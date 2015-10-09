@@ -1,0 +1,185 @@
+﻿
+
+<div class="panel panel-default">
+    <div class="panel-heading" style="padding-bottom:0px;">
+        <p class="text-center"><strong><big>ระบบติดตามการจัดส่งรายงานคดี</big></strong></p>
+    </div>
+
+    <div class="panel-body" style="padding-bottom:0px;">
+
+        <form class="readonly form form-horizontal" name="form" style="padding-top:25px;padding-bottom:50px;">
+            <div class="row">
+
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">เลขดำ</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.number_black}}">
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">เลขแดง</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.number_red}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">โจทก์</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.plaintiff}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">จำเลย</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.defendant}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">ข้อหาหลัก</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.topic_id | lookup_topic}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">คำสั่ง อธ.</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.command_id | lookup_at}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">ผลการปฏิบัติ</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.result | lookup_result}}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <legend style="padding-top:2em" class="text-center text-info">ส่งรายงานคดี</legend>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">วันที่ภาครับรายงาน </label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.date_received | thai_date}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">เลขที่รับ</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.number_received}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">ภาคส่งคืนรายงานคดีวันที่</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.date_sent4	 | thai_date}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">เลขที่ส่ง</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.number_sent4	}}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <legend style="padding-top:2em" class="text-center text-info">ส่งสำนวน</legend>
+
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">ภาครับวันที่</label>
+                    <div class="col-md-8">
+
+                       
+
+                            <input type="text" readonly class="form-control input-md" value="{{editingItem.date_received3 | thai_date}}">
+
+                   
+
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">เลขที่รับ</label>
+                    <div class="col-md-8">
+                      
+                            <input type="text" readonly class="form-control input-md" value="{{editingItem.number_received3}}">
+                       
+                    </div>
+                </div>
+
+
+
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">ภาคส่งคืนสำนวนวันที่</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.date_sent5 | thai_date}}">
+
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">เลขที่ส่ง</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.number_sent5}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">ผู้พิพากษาผู้ตรวจ 1</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.judge2_id |lookup_judge}}">
+
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">ผู้พิพากษาผู้ตรวจ 2</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.judge3_id |lookup_judge}}">
+                    </div>
+                </div>
+            </div>
+
+                     
+                     
+                     <legend style="padding-top:2em" class="text-center text-info">ส่งสำเนาคำพิพากษา</legend>
+
+                     <div class="form-group col-md-6">
+                         <label class="control-label col-md-4">ภาครับวันที่</label>
+                         <div class="col-md-8">
+
+                             
+                                 <input type="text" readonly class="form-control input-md" value="{{editingItem.date_received4 | thai_date}}">
+                             
+
+                         </div>
+                     </div>
+                     <div class="form-group col-md-6">
+                         <label class="control-label col-md-4">จำนวนไฟล์ที่ได้รับ</label>
+                         <div class="col-md-8">
+                           
+                                 <input type="text" readonly class="form-control input-md" value="{{countFile(editingItem)}}">
+                           
+                         </div>
+                     </div>
+                     <br /><br />
+ 
+</form>
+    </div>
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+
+                    <button type="button" class="btn btn-info btn-block" ng-click="goBack()"><span class="glyphicon glyphicon-arrow-left"></span> กลับไปหน้าหลัก</button>
+        
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

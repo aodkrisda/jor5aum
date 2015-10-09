@@ -1,0 +1,204 @@
+﻿<style>
+	table tr td{
+		vertical-align:middle;
+	}
+</style>
+<script type="text/ng-template" id="custom.admin.search.html">
+    <div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" style="min-width:640px">
+            <div class="modal-content">
+                <div class="modal-header" >
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">ค้นหาข้อมูล</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" name="form">
+                        <fieldset>
+
+
+
+                            <div class="form-group">
+                                <!-- Text input-->
+                                <label class="col-md-4 control-label">วันที่ส่ง</label>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <span mode="0"  ng-model="searchItem.date1"  placeholder="เริ่มตั้งแต่" custom-date-field></span>
+                                        </div>
+
+                                        <div class="col-md-12" style="padding-top:0.5em">
+                                            <span mode="0"  ng-model="searchItem.date2"  placeholder="ถึงวันที่" custom-date-field></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <!-- Text input-->
+                                <label class="col-md-4 control-label">เลขคดีดำ</label>
+                                <div class="col-md-7">
+                                    <input type="text" name="name" placeholder="" required ng-model="searchItem.number_black" class="form-control input-md">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
+                                <!-- Text input-->
+                                <label class="col-md-4 control-label">โจทก์</label>
+                                <div class="col-md-7">
+                                    <input type="text" name="code" placeholder="" required ng-model="searchItem.plaintiff" class="form-control input-md">
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <!-- Text input-->
+                                <label class="col-md-4 control-label">จำเลย</label>
+                                <div class="col-md-7">
+                                    <input type="text" name="code" placeholder="" required ng-model="searchItem.defendant" class="form-control input-md">
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <!-- Text input-->
+                                <label class="col-md-4 control-label">เรื่อง</label>
+                                <div class="col-md-7">
+                                    <input type="text" name="code" placeholder="" required ng-model="searchItem.title" class="form-control input-md">
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <!-- Select Basic -->
+                                <label class="col-md-4 control-label">ศาล</label>
+                                <div class="col-md-7">
+                                    <select class="form-control input-md" name="role" ng-model="searchItem.user_id" select-value-type="string"
+                                            ng-options="it.id as it.name group by lookup_group(it.group_id) for it in Lookups.getCourt() ">
+                                        <option value="">ทุกศาล</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                        </fieldset>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-click="startSearch(searchItem);$hide()">ค้นหา</button>
+                    <button type="button" class="btn btn-warning" ng-click="$hide()">ยกเลิก</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="custom.confirm.admin.report.html">
+    <div class="popover">
+        <div class="arrow"></div>
+        <h3 class="popover-title"><span class="glyphicon glyphicon-share"><span>เลือกทำรายการ</h3>
+        <div class="popover-content">
+            <p class="text-center">
+                <button type="button" class="btn btn-success btn-block" ng-click="go('admin.cases.form1',$it);$hide()"><div class="text-left"><span class="badge">1</span> รับรายงานคดี</div></button>
+                <button type="button" class="btn btn-success btn-block" ng-click="go('admin.cases.form2',$it);$hide()"><div class="text-left"><span class="badge">2</span> รับสำนวน</div></button>
+                <button type="button" class="btn btn-success btn-block" ng-click="go('admin.cases.form3',$it);$hide()"><div class="text-left"><span class="badge">3</span> รับสำเนาคำพิพากษา</div></button>
+            </p>
+        </div>
+    </div>
+</script>
+
+<div ng-controller="AdminReportCtrl">
+
+    <div ui-view></div>
+
+
+    <div ng-hide="!urlEq('/admin/cases')">
+        <div class="panel panel-default" ng-controller="CustomTableCtrl" ng-init="setAPI('admin_cases','custom.admin.form1.html',{search:'searchText', court:'searchCourt', month:'searchMonth', year:'searchYear'},{court:true, month:true,year:true})">
+            <div class="panel-heading">
+                <div class="text-right pull-right">
+                    <button class="btn btn-success" ng-show="isSearchMode()" ng-click="setFilter()">
+                        <span class="glyphicon glyphicon-arrow-left"></span> ออกจากโหมดการค้นหา
+                    </button>
+                    <button class="btn btn-info" ng-click="advancedSearch('custom.admin.search.html')">
+                        <span class="glyphicon glyphicon-search"></span> ค้นหา
+                    </button>
+                    <button data-placement="bottom-right" data-trigger="click" bs-popover data-template="custom.confirm.admin.report.html"
+                            ng-show="hasSelected()" class="btn btn-success" data-auto-close="true">
+                        <span class="glyphicon glyphicon-pencil"></span> รับคดี
+                    </button>
+
+                </div>
+                <h2 style="padding:0px;margin:0px;"><span class="glyphicon glyphicon-th-list"></span> รายงานคดี ({{tableParams.total()}})</h2>
+
+            </div>
+            
+            <div class="panel-body" style="padding-bottom:0px;">
+
+                <div loading-container="tableParams.settings().$loading">
+                    <div ng-show="!isSearchMode()">
+                        <div class="input-group col-md-10 col-md-offset-1">
+                            <div class="input-group-addon  adon-label">ศาล</div>
+                            <select class="form-control" ng-model="searchCourt" ng-change="setFilter()" select-value-type="string" ng-options="it.id as it.name for it in Lookups.getCourt()"></select>
+                            <div class="input-group-addon  adon-label">เดือน</div>
+
+
+
+                            <select class="form-control" ng-model="searchMonth" ng-change="setFilter()" select-value-type="string" ng-options="it.id as it.name for it in Lookups.getMonth()"></select>
+                            <div class="input-group-addon  adon-label">พ.ศ</div>
+                            <select class="form-control" ng-model="searchYear" ng-change="setFilter()" select-value-type="string" ng-options="it.id as it.name for it in Lookups.getYear()"></select>
+                            <div class="input-group-addon btn btn-default" ng-click="setFilter(true)" title="เริ่มค้นหา"><span class="glyphicon glyphicon-refresh"></span></div>
+                        </div>
+                        <hr />
+                    </div>
+                    <table ng-table="tableParams" show-filter="false" class="table table-hover table-bordered" template-pagination="custom.pages.html">
+                        <tbody>
+
+                            <tr ng-repeat="it in $data"
+                                ng-click="selectRow(it);"
+                                ng-class="{'active': isSelected(it)}">
+                                <td width="30" class="text-right text-muted">{{startIdx + $index + 1}}.</td>
+                                <td width="30" header="'custom.checked.html'">
+                                    <input type="checkbox" ng-model="checkboxes.items[it[pkField]]" />
+
+                                </td>
+                                <td data-title="'เลขคดีดำ'" sortable="'number_black'">
+                                    {{it.number_black}}
+                                </td>
+
+                                <td data-title="'เลขคดีแดง'" sortable="'number_red'">
+                                    {{it.number_red}}
+
+                                </td>
+                                <td data-title="'โจทก์'" sortable="'plaintiff'">
+                                    {{it.plaintiff}}
+
+                                </td>
+                                <td data-title="'จำเลย'" sortable="'defendant'">
+                                    {{it.defendant}}
+
+                                </td>
+                                <td data-title="'ข้อหา'" sortable="'title'">
+                                    {{it.title}}
+
+                                </td>
+                                <td data-title="'วันที่ส่งสำนวน'" sortable="'date_sent'">
+                                    {{it.date_sent | thai_date:'short'}}
+
+                                </td>
+                                <td data-title="'ไฟล์ร่าง/คำพิพากษา'">
+                                    {{it.file1}} {{it.file2}}
+                                    <span ng-if="isSelected(it)" class="pull-right"><button class="btn btn-success btn-circle btn-xs" data-placement="top-right" data-trigger="click" bs-popover data-template="custom.confirm.admin.report.html"
+                            data-auto-close="true"><span class="glyphicon glyphicon-edit"></span></button></span>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,84 @@
+﻿<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>รายงาน</title>
+        <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap-theme.css">
+        <style>
+            .bold{font-weight:bold;}
+			@media print {
+			    .page-break {page-break-after: always;}
+			}  
+			@media screen {
+			    .page-break {padding-bottom:10em}
+			} 
+			.sumary {
+				background-color:#f5f5f5;
+			}			   
+        </style>
+    </head>
+    <body>
+    	{% set index=0 %}
+     	{% for case in cases %}
+    	<div class="container-fluid page-break">
+        <div class="text-center">
+            <h3>สรุปรายงานคดีของศาลในเขตอำนาจอธิบดีผู้พิพากษาภาค 5</h3>
+            <h4>ระหว่าง เดือน {{date1 | th_date('month')}} ถึง เดือน {{date2 | th_date('month')}} พ.ศ.  {{date2 | th_date('year')}}</h4>
+            {% if type_id>0 %}
+            <h4>คดี {{case.case_name}}</h4>
+            {% else %}
+            <h4>คดี ทั้งหมด</h4>
+            {% endif %}
+        </div>
+        <br/>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th width="80">ลำดับที่</th>
+                    <th>ศาล</th>
+                    <th class ="text-center">ทราบ</thclass>
+                    <th class ="text-center">ตรวจ</thclass>
+                    <th class ="text-center">รวม</thclass>
+                </tr>
+            </thead>
+            <tbody>
+                {% for grp in case.case_items %}
+                <tr class="bold">
+                    <td colspan="2">{{grp.group | user_group}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                {% set sum_check=0 %}
+                {% set sum_know=0 %}
+                {% set sum_total=0 %}
+                {% for usr in grp.courts %}
+                <tr>
+                    {% set know=usr.total-usr.check %}
+                    {% set sum_check=sum_check + usr.check %}
+                    {% set sum_know=sum_know + know%}
+                    {% set sum_total=sum_total + usr.total %}
+                    {% set index=index + 1 %}
+                    <td class="text-center">{{index}}</td>
+                    <td>{{usr.name}}</td>
+                    <td class="text-center">{{know}}</td>
+                    <td class="text-center">{{usr.check}}</td>
+                    <td class="text-center">{{usr.total}}</td>
+                </tr>
+                {% endfor %}
+                <tr class="bold">
+                    <td></td>
+                    <td>รวม</td>
+                    <td class="text-center sumary">{{sum_know}}</td>
+                    <td class="text-center sumary">{{sum_check}}</td>
+                    <td class="text-center sumary">{{sum_total}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+       </div>
+       {% endfor %}
+    </body>
+</html>

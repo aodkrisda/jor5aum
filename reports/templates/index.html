@@ -1,0 +1,47 @@
+﻿<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>รายงาน</title>
+    </head>
+    <body>
+        <h3>สรุปรายงานคดีของศาลในเขตอำนาจอธิบดีผู้พิพากษาภาค 5</h3>
+        <h4>ระหว่าง เดือน {{month1}} ถึง เดือน {{month2}} พ.ศ. {{year}}</h4>
+        <h4>คดี {{case_name}}</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>ลำดับที่</th>
+                    <th>ศาล</th>
+                    <th>ทราบ</th>
+                    <th>ตรวจ</th>
+                    <th>รวม</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td>กลุ่มศาลจังหวัด</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>{{index}}</td>
+                    <td>{{court}}</td>
+                    <td>{{know}}</td>
+                    <td>{{check}}</td>
+                    <td>{{total}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>รวม</td>
+                    <td>{{sum_know}}</td>
+                    <td>{{sum_check}}</td>
+                    <td>{{sum_total}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

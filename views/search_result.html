@@ -1,0 +1,124 @@
+﻿<br/>
+
+<div class="row" ng-controller="SearchCtrl">
+    <div class="col-md-12 ">
+
+            <div class="btn-group pull-right">
+                <button type="button" class="btn btn-default" ng-click="gotoSearch()"><span class="glyphicon glyphicon-search"></span> ค้นหา</button>
+                <button type="button" class="btn btn-default" ng-click="gotoAdmin()"><span class="glyphicon glyphicon-th"></span> จัดการข้อมูล</button>
+                <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-user" ></span> ผู้ใช้</button>
+            </div>
+
+    </div>
+</div>
+
+
+<!-- search options-->
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" 
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" ng-controller="SearchCtrl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    <span class="glyphicon glyphicon-cog"></span> ค้นหาข้อมูลขั้นสูง
+                </h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form">
+                            <div class="form-group">
+                                <label>ค้นหาข้อมูล</label>
+                                <input type="text" placeholder="ข้อความที่ต้องการค้นหา" ng-model="options.search" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label>ชนิดของสื่อ {{options.type}}</label>
+
+                                <select class="form-control" select-default ng-model="options.type">
+                                    <option value="">ทุกชนิดของสื่อ</option>
+                                    <option value="{{it.type_id}}" ng-repeat="it in lookups.type">{{it.name}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>กล่มสาระการเรียนรู้ {{options.group}}</label>
+                                <select class="form-control" select-default ng-model="options.group">
+                                    <option value="">ทุกกลุ่มสาระการเรียนรู้</option>
+                                    <option value="{{it.group_id}}" ng-repeat="it in lookups.group">{{it.name}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>ระดับชั้น {{options.level}}</label>
+                                <select class="form-control" ng-model="options.level" select-default>
+                                    <option value="" ">ทุกระดับชั้น</option>
+                                    <option value="{{it.level_id}}" ng-repeat="it in lookups.level">{{it.name}}</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-md-offset-4 col-md-4">
+                        <button type="submit" class="btn btn-success btn-block" data-dismiss="modal">
+                            <span class="glyphicon glyphicon-search"></span>&nbsp;เริ่มค้นหา
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+
+
+<!-- search result -->
+<div class="row" style="padding-top:4em" >
+  <div class="col-md-12">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>รหัส</th>
+          <th>ชื่อเลข</th>
+          <th>ผู้สอน</th>
+          <th>กลุ่มสาระ</th>
+          <th>ระดับชั้น</th>
+          <th>ประเภทสื่อ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="i in [1,2,3,4,5,6,7,8,9,10]" ng-click="view()">
+          <td>No</td>
+          <td>Topic</td>
+          <td>Label</td>
+          <td>Type</td>
+          <td>xxx</td>
+          <td>xxx</td>
+        </tr>
+
+      </tbody>
+    </table>
+
+      <div class="text-center">
+        
+              <ul class="pagination">
+                  <li><a href="#">&laquo;</a></li>
+                  <li><a href="#">1</a></li>
+                  <li><a href="#">2</a></li>
+                  <li><a href="#">3</a></li>
+                  <li><a href="#">4</a></li>
+                  <li><a href="#">5</a></li>
+                  <li><a href="#">&raquo;</a></li>
+              </ul>
+    
+      </div>
+
+  </div>
+
+

@@ -1,0 +1,199 @@
+/* app */
+body{
+	min-height:100vh;
+	background: url('../images/paper.jpg') repeat;
+}
+.modal .modal-content{
+	background: url('../images/header2.jpg') repeat;
+}
+.modal-body, .panel-body{
+	background: url('../images/paper2.jpg') repeat;
+}
+#main-navbar{
+	background: url('../images/header.jpg') repeat !important;
+}
+
+.panel-heading, .panel-footer{
+	background: url('../images/header2.jpg') repeat !important;
+}
+.nav.navbar-nav a{
+	font-weight:bold; 
+}
+
+.nav.navbar-nav .active a:focus,.nav.navbar-nav a:hover{
+  background:transparent none;
+}
+
+.nav.navbar-nav .active a{
+  font-size:1.2em;
+  background:transparent none;
+  box-shadow:none;
+}
+.nav.navbar-nav .active{
+	background-color:transparent !important;
+	border-bottom:solid rgb(66,133,244) 4px;
+}
+		.modal-backdrop {opacity: 0.8;} 
+		.drop {padding: 15px;border: 2px #f1f1f1 dashed;border-radius: 5px;line-height: 34px;}
+		.drop.drag-over {background: #5CB85C;color: #fff;}
+
+
+/* Profile container */
+.profile {
+  margin: 20px 0;
+}
+
+/* Profile sidebar */
+.profile-sidebar {
+  padding: 20px 0 10px 0;
+  background: #fff;
+}
+
+.profile-userpic img {
+  float: none;
+  margin: 0 auto;
+  width: 50%;
+  height: 50%;
+  -webkit-border-radius: 50% !important;
+  -moz-border-radius: 50% !important;
+  border-radius: 50% !important;
+}
+
+.profile-usertitle {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.profile-usertitle-name {
+  color: #5a7391;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 7px;
+}
+
+.profile-usertitle-job {
+  text-transform: uppercase;
+  color: #5b9bd1;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.profile-userbuttons {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.profile-userbuttons .btn {
+  text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 15px;
+  margin-right: 5px;
+}
+
+.profile-userbuttons .btn:last-child {
+  margin-right: 0px;
+}
+    
+.profile-usermenu {
+  margin-top: 30px;
+}
+
+.profile-usermenu ul li {
+  border-bottom: 1px solid #f0f4f7;
+}
+
+.profile-usermenu ul li:last-child {
+  border-bottom: none;
+}
+
+.profile-usermenu ul li a {
+  color: #93a3b5;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.profile-usermenu ul li a i {
+  margin-right: 8px;
+  font-size: 14px;
+}
+
+.profile-usermenu ul li a:hover {
+  background-color: #fafcfd;
+  color: #5b9bd1;
+}
+
+.profile-usermenu ul li.active {
+  border-bottom: none;
+}
+
+.profile-usermenu ul li.active a {
+  color: #5b9bd1;
+  background-color: #f6f9fb;
+  border-left: 2px solid #5b9bd1;
+  margin-left: -2px;
+}
+
+/* Profile Content */
+.profile-content {
+  padding: 20px;
+  background: #fff;
+  min-height: 460px;
+}
+
+
+/* circle buttons */
+
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 12px;
+  line-height: 1.428571429;
+  border-radius: 15px;
+}
+.btn-circle.btn-lg {
+  width: 50px;
+  height: 50px;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.33;
+  border-radius: 25px;
+}
+.btn-circle.btn-xl {
+  width: 70px;
+  height: 70px;
+  padding: 10px 16px;
+  font-size: 24px;
+  line-height: 1.33;
+  border-radius: 35px;
+}
+
+form.readonly.form input[readonly]{
+    background-color:#F9DADA;  
+}
+
+/* ng table */
+
+			.ng-table th {text-align: left;}
+			.ng-table th.text-center {text-align:center;}
+			.ng-table th.text-right {text-align:right;}
+			.ng-table th.text-left {text-align:left;}
+			.ng-table th.sortable.sort-desc,.ng-table th.sortable.sort-asc {background-color:transparent;color:grey;}
+			.modal-backdrop {opacity: 0.5;}
+			.aside-backdrop {opacity: 0.5;}
+
+
+
+			.drop {
+				padding: 15px;
+				border: 2px #f1f1f1 dashed;
+				border-radius: 5px;
+				line-height: 34px;
+			}
+			.drop.drag-over {
+				background: #5CB85C;
+				color: #fff;
+			}

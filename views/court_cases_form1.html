@@ -1,0 +1,168 @@
+﻿
+
+<div class="panel panel-default">
+    <div class="panel-heading" style="padding-bottom:0px;">
+        <p class="text-center"><strong><big>รับรายงานคดี {{editingItem.user_id | lookup_court}}</big></strong></p>
+    </div>
+
+    <div class="panel-body" style="padding-bottom:0px;">
+
+        <form class="readonly form form-horizontal" name="form" style="padding-top:25px;padding-bottom:50px;">
+            <fieldset>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">เลขดำ</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.number_black}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">วันที่รับฟ้อง</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.date_case | thai_date}}">
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">โจทก์</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.plaintiff}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">จำเลย</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.defendant}}">
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">ประเภทคดี</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.type_id | lookup_type:'name':true}} - {{editingItem.type_id | lookup_type}}">
+                    </div>
+                </div>
+                <div class="row clearfix"></div>
+                    <div class="form-group col-md-6 ">
+                        <label class="control-label col-md-4">ข้อหาหลัก</label>
+                        <div class="col-md-8">
+                            <input type="text" readonly class="form-control input-md" value="{{editingItem.topic_id | lookup_topic}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label class="control-label col-md-4">ข้อหารอง</label>
+                        <div class="col-md-8">
+                            <input type="text" readonly class="form-control input-md" value="{{editingItem.title}}">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="control-label col-md-4">ผลการส่งรายงานคดี</label>
+                        <div class="col-md-8">
+                            <input type="text" readonly class="form-control input-md" value="{{editingItem.command_id | lookup_at}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label class="control-label col-md-4">ผลการปฏิบัติ (ภาค)</label>
+                        <div class="col-md-8">
+                            <input type="text" readonly class="form-control input-md" value="{{editingItem.result | lookup_result}}">
+                        </div>
+                    </div>
+
+
+                    <div class="row clearfix">
+
+                    </div>
+                    <hr />
+                    <div class="form-group col-md-6">
+                        <label class="control-label col-md-4">ผู้พิพากษาเจ้าของสำนวน</label>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <select class="form-control input-md" name="role" ng-model="editingItem.judge_id" select-default ng-options="it.id as it.name for it  in Lookups.getOwnJudge()">
+                                    <option value=""></option>
+                                </select>
+                                <span class="input-group-addon btn" id="add-judge" ng-click="popupJudge()"><span class="glyphicon glyphicon-plus"></span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="control-label col-md-4">องค์คณะ</label>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <select class="form-control input-md" name="role" ng-model="editingItem.judge3_id" select-default ng-options="it.id as it.name for it  in Lookups.getOwnJudge()">
+                                    <option value=""></option>
+                                </select>
+                                <span class="input-group-addon btn"  ng-click="popupJudge()"><span class="glyphicon glyphicon-plus"></span></span>
+                            </div>
+                        </div>
+                    </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">จำเลยต้องขัง</label>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <select class="form-control input-md" name="role" ng-model="editingItem.imprison_id" select-default ng-options="it.id as it.name for it  in Lookups.getResult()">
+                                <option value=""></option>
+                            </select>
+                            <span class="input-group-addon btn" id="add-imprison" ng-click="popupImprison()"><span class="glyphicon glyphicon-plus"></span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">จำเลยสารภาพ</label>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <select class="form-control input-md" name="role" ng-model="editingItem.accept_id" select-default ng-options="it.id as it.name for it  in Lookups.getResult()">
+                                <option value=""></option>
+                            </select>
+                            <span class="input-group-addon btn" id="add-accept" ng-click="popupAccept()"><span class="glyphicon glyphicon-plus"></span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">วันที่นัดฟังคำพิพากษา</label>
+                    <div class="col-md-8">
+                        <span mode="0" ng-model="editingItem.date_ap" placeholder="ยังไม่มีข้อมูล" custom-date-field></span> 
+                    </div>
+                </div><div class="form-group col-md-6">
+                    <label class="control-label col-md-4">วันที่ส่งสำนวน</label>
+                    <div class="col-md-8">
+                        <span mode="0" ng-model="editingItem.date_sent2" placeholder="ยังไม่มีข้อมูล" custom-date-field></span> 
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">เลขที่ส่งสำนวน</label>
+                    <div class="col-md-8">
+                        <input type="text"  class="form-control input-md" ng-model="editingItem.number_sent2">
+                    </div>
+                </div>
+                <div class="row clearfix"></div>
+                <div class="form-group">
+                    <label class="control-label col-md-2">หมายเหตุ</label>
+                    <div class="col-md-9">
+                        <textarea  rows="3" class="form-control" ng-model="editingItem.note2"></textarea>
+                    </div>
+                </div>
+
+
+</fieldset>
+        </form>
+    </div>
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-success btn-block" ng-click="saveForm(editingItem,1)"><span class="glyphicon glyphicon-ok-sign"></span> บันทึกข้อมูล</button>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-warning btn-block" ng-click="goBack()"><span class="glyphicon glyphicon-remove"></span> ยกเลิก</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

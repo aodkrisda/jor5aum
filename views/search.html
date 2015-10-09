@@ -1,0 +1,213 @@
+﻿<script type="text/ng-template" id="custom.confirm.popover.html">
+    <div class="popover">
+        <div class="arrow"></div>
+        <h3 class="popover-title" >คุณต้องการลบข้อมูลใช่หรือไม่</h3>
+        <div class="popover-content">
+            <p class="text-center">
+                <button type="button" class="btn btn-danger" ng-click="doRemove();$hide()">ลบข้อมูล</button>
+                <button type="button" class="btn btn-primary" ng-click="$hide()">ยกเลิก</button>
+            </p>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="custom.confirm2.popover.html">
+    <div class="popover">
+        <div class="arrow"></div>
+        <h3 class="popover-title">คุณต้องการลบข้อมูลรายการที่เช็คทั้งหมด ใช่หรือไม่</h3>
+        <div class="popover-content">
+            <p class="text-center">
+                <button type="button" class="btn btn-danger" ng-click="doRemoveChecked();$hide()">ลบทั้งหมด</button>
+                <button type="button" class="btn btn-primary" ng-click="$hide()">ยกเลิก</button>
+            </p>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="custom.form.html">
+    <div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" ng-show="title">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="title"></h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" name="form">
+                        <fieldset>
+
+                            <div class="form-group">
+
+                                <!-- Text input-->
+                                <label class="col-md-4 control-label">ชื่อ</label>
+                                <div class="col-md-7">
+                                    <input type="text" name="name" placeholder="ยังไม่ได้กำหนดชื่อ" required ng-model="editingItem.name" class="form-control input-md">
+                                    <p class="help-block has-error" ng-show="form.name.$error.required">ต้องกำหนดชื่อ</p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
+                                <!-- Select Basic -->
+                                <label class="col-md-4 control-label">สิทธิการใช้</label>
+                                <div class="col-md-7">
+                                    <select class="form-control input-md" name="role" ng-model="editingItem.admin" select-default >
+                                        <option></option>
+                                        <option ng-repeat="it in Lookups.getRole() track by it.id" value="{{it.id}}">{{it.name}}</option>
+                                    </select>
+                                    <p class="help-block text-danger" ng-show="form.role.$error.required">ต้องกำหนดสิทธิการใช้งาน</p>
+                                </div>
+                            </div>
+                            <div class="form-group" ng-if="editingItem.admin > 1 && $root.isAdmin()">
+                                <!-- Select Basic -->
+                                <label class="col-md-4 control-label">ศาล</label>
+                                <div class="col-md-7">
+                                    <select class="form-control input-md" ng-model="editingItem.parent_id" select-default>
+                                        <option></option>
+                                        <option ng-repeat="it in Lookups.getCourt() track by it.id" value="{{it.id}}">{{it.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <!-- Text input-->
+                                <label class="col-md-4 control-label">ชื่อผู้ใช้</label>
+                                <div class="col-md-7">
+                                    <input type="text" placeholder="ยังไม่ได้กำหนดชื่อ" class="form-control input-md" ng-model="editingItem.account">
+           
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <!-- Text input-->
+                                <label class="col-md-4 control-label">รหัสผ่าน</label>
+                                <div class="col-md-7">
+                                    <input type="text" placeholder="ยังไม่ได้ตั้งรหัสผ่าน" class="form-control input-md" ng-model="editingItem.password">
+                 
+                                </div>
+                            </div>
+
+
+                        </fieldset>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-disabled="!editingItem.name" ng-click="saveForm()">บันทึกข้อมูล</button>
+                    <button type="button" class="btn btn-warning" ng-click="cancelForm()">ยกเลิก</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/ng-template" id="custom.dropdown.actions.html">
+    <ul tabindex="-1" class="dropdown-menu" role="menu">
+        <li> <a ng-click="selectAll()" href="javascript://void()"><span class="glyphicon glyphicon-check"></span> เลือกทั้งหมด</a></li>
+        <li><a ng-click="selectInverse()" href="javascript://void()"><span class="glyphicon glyphicon-ok-sign"></span> เลือกกลับกัน</a></li>
+        <li><a ng-click="selectNone()" href="javascript://void()"><span class="glyphicon glyphicon-ban-circle"></span> ยกเลิกการเลือกทั้งหมด</a></li>
+        <li ng-if="hasChecked()" class="divider"></li>
+        <li ng-if="hasChecked()"><a ng-click="removeChecked()" href="javascript://void()"><span class="glyphicon glyphicon-remove"></span> ลบข้อมูลที่เลือก</a></li>
+
+    </ul>
+</script>
+<script type="text/ng-template" id="custom.pages.html">
+    <div class="ng-cloak ng-table-pager" ng-if="params.data.length"> <div ng-if="params.settings().counts.length" class="ng-table-counts btn-group pull-right"> <button ng-repeat="count in params.settings().counts" type="button" ng-class="{\'active\':params.count()==count}" ng-click="params.count(count)" class="btn btn-default"> <span ng-bind="count"></span> </button> </div> <ul class="pagination ng-table-pagination"> <li ng-class="{\'disabled\': !page.active && !page.current, \'active\': page.current}" ng-repeat="page in pages" ng-switch="page.type"> <a ng-switch-when="prev" ng-click="params.page(page.number)" href="">&laquo;</a> <a ng-switch-when="first" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a> <a ng-switch-when="page" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a> <a ng-switch-when="more" ng-click="params.page(page.number)" href="">&#8230;</a> <a ng-switch-when="last" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a> <a ng-switch-when="next" ng-click="params.page(page.number)" href="">&raquo;</a> </li> </ul> </div>
+</script>
+<script type="text/ng-template" id="custom.pages.html">
+    <div class="row panel-footer">
+        <div class="col-sm-7">
+            <div ng-cloak ng-table-pager" ng-if="params.data.length">
+                <ul class="pagination ng-table-pagination" style="margin:0px">
+                    <li ng-class="{disabled: !page.active && !page.current, active: page.current}" ng-repeat="page in pages" ng-switch="page.type">
+                        <a ng-switch-when="prev" ng-click="params.page(page.number)" href="">&laquo;</a>
+                        <a ng-switch-when="first" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a>
+                        <a ng-switch-when="page" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a>
+                        <a ng-switch-when="more" ng-click="params.page(page.number)" href="">&#8230;</a>
+                        <a ng-switch-when="last" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a>
+                        <a ng-switch-when="next" ng-click="params.page(page.number)" href="">&raquo;</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <div class="btn-group pull-right">
+                <button ng-repeat="it in params.settings().counts track by it" type="button" ng-class="{'active':params.count() == it}" ng-click="params.count(it)" class="btn btn-default"> {{it}}</button>
+            </div>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="custom.checked.html">
+    <span id="checked-actions" class="glyphicon glyphicon-th" data-animation="am-flip-x" bs-dropdown="actions" aria-haspopup="true" aria-expanded="false" data-template="custom.dropdown.actions.html"></span>
+</script>
+
+
+<div class="container-fluid">
+
+    <p>
+        <div class="panel panel-default" ng-controller="CustomTableCtrl">
+            <div class="panel-heading">
+                <div class="text-left pull-left">
+                    <h2 style="padding:0px;margin:0px;"><span class="glyphicon glyphicon-th-list"></span>ตัวอย่างขอมูล ({{tableParams.total()}})</h2>
+                </div>
+                <p class="text-right">
+
+                    <button ng-click="newItem()" class="btn btn-primary"><spand class="glyphicon glyphicon-plus"></span>เพิ่มข้อมูล</button>
+                    <button ng-click="editItem()" ng-show="hasSelected()" class="btn btn-warning"><spand class="glyphicon glyphicon-pencil"></span>แก้เขข้อมูล</button>
+                    <button data-placement="bottom-right"  data-trigger="click" bs-popover data-template="custom.confirm.popover.html"
+                            ng-click="removeItem()" ng-show="hasSelected()" class="btn btn-danger" data-auto-close="true">
+                        <spand class="glyphicon glyphicon-remove"></span>ลบข้อมูล
+                    </button>
+                    <button ng-click="refresh()" class="btn btn-success"><spand class="glyphicon glyphicon-refresh"></span> โหลดข้อมูล</button>
+                </p>
+            </div>
+            <div class="panel-body" style="padding-bottom:0px;">
+                <div loading-container="tableParams.settings().$loading">
+
+                        <div class="input-group col-md-6 col-md-offset-3">
+                            <div class="input-group-addon">ค้นหาชื่อ</div>
+
+                            <input type="text" class="form-control" ng-model="searchText" ng-model-options="{updateOn: 'blur', debounce: {'default': 500, 'blur': 0}}" placeholder="{{(lastSearchText)?lastSearchText:'ชื่อที่ต้องการค้นหา'}}" />
+                            <div class="input-group-addon btn btn-default" ng-click="setFilter()" ng-disabled="!searchText" title="เริ่มค้นหา"><span class="glyphicon glyphicon-search"></span></div>
+                            <div ng-if="lastSearchText" class="input-group-addon btn btn-default" ng-click="clearFilter()" title="เลิกค้นหา"><span class="glyphicon glyphicon-remove"></span></div>
+                            
+                        </div>
+
+                    <hr/>
+                    <table ng-table="tableParams" show-filter="false" class="table table-hover" template-pagination="custom.pages.html">
+                        <tbody>
+
+                            <tr ng-repeat="it in $data"
+                                ng-click="selectRow(it);"
+                                ng-dblclick="editItem()"
+                                ng-class="{'active': isSelected(it)}">
+                                <td width="30" style="text-align: left" header="'custom.checked.html'">
+                                    <input type="checkbox" ng-model="checkboxes.items[it[pkField]]" />
+                                </td>
+                                <td data-title="'ชื่อ User'" sortable="'name'" >
+                                    {{startIdx + $index + 1}}. {{it.name}}
+
+                                </td>
+                                <td data-title="'ศาล'" sortable="'parent_id'" >
+                                    {{it.parent_id | lookup_court}}
+
+                                </td>
+                                <td data-title="'สิทธิ'" sortable="'admin'" class="text-center">
+                                    {{it.admin | lookup_role}}
+
+                                    <span ng-if="isSelected(it)" class="pull-right glyphicon glyphicon-asterisk"></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</p>
+<div>
+
+

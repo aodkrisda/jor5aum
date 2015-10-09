@@ -1,0 +1,49 @@
+﻿
+
+<div class="panel panel-default">
+    <div class="panel-heading" style="padding-bottom:0px;">
+        <p class="text-center"><strong><big>UPLOAD ไฟล์คำพิพากษา {{editingItem.user_id | lookup_court}}</big></strong></p>
+    </div>
+
+    <div class="panel-body" style="padding-bottom:0px;">
+
+        <form class="readonly form form-horizontal" name="form" style="padding-top:25px;padding-bottom:50px;">
+            <fieldset>
+                <div class="form-group" ng-class="{ 'has-error' : form.fd1.$invalid && form.$dirty}">
+                    <!-- Select Basic -->
+                    <label class="col-md-4 control-label">ไฟล์ข้อมูล Excel</label>
+                    <div class="col-md-7">
+                        <div class="input-group">
+                            <input type="text" placeholder="คลิกปุ่มเพื่อเลือกไฟล์ที่ต้องการ" value="{{getFileTitle(importingItem.excel_file)}}" ng-readonly="true" style="background-color:#ffffff" class="form-control">
+                            <div class="file-upload input-group-addon" title="คลิกเลือกไฟล์ที่ต้องการ" style="min-width:4em">
+                                <span class="glyphicon glyphicon-upload"></span>
+                                <input type="file"  validate-file ng-model="importingItem.pdf_file" accept="application/pdf" class="upload" name="fd1" required>
+                            </div>
+                        </div>
+
+                        <p class="help-block" ng-show="form.fd1.$invalid && form.$dirty"><span class="glyphicon glyphicon-warning-sign"></span> ต้องเลือกไฟล์ที่ต้องการนำเข้าข้อมูลก่อน</p>
+                        <p class="help-block" ng-show="form.fd1.$invalid && form.fd1.$error.filesize && form.$dirty"><span class="glyphicon glyphicon-warning-sign"></span> ขนาดของไฟล์ต้องไม่เกิน 1 MB</p>
+                        <p class="help-block" ng-show="form.fd1.$invalid && form.fd1.$error.filetype && form.$dirty"><span class="glyphicon glyphicon-warning-sign"></span> ใช้ได้เฉพาะกับ ไฟล์  Excel ( *.xls, *.xlsx ) เท่านั้น</p>
+                    </div>
+                </div>
+
+
+
+</fieldset>
+        </form>
+    </div>
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+
+                <button type="button" class="btn btn-info btn-block" ng-click="goBack()"><span class="glyphicon glyphicon-arrow-left"></span> กลับไปหน้าหลัก</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
