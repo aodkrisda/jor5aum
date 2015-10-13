@@ -1,0 +1,6 @@
+*.zip
+*.bak
+*.rar
+*.exe
+./document/*.*
+./chunk/*.*
