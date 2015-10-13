@@ -1217,7 +1217,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
                         
 						    $scope._flow.cancel();
 						    $.notify('อัพโหลดเสร็จแล้ว', 'success');
-						    $scope.$parent.$fetch();
+						    //$scope.$parent.$fetch();
                     }
                 },100);
             }
