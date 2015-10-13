@@ -38,13 +38,23 @@ function get_get_token(){
   $api->api_check_user();
 }
 
-function all_upload($param=''){
+function all_upload($id='0',$doc=''){
     global $api;
+    global $norm;
     $api->api_check_user();
-   
+    $usr=$api->api_get_user();
+    
+    $rs=$norm->cases()->where('id',$id)->where('user_id',$usr['id']);
+    $ok=(count($rs)>0) && ($doc=='file1' || $doc=='file2');
+    if(!$ok){
+          // error, invalid chunk upload request, retry
+          header( $_SERVER["SERVER_PROTOCOL"]. " 400 Bad Request");
+          exit();    
+    }
+    
     $baseDir=dirname(__DIR__);
-    $uploadsDir=dirname($baseDir) . '/uploads/';
-    $chunksDir=dirname($baseDir) . '/.chunks/';
+    $uploadsDir=dirname($baseDir) . '/documents/' . $usr['id'] .'/';
+    $chunksDir=dirname($baseDir) . '/.chunks/' . $usr['id'] . '/';
     
     require($baseDir.'/Flow/Autoloader.php');
     Flow\Autoloader::register($baseDir);
@@ -55,9 +65,11 @@ function all_upload($param=''){
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         if(!is_dir($uploadsDir)){
-          @mkdir($uploadsDir);
+          @mkdir(dirname($uploadsDir));
+           @mkdir($uploadsDir);
         }
         if(!is_dir($chunksDir)){
+          @mkdir(dirname($chunksDir));
           @mkdir($chunksDir);
         }
         if ($file->checkChunk()) {
@@ -75,9 +87,23 @@ function all_upload($param=''){
           exit();
       }
     }
-    if ($file->validateFile() && $file->save($uploadsDir . $file->getFileName())) {
+    $row=$rs->fetch();
+    $filename=strtolower($file->getFileName());
+    $filename=preg_replace('/[^a-zA-Z0-9_\.]/','_',$filename);
+
+    if($doc){
+      $filename=strtolower($doc. '-' . $filename);
+    }
+    $filename=$usr['id'].'-' . $row['id'] . '-'. $filename;
+    $filename=str_replace('-','_',$filename);
+     
+    if ($file->validateFile() && $file->save($uploadsDir . $filename)) {
+       $it=array();
+       $it[$doc]=$filename;
+       $row->update($it);
+    
         echo "File upload was completed ";
-	      echo $file->getFileName();
+	      echo $filename;
     } else {
         echo "This is not a final chunk, continue to upload";
     }
@@ -532,6 +558,34 @@ class NGTABLE_COURT_CASES  extends NGTABLE{
   function __construct($table='cases', $pk='id') {
     parent::__construct($table, $pk);
   }
+  
+  function add(){
+      if($_POST){
+        $usr=$this->api->api_get_user();
+        if($usr && isset($usr['id'])){
+          if((!isset($_POST['user_id'])) || empty($_POST['user_id'])){
+            $_POST['user_id']=$usr['id'];
+            return parent::add();
+          }
+        }
+      }
+     return false;
+
+  }
+  function delete(){
+      $usr=$this->api->api_get_user();
+      if($usr && isset($usr['id'])){  
+        $rs=$this->norm->{$this->tb}()->where('user_id',$usr['id'])->where($this->pk,$_POST[$this->pk]);
+        if($rs){
+          $effected=$rs->delete();
+          if($effected > 0){
+            return array($this->pk=>$_POST[$this->pk]);
+          }
+        }
+        $this->api->sendJson(array('error'=>true, 'message'=>'ลบข้อมูลไม่ได้'),400); 
+      }
+      return false;
+  }  
   function buildFilter(&$rs, $data){
     if($rs){
       if($data && isset($data['search']) && is_array($data['search'])){

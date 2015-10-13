@@ -1,42 +1,136 @@
-﻿
+﻿<style>
+.file-upload {
+    position: relative;
+    overflow: hidden;
+    margin: 10px;
+}
+.file-upload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+</style>
 
 <div class="panel panel-default">
-    <div class="panel-heading" style="padding-bottom:0px;">
-        <p class="text-center"><strong><big>UPLOAD ไฟล์คำพิพากษา {{editingItem.user_id | lookup_court}}</big></strong></p>
+    <div class="panel-heading">
+        <h4 class="text-center"><strong><big>UPLOAD ไฟล์คำพิพากษา {{editingItem.user_id | lookup_court}}</big></strong></h4>
     </div>
 
     <div class="panel-body" style="padding-bottom:0px;">
 
         <form class="readonly form form-horizontal" name="form" style="padding-top:25px;padding-bottom:50px;">
-            <fieldset>
-                <div class="form-group" ng-class="{ 'has-error' : form.fd1.$invalid && form.$dirty}">
-                    <!-- Select Basic -->
-                    <label class="col-md-4 control-label">ไฟล์ข้อมูล Excel</label>
-                    <div class="col-md-7">
-                        <div class="input-group">
-                            <input type="text" placeholder="คลิกปุ่มเพื่อเลือกไฟล์ที่ต้องการ" value="{{getFileTitle(importingItem.excel_file)}}" ng-readonly="true" style="background-color:#ffffff" class="form-control">
-                            <div class="file-upload input-group-addon" title="คลิกเลือกไฟล์ที่ต้องการ" style="min-width:4em">
-                                <span class="glyphicon glyphicon-upload"></span>
-                                <input type="file"  validate-file ng-model="importingItem.pdf_file" accept="application/pdf" class="upload" name="fd1" required>
-                            </div>
-                        </div>
+            <fieldset >
 
-                        <p class="help-block" ng-show="form.fd1.$invalid && form.$dirty"><span class="glyphicon glyphicon-warning-sign"></span> ต้องเลือกไฟล์ที่ต้องการนำเข้าข้อมูลก่อน</p>
-                        <p class="help-block" ng-show="form.fd1.$invalid && form.fd1.$error.filesize && form.$dirty"><span class="glyphicon glyphicon-warning-sign"></span> ขนาดของไฟล์ต้องไม่เกิน 1 MB</p>
-                        <p class="help-block" ng-show="form.fd1.$invalid && form.fd1.$error.filetype && form.$dirty"><span class="glyphicon glyphicon-warning-sign"></span> ใช้ได้เฉพาะกับ ไฟล์  Excel ( *.xls, *.xlsx ) เท่านั้น</p>
+                <!-- file1 -->
+                <div ng-controller="FlowUploadCtrl as upflow" ng-init="upflow.linkScope(currentScope())" class="form-group" ng-class="{ 'has-error' : form.fd1.$invalid && form.$dirty}">
+                   
+                    <label class="col-md-4 control-label">ไฟล์สำเนาตรวจร่าง (.pdf)</label>
+                    <div class="col-md-7">
+                          <input type="text" placeholder="ยังไม่ได้อัพโหลด" value="{{editingItem.file1}}" readonly class="form-control">
+                            <!--begin upload-->
+                        
+                            <div ng-if="editingItem.id" style="padding-top:1em" flow-init="{target: API_URL + 'upload/' + editingItem.id + '/file1'}" flow-file-added="upflow.setFlow($flow,$file);" flow-files-added="upflow.setFlow($flow); upflow.setFlowState(1)" flow-upload-started="upflow.setFlowState(2)" flow-complete="upflow.checkFlow()" flow-file-success="$file.response = $message">
+
+                                <div ng-hide="upflow.getFlowState()==2" style="padding-bottom:1em" ng-if="$flow.files.length<1">
+                                    <span class="btn btn-success" flow-btn flow-single-file="true" flow-attrs="{accept:'application/pdf'}" style="min-width:20em"><span class="fa fa-file-pdf-o"></span> อัพโหลดไฟล์สำเนาตรวจร่าง</span>
+                                </div>
+                                <h4 ng-show="upflow.getFlowState()==2">กำลังอัพโหลดไฟล์<br><small>กรุณารอจนกว่าจะอัพโหลดเสร็จ...</small></h4>
+
+                                <div class="well" ng-if="$flow.files.length && upflow.getFlowState()">
+                                    <div ng-repeat="file in $flow.files" class="transfer-box">
+                                        <div>
+                                            {{file.name}} ({{file.size}}bytes)
+                                            <div class="progress progress-striped" ng-class="{active: file.isUploading()}">
+                                                <div class="progress-bar" role="progressbar" ng-class="{'progress-bar-success':file.isComplete(),'progress-bar-danger':file.error}" aria-valuenow="{{file.progress() * 100}}" aria-valuemin="0" aria-valuemax="100" ng-style="{width: (file.progress() * 100) + '%'}">
+                                                    <span class="sr-only">{{file.progress()}}% Complete</span>
+                                                </div>
+                                            </div>
+                                            <div style="padding-bottom:1em;">
+                                                <a ng-show="upflow.getFlowState()==1" class="btn btn-mini btn-success" ng-click="uploadFlow($flow)" style="min-width:12em"><span class="glyphicon glyphicon-ok"></span> เริ่มอัพโหลด</a>
+                                                <a ng-show="upflow.getFlowState()==-1 || (upflow.getFlowState()==2 && !$flow.isUploading())" class="btn btn-mini btn-success" ng-click="upflow.retry()" style="min-width:12em"><span class="glyphicon glyphicon-repeat"></span> อัพโหลดใหม่</a>
+                                                <a ng-show="$flow.isUploading()" class="btn btn-small btn-warning" ng-click="$flow.pause()">หยุดอัพโหลดไฟล์</a>
+                                                <a ng-show="$flow.files.length && upflow.getFlowState()" class="btn btn-small btn-danger" ng-click="$flow.cancel();upflow.checkFlow()" style="min-width:12em"><span class="glyphicon glyphicon-remove"></span> ยกเลิกคิวอัพโหลดไฟล์</a>
+                                            </div>
+                                            <p class="text-center" style="height:0px"><span id="_btn_upload_">&nbsp;</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <p>
+                                วิธีการตั้งชื่อไฟล์ Upload<br />
+                                ให้หน่วยงานตั้งชื่อเป็นภาษาอังกฤษและสื่อถึงหมายเลขคดีนั้นๆ<br />
+                                R = คดีอาญา, P = สำหรับคดีแพ่ง, PB=สำหรับคดีผู้บริโภค<br />
+                                เช่น R2-56A(คือ อ.2/2556)<br />
+                                โดยห้ามตั้งชื่อโดยใช้อักขระพิเศษ \\ / : ; * ? " ' < > | หรือภาษาไทย
+                            </p>
+                            <!-- end upload -->
+                    </div>
+                </div>
+
+         
+                <!-- file2 -->
+                <div ng-controller="FlowUploadCtrl as upflow" ng-init="upflow.linkScope(currentScope())" class="form-group" ng-class="{ 'has-error' : form.fd1.$invalid && form.$dirty}">
+
+                    <label class="col-md-4 control-label">ไฟล์สำเนาคำพิพากษา (.pdf)</label>
+                    <div class="col-md-7">
+                        <input type="text" placeholder="ยังไม่ได้อัพโหลด" value="{{editingItem.file2}}" readonly class="form-control">
+                        <!--begin upload-->
+                        
+                            <div ng-if="editingItem.id" style="padding-top:1em" flow-init="{target: API_URL + 'upload/' + editingItem.id + '/file2'}" flow-file-added="upflow.setFlow($flow,$file);" flow-files-added="upflow.setFlow($flow); upflow.setFlowState(1)" flow-upload-started="upflow.setFlowState(2)" flow-complete="upflow.checkFlow()" flow-file-success="$file.response = $message">
+
+                                <div ng-hide="upflow.getFlowState()==2" style="padding-bottom:1em" ng-if="$flow.files.length<1">
+                                    <span class="btn btn-success" flow-btn flow-single-file="true" flow-attrs="{accept:'application/pdf'}" style="min-width:20em"><span class="fa fa-file-pdf-o"></span> อัพโหลดไฟล์สำเนาคำพิพากษา</span>
+                                </div>
+                                <h4 ng-show="upflow.getFlowState()==2">กำลังอัพโหลดไฟล์<br><small>กรุณารอจนกว่าจะอัพโหลดเสร็จ...</small></h4>
+
+                                <div class="well" ng-if="$flow.files.length && upflow.getFlowState()">
+                                    <div ng-repeat="file in $flow.files" class="transfer-box">
+                                        <div>
+                                            {{file.name}} ({{file.size}}bytes)
+                                            <div class="progress progress-striped" ng-class="{active: file.isUploading()}">
+                                                <div class="progress-bar" role="progressbar" ng-class="{'progress-bar-success':file.isComplete(),'progress-bar-danger':file.error}" aria-valuenow="{{file.progress() * 100}}" aria-valuemin="0" aria-valuemax="100" ng-style="{width: (file.progress() * 100) + '%'}">
+                                                    <span class="sr-only">{{file.progress()}}% Complete</span>
+                                                </div>
+                                            </div>
+                                            <div style="padding-bottom:1em;">
+                                                <a ng-show="upflow.getFlowState()==1" class="btn btn-mini btn-success" ng-click="uploadFlow($flow)" style="min-width:12em"><span class="glyphicon glyphicon-ok"></span> เริ่มอัพโหลด</a>
+                                                <a ng-show="upflow.getFlowState()==-1 || (upflow.getFlowState()==2 && !$flow.isUploading())" class="btn btn-mini btn-success" ng-click="upflow.retry()" style="min-width:12em"><span class="glyphicon glyphicon-repeat"></span> อัพโหลดใหม่</a>
+                                                <a ng-show="$flow.isUploading()" class="btn btn-small btn-warning" ng-click="$flow.pause()">หยุดอัพโหลดไฟล์</a>
+                                                <a ng-show="$flow.files.length && upflow.getFlowState()" class="btn btn-small btn-danger" ng-click="$flow.cancel();upflow.checkFlow()" style="min-width:12em"><span class="glyphicon glyphicon-remove"></span> ยกเลิกคิวอัพโหลดไฟล์</a>
+                                            </div>
+                                            <p class="text-center" style="height:0px"><span id="_btn_upload_">&nbsp;</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <p>
+                                วิธีการตั้งชื่อไฟล์ Upload<br />
+                                ให้หน่วยงานตั้งชื่อเป็นภาษาอังกฤษและสื่อถึงหมายเลขคดีนั้นๆ<br />
+                                R = คดีอาญา, P = สำหรับคดีแพ่ง, PB=สำหรับคดีผู้บริโภค<br />
+                                เช่น R2-56(คือ อ.2/2556)<br />
+                                โดยห้ามตั้งชื่อโดยใช้อักขระพิเศษ \\ / : ; * ? " ' < > | หรือภาษาไทย
+                            </p>
+                        <!-- end upload -->
                     </div>
                 </div>
 
 
-
-</fieldset>
+            </fieldset>
         </form>
     </div>
     <div class="panel-footer">
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
 
-                <button type="button" class="btn btn-info btn-block" ng-click="goBack()"><span class="glyphicon glyphicon-arrow-left"></span> กลับไปหน้าหลัก</button>
+                <button type="button" class="btn btn-primary btn-block" ng-click="goBack()"><span class="glyphicon glyphicon-arrow-left"></span> กลับไปหน้าหลัก</button>
 
             </div>
         </div>

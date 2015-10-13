@@ -9,8 +9,9 @@
         <div class="modal-dialog" style="width:95%;">
             <div class="modal-content">
                 <div class="modal-header" ng-show="title">
+                    
                     <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" ng-bind="title"></h4>
+                    <h4 class="modal-title"><span class="fa fa-book"></span> <span ng-bind="title"></span></h4>
                 </div>
                 <div class="modal-body">
 
@@ -22,8 +23,8 @@
                                     <!-- Text input-->
                                     <label class="col-md-4 control-label">วันที่ส่ง</label>
                                     <div class="col-md-7">
-                                        <input type="text" name="name" placeholder="ยังไม่มีข้อมูล" required ng-model="editingItem.name" class="form-control input-md">
-                                        <p class="help-block has-error" ng-show="form.name.$error.required">ต้องกำหนดชื่อ</p>
+                                        <span mode="0" ng-model="editingItem.date_sent" placeholder="ยังไม่มีข้อมูล" custom-date-field></span> 
+       
                                     </div>
                                 </div>
 
@@ -32,7 +33,7 @@
                                     <!-- Text input-->
                                     <label class=" col-md-4 control-label">เลขที่หนังสือส่ง</label>
                                     <div class="col-md-7">
-                                        <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control input-md" ng-model="editingItem.position">
+                                        <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control input-md" ng-model="editingItem.number_sent">
 
                                     </div>
                                 </div>
@@ -44,7 +45,7 @@
                                         <!-- Text input-->
                                         <label class="col-md-4 control-label">วันที่รับฟ้อง</label>
                                         <div class="col-md-7">
-                                            <input type="text" placeholder="ยังไม่ได้ตั้งรหัสผ่าน" class="form-control input-md" ng-model="editingItem.password">
+                                            <span mode="0" ng-model="editingItem.date_case" placeholder="ยังไม่มีข้อมูล" custom-date-field></span> 
 
                                         </div>
                                     </div>
@@ -54,8 +55,10 @@
                                     <!-- Text input-->
                                     <label class="col-md-4 control-label">ประเภทคดี</label>
                                     <div class="col-md-7">
-                                        <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control input-md" ng-model="editingItem.account">
-
+                                        
+                                        <select class="form-control input-md" name="role" ng-model="editingItem.type_id" select-default ng-options="it.id as it.name group by it.group_id | lookup_group for it  in Lookups.getType()">
+                                            <option value=""></option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group col-md-6">
@@ -63,7 +66,7 @@
                                     <!-- Text input-->
                                     <label class="col-md-4 control-label">เลขคดีดำ</label>
                                     <div class="col-md-7">
-                                        <input type="text" placeholder="ยังไม่ได้ตั้งรหัสผ่าน" class="form-control input-md" ng-model="editingItem.password">
+                                        <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control input-md" ng-model="editingItem.number_black">
 
                                     </div>
                                 </div>
@@ -74,7 +77,7 @@
                                     <!-- Text input-->
                                     <label class="col-md-4 control-label">โจทก์</label>
                                     <div class="col-md-7">
-                                        <input type="text" placeholder="ยังไม่ได้ตั้งรหัสผ่าน" class="form-control input-md" ng-model="editingItem.password">
+                                        <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control input-md" ng-model="editingItem.plaintiff">
 
                                     </div>
                                 </div>
@@ -84,7 +87,7 @@
                                     <!-- Text input-->
                                     <label class="col-md-4 control-label">จำเลย</label>
                                     <div class="col-md-7">
-                                        <input type="text" placeholder="ยังไม่ได้ตั้งรหัสผ่าน" class="form-control input-md" ng-model="editingItem.password">
+                                        <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control input-md" ng-model="editingItem.defendant">
 
                                     </div>
                                 </div>
@@ -95,8 +98,9 @@
                                 <!-- Text input-->
                                 <label class="col-md-2 control-label">ข้อหาหลัก</label>
                                 <div class="col-md-9">
-                                    <input type="text" placeholder="ยังไม่ได้ตั้งรหัสผ่าน" class="form-control input-md" ng-model="editingItem.password">
-
+                                    <select class="form-control input-md" name="role" ng-model="editingItem.topic_id" select-default ng-options="it.id as it.name group by it.type_id|lookup_type for it  in Lookups.getTopicByType(editingItem.type_id)">
+                                        <option value=""></option>
+                                    </select>
                                 </div>
                             </div>
                                 
@@ -106,7 +110,7 @@
                                 <!-- Text input-->
                                 <label class="col-md-2 control-label">ข้อหารอง</label>
                                 <div class="col-md-9">
-                                    <input type="text" placeholder="ยังไม่ได้ตั้งรหัสผ่าน" class="form-control input-md" ng-model="editingItem.password">
+                                    <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control input-md" ng-model="editingItem.title">
 
                                 </div>
                             </div>
@@ -114,7 +118,7 @@
                                 <!-- Text input-->
                                 <label class="col-md-2 control-label">หมายเหตุ</label>
                                 <div class="col-md-9">
-                                    <textarea type="text" rows="3" placeholder="ยังไม่ได้ตั้งรหัสผ่าน" class="form-control input-md" ng-model="editingItem.password"></textarea>
+                                    <textarea type="text" rows="3" placeholder="ยังไม่มีข้อมูล" class="form-control input-md" ng-model="editingItem.note1"></textarea>
                                 </div>
                             </div>
                           
@@ -124,8 +128,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" ng-disabled="!editingItem.name" ng-click="saveForm()">บันทึกข้อมูล</button>
-                    <button type="button" class="btn btn-warning" ng-click="cancelForm()">ยกเลิก</button>
+                    <button type="button" class="btn btn-primary btn-min"  ng-click="saveForm()"><span class="fa fa-save"></span> บันทึกข้อมูล</button>
+                    <button type="button" class="btn btn-warning btn-min" ng-click="cancelForm()"><span class="fa fa-close"></span> ยกเลิก</button>
                 </div>
             </div>
         </div>
@@ -166,7 +170,7 @@
                                 <!-- Text input-->
                                 <label class="col-md-4 control-label">เลขคดีดำ</label>
                                 <div class="col-md-7">
-                                    <input type="text" name="name" placeholder="" required ng-model="searchItem.number_black" class="form-control input-md">
+                                    <input type="text" name="name" placeholder="ยังไม่มีข้อมูล" required ng-model="searchItem.number_black" class="form-control input-md">
                                 </div>
                             </div>
 
@@ -175,7 +179,7 @@
                                 <!-- Text input-->
                                 <label class="col-md-4 control-label">โจทก์</label>
                                 <div class="col-md-7">
-                                    <input type="text" name="code" placeholder="" required ng-model="searchItem.plaintiff" class="form-control input-md">
+                                    <input type="text" name="code" placeholder="ยังไม่มีข้อมูล" required ng-model="searchItem.plaintiff" class="form-control input-md">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -191,7 +195,7 @@
                                 <!-- Text input-->
                                 <label class="col-md-4 control-label">เรื่อง</label>
                                 <div class="col-md-7">
-                                    <input type="text" name="code" placeholder="" required ng-model="searchItem.title" class="form-control input-md">
+                                    <input type="text" name="code" placeholder="ยังไม่มีข้อมูล" required ng-model="searchItem.title" class="form-control input-md">
                                 </div>
                             </div>
                         </fieldset>
@@ -237,11 +241,11 @@
                     <button class="btn btn-info" ng-click="advancedSearch('custom.court.search.html')">
                         <span class="glyphicon glyphicon-search"></span> ค้นหา
                     </button>
-                    <button ng-click="newItem()" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> เพิ่ม</button>
-                    <button ng-click="editItem()" ng-show="hasSelected()" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span> แก้ไข</button>
+                    <button ng-click="newItem({date_sent:today()})" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> เพิ่มคดี</button>
+                    <button ng-click="editItem()" ng-show="hasSelected()" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span> แก้ไขคดี</button>
                     <button data-placement="bottom-right" data-trigger="click" bs-popover data-template="custom.confirm.popover.html"
                             ng-click="removeItem()" ng-show="hasSelected()" class="btn btn-danger" data-auto-close="true">
-                        <span class="glyphicon glyphicon-remove"></span> ลบ
+                        <span class="glyphicon glyphicon-remove"></span> ลบคดี
                     </button>
                     <button ng-click="refresh()" class="btn btn-success"><span class="glyphicon glyphicon-refresh"></span> โหลดข้อมูล</button>
 
@@ -277,10 +281,12 @@
                                 ng-dblclick="editItem()"
                                 ng-class="{'active': isSelected(it)}">
                                 <td width="30" class="text-right text-muted">{{startIdx + $index + 1}}.</td>
+                                <!--
                                 <td width="30" header="'custom.checked.html'">
                                     <input type="checkbox" ng-model="checkboxes.items[it[pkField]]" />
 
                                 </td>
+                                -->
                                 <td data-title="'เลขคดีดำ'" sortable="'number_black'">
                                     {{it.number_black}}
                                 </td>
@@ -311,7 +317,7 @@
                                 </td>
                                 <td data-title="'ไฟล์ร่าง/คำพิพากษา'">
                                    <span class="label label-info">{{countFile(it)}}</span>
-                                    <span ng-if="isSelected(it)" class="pull-right"><button class="btn btn-success btn-circle btn-xs" data-placement="top-right" data-trigger="click" bs-popover data-template="custom.confirm.court.report.html"
+                                    <span ng-if="isSelected(it)" title="เลือกทำรายการ" class="pull-right"><button class="btn btn-primary btn-circle btn-xs" data-placement="top-right" data-trigger="click" bs-popover data-template="custom.confirm.court.report.html"
                             data-auto-close="true"><span class="glyphicon glyphicon-edit"></span></button></span>
                                 </td>
 

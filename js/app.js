@@ -20,11 +20,14 @@ angular.module('App', ['lazyLoadJs', 'ui.router', 'angular-loading-bar', 'ngAnim
 }])
 
 
-.run(['$rootScope', '$state', '$stateParams', 'Auth', '$filter', '$alert', 'store', 'Lookups', function ($rootScope, $state, $stateParams, Auth, $filter, $alert, store, Lookups) {
-
+.run(['$rootScope', '$state', '$stateParams', 'Auth', '$filter', '$alert', 'store', 'Lookups', 'API_URL', function ($rootScope, $state, $stateParams, Auth, $filter, $alert, store, Lookups, API_URL) {
+    $rootScope.API_URL = API_URL;
     var _StoreData = store.get('_StoreData') || {};
    
-
+    var _today = new Date();
+    $rootScope.today = function () {
+        return $filter('date')(_today, 'yyyy-MM-dd');
+    }
     $rootScope.storeData = function ($a, $b) {
         if ($b === null) {
             delete _StoreData[$a];
@@ -128,8 +131,11 @@ angular.module('App', ['lazyLoadJs', 'ui.router', 'angular-loading-bar', 'ngAnim
         Lookups.load();
     }
 }])
-.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', '$controllerProvider', 'storeProvider',
-function ($stateProvider,   $urlRouterProvider, $httpProvider, $controllerProvider,storeProvider) { 
+.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', '$controllerProvider', 'storeProvider','flowFactoryProvider',
+function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider, storeProvider, flowFactoryProvider) {
+    flowFactoryProvider.defaults = {
+        singleFile: true
+    };
     storeProvider.setStore("sessionStorage");
         //$filterProvider
        // angular.configDynamic($controllerProvider);
@@ -610,6 +616,12 @@ function ($stateProvider,   $urlRouterProvider, $httpProvider, $controllerProvid
             }
             return lookups.topics;
         },
+        getTopicByType: function (id) {
+            if (id !== undefined) {
+                return _.filter(lookups.topics, function (it) { return (it.type_id == id) });
+            }
+            return lookups.topics;
+        },
         getYear: function (id, fd) {
             if (id !== undefined) {
                 if (!fd) fd = 'name';
@@ -722,6 +734,9 @@ function ($stateProvider,   $urlRouterProvider, $httpProvider, $controllerProvid
                     }
                 } else {
                     str = it[fd];
+                    if (it['code']) {
+                        str = it['code'] + ' ' + str;
+                    }
                 }
             }
         }
@@ -904,19 +919,26 @@ function ($stateProvider,   $urlRouterProvider, $httpProvider, $controllerProvid
         $rootScope.storeData('court_cases_id', null);
         $state.go('court.cases')
     }
-
+    var _reRead = [];
     $scope.go = function (a, b) {
         if (a && b) {
             var d = {};
             d[$scope.pkField] = b[$scope.pkField];
             $scope.editingItem = null;
             Auth.post($scope.apiName + '/get', d).success(function (data) {
+                _reRead = null;
+                _reRead = [a,b];
                 $scope.editingItem = data.data;
                 $rootScope.storeData('court_cases_id', b[$scope.pkField]);
                 $state.go(a);
 
             });
 
+        }
+    }
+    $scope.$fetch = function () {
+        if (_reRead.length==2) {
+            $scope.go(_reRead[0], _reRead[1]);
         }
     }
     
@@ -1143,6 +1165,89 @@ function ($stateProvider,   $urlRouterProvider, $httpProvider, $controllerProvid
         }
     };
 })
+.controller('FlowUploadCtrl', ['$scope', '$modal', '$timeout', 'Auth', '$state', 'Lookups', function ($scope, $modal, $timeout, Auth, $state, Lookups) {
 
+    var MAXSIZE = 1024 * 1014 * 10;
+    this.linkScope = function (s) {
+        $scope._scope = s;
+    }
+
+    $scope._flowState = 0;
+    this.setFlowState = function (i) {
+        $scope._flowState = i;
+    }
+    this.getFlowState = function () {
+        return $scope._flowState;
+    }
+    this.getFlow = function () {
+        return $scope._flow;
+    }
+    this.setFlow = function (flow, $file) {
+        $scope._flow = flow;
+        var ret = true;
+        if ($file) {
+            ret=($file.size > 0) && ($file.size < MAXSIZE);
+            if (ret) {
+                $scope._flowState = 1;
+            } else {
+                $scope._flowState = 0;
+                alert('ไม่สามารถเลือกไฟล์ ที่ไม่มีข้อมูล หรือ ไฟล์ที่ใหญ่เกิน 10M');
+            }
+        }
+        
+        return ret;
+    }
+    this.checkFlow = function () {
+        if ($scope._flow) {
+            var er = false;
+            if ($scope._flow.files) {
+                for (var i = 0; i < $scope._flow.files.length; i++) {
+                    if ($scope._flow.files[i].error) {
+                        er = true;
+                        break;
+                    }
+                }
+            }
+            if (er) {
+                $scope._flowState = -1;
+            } else {
+                $scope._flowState = 0;
+                $timeout(function () {
+                    if ( $scope._flow.files[0].response) {
+                        
+						    $scope._flow.cancel();
+						    $.notify('อัพโหลดเสร็จแล้ว', 'success');
+						    $scope.$parent.$fetch();
+                    }
+                },100);
+            }
+        }
+    }
+    this.retry = function () {
+        if ($scope._flow) {
+            if ($scope._flowState == -1) {
+                if ($scope._flow.files) {
+                    for (var i = 0; i < $scope._flow.files.length; i++) {
+                        if ($scope._flow.files[i].error) {
+                            $scope._flow.files[i].retry();
+                            $scope._flowState = 2;
+                        }
+                    }
+                }
+            } else {
+                $scope._flow.resume();
+            }
+        }
+    }
+    this.getScope = function () {
+        return $scope;
+    }
+    $scope.uploadFlow = function (fl) {
+        $scope.$xflow = fl;
+        $scope.$xflow.upload();
+
+    }
+
+}])
 
 
