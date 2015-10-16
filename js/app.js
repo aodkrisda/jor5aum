@@ -20,7 +20,7 @@ angular.module('App', ['lazyLoadJs', 'ui.router', 'angular-loading-bar', 'ngAnim
 }])
 
 
-.run(['$rootScope', '$state', '$stateParams', 'Auth', '$filter', '$alert', 'store', 'Lookups', 'API_URL', function ($rootScope, $state, $stateParams, Auth, $filter, $alert, store, Lookups, API_URL) {
+.run(['$rootScope', '$state', '$stateParams', 'Auth', '$filter', '$alert', 'store', 'Lookups', 'API_URL','moment', function ($rootScope, $state, $stateParams, Auth, $filter, $alert, store, Lookups, API_URL,moment) {
     $rootScope.API_URL = API_URL;
     var _StoreData = store.get('_StoreData') || {};
    
@@ -65,12 +65,28 @@ angular.module('App', ['lazyLoadJs', 'ui.router', 'angular-loading-bar', 'ngAnim
         }
         return n;
     }
+    $rootScope.date_diff = function (d1, d2) {
+        var i = 0;
+        if (d1 && d2) {
+            var d = moment(d1);
+            var d3 = moment(d2);
+            if(d && d3 && d.isValid() && d3.isValid()){
+                i = d.diff(d3, 'days');
+            }
+            d = null;
+            d3 = null;
+        }
+        return i;
+    }
+    $rootScope.open_pdf = function (pdf) {
+        return API_URL + 'pdf/' + pdf;
+    }
     $rootScope.lookup_group = $filter('lookup_group');
     $rootScope.courtName = '';
     $rootScope.dropdown_reports=[
 
 {
-    "text": "สรุปรายงานคดีของศาล",
+    "text": "สรุปรายงานคดีของศาลในภาค 5",
     "href": "#admin/report1"
   },
   {
@@ -78,7 +94,7 @@ angular.module('App', ['lazyLoadJs', 'ui.router', 'angular-loading-bar', 'ngAnim
   },
 
                                  {
-                                	    "text": "รายงานคดีของศาลที่จัดส่ง",
+                                     "text": "สรุปรายงานคดีแยกเป็นรายศาล",
                                 	    "href": "#admin/report2"
                                 	  }                              	  
     ];
@@ -95,6 +111,7 @@ angular.module('App', ['lazyLoadJs', 'ui.router', 'angular-loading-bar', 'ngAnim
     $rootScope.logOut = function () {
         Auth.post('logout', {}).success(function () {
             Auth.logOut();
+           
             $state.go('login');
         })
     }
@@ -173,6 +190,15 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
                   }
               }
           })
+          .state("admin.vcases", {
+              url: "/vcases",
+              roles: ['admin'],
+              views: {
+                  '': {
+                      templateUrl: 'views/admin_vcases.html'
+                  }
+              }
+          })
           .state("admin.cases.form1", {
               url: "/form1",
               roles: ['admin'],
@@ -235,14 +261,29 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
                       templateUrl: 'views/admin_users.html'
                   }}
           })
-          .state("admin.types", {
+          .state("admin.management", {
+              // Use a url of "/" to set a state as the "index".
+              url: "/management",
+              abstract: true,
+              templateUrl: 'views/admin_management.html'
+          })
+          .state("admin.management.users", {
+              url: "/users",
+              roles: ['admin'],
+              views: {
+                  '': {
+                      templateUrl: 'views/admin_users.html'
+                  }
+              }
+          })
+          .state("admin.management.types", {
               url: "/types",
               views:{
                   '': {
                       templateUrl: 'views/admin_types.html'
                   }}
           })
-          .state("admin.topics", {
+          .state("admin.management.topics", {
               url: "/topics",
               roles: ['admin'],
               views: {
@@ -251,7 +292,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
                   }
               }
           })
-          .state("admin.results", {
+          .state("admin.management.results", {
               url: "/results",
               roles: ['admin'],
               views: {
@@ -260,7 +301,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
                   }
               }
           })
-          .state("admin.ats", {
+          .state("admin.management.ats", {
               url: "/ats",
               roles: ['admin'],
               views: {
@@ -287,6 +328,15 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
                   }
               }
 
+          })
+          .state("court.vcases", {
+              url: "/vcases",
+              roles: ['court'],
+              views: {
+                  '': {
+                      templateUrl: 'views/court_vcases.html'
+                  }
+              }
           })
           .state("court.cases.form1", {
               url: "/form1",
@@ -366,6 +416,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
     function logOut() {
         user = null;
         token = null;
+        store.remove('utoken');
     }
 
     return {
@@ -734,9 +785,11 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
                     }
                 } else {
                     str = it[fd];
+                    /*
                     if (it['code']) {
                         str = it['code'] + ' ' + str;
                     }
+                    */
                 }
             }
         }
@@ -751,12 +804,23 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
             if (!fd) fd = 'name';
             var it = Lookups.getType(id);
             if (it && (it[fd] !== undefined)) {
-                if (lookgroup) {
+                if (lookgroup===true) {
                     if (it['group_id'] !== undefined) {
                         var it2 = Lookups.getGroup(it['group_id']);
                         if (it2 && (it2[fd] !== undefined)) {
                             str = it2[fd];
                         }
+                    }
+                } else if (lookgroup === 'code') {
+                    str = it[fd];
+                    if (it && (it['code'] !== undefined)) {
+                        str = str + ' (' + it['code'] + ')';
+                    }
+                }else if(lookgroup==='full') {
+                    str = it[fd];
+                    var it2 = Lookups.getGroup(it['group_id']);
+                    if (it2 && (it2['name'] !== undefined)) {
+                        str = str + ' (' + it2['name'] + ')';
                     }
                 } else {
                     str = it[fd];
@@ -767,6 +831,13 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
     }
 }])
 
+
+.filter('math_abs', [function () {
+    return function (v) {
+        v = parseFloat(v);
+        return Math.abs(v);
+    }
+}])
 
 
 .controller('AdminReportCtrl', ['$scope', '$rootScope','$timeout', 'Auth', '$state', 'Lookups', '$modal', '$popover','Lookups', '_',function ($scope,$rootScope, $timeout, Auth, $state, Lookups, $modal, $popover,$Lookups,_) {
@@ -886,11 +957,86 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
 }])
 
 
-.controller('CourtReportCtrl', ['$scope', '$rootScope', '$timeout', 'Auth', '$state', 'Lookups', '$modal', '$popover', 'Lookups', '_', function ($scope, $rootScope, $timeout, Auth, $state, Lookups, $modal, $popover, $Lookups, _) {
+.controller('MoveUserCtrl', ['$scope', '$rootScope', '$timeout', 'Auth', '$state', 'Lookups', '$modal', '$popover', 'Lookups', '_', function ($scope, $rootScope, $timeout, Auth, $state, Lookups, $modal, $popover, $Lookups, _) {
+    var _successHlr = null;
+    $scope.moveUser = function (tpl, hlr) {
+        if (tpl) {
+            _successHlr = hlr;
+            if (!$scope._Panel) {
+                $scope._Panel = $modal({ scope: $scope, title: '', backdrop: 'static', template: tpl, placement: "top", html: true, show: false });
+            }
+            $scope._Panel.$promise.then($scope._Panel.show);
+        }
+    }
+    $scope.doMoveUser = function (scope,hlr) {
+        if (scope && scope.$it) {
+            var d = {};
+            d[$scope.pkField] = scope.$it[scope.pkField];
+            console.dir(d);
+            console.log(scope.apiName + '/checkin');
+            Auth.post(scope.apiName + '/checkin_user', d).success(function (data) {
+                if (data.data == true) {
+                    if (hlr) hlr();
+                    if (_successHlr) {
+                        _successHlr();
+                        _successHlr = null;
+                    }
+                }
+            });
+        }
+    }
+
+}])
+.controller('CourtReportCtrl', ['$scope', '$filter','$rootScope', '$timeout', 'Auth', '$state', 'Lookups', '$modal', '$popover', 'Lookups', '_', function ($scope, $filter, $rootScope, $timeout, Auth, $state, Lookups, $modal, $popover, $Lookups, _) {
     $scope.Lookups = Lookups;
     $scope.pkField = 'id';
     $scope.apiName = 'court_cases';
     $scope.editItem = null;
+    
+    $scope.years = [];
+    $scope.blkPopover = null;
+    var i = (new Date()).getFullYear() + 543;
+    for (var j = 0; j < 10; j++) {
+        $scope.years.push((i - j) + '');
+    }
+
+    var __it = null;
+    $scope.popupBlackNumber = function (it) {
+        __it = it;
+        $scope.editingItem = it;
+        var tm = {black_number:'',year:''};
+        if (__it.number_black) {
+            var str = __it.number_black;
+            var i = str.indexOf("/");
+            if (i >= 0) {
+                tm.year = str.substr(i + 1);
+                str = str.substr(0, i);
+                var str2 = $filter('lookup_type')($scope.editingItem.type_id, 'code');
+                i = str.indexOf(str2);
+                if (i == 0) {
+                    str = str.substr(str2.length);
+                }
+                tm.number_black = str;
+            }
+        }
+        $scope.temp = tm;
+        //if (!$scope.blkPopover) {
+            $scope.blkPopover = $popover(angular.element('#edit-blacknum'), { scope: $scope, container: 'body', autoClose: true, trigger: 'manual', placement: 'left', template: "popup.black_number.tpl.html", show: false });
+        //}
+        $scope.blkPopover.$promise.then($scope.blkPopover.show);
+    }
+    $scope.changeTypeId = function (it) {
+        if (it && it.number_black) {
+            it.number_black = '';
+        }
+    }
+    $scope.setBlackNumber = function (temp) {
+        var str = $filter('lookup_type')($scope.editingItem.type_id, 'code');
+        str += temp.number_black.trim();
+        if (temp.year) str += '/' + temp.year.trim();
+        __it.number_black = str;
+    }
+
     $scope.getFileTitle = function (f) {
         if (f && f.name && f.size) {
             return f.name + ' (' + $filter('number')(f.size / 1024, 1) + ' KB)'
@@ -1251,3 +1397,38 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
 }])
 
 
+.directive('iosToggle', function () {
+    var toggle = ['$scope', '$timeout', function ($scope, $timeout) {
+        $scope.toggle = function toggle() {
+            if (!$scope.disabled) {
+                $scope.model = ($scope._model.$viewValue == $scope.trueValue) ? $scope.falseValue : $scope.trueValue;
+                if ($scope._model) $scope._model.$setViewValue($scope.model);
+            }
+        };
+    }];
+    return {
+        template: '<div ng-click="toggle()" ng-class="{coActive: model === trueValue, disabled: disabled}"></div>',
+        restrict: 'EA',
+        require: '?ngModel',
+        controller: toggle,
+        scope: {
+            model: '=ngModel',
+            disabled: '=ngDisabled',
+            trueValue: '=ngTrueValue',
+            falseValue: '=ngFalseValue'
+        },
+        link: function (scope, $element, attrs, ctrl) {
+            scope.trueValue = scope.trueValue || true;
+            scope.falseValue = scope.falseValue || false;
+
+            // Add class to outer element (no replace)
+            $element.addClass('ios-toggle');
+            if (scope.disabled) {
+                $element.addClass('disabled');
+            } else {
+                $element.removeClass('disabled');
+            }
+            scope._model = ctrl;
+        }
+    };
+});

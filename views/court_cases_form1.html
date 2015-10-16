@@ -2,7 +2,7 @@
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h4 class="text-center"><strong><big>รับรายงานคดี {{editingItem.user_id | lookup_court}}</big></strong></h4>
+        <h4 class="text-center"><strong><big>ส่งสำนวนและคำพิพากษาเพื่อตรวจร่าง {{editingItem.user_id | lookup_court}}</big></strong></h4>
     </div>
 
     <div class="panel-body" style="padding-bottom:0px;">
@@ -43,14 +43,14 @@
                 </div>
                 <div class="row clearfix"></div>
                     <div class="form-group col-md-6 ">
-                        <label class="control-label col-md-4">ข้อหาหลัก</label>
+                        <label class="control-label col-md-4">ข้อหาสถิติ</label>
                         <div class="col-md-8">
                             <input type="text" readonly class="form-control input-md" value="{{editingItem.topic_id | lookup_topic}}">
                         </div>
                     </div>
 
                     <div class="form-group col-md-6">
-                        <label class="control-label col-md-4">ข้อหารอง</label>
+                        <label class="control-label col-md-4">ข้อหาพิมพ์ปก</label>
                         <div class="col-md-8">
                             <input type="text" readonly class="form-control input-md" value="{{editingItem.title}}">
                         </div>
@@ -131,7 +131,7 @@
                 </div>
 
                 <div class="form-group col-md-6">
-                    <label class="control-label col-md-4">เลขที่ส่งสำนวน</label>
+                    <label class="control-label col-md-4">เลขที่หนังสือออก(ส่งสำนวน)</label>
                     <div class="col-md-8">
                         <input type="text"  class="form-control input-md" ng-model="editingItem.number_sent2">
                     </div>
@@ -152,10 +152,10 @@
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
                 <div class="col-md-6">
-                    <button type="button" class="btn btn-success btn-block" ng-click="saveForm(editingItem,1)"><span class="glyphicon glyphicon-ok-sign"></span> บันทึกข้อมูล</button>
+                    <button type="button" class="btn btn-success btn-block" ng-click="saveForm(editingItem,1)"><span class="fa fa-save"></span> บันทึกข้อมูล</button>
                 </div>
                 <div class="col-md-6">
-                    <button type="button" class="btn btn-warning btn-block" ng-click="goBack()"><span class="glyphicon glyphicon-remove"></span> ยกเลิก</button>
+                    <button type="button" class="btn btn-warning btn-block" ng-click="goBack()"><span class="fa fa-close"></span> ยกเลิก</button>
                 </div>
             </div>
         </div>

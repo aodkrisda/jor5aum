@@ -81,11 +81,13 @@ angular.module('custom.table', [])
         return ($scope.searchOption && ($scope.tableParams.filter() === $scope.searchOption));
     }
     $scope._searchPanel = null;
-    $scope.advancedSearch = function (tpl) {
+    var _advancedParam = null;
+    $scope.advancedSearch = function (tpl,param) {
         if (tpl) {
             if (!$scope._searchPanel) {
                 $scope._searchPanel = $modal({ scope: $scope, title: '', backdrop: 'static', template: tpl, placement: "top", html: true, show: false });
             }
+            _advancedParam = param || {};
             $scope._searchPanel.$promise.then($scope._searchPanel.show);
         }
     }
@@ -97,6 +99,9 @@ angular.module('custom.table', [])
 
     $scope.searchOption = null;
     $scope.startSearch = function (option) {
+        if (_advancedParam) {
+            angular.extend(option,_advancedParam);
+        }
         $scope.searchOption = {search: option };
         $scope.tableParams.filter($scope.searchOption);
     }
@@ -264,15 +269,16 @@ angular.module('custom.table', [])
     }
     $scope.pleaseConfirmDeleteHlr=null;
     $scope.pleaseConfirmDelete=function(hlr){
+       
         if (!$scope._confirmPanel) {
-            $scope._confirmPanel = $modal({ scope: $scope, title: '', backdrop: 'static', template: 'custom.confirm.delete.html', placement: "top", html: true, show: false });
+            $scope._confirmPanel = $modal({ scope: $scope, title: '', backdrop: 'static', template: 'custom.confirm.delete.html', placement: "left", html: true, show: false });
         }
         $scope.pleaseConfirmDeleteHlr=hlr;
         $scope._confirmPanel.$promise.then($scope._confirmPanel.show);
     }
     $scope.pleaseConfirmDelete2=function(hlr){
         if (!$scope._confirmPanel) {
-            $scope._confirmPanel = $modal({ scope: $scope, title: '', backdrop: 'static', template: 'custom.confirm.delete2.html', placement: "top", html: true, show: false });
+            $scope._confirmPanel = $modal({ scope: $scope, title: '', backdrop: 'static', template: 'custom.confirm.delete2.html', placement: "left", html: true, show: false });
         }
         $scope._confirmPanel.$promise.then($scope._confirmPanel.show);
     }    
@@ -398,89 +404,90 @@ angular.module('custom.table', [])
                 //return;
             }
 
-/*
-            var b = true;
-            if(!($scope.searchOption && ($scope.tableParams.filter() === $scope.searchOption))){
-                if ($scope.requiredFilters) {
-                    var f = params.filter();
-                    _.each($scope.requiredFilters, function (v, k) {
-                        if (v && (f[k] == undefined)) {
-                            b = false;
+            /*
+                        var b = true;
+                        if(!($scope.searchOption && ($scope.tableParams.filter() === $scope.searchOption))){
+                            if ($scope.requiredFilters) {
+                                var f = params.filter();
+                                _.each($scope.requiredFilters, function (v, k) {
+                                    if (v && (f[k] == undefined)) {
+                                        b = false;
+                                    }
+                                });
+                                if (!b) {
+                                    params.total(0);
+                                    $defer.resolve([]);
+            
+                                }
+                            }
                         }
-                    });
-                    if (!b) {
-                        params.total(0);
-                        $defer.resolve([]);
+            
+                        if (params.sorting) {
+                            var key = Object.keys(params.sorting)[0];
+                            key = key + ':' + params.sorting[key];
+                            if (key != $scope._sortfield_) {
+                                $scope._sortfield_ = key;
+                                if (params['page'] != 1) {
+                                    $scope.tableParams.page(1);
+                                    return;
+                                }
+                            }
+                        }
+            */
 
-                    }
-                }
+            var p={
+                filter: params.filter(),
+                sorting:params.sorting(),
+                count:params.count(),
+                page:params.page()
             }
-
-            if (params.sorting) {
-                var key = Object.keys(params.sorting)[0];
-                key = key + ':' + params.sorting[key];
-                if (key != $scope._sortfield_) {
-                    $scope._sortfield_ = key;
-                    if (params['page'] != 1) {
-                        $scope.tableParams.page(1);
-                        return;
-                    }
-                }
-            }
-*/
-
-        var p={
-          filter: params.filter(),
-          sorting:params.sorting(),
-          count:params.count(),
-          page:params.page()
-        }
 
 
             // ajax request to api
             cfpLoadingBar.start();
             Auth.post($scope.apiName, p).success(function (data) {
 
-                    // update table params
-            		if(data.meta!==undefined){
-            			$scope.TableMeta=data.meta;
-            		}else{
-            			$scope.TableMeta=null;
-            		}
-                    params.total(data.total);
-                    params.page(data.page);
-                    // set new data
-                    $scope.startIdx = (data.page - 1) * params.count();
+                // update table params
+                if(data.meta!==undefined){
+                    $scope.TableMeta=data.meta;
+                }else{
+                    $scope.TableMeta=null;
+                }
+                params.total(data.total);
+                params.page(data.page);
+                // set new data
+                $scope.startIdx = (data.page - 1) * params.count();
                    
-                    var keys = {};
-                    var sel = null;
+                var keys = {};
+                var sel = null;
 
-                    var n = data.data.length;
-                    var b=false;
-                    for (var i = 0; i < n; i++) {
-                        var it = data.data[i];
-                        keys[it[$scope.pkField]]=$scope.checkboxes.items[it[$scope.pkField]] || false;
-                        b = b || keys[it[$scope.pkField]];
-                        if ($scope.$it) {
-                            if ($scope.$it[$scope.pkField] == it[$scope.pkField]) {
-                                sel = it;
-                            }
+                var n = data.data.length;
+                var b=false;
+                for (var i = 0; i < n; i++) {
+                    var it = data.data[i];
+                    keys[it[$scope.pkField]]=$scope.checkboxes.items[it[$scope.pkField]] || false;
+                    b = b || keys[it[$scope.pkField]];
+                    if ($scope.$it) {
+                        if ($scope.$it[$scope.pkField] == it[$scope.pkField]) {
+                            sel = it;
                         }
                     }
+                }
 
-                    if ($scope.$it !== sel) {
-                        $scope.$it=sel;
-                    }
-                    $scope.checkboxes.checked=b;
-                    $scope.checkboxes.items=keys;
-                    $defer.resolve(data.data);
+                if ($scope.$it !== sel) {
+                    $scope.$it=sel;
+                }
+                $scope.checkboxes.checked=b;
+                $scope.checkboxes.items=keys;
+                $defer.resolve(data.data);
 
-                    cfpLoadingBar.complete();
-                    $scope.tableParams.ready = true;
+                cfpLoadingBar.complete();
+                $scope.tableParams.ready = true;
             
 
             });
         }
+ 
     });
 
     $scope.statusChecked=function(status){
@@ -519,6 +526,7 @@ angular.module('custom.table', [])
         }
         $scope.checkboxes.checked = (checked > 0);
     }, true);
+
 
     $timeout(function () {
         $scope.setFilter(true);

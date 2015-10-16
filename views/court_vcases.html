@@ -1,0 +1,94 @@
+﻿<style>
+	table tr td{
+		vertical-align:middle;
+	}
+</style>
+
+    <div ng-controller="CourtReportCtrl">
+
+        <div ui-view></div>
+
+        <div>
+            <div class="panel panel-default" ng-controller="CustomTableCtrl as ctb" ng-init="_view=true;setAPI('court_cases','custom.court.form1.html',{search:'searchText', court:'searchCourt', month:'searchMonth', year:'searchYear',_view:'_view'},{court:true, month:true,year:true})">
+                <div class="panel-heading">
+                    <div class="text-right pull-right">
+                        <button class="btn btn-success" ng-show="isSearchMode()" ng-click="setFilter()">
+                            <span class="glyphicon glyphicon-arrow-left"></span> ออกจากโหมดการค้นหา
+                        </button>
+                        <button class="btn btn-info" ng-click="advancedSearch('custom.cases.search.html',{_view:true})">
+                            <span class="glyphicon glyphicon-search"></span> ค้นหา
+                        </button>
+                    </div>
+                    <h2 style="padding:0px;margin:0px;"><span class="fa fa-windows"></span> รายงานคดี2 ({{tableParams.total()}})</h2>
+
+                </div>
+
+                <div class="panel-body" style="padding-bottom:0px;">
+                    <div loading-container="tableParams.settings().$loading">
+                        <div ng-show="!isSearchMode()">
+                            <div class="input-group col-md-10 col-md-offset-1">
+                                <div class="input-group-addon  adon-label">ศาล</div>
+                                <input type="text" ng-init="searchCourt=getUser().id" class="form-control" value="{{getUser().name}}" ng-readonly="true" style="background-color:#ffffff">
+                                <div class="input-group-addon  adon-label">เดือน</div>
+                                <select class="form-control" ng-model="searchMonth" ng-change="setFilter()" select-value-type="string" ng-options="it.id as it.name for it in Lookups.getMonth()"></select>
+                                <div class="input-group-addon  adon-label">พ.ศ</div>
+                                <select class="form-control" ng-model="searchYear" ng-change="setFilter()" select-value-type="string" ng-options="it.id as it.name for it in Lookups.getYear()"></select>
+                                <div class="input-group-addon btn btn-default" ng-click="setFilter(true)" title="เริ่มค้นหา"><span class="glyphicon glyphicon-refresh"></span></div>
+                            </div>
+                            <hr />
+                        </div>
+                        <table ng-table="tableParams" show-filter="false" class="table table-hover table-bordered" template-pagination="custom.pages.html">
+                            <tbody>
+                                <tr ng-repeat="it in $data"
+                                    ng-click="selectRow(it);"
+                                    ng-class="{'active': isSelected(it),'text-warning':it._days<0}" ng-init="it._days=date_diff(it.date_ap, it.date_received2)">
+                                    <td width="30" class="text-right text-muted"><span title="#{{it.id}}">{{startIdx + $index + 1}}.</span></td>
+
+                                    <td data-title="'เลขคดีดำ'" sortable="'number_black'">
+                                        {{it.number_black}}
+                                    </td>
+                                    <td data-title="'เลขคดีแดง'" sortable="'number_red'">
+                                        {{it.number_red}}
+                                    </td>
+                                    <td data-title="'โจทก์'" sortable="'plaintiff'">
+                                        {{it.plaintiff}}
+                                    </td>
+                                    <td data-title="'จำเลย'" sortable="'defendant'">
+                                        {{it.defendant}}
+                                    </td>
+                                    <td data-title="'ข้อหาสถิติ'" sortable="'topic_id'">
+                                        {{it.topic_id | lookup_topic}}
+                                    </td>
+                                    <td data-title="'ผลการส่งรายงานดดี'" sortable="'ressult'">
+                                        {{it.comment_id | lookup_at }}
+                                    </td>
+                                    <td data-title="'ผลการปฏิบัติ(ภาค)'" sortable="'date_sent'">
+                                        {{it.result | lookup_result}}
+                                    </td>
+                                    <td data-title="'วันที่ส่งสำนวน'" sortable="'date_sent'">
+                                        {{it.date_sent | thai_date:'short'}}
+                                    </td>
+                                    <td data-title="'วันที่รับสำนวน'" sortable="'date_received2'">
+                                        {{it.date_received2 | thai_date:'short'}}
+                                    </td>
+                                    <td data-title="'นัดฟังคำพิพากษา'" sortable="'date_ap'">
+                                        {{it.date_ap | thai_date:'short'}}
+                                    </td>
+                                    <td data-title="'ส่งตามกำหนด(ก่อน 15 วัน)'" class="text-center" >
+                                        <span ng-if="it._days<0">หลัง {{it._days | math_abs}} วัน</span>
+                                        <span ng-if="it._days>0">ก่อน {{it._days}} วัน</span>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+

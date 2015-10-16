@@ -152,7 +152,9 @@ class REST_API{
   public function api_gen_key() {
      return md5(uniqid(rand(), true));
   }
-  
+  public function getMethod(){
+    return $this->_method;
+  }  
   public function isGet(){
     return ($this->_method=='get');
   }  

@@ -109,7 +109,22 @@ function all_upload($id='0',$doc=''){
     }
     exit();
 }
-  
+
+function all_pdf($pdf){
+    global $api;
+    global $norm;
+    $api->api_check_user();
+    $usr=$api->api_get_user();
+    $fd=dirname(dirname(__DIR__)).'/documents/' . $usr['id'] .'/' . $pdf;
+    if(is_file($fd)){
+      passthru($fd,$err);
+    }else{
+      header("HTTP/1.0 404 Not Found");
+      echo "404 Not Found";
+    }
+    exit();
+}
+
 function get_test(){
   global $norm;
   return (count($norm->get_tables())>0);
@@ -398,12 +413,20 @@ class NGTABLE{
       case 'delete':
         return $this->delete();
         break;
+       case 'query':
        case '':
         return $this->query();
         break;
+       default:
+          $mt=$this->api->getMethod() . '_' . $action;
+          if(is_callable(array($this,$mt))){
+             return call_user_func_array(array($this,$mt),array());
+          }
+          break;
     }
     return false;
   }
+
 }
 
 class NGTABLE_USERS extends NGTABLE{
@@ -414,21 +437,41 @@ class NGTABLE_USERS extends NGTABLE{
     parent::__construct($table, $pk);
 
   }
+   function post_checkin_user(){
+      if(isset($_POST[$this->pk])){
+        $id=$_POST[$this->pk];
+        $row=$this->norm->users()->where($this->pk, $id)->where('check_out',1)->fetch();
+        if($row){
+          $row->update(array('check_out'=>0));
+          return true;
+        }
+      }
+      return false; 
+  }
   function buildFilter(&$rs, $fs){
     if($rs){
-      if($fs && isset($fs['search'])){
-        $rs=$rs->where('name LIKE ?','%' . $fs['search']. '%');
+      if($fs){
+        if(isset($fs['search'])){
+          $rs=$rs->where('name LIKE ?','%' . $fs['search']. '%');
+        }
+        if(isset($fs['_view']) && $fs['_view']=='moveuser'){
+          $rs->where('admin',2)->where('(check_out=1) OR (parent_id=0)');
+         
+        }else{
+          if(isset($fs['admin'])){
+            $rs=$rs->where('admin', $fs['admin']);
+          }
+          if(isset($fs['parent_id'])){
+            $rs=$rs->where('parent_id', $fs['parent_id']);
+          }
+          $me=$this->api->api_get_user();
+          if($me && ($me['admin'] != 1)){
+            $rs=$rs->where('parent_id',$me['id']);
+          }           
+        }
       }
-      if($fs && isset($fs['admin'])){
-        $rs=$rs->where('admin', $fs['admin']);
-      }
-      if($fs && isset($fs['parent_id'])){
-        $rs=$rs->where('parent_id', $fs['parent_id']);
-      }        
-      $me=$this->api->api_get_user();
-      if($me && ($me['admin'] != 1)){
-        $rs=$rs->where('parent_id',$me['id']);
-      }      
+       
+     
     }
   }   
 }
@@ -448,6 +491,18 @@ class NGTABLE_TYPES  extends NGTABLE{
     $this->required[]='name';
     $this->uniques['name']='ชื่อประเภทคดีซ้ำ กรุณาเปลี่ยนใหม่';
   }  
+  function buildFilter(&$rs, $fs){
+    if($rs){
+      if($fs && isset($fs['search'])){
+        $rs=$rs->where('name LIKE ?','%' . $fs['search']. '%');
+      }
+
+      if($fs && isset($fs['group_id'])){
+        $rs=$rs->where('group_id', $fs['group_id']);
+      }        
+     
+    }
+  }
 }
 
 class NGTABLE_TOPICS  extends NGTABLE{
@@ -457,6 +512,18 @@ class NGTABLE_TOPICS  extends NGTABLE{
     $this->uniques['name']='ชื่อข้อหาซ้ำ กรูณาเปลี่ยนใหม่';
     $this->uniques['code']='รหัสซ้ำ กรุณาเปลี่ยนใหม่';
   }  
+  function buildFilter(&$rs, $fs){
+    if($rs){
+      if($fs && isset($fs['search'])){
+        $rs=$rs->where('name LIKE ?','%' . $fs['search']. '%');
+      }
+
+      if($fs && isset($fs['type_id'])){
+        $rs=$rs->where('type_id', $fs['type_id']);
+      }        
+     
+    }
+  } 
 }
 
 class NGTABLE_RESULTS  extends NGTABLE{
@@ -494,6 +561,7 @@ class NGTABLE_ADMIN_CASES  extends NGTABLE{
   }
   function buildFilter(&$rs, $data){
     if($rs && $data){
+  
       if(isset($data['search']) && is_array($data['search'])){
 		    $p=$data['search'];
         $q='';
@@ -529,10 +597,13 @@ class NGTABLE_ADMIN_CASES  extends NGTABLE{
 			    $q.='(user_id=%d)';
           $qs[]=$data['court'];
 		    }
-    
+
         if($qs){
           $rs->where($q, $qs);
         }
+        if(isset($p['_view']) && ($p['_view'])){
+          $rs->where('date_ap IS NOT NULL')->where('command_id>1')->where('date_received2 IS  NOT NULL');
+        }  
 	    }else if(isset($data['month']) && isset($data['year']) && $data['month'] && $data['year']){
           $dt=$this->getDateRange($data['year'].'-'. $data['month'] . '-1');
           $rs->where('date_sent>=? AND date_sent<?',$dt['begin'],$dt['end']);
@@ -540,8 +611,11 @@ class NGTABLE_ADMIN_CASES  extends NGTABLE{
             $rs->where('user_id', $data['court']);
           }
       }
+      if(isset($data['_view']) && ($data['_view'])){
+        $rs->where('date_ap IS NOT NULL')->where('command_id>1')->where('date_received2 IS  NOT NULL');
+      }   
       $rs->order('date_sent desc, id desc');
-      $rs->select('id,number_black,number_red,plaintiff,defendant,title,date_sent,file1,file2');
+      $rs->select('id,number_black,number_red,plaintiff,defendant,title,topic_id,date_sent,date_received2,date_ap,file1,file2');
 
 
       /*
@@ -588,6 +662,7 @@ class NGTABLE_COURT_CASES  extends NGTABLE{
   }  
   function buildFilter(&$rs, $data){
     if($rs){
+    
       if($data && isset($data['search']) && is_array($data['search'])){
 		    $p=$data['search'];
         $q='';
@@ -623,6 +698,9 @@ class NGTABLE_COURT_CASES  extends NGTABLE{
         if($qs){
           $rs->where($q, $qs);
         }
+        if(isset($p['_view']) && ($p['_view'])){
+          $rs->where('date_ap IS NOT NULL')->where('command_id>1')->where('date_received2 IS  NOT NULL');
+        }          
 	    }else if(isset($data['month']) && isset($data['year']) && $data['month'] && $data['year']){
           $dt=$this->getDateRange($data['year'].'-'. $data['month'] . '-1');
           $rs->where('date_sent>=? AND date_sent<?',$dt['begin'],$dt['end']);
@@ -630,10 +708,11 @@ class NGTABLE_COURT_CASES  extends NGTABLE{
             $rs->where('user_id', $data['court']);
           }
       }
+      if(isset($data['_view']) && ($data['_view'])){
+        $rs->where('date_ap IS NOT NULL')->where('command_id>1')->where('date_received2 IS  NOT NULL');
+      }        
       $rs->order('date_sent desc, id desc');
-      $rs->select('id,number_black,number_red,plaintiff,defendant,title,topic_id,result,command_id,date_sent,file1,file2');
-
-
+      $rs->select('id,number_black,number_red,plaintiff,defendant,title,topic_id,result,command_id,date_sent,file1,date_received2,date_ap,file2');
     }
   }
 }

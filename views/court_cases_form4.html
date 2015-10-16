@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <div class="form-group col-md-6">
-                    <label class="control-label col-md-4">ข้อหาหลัก</label>
+                    <label class="control-label col-md-4">ข้อหาสถิติ</label>
                     <div class="col-md-8">
                         <input type="text" readonly class="form-control input-md" value="{{editingItem.topic_id | lookup_topic}}">
                     </div>
@@ -47,6 +47,13 @@
                         <input type="text" readonly class="form-control input-md" value="{{editingItem.command_id | lookup_at}}">
                     </div>
                 </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">ข้อหาพิมพ์ปก</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.title}}">
+                    </div>
+                </div>
+
                 <div class="form-group col-md-6">
                     <label class="control-label col-md-4">ผลการปฏิบัติ</label>
                     <div class="col-md-8">

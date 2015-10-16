@@ -27,16 +27,17 @@
 	{% for case in cases %}
 	<div class="container-fluid page-break">
     <div class="text-center">
-        <h3>สรุปรายงานคดีของศาลในเขตอำนาจอธิบดีผู้พิพากษาภาค 5</h3>
-        <h4>ประจำ เดือน {{date1|th_date('month')}} พ.ศ. {{date1|th_date('year')}}</h4>
-        <h4>ศาล {{court.name}}</h4>
+        <h3>สรุปรายงานคดีของ{{court.name}}</h3>
+        <h4>เดือน {{date1|th_date('month')}} พ.ศ. {{date1|th_date('year')}}</h4>
         {% if type_id>0 %}
         <h4>คดี {{case.case_name}}</h4>
         {% else %}
-        <h4>คดี ทั้งหมด</h4>
+        <h4>ทุกประเภทคดี</h4>
         {% endif %}
     </div>
+    <div class="text-right hidden-print"><a href="javascript:window.print()" title="พิมพ์รายงาน" class="btn btn-default"><span class="glyphicon glyphicon-print"></span></a></div>
     <br />
+        
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -67,7 +68,7 @@
                 {% endfor %}
             </tbody>
         </table>
-        <center>
+        <center style="padding-top:3em">
             <table style="width:400px" class="bold">
                 <tr>
                     <td>รวมทั้งหมด</td>

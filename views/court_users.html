@@ -5,7 +5,7 @@
             <div class="modal-content">
                 <div class="modal-header" ng-show="title">
                     <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" ng-bind="title"></h4>
+                    <h4 class="modal-title"><span class="fa fa-windows"></span> <span ng-bind="title"></span></h4>
                 </div>
                 <div class="modal-body">
         
@@ -28,6 +28,8 @@
                                 ตำแหน่ง</label>
                                 <div class="col-md-7" ng-init="show_account=false">
                                     <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control input-md" ng-model="editingItem.position">
+                                    <br />
+                                    <label><div ios-toggle ng-model="editingItem.check_out" ng-true-value="'1'" ng-false-value="'0'"></div> <span ng-if="editingItem.check_out=='1'">ย้ายออกแล้ว </span><span ng-if="editingItem.check_out!='1'">กดเลือกเพื่อย้ายออก </span></label>
                                     <p class="text-right text-info" ng-click="show_account=!show_account"><br /><a href="javascript:void()"><span class="glyphicon glyphicon-user"></span> ข้อมูล login</a></p>
                                 </div>
                             </div>
@@ -56,8 +58,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" ng-disabled="!editingItem.name" ng-click="saveForm()">บันทึกข้อมูล</button>
-                    <button type="button" class="btn btn-warning" ng-click="cancelForm()">ยกเลิก</button>
+                    <button type="button" class="btn btn-primary btn-min" ng-disabled="!editingItem.name" ng-click="saveForm()"><span class="fa fa-save"></span> บันทึกข้อมูล</button>
+                    <button type="button" class="btn btn-warning btn-min" ng-click="cancelForm()"><span class="fa fa-close"></span> ยกเลิก</button>
                 </div>
             </div>
         </div>
@@ -65,23 +67,69 @@
 </script>
 
 
+<script type="text/ng-template" id="custom.move.users.html">
+    <div class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog"  aria-hidden="true"   style="min-width:80%;" ng-controller="CustomTableCtrl as ctb" ng-init="tableParams.hide_limit=true;_view='moveuser';tableParams.count(10);setAPI('users','',{search:'searchText',_view:'_view'})">
+            <div class="modal-content">
+                <div class="modal-header">
 
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <div class="input-group pull-right" style="width:300px;margin-right:30px">
+                        
+                        <input type="text" class="form-control" ng-model="searchText" ng-enter="setFilter()" placeholder="{{(lastSearchText)?lastSearchText:'ชื่อที่ต้องการค้นหา'}}" />
+                        <div ng-if="!lastSearchText" class="input-group-addon btn btn-default" ng-click="setFilter()" ng-disabled="!searchText" title="เริ่มค้นหา"><span class="glyphicon glyphicon-search"></span></div>
+                        <div ng-if="lastSearchText" class="input-group-addon btn btn-default" ng-click="clearFilter()" title="เลิกค้นหา"><span class="glyphicon glyphicon-remove"></span></div>
+                    </div>
+                    <h4 class="modal-title"><span class="fa fa-windows"></span> ย้ายผู้พิพากษาเข้า ({{tableParams.total()}})</h4>
 
+                </div>
+                <div class="modal-body" style="min-height:300px">
+  
+                    <table ng-table="tableParams" show-filter="false" class="table table-hover" template-pagination="custom.pages.html">
+                        <tbody>
+                            <tr ng-repeat="it in $data"
+                                ng-click="selectRow(it);"
+                                ng-class="{'active': isSelected(it)}">
+                                <td width="30" class="text-right text-muted">{{startIdx + $index + 1}}.</td>
+
+                                <td data-title="'ชื่อผู้พิพากษา'" sortable="'name'">
+                                     {{it.name}}
+                                </td>
+                                <td data-title="'ตำแหน่ง'" sortable="'position'">
+                                    {{it.position}}
+                                </td>
+                                <td data-title="'ศาล'" sortable="'parent_id'">
+                                    {{it.parent_id | lookup_court}}
+                                    <span ng-if="isSelected(it)" class="pull-right glyphicon glyphicon-ok text-success"></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success btn-min"  ng-disabled="!hasSelected()" ng-click="doMoveUser(ctb.getScope(),$hide);"><span class="glyphicon glyphicon-circle-arrow-down"></span> ย้ายผู้พิพากษาที่เลือกเข้า</button>
+                    <button type="button" class="btn btn-warning btn-min" ng-click="$hide()"><span class="fa fa-close"></span> ยกเลิก</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
 <div class="container-fluid">
 
     <p>
-        <div class="panel panel-default" ng-controller="CustomTableCtrl" ng-init="searchCourt='';searchRole='';setAPI('users','custom.form.court.users.html',{search:'searchText', parent_id:getUser().id})">
+        <div class="panel panel-default" ng-controller="CustomTableCtrl as uctb" ng-init="searchCourt='';searchRole='';setAPI('users','custom.form.court.users.html',{search:'searchText', parent_id:getUser().id})">
             <div class="panel-heading">
                 <div class="text-left pull-left">
-                    <h2 style="padding:0px;margin:0px;"><span class="glyphicon glyphicon-th-list"></span> ผู้พิพากษา ({{tableParams.total()}})</h2>
+                    <h2 style="padding:0px;margin:0px;"><span class="fa fa-windows"></span> ผู้พิพากษา ({{tableParams.total()}})</h2>
                 </div>
 <p class="text-right">
+                     <button ng-controller="MoveUserCtrl" ng-click="moveUser('custom.move.users.html', uctb.getScope().refresh)" class="btn btn-info" style="margin-right:2em"><span class="glyphicon glyphicon-circle-arrow-down"></span> ย้ายผู้พิพากษาเข้า</button>
 
-                    <button ng-click="newItem({admin:2,parent_id:getUser().id})" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span>เพิ่มข้อมูล</button>
-                    <button ng-click="editItem()" ng-show="hasSelected()" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span>แก้เขข้อมูล</button>
-                    <button data-placement="bottom-right"  data-trigger="click" bs-popover data-template="custom.confirm.popover.html"
+                    <button ng-click="newItem({admin:2,parent_id:getUser().id})" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> เพิ่มข้อมูล</button>
+                    <button ng-click="editItem()" ng-show="hasSelected()" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span> แก้เขข้อมูล</button>
+                    <button data-placement="bottom"  data-trigger="click" bs-popover data-template="custom.confirm.popover.html"
                             ng-click="removeItem()" ng-show="hasSelected()" class="btn btn-danger" data-auto-close="true">
-                        <span class="glyphicon glyphicon-remove"></span>ลบข้อมูล
+                        <span class="glyphicon glyphicon-remove"></span> ลบข้อมูล
                     </button>
                     <button ng-click="refresh()" class="btn btn-success"><span class="glyphicon glyphicon-refresh"></span> โหลดข้อมูล</button>
                 </p>
@@ -107,19 +155,18 @@
                             <tr ng-repeat="it in $data"
                                 ng-click="selectRow(it);"
                                 ng-dblclick="editItem()"
-                                ng-class="{'active': isSelected(it)}">
+                                ng-class="{'active': isSelected(it),'text-checkout': it.check_out==1,'text-warning': it.check_out==1}">
                                 <td width="30" class="text-right text-muted">{{startIdx + $index + 1}}.</td>
-                                <td width="30" header="'custom.checked.html'">
-                                    <input type="checkbox" ng-model="checkboxes.items[it[pkField]]" />
-                                </td>
-                                <td data-title="'ชื่อผู้ใช้'" sortable="'name'" >
+
+                                <td data-title="'ชื่อผู้พิพากษา'" sortable="'name'" >
                                     {{it.name}}
                                 </td>
-                                <td data-title="'ศาล'" sortable="'parent_id'">
-                                    {{it.parent_id | lookup_court}} 
+                                <td data-title="'ตำแหน่ง'" sortable="'position'">
+                                    {{it.position}}
                                 </td>
-                                <td data-title="'ตำแหน่ง'" sortable="'position'" >
-                                    {{it.position}} <span ng-if="isSelected(it)" class="pull-right glyphicon glyphicon-asterisk"></span>
+                                <td data-title="'ศาล'" sortable="'parent_id'">
+                                    {{it.parent_id | lookup_court}}
+                                    <span ng-if="isSelected(it)" class="pull-right glyphicon glyphicon-asterisk"></span>
                                 </td>
                             </tr>
                         </tbody>

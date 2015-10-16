@@ -5,7 +5,7 @@
             <div class="modal-content">
                 <div class="modal-header" ng-show="title">
                     <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" ng-bind="title"></h4>
+                    <h4 class="modal-title"><span class="fa fa-windows"></span> <span ng-bind="title"></span></h4>
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal" name="form">
@@ -25,8 +25,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" ng-disabled="!editingItem.name" ng-click="saveForm()">บันทึกข้อมูล</button>
-                    <button type="button" class="btn btn-warning" ng-click="cancelForm()">ยกเลิก</button>
+                    <button type="button" class="btn btn-primary btn-min" ng-disabled="!editingItem.name" ng-click="saveForm()"><span class="fa fa-save"></span> บันทึกข้อมูล</button>
+                    <button type="button" class="btn btn-warning btn-min" ng-click="cancelForm()"><span class="fa fa-close"></span> ยกเลิก</button>
                 </div>
             </div>
         </div>
@@ -41,15 +41,15 @@
         <div class="panel panel-default" ng-controller="CustomTableCtrl" ng-init="setAPI('results','custom.form.results.html')">
             <div class="panel-heading">
                 <div class="text-left pull-left">
-                    <h2 style="padding:0px;margin:0px;"><span class="glyphicon glyphicon-th-list"></span> ผลการปฏิบัติ ({{tableParams.total()}})</h2>
+                    <h2 style="padding:0px;margin:0px;"><span class="fa fa-windows"></span> ผลการปฏิบัติ ({{tableParams.total()}})</h2>
                 </div>
                 <p class="text-right">
 
-                    <button ng-click="newItem()" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span>เพิ่มข้อมูล</button>
-                    <button ng-click="editItem()" ng-show="hasSelected()" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span>แก้เขข้อมูล</button>
-                    <button data-placement="bottom-right"  data-trigger="click" bs-popover data-template="custom.confirm.popover.html"
+                    <button ng-click="newItem()" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> เพิ่มข้อมูล</button>
+                    <button ng-click="editItem()" ng-show="hasSelected()" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span> แก้เขข้อมูล</button>
+                    <button data-placement="bottom"  data-trigger="click" bs-popover data-template="custom.confirm.popover.html"
                             ng-click="removeItem()" ng-show="hasSelected()" class="btn btn-danger" data-auto-close="true">
-                        <span class="glyphicon glyphicon-remove"></span>ลบข้อมูล
+                        <span class="glyphicon glyphicon-remove"></span> ลบข้อมูล
                     </button>
                     <button ng-click="refresh()" class="btn btn-success"><span class="glyphicon glyphicon-refresh"></span> โหลดข้อมูล</button>
                 </p>
@@ -75,9 +75,10 @@
                                 ng-dblclick="editItem()"
                                 ng-class="{'active': isSelected(it)}">
                                 <td width="30" class="text-right text-muted">{{startIdx + $index + 1}}.</td>
+                                <!--
                                 <td width="30" header="'custom.checked.html'">
                                     <input type="checkbox" ng-model="checkboxes.items[it[pkField]]" />
-                                </td>
+                                </td>-->
                                 <td data-title="'ผลการปฏิบัติ'" sortable="'name'" >
                                     {{it.name}}
                                     <span ng-if="isSelected(it)" class="pull-right glyphicon glyphicon-asterisk"></span>

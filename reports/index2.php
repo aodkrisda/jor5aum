@@ -42,6 +42,9 @@
     }
     if(isset($_POST['date2'])){
     	$date2=$_POST['date2'];
+      if($date2==$date1){
+        $date2='';
+      }      
     }
     if(isset($_POST['type_id'])){
     	$type_id=intval($_POST['type_id']);

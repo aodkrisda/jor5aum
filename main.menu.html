@@ -1,0 +1,133 @@
+﻿
+    <nav id="main-navbar" class="navbar yamm navbar-default" role="navigation"  ng-if="$root.getUserId()" bs-navbar>
+        <div class="container-fluid" bs-collapse>
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" bs-collapse-toggle>
+                    <span class="sr-only">Navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">
+                    <h3 style="color:#014F7F;font-size:1.6em;font-weight:bold;padding:0px;margin:0px"><span class="fa fa-university"></span> สำนักศาลยุติธรรมประจำภาค ๕</h3>
+                </a>
+            </div>
+            <div ng-if="isAdmin()" class="collapse navbar-collapse" bs-collapse-target>
+                <ul class="nav navbar-nav navbar-right" ng-if="$root.getUserId()">
+                    <li data-match-route="admin/cases"><a href="#admin/cases"><span class="glyphicon glyphicon-book"></span> ข้อมูลคดี</a></li>
+                    <li data-match-route="admin/vcases"><a href="#admin/vcases"><span class="glyphicon glyphicon-equalizer"></span> ข้อมูลคดี2</a></li>
+                    <li  data-match-route="admin/management" class="dropdown">
+                        <a href="javascript:void()"  bs-dropdown><span class="glyphicon glyphicon-th-large"></span>  เตรียมข้อมูล</a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <div class="yamm-content">
+                                    <h3 class="text-center page-header" style="margin-top:0.5em;margin-bottom:1em">เลือกเตรียมข้อมูล</h3>
+                                    <div class="row">
+                                        <div class="col-md-6 col-lg-4">
+                                            <a href="#admin/management/users">
+                                                <h1 class="text-center">
+                                                    <span class="glyphicon glyphicon-user"></span>
+                                                </h1>
+                                                <h4 class="text-center text-primary">ผู้ใช้</h4>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-6 col-lg-4">
+                                            <a href="#admin/management/types">
+                                                <h1 class="text-center">
+                                                    <span class="glyphicon glyphicon-briefcase"></span>
+                                                </h1>
+                                                <h4 class="text-center text-primary">ประเภทคดี</h4>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-6 col-lg-4">
+                                            <a href="#admin/management/topics">
+                                                <h1 class="text-center">
+                                                    <span class="glyphicon glyphicon-tasks"></span>
+                                                </h1>
+                                                <h4 class="text-center text-primary">ข้อหา</h4>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-6 col-lg-4">
+                                            <a href="#admin/management/results">
+                                                <h1 class="text-center">
+                                                    <span class="glyphicon glyphicon-check"></span>
+                                                </h1>
+                                                <h4 class="text-center text-primary">ผลการปฏิบัติ</h4>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-6 col-lg-4">
+                                            <a href="#admin/management/ats">
+                                                <h1 class="text-center">
+                                                    <span class="glyphicon glyphicon-share"></span>
+                                                </h1>
+                                                <h4 class="text-center text-primary">คำสั่ง อ.ธ</h4>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-6 col-lg-4">
+                                            <a href="#admin/management/settings" >
+                                                <h1 class="text-center">
+                                                    <span class="glyphicon glyphicon-cog"></span>
+                                                </h1>
+                                                <h4 class="text-center text-primary">ตั้งค่าระบบ</h4>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li data-match-route="admin/management" class="dropdown">
+                        <a href="javascript:void()" bs-dropdown><span class="glyphicon glyphicon-print"></span> สรุปรายงานคดี</a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <div class="yamm-content" style="max-width:480px">
+                                    <h3 class="text-center page-header" style="margin-top:0.5em;margin-bottom:1em">สรุปรายงานคดี</h3>
+                                        <div class="row">
+                                          <div class="col-sm-12">
+                                            <ul class="media-list" style="padding-left:2em">
+                                                <li class="media">
+                                                    <div class="media-left">
+                                                            <span class="glyphicon glyphicon-stats" style="font-size:2em"></span>
+                                                    </div>
+                                                    <div class="media-body">
+                                                        <a href="#admin/report1">
+                                                            <h4 class="media-heading text-primary">สรุปรายงานคดีของศาลในภาค 5</h4>
+                                                        </a>
+                                                             พิมพ์รายงานคดีของศาลในเขตอำนาจอธิบดีผู้พิพากษาภาค
+                                                    </div>
+                                                </li>
+                                                <li class="media">
+                                                    <div class="media-left">
+                                                        <span class="glyphicon glyphicon-tasks" style="font-size:2em"></span>
+                                                    </div>
+                                                    <div class="media-body">
+                                                        <a href="#admin/report2">
+                                                            <h4 class="media-heading text-primary">สรุปรายงานคดีแยกเป็นรายศาล</h4>
+                                                        </a>
+                                                        พิมพ์รายงานคดีของศาลในเขตอำนาจอธิบดีผู้พิพากษาภาค
+</div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                   
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a data-placement="bottom" data-trigger="click" bs-popover data-template="custom.logout.popover.html" data-auto-close="true" href="javascript:void()"><span class="glyphicon glyphicon-lock"></span> ออกจากระบบ</a></li>
+                </ul>
+            </div>
+
+
+
+            <div ng-if="!isAdmin()" class="collapse navbar-collapse" bs-collapse-target>
+                <ul class="nav navbar-nav navbar-right" ng-if="$root.getUserId()">
+                    <li data-match-route="court/cases"><a href="#court/cases"><span class="glyphicon glyphicon-book"></span> ข้อมูลคดี</a></li>
+                    <li data-match-route="court/vcases"><a href="#court/vcases"><span class="glyphicon glyphicon-equalizer"></span> ข้อมูลคดี2</a></li>
+                    <li data-match-route="court/users"><a href="#court/users"><span class="glyphicon glyphicon-user"></span> ข้อมูลผู้พิพิกษา</a></li>
+
+                    <li><a data-placement="bottom" data-trigger="click" bs-popover data-template="custom.logout.popover.html" data-auto-close="true" href="javascript:void()"><span class="glyphicon glyphicon-off"></span> ออกจากระบบ</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>

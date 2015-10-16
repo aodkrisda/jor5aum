@@ -30,6 +30,9 @@
     }
     if(isset($_POST['date2'])){
     	$date2=$_POST['date2'];
+      if($date2==$date1){
+        $date2='';
+      }
     }
     if(isset($_POST['type_id'])){
     	$type_id=intval($_POST['type_id']);
@@ -69,12 +72,32 @@
 			$where=sprintf(' AND (type_id=%d) ', $type_id);
 		}
 		
-		$sql="select user_id, count(user_id) as 'total' FROM info_cases WHERE (date_sent>=? AND date_sent<?) {$where} GROUP BY user_id";
+		$sql="select user_id, count(id) as 'total' FROM info_cases WHERE (date_sent>=? AND date_sent<?) {$where} GROUP BY user_id";
 		//echo $sql ."\r\n";
 		
-	    $rs=$orm->execute($sql,$param);
+	    $xrs=$orm->execute($sql,$param);
+      $drs=array();
+      foreach($xrs as &$r){
+        $drs[$r['user_id']]=$r;
+      }
+      $rs=array();
+	    $sql="select id, name, usergroup_id FROM info_users WHERE admin=0 and parent_id=0 ORDER BY usergroup_id, name";
+	    //echo $sql ."\r\n";
+	
+	    $rs2=$orm->execute($sql);    
+	    $dic2=array();
+	    foreach($rs2 as &$r){
+	      $dic2[$r['id']]=$r;
+        $total=0;
+        if(isset($drs[$r['id']])){
+          $total=$drs[$r['id']]['total'];
+        }
+        $tm=array('user_id'=>$r['id'], 'total'=>$total);
+        $rs[]=$tm;
+	    }
+      
 
-	    $sql="select user_id, count(user_id) as 'check'  FROM info_cases WHERE (date_sent>=? AND date_sent<? AND command_id > ?) {$where} GROUP BY user_id";
+	    $sql="select user_id, count(id) as 'check'  FROM info_cases WHERE (date_sent>=? AND date_sent<? AND command_id > ?) {$where} GROUP BY user_id";
 	    //echo $sql ."\r\n";
 	    
 	    $rs2=$orm->execute($sql,$param2);    
@@ -82,6 +105,8 @@
 	    foreach($rs2 as &$r){
 	      $dic[$r['user_id']]=$r['check'];
 	    }
+      
+
 	    
 	    $rs2=$orm->execute("select id,name  FROM info_usergroups");    
 	    $_GROUPS=array();
@@ -89,14 +114,7 @@
 	      $_GROUPS[$r['id']]=$r['name'];
 	    }
 	    
-	    $sql="select id, name, usergroup_id FROM info_users WHERE admin=0 and parent_id=0 ORDER BY usergroup_id, name";
-	    //echo $sql ."\r\n";
-	    
-	    $rs2=$orm->execute($sql);    
-	    $dic2=array();
-	    foreach($rs2 as &$r){
-	      $dic2[$r['id']]=$r;
-	    }
+
 	    
 	    foreach($rs as &$r){
 	      if(isset($dic[$r['user_id']])){
@@ -109,7 +127,7 @@
 	        $r['group']=$dic2[$r['user_id']]['usergroup_id'];
 	      }
 	    }
-	    
+      
 	    $dic=array();
 	    foreach($rs as &$r){
 	      if(isset($r['group'])){
@@ -126,9 +144,10 @@
 		      break;
 		    }    
 	    }
+
 	    $cases[]=array('case_name'=>$case_name, 'case_items'=>$dic);
     }
-
-    echo $twig->render(($date2)?'report1_2.html':'report1_1.html', array('date1'=>$date1, 'date2'=>$date2,'year'=>'YEAR','type_id'=>$type_id,  'cases'=>$cases));
+    
+    echo $twig->render(($date2)?'report1_2.html':'report1_1.html', array('date1'=>$date1, 'date2'=>$date2,'type_id'=>$type_id,  'cases'=>$cases));
 
 ?>

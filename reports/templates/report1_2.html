@@ -14,33 +14,52 @@
 			@media screen {
 			    .page-break {padding-bottom:10em}
 			} 
+            .text-right.padding{
+                padding-right:2em;
+            }
 			.sumary {
 				background-color:#f5f5f5;
 			}			   
         </style>
     </head>
     <body>
-    	{% set index=0 %}
+        {% set year1 -%}
+        พ.ศ. {{date1 | th_date('year')}}
+        {%- endset %}
+        {% set year2 -%}
+        พ.ศ. {{date2 | th_date('year')}}
+        {%- endset %}
+        {% if year1==year2 %}
+            {% set year1='' %}
+        {% endif %}
+
+
      	{% for case in cases %}
+        {% set index=0 %}
+        {% set all_know=0 %}
+        {% set all_check=0 %}
     	<div class="container-fluid page-break">
         <div class="text-center">
             <h3>สรุปรายงานคดีของศาลในเขตอำนาจอธิบดีผู้พิพากษาภาค 5</h3>
-            <h4>ระหว่าง เดือน {{date1 | th_date('month')}} ถึง เดือน {{date2 | th_date('month')}} พ.ศ.  {{date2 | th_date('year')}}</h4>
+            <h4>เดือน {{date1 | th_date('month')}} {{year1}} ถึงเดือน {{date2 | th_date('month')}} {{year2}}</h4>
             {% if type_id>0 %}
             <h4>คดี {{case.case_name}}</h4>
             {% else %}
-            <h4>คดี ทั้งหมด</h4>
+            <h4>ทุกประเภทคดี</h4>
             {% endif %}
         </div>
+            <div class="text-right hidden-print"><a href="javascript:window.print()" title="พิมพ์รายงาน" class="btn btn-default"><span class="glyphicon glyphicon-print"></span></a></div>
         <br/>
         <table class="table table-bordered">
             <thead>
                 <tr>
                     <th width="80">ลำดับที่</th>
                     <th>ศาล</th>
-                    <th class ="text-center">ทราบ</thclass>
-                    <th class ="text-center">ตรวจ</thclass>
-                    <th class ="text-center">รวม</thclass>
+                    <th class="text-center">ไม่ตรวจ</th>
+                    <th class="text-center">ร้อยละ</th>
+                    <th class="text-center">ตรวจ</th>
+                    <th class="text-center">ร้อยละ</th>
+                    <th class ="text-center">รวม</th>
                 </tr>
             </thead>
             <tbody>
@@ -50,35 +69,85 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
                 {% set sum_check=0 %}
                 {% set sum_know=0 %}
                 {% set sum_total=0 %}
+                {% set sum_percent1=0 %}
+                {% set sum_percent2=0 %}
                 {% for usr in grp.courts %}
                 <tr>
                     {% set know=usr.total-usr.check %}
+                    {% set check=usr.check %}
                     {% set sum_check=sum_check + usr.check %}
                     {% set sum_know=sum_know + know%}
                     {% set sum_total=sum_total + usr.total %}
+                    {% set percent1=0 %}
+                    {% set percent2=0 %}
+                    {% if usr.total!=0 %}
+                        {% set percent1=(know / usr.total * 100) %}
+                        {% set percent2=(check / usr.total * 100) %}
+                    {% endif %}
                     {% set index=index + 1 %}
                     <td class="text-center">{{index}}</td>
                     <td>{{usr.name}}</td>
                     <td class="text-center">{{know}}</td>
+                    <td class="text-center">{{percent1 | number_format(0)}}</td>
                     <td class="text-center">{{usr.check}}</td>
+                    <td class="text-center">{{percent2 | number_format(0)}}</td>
                     <td class="text-center">{{usr.total}}</td>
+
                 </tr>
                 {% endfor %}
                 <tr class="bold">
                     <td></td>
                     <td>รวม</td>
+                    {% if sum_total!=0 %}
+                    {% set sum_percent1=(sum_know / sum_total * 100) %}
+                    {% set sum_percent2=(sum_check / sum_total * 100) %}
+                    {% endif %}
+                    {% set all_know=all_know + sum_know %}
+                    {% set all_check=all_check + sum_check %}
                     <td class="text-center sumary">{{sum_know}}</td>
+                    <td class="text-center sumary">{{sum_percent1 | number_format(0)}}</td>
                     <td class="text-center sumary">{{sum_check}}</td>
+                    <td class="text-center sumary">{{sum_percent2 | number_format(0)}}</td>
                     <td class="text-center sumary">{{sum_total}}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-       </div>
-       {% endfor %}
+        {% set all_total=all_check + all_know %}
+        {% set all_p_check=0 %}
+        {% set all_p_know=0 %}
+        {% if all_total!=0 %}
+            {% set all_p_know=(all_know / all_total * 100) %}
+            {% set all_p_check=(all_check / all_total * 100) %}
+        {% endif %}
+            <center style="padding-top:3em">
+                <table style="width:400px;" class="bold">
+                    <tr>
+                        <td>รวมทั้งหมด</td>
+                        <td class="text-right padding">{{all_total}}</td>
+                        <td>คดี</td>
+                    </tr>
+                    <tr>
+                        <td>ไม่ตรวจ</td>
+                        <td class="text-right padding">{{all_know}}</td>
+                        <td>คดี ร้อยละ {{all_p_know | number_format(0)}}</td>
+                    </tr>
+                    <tr>
+                        <td>ตรวจ</td>
+                        <td class="text-right padding">{{all_check}}</td>
+                        <td>คดี ร้อยละ {{all_p_check | number_format(0)}}</td>
+                    </tr>
+
+                </table>
+            </center>
+    </div>
+    {% endfor %}
+
     </body>
 </html>

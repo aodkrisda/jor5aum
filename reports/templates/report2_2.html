@@ -23,18 +23,27 @@
     </style>
 </head>
 <body>
+    {% set year1 -%}
+    พ.ศ. {{date1 | th_date('year')}}
+    {%- endset %}
+    {% set year2 -%}
+    พ.ศ. {{date2 | th_date('year')}}
+    {%- endset %}
+    {% if year1==year2 %}
+    {% set year1='' %}
+    {% endif %}
 	{% for case in cases %}
 	<div class="container-fluid page-break">
     <div class="text-center">
-        <h3>สรุปรายงานคดีของศาลในเขตอำนาจอธิบดีผู้พิพากษาภาค 5</h3>
-        <h4>รหว่าง เดือน {{date1|th_date('month')}} ถึง เดือน {{date2|th_date('month')}} พ.ศ. {{date1|th_date('year')}}</h4>
-        <h4>ศาล {{court.name}}</h4>
+        <h3>สรุปรายงานคดีของ{{court.name}}</h3>
+        <h4>เดือน {{date1|th_date('month')}} {{year1}} ถึงเดือน {{date2|th_date('month')}} {{year2}}</h4>
         {% if type_id>0 %}
         <h4>คดี {{case.case_name}}</h4>
         {% else %}
-        <h4>คดี ทั้งหมด</h4>
+        <h4>ทุกประเภทคดี</h4>
         {% endif %}
     </div>
+        <div class="text-right hidden-print"><a href="javascript:window.print()" title="พิมพ์รายงาน" class="btn btn-default"><span class="glyphicon glyphicon-print"></span></a></div>
     <br />
     <table class="table table-bordered">
         <thead>
@@ -66,25 +75,25 @@
             {% endfor %}
         </tbody>
     </table>
-    <center>
-        <table style="width:400px" class="bold">
-            <tr>
-                <td>รวมทั้งหมด</td>
-                <td class="text-right padding">{{sum_total}}</td>
-                <td>คดี</td>
-            </tr>
-            <tr>
-                <td>ตรวจ</td>
-                <td class="text-right padding">{{sum_check}}</td>
-                <td>คดี</td>
-            </tr>
-            <tr>
-                <td>ไม่ตรวจ</td>
-                <td class="text-right padding">{{sum_total - sum_check}}</td>
-                <td>คดี</td>
-            </tr>
-        </table>
-    </center>
+        <center style="padding-top:3em">
+            <table style="width:400px" class="bold">
+                <tr>
+                    <td>รวมทั้งหมด</td>
+                    <td class="text-right padding">{{sum_total}}</td>
+                    <td>คดี</td>
+                </tr>
+                <tr>
+                    <td>ตรวจ</td>
+                    <td class="text-right padding">{{sum_check}}</td>
+                    <td>คดี</td>
+                </tr>
+                <tr>
+                    <td>ไม่ตรวจ</td>
+                    <td class="text-right padding">{{sum_total - sum_check}}</td>
+                    <td>คดี</td>
+                </tr>
+            </table>
+        </center>
     <p>&nbsp;</p>
     <p class="text-right">
         <strong>หมายเหตุ</strong> คดีนับตั้งแต่วันที่ภาครับหนังสือรายงานคดีจากศาล

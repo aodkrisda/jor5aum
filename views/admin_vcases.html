@@ -5,30 +5,23 @@
 </style>
 
 
-
-
 <div ng-controller="AdminReportCtrl">
 
     <div ui-view></div>
 
 
-    <div ng-hide="!urlEq('/admin/cases')">
-        <div class="panel panel-default" ng-controller="CustomTableCtrl" ng-init="setAPI('admin_cases','custom.admin.form1.html',{search:'searchText', court:'searchCourt', month:'searchMonth', year:'searchYear'},{court:true, month:true,year:true})">
+    <div>
+        <div class="panel panel-default" ng-controller="CustomTableCtrl" ng-init="_view=true;setAPI('admin_cases','custom.admin.form1.html',{search:'searchText', court:'searchCourt', month:'searchMonth', year:'searchYear',_view:'_view'},{court:true, month:true,year:true})">
             <div class="panel-heading">
                 <div class="text-right pull-right">
                     <button class="btn btn-success" ng-show="isSearchMode()" ng-click="setFilter()">
                         <span class="glyphicon glyphicon-arrow-left"></span> ออกจากโหมดการค้นหา
                     </button>
-                    <button class="btn btn-info" ng-click="advancedSearch('custom.cases.search.html')">
+                    <button class="btn btn-info" ng-click="advancedSearch('custom.cases.search.html',{_view:true})">
                         <span class="glyphicon glyphicon-search"></span> ค้นหา
                     </button>
-                    <button data-placement="bottom" data-trigger="click" bs-popover data-template="custom.confirm.admin.report.html"
-                            ng-show="hasSelected()" class="btn btn-success" data-auto-close="true">
-                        <span class="glyphicon glyphicon-pencil"></span> รับคดี
-                    </button>
-
                 </div>
-                <h2 style="padding:0px;margin:0px;"><span class="fa fa-windows"></span> รายงานคดี ({{tableParams.total()}})</h2>
+                <h2 style="padding:0px;margin:0px;"><span class="fa fa-windows"></span> ส่งสำนวน ({{tableParams.total()}})</h2>
 
             </div>
             
@@ -55,14 +48,10 @@
 
                             <tr ng-repeat="it in $data"
                                 ng-click="selectRow(it);"
-                                ng-class="{'active': isSelected(it)}">
+                                ng-init="it._days=date_diff(it.date_ap, it.date_received2)"
+                                ng-class="{'active': isSelected(it),'text-warning':it._days<0}" ng-init="it._days=date_diff(it.date_ap, it.date_received2)">
                                 <td width="30" class="text-right text-muted"><span title="#{{it.id}}">{{startIdx + $index + 1}}.</span></td>
-                                <!--
-                                <td width="30" header="'custom.checked.html'">
-                                    <input type="checkbox" ng-model="checkboxes.items[it[pkField]]" />
-
-                                </td>
-                                    -->
+      
                                 <td data-title="'เลขคดีดำ'" sortable="'number_black'">
                                     {{it.number_black}}
                                 </td>
@@ -85,16 +74,17 @@
                                 </td>
                                 <td data-title="'วันที่ส่งสำนวน'" sortable="'date_sent'">
                                     {{it.date_sent | thai_date:'short'}}
-
                                 </td>
-                                <td data-title="'ไฟล์ร่าง/คำพิพากษา'" class="text-center">
-                                    <a ng-if="it.file1" href="{{open_pdf(it.file1)}}" target="_bank"><span title="สำเนาตรวจร่าง {{it.file1}}" class="fa fa-file-o"></span></a>
-                                    <a ng-if="it.file2" href="{{open_pdf(it.file2)}}" target="_bank"><span title="สำเนาคำพิพากษา {{it.file2}}" class="fa fa-file-pdf-o"></span></a>
-                                 
-                                    <span ng-if="isSelected(it)" class="pull-right"><button class="btn btn-success btn-circle btn-xs" data-placement="left" data-trigger="click" bs-popover data-template="custom.confirm.admin.report.html"
-                            data-auto-close="true"><span class="glyphicon glyphicon-edit"></span></button></span>
+                                <td data-title="'วันที่รับสำนวน'" sortable="'date_received2'">
+                                    {{it.date_received2 | thai_date:'short'}}
                                 </td>
-
+                                <td data-title="'นัดฟังคำพิพากษา'" sortable="'date_ap'">
+                                    {{it.date_ap | thai_date:'short'}}
+                                </td>
+                                <td data-title="'ส่งตามกำหนด(ก่อน 15 วัน)'" class="text-center" >
+                                    <span ng-if="it._days<0">หลัง {{it._days | math_abs}} วัน</span>
+                                    <span ng-if="it._days>0">ก่อน {{it._days}} วัน</span>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
