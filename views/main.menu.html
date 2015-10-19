@@ -9,14 +9,14 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="#">
-                    <h3 style="color:#014F7F;font-size:1.6em;font-weight:bold;padding:0px;margin:0px"><span class="fa fa-university"></span> สำนักศาลยุติธรรมประจำภาค ๕</h3>
+                    <h3 style="color:#014F7F;font-size:1.6em;font-weight:bold;padding:0px;margin:0px"><span class="fa fa-university"></span> <span ng-if="isAdmin()">สำนักศาลยุติธรรมประจำภาค5</span><span ng-if="!isAdmin()">{{getUser().name}}</span></h3>
                 </a>
             </div>
             <div ng-if="isAdmin()" class="collapse navbar-collapse" bs-collapse-target>
                 <ul class="nav navbar-nav navbar-right" ng-if="$root.getUserId()">
                     <li data-match-route="admin/cases"><a href="#admin/cases"><span class="glyphicon glyphicon-book"></span> ข้อมูลคดี</a></li>
                     <li data-match-route="admin/vcases"><a href="#admin/vcases"><span class="glyphicon glyphicon-equalizer"></span> ข้อมูลคดี2</a></li>
-                    <li  data-match-route="admin/management" class="dropdown">
+                    <li  data-match-route="admin/management/" class="dropdown">
                         <a href="javascript:void()"  bs-dropdown><span class="glyphicon glyphicon-th-large"></span>  เตรียมข้อมูล</a>
                         <ul class="dropdown-menu">
                             <li>
@@ -76,7 +76,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li data-match-route="admin/management" class="dropdown">
+                    <li data-match-route="admin/report" class="dropdown">
                         <a href="javascript:void()" bs-dropdown><span class="glyphicon glyphicon-print"></span> สรุปรายงานคดี</a>
                         <ul class="dropdown-menu">
                             <li>
@@ -105,7 +105,7 @@
                                                             <h4 class="media-heading text-primary">สรุปรายงานคดีแยกเป็นรายศาล</h4>
                                                         </a>
                                                         พิมพ์รายงานคดีของศาลในเขตอำนาจอธิบดีผู้พิพากษาภาค
-</div>
+                                                    </div>
                                                 </li>
                                             </ul>
                                         </div>
@@ -126,7 +126,7 @@
                     <li data-match-route="court/vcases"><a href="#court/vcases"><span class="glyphicon glyphicon-equalizer"></span> ข้อมูลคดี2</a></li>
                     <li data-match-route="court/users"><a href="#court/users"><span class="glyphicon glyphicon-user"></span> ข้อมูลผู้พิพิกษา</a></li>
 
-                    <li><a data-placement="bottom" data-trigger="click" bs-popover data-template="custom.logout.popover.html" data-auto-close="true" href="javascript:void()"><span class="glyphicon glyphicon-off"></span> ออกจากระบบ</a></li>
+                    <li><a data-placement="bottom" data-trigger="click" bs-popover data-template="custom.logout.popover.html" data-auto-close="true" href="javascript:void()"><span class="glyphicon glyphicon-lock"></span> ออกจากระบบ</a></li>
                 </ul>
             </div>
         </div>

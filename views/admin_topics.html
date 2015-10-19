@@ -107,12 +107,9 @@
                     ng-dblclick="editItem()"
                     ng-class="{'active': isSelected(it)}">
                     <td width="30" class="text-right text-muted">{{startIdx + $index + 1}}.</td>
-                    <!--
-                    <td width="30" header="'custom.checked.html'">
-                        <input type="checkbox" ng-model="checkboxes.items[it[pkField]]" />
-                    </td>-->
-                    <td data-title="'รหัส'" sortable="'code'">
-                        <span class="label label-info">{{it.code}}</span>
+
+                    <td data-title="'รหัส'" sortable="'code'" width="120">
+                        {{it.code}}
                     </td>
                     <td data-title="'ข้อหา'" sortable="'name'">
                         {{it.name}}

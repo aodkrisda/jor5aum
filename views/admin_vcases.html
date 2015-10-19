@@ -49,7 +49,7 @@
                             <tr ng-repeat="it in $data"
                                 ng-click="selectRow(it);"
                                 ng-init="it._days=date_diff(it.date_ap, it.date_received2)"
-                                ng-class="{'active': isSelected(it),'text-warning':it._days<0}" ng-init="it._days=date_diff(it.date_ap, it.date_received2)">
+                                ng-class="{'active': isSelected(it),'text-warning':it._days<BDAYS}" ng-init="it._days=date_diff(it.date_ap, it.date_received2)">
                                 <td width="30" class="text-right text-muted"><span title="#{{it.id}}">{{startIdx + $index + 1}}.</span></td>
       
                                 <td data-title="'เลขคดีดำ'" sortable="'number_black'">
@@ -68,8 +68,8 @@
                                     {{it.defendant}}
 
                                 </td>
-                                <td data-title="'ข้อหาสถิติ'" sortable="'topic_id'">
-                                    {{it.topic_id | lookup_topic}}
+                                <td data-title="'ข้อหาสถิติ'" sortable="'topic_ids'">
+                                    {{it.topic_ids | lookup_topic}}
 
                                 </td>
                                 <td data-title="'วันที่ส่งสำนวน'" sortable="'date_sent'">

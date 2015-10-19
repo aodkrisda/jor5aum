@@ -37,8 +37,8 @@
 		<script src="js/app.js"></script>
 	</head>
 	<body id="body">
-		<div ng-include="'main.template.html'"></div>
-		<div ng-include="'main.menu.html'"></div>
+		<div ng-include="'views/main.template.html'"></div>
+		<div ng-include="'views/main.menu.html'"></div>
 		<div id="main-content" class="container-fluid">
 			<div id="alert-messages" class="hidden-print"></div>
 			<div ui-view></div>

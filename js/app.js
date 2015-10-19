@@ -3,7 +3,8 @@
 
 
 angular.module('App', ['lazyLoadJs', 'ui.router', 'angular-loading-bar', 'ngAnimate', 'mgcrea.ngStrap', 'ngTable', 'ngSanitize', 'custom.table', 'flow', 'angular-storage'])
-.constant('API_URL','rest/api.php/v1/')
+.constant('API_URL', 'rest/api.php/v1/')
+.constant('BDAYS',15)
 .factory('myHttpInterceptor', ['$q', '$rootScope', function ($q, $rootScope) {
     return {
         /*
@@ -20,8 +21,9 @@ angular.module('App', ['lazyLoadJs', 'ui.router', 'angular-loading-bar', 'ngAnim
 }])
 
 
-.run(['$rootScope', '$state', '$stateParams', 'Auth', '$filter', '$alert', 'store', 'Lookups', 'API_URL','moment', function ($rootScope, $state, $stateParams, Auth, $filter, $alert, store, Lookups, API_URL,moment) {
+.run(['$rootScope', '$state', '$stateParams', 'Auth', '$filter', '$alert', 'store', 'Lookups', 'API_URL','moment','BDAYS', function ($rootScope, $state, $stateParams, Auth, $filter, $alert, store, Lookups, API_URL,moment,BDAYS) {
     $rootScope.API_URL = API_URL;
+    $rootScope.BDAYS=BDAYS;
     var _StoreData = store.get('_StoreData') || {};
    
     var _today = new Date();
@@ -307,6 +309,15 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
               views: {
                   '': {
                       templateUrl: 'views/admin_ats.html'
+                  }
+              }
+          })
+          .state("admin.management.settings", {
+              url: "/settings",
+              roles: ['admin'],
+              views: {
+                  '': {
+                      templateUrl: 'views/admin_settings.html'
                   }
               }
           })
@@ -773,29 +784,49 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
     return function (id, fd, lookuptype) {
         var str = '';
         if (id !== undefined) {
+    
             if (!fd) fd = 'name';
-            var it = Lookups.getTopic(id);
-            if (it && (it[fd] !== undefined)) {
-                if (lookuptype) {
-                    if (it['type_id'] !== undefined) {
-                        var it2 = Lookups.getType(it['type_id']);
-                        if (it2 && (it2[fd] !== undefined)) {
-                            str = it2[fd];
-                        }
+            var ids = null;
+            if (angular.isString(id)) {
+                if ((id.indexOf('[') >= 0) && (id.indexOf(']') >= 0)) {
+                    try{
+                        ids = eval(id);
+                    } catch (e) {
+                        idx = null;
                     }
-                } else {
-                    str = it[fd];
-                    /*
-                    if (it['code']) {
-                        str = it['code'] + ' ' + str;
-                    }
-                    */
                 }
             }
+            if (ids === null) {
+                ids = [id];
+            }
+            var bufs = [];
+            ids.forEach(function (id) {
+                var it = Lookups.getTopic(id);
+                if (it && (it[fd] !== undefined)) {
+                    str = '';
+                    if (lookuptype) {
+                        if (it['type_id'] !== undefined) {
+                            var it2 = Lookups.getType(it['type_id']);
+                            if (it2 && (it2[fd] !== undefined)) {
+                                str = it2[fd];
+                            }
+                        }
+                    } else {
+                        str = it[fd];
+                    }
+                    if (str && bufs.indexOf(str)) {
+                        bufs.push((bufs.length+1) + '.' + str);
+                    }
+                }
+            });
+            str = bufs.join(', ');
+            ids = null;
+            bufs = null;
         }
         return str;
     }
 }])
+
 
 .filter('lookup_type', ['Lookups', function (Lookups) {
     return function (id, fd, lookgroup) {
@@ -987,6 +1018,70 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
     }
 
 }])
+  
+.controller('TopicsCtrl', ['$scope', '$filter', '$rootScope', '$timeout', 'Auth', '$state', 'Lookups', '$modal', '$popover', 'Lookups', '_', function ($scope, $filter, $rootScope, $timeout, Auth, $state, Lookups, $modal, $popover, $Lookups, _) {
+    $scope.$items = [];
+    $scope.groupTitle = '';
+    $scope.search={name:''}
+    var _editingItem = null;
+    var _key = null;
+    $scope.clearSearch = function () {
+        if($scope.search.name) $scope.search.name = '';
+    }
+    $scope.createList = function (editingItem, key) {
+        _key = key;
+        _editingItem = editingItem;
+        var temp = '';
+        if (_editingItem && _editingItem[_key]) {
+            temp = _editingItem[_key];
+        }
+       var v= $scope.$eval(temp)
+       if (!v) v = [];
+       if (!angular.isArray(v)) {
+           v = [v];
+       }
+        var a = Lookups.getTopicByType(editingItem.type_id);
+        if (a) {
+            $scope.$items = _.map(a, function (it) {
+                var it2=_.mapObject(it, function (v) {
+                    return v;
+                });
+                var s = parseInt(it2.id);
+                it2._checked = (v.indexOf(s)>=0);
+                return it2;
+            });
+        } else {
+            $scope.$items = [];
+        }
+        if ($scope.$items.length > 0) {
+            var it = $scope.$items[0];
+            $scope.groupTitle=$filter('lookup_type')(it.type_id,'name','code');
+        }
+    }
+    $scope.clearChecked = function () {
+         _.each($scope.$items, function (it) {
+             if (it._checked === true) {
+                 it._checked = false;
+             }
+        })
+
+    }
+
+    $scope.setTopics = function () {
+        var ids = [];
+        _.each($scope.$items, function (it) {
+            if (it._checked === true) {
+                ids.push(it.id);
+            }
+        })
+        if (_editingItem && _key) {
+            _editingItem[_key] =(ids.length)? ('['+ ids.join(',') + ']'):'';
+        }
+        ids = null;
+    }
+
+}])
+
 .controller('CourtReportCtrl', ['$scope', '$filter','$rootScope', '$timeout', 'Auth', '$state', 'Lookups', '$modal', '$popover', 'Lookups', '_', function ($scope, $filter, $rootScope, $timeout, Auth, $state, Lookups, $modal, $popover, $Lookups, _) {
     $scope.Lookups = Lookups;
     $scope.pkField = 'id';
@@ -1021,6 +1116,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
         }
         $scope.temp = tm;
         //if (!$scope.blkPopover) {
+            $scope.blkPopover = null;
             $scope.blkPopover = $popover(angular.element('#edit-blacknum'), { scope: $scope, container: 'body', autoClose: true, trigger: 'manual', placement: 'left', template: "popup.black_number.tpl.html", show: false });
         //}
         $scope.blkPopover.$promise.then($scope.blkPopover.show);
@@ -1031,10 +1127,33 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
         }
     }
     $scope.setBlackNumber = function (temp) {
-        var str = $filter('lookup_type')($scope.editingItem.type_id, 'code');
-        str += temp.number_black.trim();
-        if (temp.year) str += '/' + temp.year.trim();
+        var str = '';
+        temp.number_black = (temp.number_black || '').trim();
+        temp.year = (temp.year || '').trim();
+        if (temp.number_black && temp.year) {
+            str = $filter('lookup_type')($scope.editingItem.type_id, 'code');
+            str += temp.number_black;
+            if (temp.year) str += '/' + temp.year;
+        }
         __it.number_black = str;
+    }
+    $scope.clearBlackNumber = function (temp) {
+        if (temp) {
+            temp.number_black = '';
+            temp.year = '';
+        }
+    }
+    $scope.popupTopics = function (it) {
+        __it = it;
+        $scope.editingItem = it;
+        var tm = { topic_ids:[] };
+
+        $scope.temp = tm;
+        //if (!$scope.blkPopover) {
+        $scope.topicsPopover = null;
+        $scope.topicsPopover = $popover(angular.element('#edit-topics'), { scope: $scope, container: 'body', autoClose: true, trigger: 'manual', placement: 'left', template: "popup.topics.tpl.html", show: false });
+        //}
+        $scope.topicsPopover.$promise.then($scope.topicsPopover.show);
     }
 
     $scope.getFileTitle = function (f) {
@@ -1431,4 +1550,50 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
             scope._model = ctrl;
         }
     };
-});
+})
+.directive('customChoices', ['Lookups', '_', '$timeout', function (Lookups, _, $timeout) {
+    return{
+        template: '<div ng-repeat="it in items">{{$index+1}}. {{it.name}}</div>',
+        restrict: 'EA',
+        require: '?ngModel',
+
+        link: function (scope, $element, attrs) {
+            scope.items = [];
+            scope.$watch(attrs.ngModel,function(v,o){
+                $timeout(function () {
+                    var ids = scope.$eval(v || '');
+                    if (!ids) ids = [];
+                    if (!angular.isArray(ids)) ids = [ids];
+                   
+                    var its = [];
+                    if (ids && ids.length) {
+                       
+                        _.each(ids, function (id) {
+                            var tm = _.find(Lookups.getTopic(), function (it2) {
+                                return (it2['id'] == id);
+                            });
+                            if (tm) its.push(tm);
+                        });
+                       
+                    }
+                    scope.items = its;
+                    ids = null;
+                },100);
+            });
+        }
+    };
+}])
+
+
+.directive('customReadonlyTopics', ['Lookups', '_', '$timeout', function (Lookups, _, $timeout) {
+    return {
+        priority:1,
+        template: function (telement, tattrs) {
+            var model = tattrs['ngModel'] || '_nomodel';
+            return ('<div class="form-control readonly" style="height:auto;min-height:34px;">' + 
+                    '<custom-choices ng-model="' + model + '"></custom-choices>' +
+                '</div>');
+        },
+        restrict: 'EA'
+    }
+}])

@@ -1,3 +1,11 @@
+ALTER TABLE `info_users` ADD `check_out` INT NOT NULL DEFAULT '0';
+ALTER TABLE `info_cases` ADD `judge4_id` INT NOT NULL DEFAULT '0';
+ALTER TABLE `info_cases` ADD `topic_ids` VARCHAR(255) DEFAULT '';
+UPDATE `info_cases` set topic_ids=CONCAT('[',topic_id,']');
+
+
+
+
 --field types:
 --NUMBER()
 --TEXT()
@@ -8,24 +16,6 @@
 --PK()
 --FK()
 
-
-CASES=[
-{name:"id", type:"int", pk:true, label:"#"},
-{name:"user_id", type:"int", fk:"users", label:"ศาล"},
-{name:"type_id", type:"int", fk:"types", label:"ประเภทคดี "},
-{name:"number_sent", type:"text",  label:"วันที่ส่ง"},
-{name:"date_sent", type:"text",  label:"เลขที่หนังสือส่ง"},
-{name:"date_case", type:"date",  label:"วันที่รับฟ้อง"},
-{name:"number_sent", type:"text",  label:"เลขที่หนังสือส่ง"},
-{name:"number_sent", type:"text",  label:"เลขที่หนังสือส่ง"},
-{name:"number_sent", type:"text",  label:"เลขที่หนังสือส่ง"},
-{name:"number_sent", type:"text",  label:"เลขที่หนังสือส่ง"},
-{name:"number_sent", type:"text",  label:"เลขที่หนังสือส่ง"},
-{name:"number_sent", type:"text",  label:"เลขที่หนังสือส่ง"},
-{name:"number_sent", type:"text",  label:"เลขที่หนังสือส่ง"},
-{name:"number_sent", type:"text",  label:"เลขที่หนังสือส่ง"},
-{name:"number_sent", type:"text",  label:"เลขที่หนังสือส่ง"},
-{name:"number_sent", type:"text",  label:"เลขที่หนังสือส่ง"},
 
 	
 ]
@@ -42,7 +32,8 @@ number_black=เลคคดีดำ
 number_red=เลขคดีแดง
 plaintiff=โจทก์	
 defendant=จำเลย
-topic_id=FK(TOPICS); ข้อหาหลัก     -> ข้อหาสถิติ   ***********ข้อมูลหาย
+*topic_id=FK(TOPICS); ข้อหาหลัก     -> ข้อหาสถิติ   ***********  ไม่ใช้แล้ว
+topic_ids= ข้อหาสถิติ  (Multiple)
 title=ข้อหารอง  -> ข้อหาพิมพ์ปก
 note1=หมายเหตุ
 
@@ -52,7 +43,7 @@ date_sent2=วันทีส่งสำนวน
 number_sent2=เลขที่ส่งสำนวน
 note2=หมายเหตุ
 judge_id=FK(USERS); ผู้พิพากษาเจ้าของสำนวน
-judge3_id=FK(USERS); องค์คณะ   (********ข้อมูลทับกัน***********ภาค  ผู้พิพากษาผู้ตรวจ 2)
+judge3_id=FK(USERS); องค์คณะ   (********เดิมข้อมูลทับกัน***********ภาค  ผู้พิพากษาผู้ตรวจ 2)
 imprison_id=FK(IMPRISONS); จำเลขต้องขัง
 accept_id=FK(ACCEPS); จำเลยสารภาพ
 
@@ -80,7 +71,8 @@ number_sent4=เลขที่หนังสือแจ้งรายงานคดี
 date_received2=วันที่ภาครับสำนวน
 number_received2=เลขที่รับของภาค
 judge2_id=FK(USERS); ผู้พิพากษาผู้ตรวจ
-judge3_id=FK(USERS); องค์คณะ   (********ข้อมูลทับกัน***********ภาค  ผู้พิพากษาผู้ตรวจ 2)
+judge4_id=FK(USERS); ผู้พิพากษาผู้ตรวจ 2 (ภาค) +
+
 
 --4. ภาครับสำนวน	
 date_received3=วันที่ภาครับสำนวนคำพิพากษา
@@ -176,7 +168,7 @@ admin=1 เป็น admin
 position=ตำแหน่ง
 parent_id=FK(USERS); ศาล
 active=1 สามารถเข้าใช้งานได้
-take_out=0 ย้ายผู้พิพากษาออก
+check_out= 1 ย้ายออกแล้ว
 
 
 

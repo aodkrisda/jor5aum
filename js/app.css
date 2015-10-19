@@ -85,7 +85,7 @@ table[ng-table] tr.active td {
     vertical-align: middle;
     float: none;
 }
-form.readonly.form input[readonly]{
+form.readonly.form input[readonly], form.readonly.form .form-control.readonly{
     background-color:#F9DADA;  
 }
 

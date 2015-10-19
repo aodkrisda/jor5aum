@@ -615,7 +615,7 @@ class NGTABLE_ADMIN_CASES  extends NGTABLE{
         $rs->where('date_ap IS NOT NULL')->where('command_id>1')->where('date_received2 IS  NOT NULL');
       }   
       $rs->order('date_sent desc, id desc');
-      $rs->select('id,number_black,number_red,plaintiff,defendant,title,topic_id,date_sent,date_received2,date_ap,file1,file2');
+      $rs->select('id,number_black,number_red,plaintiff,defendant,title,topic_ids,date_sent,date_received2,date_ap,file1,file2');
 
 
       /*
@@ -712,7 +712,7 @@ class NGTABLE_COURT_CASES  extends NGTABLE{
         $rs->where('date_ap IS NOT NULL')->where('command_id>1')->where('date_received2 IS  NOT NULL');
       }        
       $rs->order('date_sent desc, id desc');
-      $rs->select('id,number_black,number_red,plaintiff,defendant,title,topic_id,result,command_id,date_sent,file1,date_received2,date_ap,file2');
+      $rs->select('id,number_black,number_red,plaintiff,defendant,title,topic_ids,result,command_id,date_sent,file1,date_received2,date_ap,file2');
     }
   }
 }

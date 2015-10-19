@@ -3,12 +3,12 @@
 
 <div class="panel panel-default">
     <div class="panel-heading" style="padding-bottom:0px;">
-        <p class="text-center"><strong><big>ส่งสำนวนกลับ {{editingItem.user_id | lookup_court}}</big></strong></p>
+        <h2 class="text-center" style="margin-top:0px">ส่งสำนวนกลับ {{editingItem.user_id | lookup_court}}</h2>
     </div>
 
     <div class="panel-body" style="padding-bottom:0px;">
 
-        <form class="form form-horizontal" name="form" style="padding-top:25px;padding-bottom:50px;">
+        <form class="form form-horizontal readonly" name="form" style="padding-top:25px;padding-bottom:50px;">
             <fieldset>
                 <div class="form-group col-md-6">
                     <label class="control-label col-md-4">เลขดำ</label>
@@ -44,7 +44,7 @@
                 <div class="form-group col-md-6">
                     <label class="control-label col-md-4">ข้อหาสถิติ</label>
                     <div class="col-md-8">
-                        <input type="text" readonly class="form-control input-md" value="{{editingItem.topic_id | lookup_topic}}">
+                        <custom-readonly-topics ng-model="editingItem.topic_ids"></custom-readonly-topics>
                     </div>
                 </div>
                 <div class="form-group col-md-6">
@@ -77,8 +77,8 @@
                         <input type="text" readonly class="form-control input-md" value="{{editingItem.judge_id | lookup_judge}}">
                     </div>
                 </div>
-
-
+                <div class="row clearfix"></div>
+                <hr />
                 <div class="form-group col-md-6">
                     <label class="control-label col-md-4">ชื่อผู้พิพากษาผู้ตรวจ</label>
                     <div class="col-md-8">
@@ -90,7 +90,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="row clearfix"> </div>
 
                 <div class="form-group col-md-6">
                     <label class="control-label col-md-4">วันที่ภาครับร่างคำพิพากษาที่ตรวจแล้วเสร็จ</label>
@@ -102,14 +101,14 @@
                     <label class="control-label col-md-4">ชื่อผู้พิพากษาผู้ตรวจ2</label>
                     <div class="col-md-8">
                         <div class="input-group">
-                            <select class="form-control input-md"  name="role" ng-model="editingItem.judge3_id" select-default ng-options="it.id as it.name for it  in Lookups.getJudge2()">
+                            <select class="form-control input-md"  name="role" ng-model="editingItem.judge4_id" select-default ng-options="it.id as it.name for it  in Lookups.getJudge2()">
                                 <option value=""></option>
                             </select>
                             <span class="input-group-addon btn" id="add-judge" ng-click="popupJudge()"><span class="glyphicon glyphicon-plus"></span></span>
                         </div>
                     </div>
                 </div>
-                <div class="row clearfix"> </div>
+           
                 <div class="form-group col-md-6">
                     <label class="control-label col-md-4">เลขที่รับของภาค</label>
                     <div class="col-md-8">
