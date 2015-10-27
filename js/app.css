@@ -14,6 +14,9 @@ body{
 	background: url('../images/header.jpg') repeat !important;
 }
 
+.add-top-padding{
+    padding-top:5em;
+}
 .panel-heading, .panel-footer{
 	background: url('../images/header2.jpg') repeat !important;
 }
@@ -23,6 +26,13 @@ body{
 
 .nav.navbar-nav .active a:focus,.nav.navbar-nav a:hover{
   background:transparent none;
+}
+.input-group.date  input.date{
+    background-color:#ffffff;
+    cursor:default;
+}
+fieldset[disabled] .input-group.date  input.date{
+    background-color:#eeeeee;
 }
 .text-checkout{
     text-decoration:line-through;

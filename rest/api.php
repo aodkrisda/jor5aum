@@ -1,4 +1,5 @@
 <?php
+@date_default_timezone_set("Asia/Bangkok");
 /* fix input of CGI/FastCGI */
 if(strpos($_SERVER["SERVER_SOFTWARE"],'nginx/')!==false){
 if(!isset($_SERVER['PATH_INFO'])){
@@ -58,13 +59,15 @@ class REST_API{
     exit();
   }
   
-  public function api_require_fields($fds){
+  public function api_require_fields($fds,$pk=null){
     $error_fields='';
     if(is_array($fds)){
         foreach ($fds as $field) {
           if (!isset($_POST[$field])) {
-              if($error_fields) $error_fields.=', ';
-              $error_fields .= $field;
+              if(!$pk){
+                if($error_fields) $error_fields.=', ';
+                $error_fields .= $field;
+              }
           }
         }
     }

@@ -21,7 +21,24 @@ angular.module('App', ['lazyLoadJs', 'ui.router', 'angular-loading-bar', 'ngAnim
 }])
 
 
-.run(['$rootScope', '$state', '$stateParams', 'Auth', '$filter', '$alert', 'store', 'Lookups', 'API_URL','moment','BDAYS', function ($rootScope, $state, $stateParams, Auth, $filter, $alert, store, Lookups, API_URL,moment,BDAYS) {
+.run(['$rootScope', '$state', '$stateParams', 'Auth', '$filter', '$alert', 'store', 'Lookups', 'API_URL', 'moment', 'BDAYS','_', function ($rootScope, $state, $stateParams, Auth, $filter, $alert, store, Lookups, API_URL, moment, BDAYS,_) {
+    angular.getChanges = function getChanges(item, old, pk) {
+        if (pk && item && old && old[pk] && old[pk] == item[pk]) {
+            var fds = {};
+            _.each(item, function (v, k) {
+                if (old[k] != v) {
+                    fds[k] = v;
+                }
+            });
+            if (_.size(fds) > 0) {
+                fds[pk] = item[pk];
+                return fds;
+            }
+            return null;
+        }
+        return item;
+    }
+
     $rootScope.API_URL = API_URL;
     $rootScope.BDAYS=BDAYS;
     var _StoreData = store.get('_StoreData') || {};
@@ -85,21 +102,7 @@ angular.module('App', ['lazyLoadJs', 'ui.router', 'angular-loading-bar', 'ngAnim
     }
     $rootScope.lookup_group = $filter('lookup_group');
     $rootScope.courtName = '';
-    $rootScope.dropdown_reports=[
 
-{
-    "text": "สรุปรายงานคดีของศาลในภาค 5",
-    "href": "#admin/report1"
-  },
-  {
-    "divider": true
-  },
-
-                                 {
-                                     "text": "สรุปรายงานคดีแยกเป็นรายศาล",
-                                	    "href": "#admin/report2"
-                                	  }                              	  
-    ];
 
     $rootScope.isAdmin = function () {
         return Auth.isAdmin();
@@ -136,6 +139,7 @@ angular.module('App', ['lazyLoadJs', 'ui.router', 'angular-loading-bar', 'ngAnim
         } else if (!Auth.canAccess(toState)) {
             e.preventDefault(); // stop current execution
         }
+        $state.previousState = fromState;
     });
     $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
         switch (fromState.name) {
@@ -192,15 +196,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
                   }
               }
           })
-          .state("admin.vcases", {
-              url: "/vcases",
-              roles: ['admin'],
-              views: {
-                  '': {
-                      templateUrl: 'views/admin_vcases.html'
-                  }
-              }
-          })
+
           .state("admin.cases.form1", {
               url: "/form1",
               roles: ['admin'],
@@ -210,7 +206,25 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
                   }
               }
           })
-          .state("admin.cases.form2", {
+          .state("admin.cases.form5", {
+              url: "/form5",
+              roles: ['admin'],
+              views: {
+                  '': {
+                      templateUrl: 'views/admin_cases_form5.html'
+                  }
+              }
+          })
+          .state("admin.vcases", {
+              url: "/vcases",
+              roles: ['admin'],
+              views: {
+                  '': {
+                      templateUrl: 'views/admin_vcases.html'
+                  }
+              }
+          })
+          .state("admin.vcases.form2", {
               url: "/form2",
               roles: ['admin'],
               views: {
@@ -219,7 +233,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
                   }
               }
           })
-          .state("admin.cases.form3", {
+          .state("admin.vcases.form3", {
               url: "/form3",
               roles: ['admin'],
               views: {
@@ -228,7 +242,33 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
                   }
               }
           })
-
+          .state("admin.vcases.form4", {
+              url: "/form4",
+              roles: ['admin'],
+              views: {
+                  '': {
+                      templateUrl: 'views/admin_cases_form4.html'
+                  }
+              }
+          })
+          .state("admin.vcases.form5", {
+              url: "/form5",
+              roles: ['admin'],
+              views: {
+                  '': {
+                      templateUrl: 'views/admin_cases_form5.html'
+                  }
+              }
+          })
+          .state("admin.cases.form6", {
+              url: "/form6",
+              roles: ['admin'],
+              views: {
+                  '': {
+                      templateUrl: 'views/admin_cases_form6.html'
+                  }
+              }
+          })
           .state("admin.report1", {
               url: "/report1",
               roles: ['admin'],
@@ -340,15 +380,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
               }
 
           })
-          .state("court.vcases", {
-              url: "/vcases",
-              roles: ['court'],
-              views: {
-                  '': {
-                      templateUrl: 'views/court_vcases.html'
-                  }
-              }
-          })
+
           .state("court.cases.form1", {
               url: "/form1",
               roles: ['court'],
@@ -377,6 +409,42 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
               }
           })
           .state("court.cases.form4", {
+              url: "/form4",
+              roles: ['court'],
+              views: {
+                  '': {
+                      templateUrl: 'views/court_cases_form4.html'
+                  }
+              }
+          })
+          .state("court.vcases", {
+              url: "/vcases",
+              roles: ['court'],
+              views: {
+                  '': {
+                      templateUrl: 'views/court_vcases.html'
+                  }
+              }
+          })
+         .state("court.vcases.form2", {
+             url: "/form2",
+             roles: ['court'],
+             views: {
+                 '': {
+                     templateUrl: 'views/court_cases_form2.html'
+                 }
+             }
+         })
+          .state("court.vcases.form3", {
+              url: "/form3",
+              roles: ['court'],
+              views: {
+                  '': {
+                      templateUrl: 'views/court_cases_form3.html'
+                  }
+              }
+          })
+          .state("court.vcases.form4", {
               url: "/form4",
               roles: ['court'],
               views: {
@@ -519,7 +587,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
                         lookups[k] = v;
                     }
                 })
-             
+               
 
             }
         });
@@ -569,7 +637,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
 
                 store.set('lookups', lookups);
 
-
+       
 
             }
         });
@@ -657,7 +725,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
             }
             return lookups.imprisons;
         },
-        getAccpt: function (id, fd) {
+        getAccept: function (id, fd) {
             if (id !== undefined) {
                 if (!fd) fd = 'name';
                 return _.find(lookups.accepts, function (it) { return (it.id == id) });
@@ -740,6 +808,10 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
             if (!fd) fd = 'name';
             var it = Lookups.getAt(id);
             if (it && (it[fd] !== undefined)) str = it[fd];
+            if (it && it['checked']!=undefined) {
+                str = str + ((it['checked'] == '1') ? ' (ตรวจ)' : ' (ไม่ตรวจ)');
+        
+            }
         }
         return str;
     }
@@ -871,53 +943,72 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
 }])
 
 
-.controller('AdminReportCtrl', ['$scope', '$rootScope','$timeout', 'Auth', '$state', 'Lookups', '$modal', '$popover','Lookups', '_',function ($scope,$rootScope, $timeout, Auth, $state, Lookups, $modal, $popover,$Lookups,_) {
+.controller('AdminReportCtrl', ['$scope', '$element','$rootScope','$timeout', 'Auth', '$state', 'Lookups', '$modal', '$popover','Lookups', '_',function ($scope,$element, $rootScope, $timeout, Auth, $state, Lookups, $modal, $popover,$Lookups,_) {
     $scope.Lookups = Lookups;
     $scope.pkField = 'id';
     $scope.apiName = 'admin_cases';
     $scope.editItem = null;
-    $scope.dropDownAdmin = [
-        {
-            text: "Login",
-            href: '#/login',
-            title: 'Log out'
-        },
-        {
-            text: "Logout",
-            href: '/api/auth/logout',
-            title: 'Log out'
+    $scope.prefix = $element.attr('data-prefix') || '';
+    $scope.clearRunNumber=function(item){
+        if (item.id) {
+            Auth.post($scope.apiName + '/clearnumber', { id: item.id }).success(function (data) {
+                if (data && data.data && data.data['auto_received_num']!=undefined) {
+                    item['auto_received_num'] = data.data['auto_received_num'];
+                    if ('date_received3' in data.data) {
+                        item['date_received3'] = data.data['date_received3'];
+                    }
+                }
+            });
         }
-    ];
+    }
+    $scope.setRunNumber=function(item){
+        if (item.id) {
+            Auth.post($scope.apiName + '/setnumber', {id:item.id}).success(function (data) {
+                if (data && data.data && data.data['auto_received_num']) {
+                    item['auto_received_num'] = data.data['auto_received_num'];
+                    if ('date_received3' in data.data) {
+                        item['date_received3'] = data.data['date_received3'];
+                    }
+                }
+            });
+        }
+    }
     $scope.saveForm = function (item, idx) {
         if (item) {
-            var d;
-            if (idx == '3') {
-                d = { id: '', result: '', judge2_id: '', judge3_id: '', date_received4: '', number_received4: '' };
-            }else if (idx == '2') {
-                d = { id: '', result: '', judge2_id: '', judge3_id: '', date_sent5: '', number_sent5: '', number_received3: '', date_received3: '' };
-            }else{
-                d = { id: '', result: '', command_id: '',  date_received4: '', number_received4: '',date_received:'',number_received:'' };
-            }
-            _.extendOwn(d, item);
-            Auth.post($scope.apiName + '/update', d).success(function (data) {
-                $scope.editingItem = null;
+            item = angular.getChanges(item, oldData, $scope.pkField)
+            if (item) {
+                var d = {};
+                _.extendOwn(d, item);
+                Auth.post($scope.apiName + '/update', d).success(function (data) {
+                    $scope.editingItem = null;
+                    $scope.goBack();
+                });
+            } else {
                 $scope.goBack();
-            });
+            }
         }
     }
 
     $scope.goBack = function () {
         $rootScope.storeData('admin_cases_id', null);
-        $state.go('admin.cases')
+        if ($state.previousState && ($state.previousState.name=='admin.vcases')) {
+            $state.go('admin.vcases');
+        } else {
+            $state.go('admin.cases');
+        }
     }
-
+    var oldData = null;
     $scope.go = function (a, b) {
         if (a && b) {
             var d = {};
             d[$scope.pkField] = b[$scope.pkField];
             $scope.editingItem = null;
+            oldData = null;
             Auth.post($scope.apiName + '/get', d).success(function (data) {
                 $scope.editingItem = data.data;
+               
+                oldData = {};
+                angular.copy(data.data, oldData);
                 $rootScope.storeData('admin_cases_id', b[$scope.pkField]);
                 $state.go(a);
   
@@ -929,7 +1020,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
     $scope.resultPopover = null;
     $scope.popupResult = function () {
         if (!$scope.resultPopover) {
-            $scope.resultPopover = $popover(angular.element('#add-result'), { scope: $scope,container:'body', autoClose: true, trigger: 'manual', placement: 'auto bottom-left', template: "custom.result.popover.html", show: false });
+            $scope.resultPopover = $popover(angular.element('#add-result'), { scope: $scope,container:'body', autoClose: true, trigger: 'manual', placement: 'auto', template: "custom.result.popover.html", show: false });
         }
         $scope.resultPopover.$promise.then($scope.resultPopover.show);
     }
@@ -945,7 +1036,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
     $scope.commandPopover = null;
     $scope.popupCommand = function () {
         if (!$scope.commandPopover) {
-            $scope.commandPopover = $popover(angular.element('#add-command'), { scope: $scope,container:'body', autoClose: true, placement: 'auto bottom-left', trigger: 'manual', template: "custom.command.popover.html", show: false });
+            $scope.commandPopover = $popover(angular.element('#add-command'), { scope: $scope,container:'body', autoClose: true, placement: 'auto', trigger: 'manual', template: "custom.command.popover.html", show: false });
         }
         $scope.commandPopover.$promise.then($scope.commandPopover.show);
     }
@@ -962,7 +1053,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
     $scope.judgePopover = null;
     $scope.popupJudge = function () {
         if (!$scope.judgePopover) {
-            $scope.judgePopover = $popover(angular.element('#add-judge'), { scope: $scope, container: 'body', autoClose: true, placement: 'auto bottom-left', trigger: 'manual', template: "custom.judge.popover.html", show: false });
+            $scope.judgePopover = $popover(angular.element('#add-judge'), { scope: $scope, container: 'body', autoClose: true, placement: 'auto', trigger: 'manual', template: "custom.judge.popover.html", show: false });
         }
         $scope.judgePopover.$promise.then($scope.judgePopover.show);
     }
@@ -978,12 +1069,33 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
     var str = $state.current.name;
     var n = $rootScope.fetchData('admin_cases_id');
     if (n) {
-        if (str.indexOf('admin.cases.form') == 0) {
+        if (str.indexOf('admin.') == 0) {
             var d = {};
             d[$scope.pkField] = n;
             $scope.go(str, d);
         }
     }
+    $scope.setCourtId = function (id) {
+        $rootScope.storeData($scope.prefix + 'admin_cases_court', id);
+    }
+    $scope.setMonthId = function (id) {
+        $rootScope.storeData($scope.prefix + 'admin_cases_month', id);
+    }
+    $scope.setYearId = function (id) {
+        $rootScope.storeData($scope.prefix + 'admin_cases_year', id);
+    }
+    $scope.setDateId = function (id) {
+        $rootScope.storeData($scope.prefix + 'admin_cases_date', id);
+    }
+    n = $rootScope.fetchData($scope.prefix + 'admin_cases_court');
+    if(n)$scope.searchCourt = n;
+    n = $rootScope.fetchData($scope.prefix + 'admin_cases_month');
+    if (n) $scope.searchMonth = n;
+    n = $rootScope.fetchData($scope.prefix+'admin_cases_year');
+    if (n) $scope.searchYear = n;
+    n = $rootScope.fetchData($scope.prefix + 'admin_cases_date') || $rootScope.today();
+    if (n) $scope.searchDate = n;
+    
 
 }])
 
@@ -1082,11 +1194,12 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
 
 }])
 
-.controller('CourtReportCtrl', ['$scope', '$filter','$rootScope', '$timeout', 'Auth', '$state', 'Lookups', '$modal', '$popover', 'Lookups', '_', function ($scope, $filter, $rootScope, $timeout, Auth, $state, Lookups, $modal, $popover, $Lookups, _) {
+.controller('CourtReportCtrl', ['$scope','$element', '$filter','$rootScope', '$timeout', 'Auth', '$state', 'Lookups', '$modal', '$popover', 'Lookups', '_', function ($scope,$element, $filter, $rootScope, $timeout, Auth, $state, Lookups, $modal, $popover, $Lookups, _) {
     $scope.Lookups = Lookups;
     $scope.pkField = 'id';
     $scope.apiName = 'court_cases';
     $scope.editItem = null;
+    $scope.prefix = $element.attr('data-prefix') || '';
     
     $scope.years = [];
     $scope.blkPopover = null;
@@ -1162,27 +1275,30 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
         }
         return '';
     }
+    var oldData=null;
     $scope.saveForm = function (item, idx) {
         if (item) {
-            var d;
-            if (idx == '3') {
-                d = { id: '', result: '', judge2_id: '', judge3_id: '', date_received4: '', number_received4: '' };
-            } else if (idx == '2') {
-                d = { id: '', result: '', judge2_id: '', judge3_id: '', date_sent5: '', number_sent5: '', number_received3: '', date_received3: '' };
+            item = angular.getChanges(item, oldData, $scope.pkField)
+            if(item){
+                var d = {};
+                _.extendOwn(d, item);
+                Auth.post($scope.apiName + '/update', d).success(function (data) {
+                    $scope.editingItem = null;
+                    $scope.goBack();
+                });
             } else {
-                d = { id: '', result: '', command_id: '', date_received4: '', number_received4: '', date_received: '', number_received: '' };
-            }
-            _.extendOwn(d, item);
-            Auth.post($scope.apiName + '/update', d).success(function (data) {
-                $scope.editingItem = null;
                 $scope.goBack();
-            });
+            }
         }
     }
 
     $scope.goBack = function () {
         $rootScope.storeData('court_cases_id', null);
-        $state.go('court.cases')
+        if ($state.previousState && ($state.previousState.name == 'court.vcases')) {
+            $state.go('court.vcases');
+        } else {
+            $state.go('court.cases');
+        }
     }
     var _reRead = [];
     $scope.go = function (a, b) {
@@ -1190,13 +1306,15 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
             var d = {};
             d[$scope.pkField] = b[$scope.pkField];
             $scope.editingItem = null;
+            oldData=null;
             Auth.post($scope.apiName + '/get', d).success(function (data) {
                 _reRead = null;
                 _reRead = [a,b];
+                oldData={};
                 $scope.editingItem = data.data;
+                angular.copy(data.data,oldData);
                 $rootScope.storeData('court_cases_id', b[$scope.pkField]);
                 $state.go(a);
-
             });
 
         }
@@ -1210,7 +1328,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
     $scope.resultPopover = null;
     $scope.popupResult = function () {
         if (!$scope.resultPopover) {
-            $scope.resultPopover = $popover(angular.element('#add-result'), { scope: $scope, container: 'body', autoClose: true, trigger: 'manual', placement: 'auto bottom-left', template: "custom.result.popover.html", show: false });
+            $scope.resultPopover = $popover(angular.element('#add-result'), { scope: $scope, container: 'body', autoClose: true, trigger: 'manual', placement: 'auto', template: "custom.result.popover.html", show: false });
         }
         $scope.resultPopover.$promise.then($scope.resultPopover.show);
     }
@@ -1226,7 +1344,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
     $scope.commandPopover = null;
     $scope.popupCommand = function () {
         if (!$scope.commandPopover) {
-            $scope.commandPopover = $popover(angular.element('#add-command'), { scope: $scope, container: 'body', autoClose: true, placement: 'auto bottom-left', trigger: 'manual', template: "custom.command.popover.html", show: false });
+            $scope.commandPopover = $popover(angular.element('#add-command'), { scope: $scope, container: 'body', autoClose: true, placement: 'auto', trigger: 'manual', template: "custom.command.popover.html", show: false });
         }
         $scope.commandPopover.$promise.then($scope.commandPopover.show);
     }
@@ -1243,7 +1361,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
     $scope.imprisonPopover = null;
     $scope.popupImprison = function () {
         if (!$scope.imprisonPopover) {
-            $scope.imprisonPopover = $popover(angular.element('#add-imprison'), { scope: $scope, container: 'body', autoClose: true, placement: 'auto bottom-left', trigger: 'manual', template: "custom.imprison.popover.html", show: false });
+            $scope.imprisonPopover = $popover(angular.element('#add-imprison'), { scope: $scope, container: 'body', autoClose: true, placement: 'auto', trigger: 'manual', template: "custom.imprison.popover.html", show: false });
         }
         $scope.imprisonPopover.$promise.then($scope.imprisonPopover.show);
     }
@@ -1259,7 +1377,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
     $scope.acceptPopover = null;
     $scope.popupAccept = function () {
         if (!$scope.acceptPopover) {
-            $scope.acceptPopover = $popover(angular.element('#add-accept'), { scope: $scope, container: 'body', autoClose: true, placement: 'auto bottom-left', trigger: 'manual', template: "custom.accept.popover.html", show: false });
+            $scope.acceptPopover = $popover(angular.element('#add-accept'), { scope: $scope, container: 'body', autoClose: true, placement: 'auto', trigger: 'manual', template: "custom.accept.popover.html", show: false });
         }
         $scope.acceptPopover.$promise.then($scope.acceptPopover.show);
     }
@@ -1275,7 +1393,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
     $scope.judgePopover = null;
     $scope.popupJudge = function () {
         if (!$scope.judgePopover) {
-            $scope.judgePopover = $popover(angular.element('#add-judge'), { scope: $scope, container: 'body', autoClose: true, placement: 'auto bottom-left', trigger: 'manual', template: "custom.judge.popover.html", show: false });
+            $scope.judgePopover = $popover(angular.element('#add-judge'), { scope: $scope, container: 'body', autoClose: true, placement: 'auto', trigger: 'manual', template: "custom.judge.popover.html", show: false });
         }
         $scope.judgePopover.$promise.then($scope.judgePopover.show);
     }
@@ -1299,6 +1417,22 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
             $scope.go(str, d);
         }
     }
+
+    $scope.setMonthId = function (id) {
+        $rootScope.storeData($scope.prefix + 'court_cases_month', id);
+    }
+    $scope.setYearId = function (id) {
+        $rootScope.storeData($scope.prefix + 'court_cases_year', id);
+    }
+    $scope.setDateId = function (id) {
+        $rootScope.storeData($scope.prefix + 'court_cases_date', id);
+    }
+    n = $rootScope.fetchData($scope.prefix + 'court_cases_month');
+    if (n) $scope.searchMonth = n;
+    n = $rootScope.fetchData($scope.prefix + 'court_cases_year');
+    if (n) $scope.searchYear = n;
+    n = $rootScope.fetchData($scope.prefix + 'court_cases_date') || $rootScope.today();
+    if (n) $scope.searchDate = n;
 }])
 .controller('LoginCtrl', ['$scope', '$timeout', 'Auth', '$state', 'Lookups', '$rootScope', 'cfpLoadingBar', function ($scope, $timeout, Auth, $state, Lookups, $rootScope, cfpLoadingBar) {
     $scope.userid = '';

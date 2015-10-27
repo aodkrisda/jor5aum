@@ -144,6 +144,18 @@
     </div>
 </script>
 
+<script type="text/ng-template" id="custom.confirm.autonumber.html">
+    <div class="popover" style="min-width:350px">
+        <div class="arrow"></div>
+        <h3 class="popover-title text-center text-danger"><strong>ยืนยันการลบเลขรับสำนวน</strong></h3>
+        <div class="popover-content">
+            <p class="text-center">
+                <button type="button" class="btn btn-danger btn-min" ng-click="clearRunNumber(editingItem);$hide()"><span class="glyphicon glyphicon-remove"></span> ลบ</button>
+                <button type="button" class="btn btn-primary btn-min" ng-click="$hide()"><span class="glyphicon glyphicon-ok"></span> ยกเลิก</button>
+            </p>
+        </div>
+    </div>
+</script>
 <script type="text/ng-template" id="custom.confirm2.popover.html">
 	<div class="popover">
 		<div class="arrow"></div>
@@ -178,12 +190,12 @@
    </div>
 </script>
 
-<script type="text/ng-template" id="custom.pages.html">
+<script type="text/ng-template" id="ng-table/pager.html">
 	<div class="row panel-footer">
 		<div class="col-sm-7">
-			<div ng-if="params.data.length==0  && params.ready"><h2 style="padding:0px;margin:0px;color:#777777"><i class="fa fa-exclamation-triangle fa-lg"></i> ไม่พบข้อมูล</h2></div>
+			<div ng-if="params.data.length==0  && params.ready"><h2 style="padding:0px;margin:0px;color:#777777"><i class="fa fa-exclamation-triangle fa-lg"></i> <span ng-if="!params.message">ไม่พบข้อมูล</span><span ng-if="params.message">{{params.message}}</span></h2></div>
 			<div ng-table-pager class="ng-cloak" ng-if="params.data.length">
-				<ul class="pagination ng-table-pagination" style="margin:0px">
+				<ul class="pagination ng-table-pagination" style="margin:0px" title="ไปหน้าที่">
 					<li ng-class="{disabled: !page.active && !page.current, active: page.current}" ng-repeat="page in pages" ng-switch="page.type">
 						<a ng-switch-when="prev" ng-click="params.page(page.number)" href="">&laquo;</a>
 						<a ng-switch-when="first" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a>
@@ -196,7 +208,7 @@
 			</div>
 		</div>
 		<div class="col-sm-5" ng-if="params.hide_limit!==true">
-			<div class="btn-group pull-right">
+			<div class="btn-group pull-right" title="จำนวนข้อมูลที่ต้องการให้แสดงในหนึ่งหน้า">
 				<button ng-repeat="it in params.settings().counts track by it" type="button" ng-class="{'active':params.count() == it}" ng-click="params.count(it)" class="btn btn-default"> {{it}}</button>
 			</div>
 		</div>
@@ -292,30 +304,55 @@
     </div>
 </script>
 
-<script type="text/ng-template" id="custom.confirm.admin.report.html">
-    <div class="popover">
+<script type="text/ng-template" id="custom.confirm.admin.actions.html">
+    <div class="popover"  style="min-width:300px">
         <div class="arrow"></div>
         <h3 class="popover-title"><span class="glyphicon glyphicon-share"></span> <strong>เลือกทำรายการ</strong></h3>
         <div class="popover-content">
             <p class="text-center">
                 <button type="button" class="btn btn-success btn-block" ng-click="go('admin.cases.form1',$it);$hide()"><div class="text-left"><span class="badge">1</span> รับรายงานคดี</div></button>
-                <button type="button" class="btn btn-success btn-block" ng-click="go('admin.cases.form2',$it);$hide()"><div class="text-left"><span class="badge">2</span> รับสำนวน</div></button>
-                <button type="button" class="btn btn-success btn-block" ng-click="go('admin.cases.form3',$it);$hide()"><div class="text-left"><span class="badge">3</span> รับสำเนาคำพิพากษา</div></button>
+                <button type="button" class="btn btn-success btn-block" ng-click="go('admin.cases.form5',$it);$hide()"><div class="text-left"><span class="badge">5</span> รับสำเนาคำพิพากษา</div></button>
             </p>
         </div>
     </div>
 </script>
-
-<script type="text/ng-template" id="custom.confirm.court.report.html">
+<script type="text/ng-template" id="custom.confirm.admin.actions2.html">
+    <div class="popover" style="min-width:300px">
+        <div class="arrow"></div>
+        <h3 class="popover-title"><span class="glyphicon glyphicon-share"></span> <strong>เลือกทำรายการ</strong></h3>
+        <div class="popover-content">
+            <p class="text-center">
+                <button type="button" class="btn btn-info btn-block" ng-click="go('admin.vcases.form2',$it);$hide()"><div class="text-left"><span class="badge">1</span> รับสำนวนและร่าง</div></button>
+                <button type="button" class="btn btn-info btn-block" ng-click="go('admin.vcases.form3',$it);$hide()"><div class="text-left"><span class="badge">2</span> จ่ายสำนวนเพื่อตรวจร่างคำพิพากษา</div></button>
+                <button type="button" class="btn btn-info btn-block" ng-click="go('admin.vcases.form4',$it);$hide()"><div class="text-left"><span class="badge">3</span> ส่งสำนวนและร่างคำพิพากษาคืนศาล</div></button>
+                <button type="button" class="btn btn-info btn-block" ng-click="go('admin.vcases.form5',$it);$hide()"><div class="text-left"><span class="badge">4</span> รับสำเนาคำพิพากษา</div></button>
+            </p>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="custom.confirm.court.actions.html">
     <div class="popover">
         <div class="arrow"></div>
-        <h3 class="popover-title"><span class="glyphicon glyphicon-share"><span> <strong>เลือกทำรายการ</strong></h3>
+        <h3 class="popover-title"><span class="glyphicon glyphicon-share"></span> <strong>เลือกทำรายการ</strong></h3>
         <div class="popover-content">
             <p class="text-center">
                 <button type="button" class="btn btn-success btn-block" ng-click="go('court.cases.form1',$it);$hide()"><div class="text-left"><span class="badge">1</span> ส่งสำนวนเพื่อตรวจร่าง</div></button>
                 <button type="button" class="btn btn-success btn-block" ng-click="go('court.cases.form2',$it);$hide()"><div class="text-left"><span class="badge">2</span> ส่งสำเนาคำพิพากษา</div></button>
                 <button type="button" class="btn btn-success btn-block" ng-click="go('court.cases.form3',$it);$hide()"><div class="text-left"><span class="badge">3</span> Upload คำพิพากษา</div></button>
                 <button type="button" class="btn btn-success btn-block" ng-click="go('court.cases.form4',$it);$hide()"><div class="text-left"><span class="badge">4</span> ระบบติดตาม</div></button>
+            </p>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="custom.confirm.court.actions2.html">
+    <div class="popover">
+        <div class="arrow"></div>
+        <h3 class="popover-title"><span class="glyphicon glyphicon-share"></span> <strong>เลือกทำรายการ</strong></h3>
+        <div class="popover-content">
+            <p class="text-center">
+                <button type="button" class="btn btn-success btn-block" ng-click="go('court.vcases.form2',$it);$hide()"><div class="text-left"><span class="badge">1</span> ส่งสำเนาคำพิพากษา</div></button>
+                <button type="button" class="btn btn-success btn-block" ng-click="go('court.vcases.form3',$it);$hide()"><div class="text-left"><span class="badge">2</span> Upload คำพิพากษา</div></button>
+                <button type="button" class="btn btn-success btn-block" ng-click="go('court.vcases.form4',$it);$hide()"><div class="text-left"><span class="badge">3</span> ระบบติดตาม</div></button>
             </p>
         </div>
     </div>

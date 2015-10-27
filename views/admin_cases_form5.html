@@ -3,13 +3,13 @@
 
 <div class="panel panel-default">
     <div class="panel-heading" style="padding-bottom:0px;">
-        <h2 class="text-center" style="margin-top:0px">สำนวนและร่าง {{editingItem.user_id | lookup_court}}</h2>
+        <h2 class="text-center" style="margin-top:0px">รับสำเนาคำพิพากษา {{editingItem.user_id | lookup_court}}</h2>
     </div>
 
     <div class="panel-body" style="padding-bottom:0px;">
 
         <form class="form form-horizontal readonly" name="form" style="padding-top:25px;padding-bottom:50px;">
-           
+            <fieldset>
                 <div class="form-group col-md-6">
                     <label class="control-label col-md-4">เลขดำ</label>
                     <div class="col-md-8">
@@ -60,7 +60,7 @@
                     </div>
                 </div>
                 <div class="form-group col-md-6">
-                    <label class="control-label col-md-4">วันที่ศาลส่งสำนวน</label>
+                    <label class="control-label col-md-4">วันที่ส่งศาลส่งสำนวน</label>
                     <div class="col-md-8">
                         <input type="text" readonly class="form-control input-md" value="{{editingItem.date_sent | thai_date}}">
                     </div>
@@ -77,52 +77,69 @@
                         <input type="text" readonly class="form-control input-md" value="{{editingItem.judge  | lookup_judge}}">
                     </div>
                 </div>
-        
+
                 <div class="row clearfix"></div>
                 <hr />
-                <div >
-                    <div class="col-md-4 col-md-offset-4" ng-if="!editingItem.auto_received_num">
-                        <button class="btn btn-success btn-lg btn-block" ng-click="setRunNumber(editingItem)"><span class="glyphicon glyphicon-sort-by-attributes"></span> รันเลขรับสำนวน</button>
-                    </div>
-                    <div class="col-md-4 col-md-offset-4" ng-if="editingItem.auto_received_num">
-                        <h3 title="คลิกเพื่อลบเลขรับสำนวน"><span class="btn text-primary" data-placement="top" data-auto-close="true" data-trigger="click" bs-popover data-template="custom.confirm.autonumber.html" style="font-size:1em">เลขรับสำนวน  <span class="glyphicon glyphicon-paperclip"></span> {{editingItem.auto_received_num}}</span> </h3>
+                <div ng-if="editingItem.auto_received_num">
+                    <div class="col-md-4 col-md-offset-4">
+                        <h3>เลขรับสำนวน <span class="glyphicon glyphicon-paperclip"></span> {{editingItem.auto_received_num}}</h3>
                     </div>
                     <div class="row clearfix"></div>
                     <hr />
                 </div>
-
-            <fieldset ng-disabled="!editingItem.auto_received_num">
                 <div class="form-group col-md-6">
-                    <label class="control-label col-md-4">วันที่ภาครับสำนวนคำพิพากษา</label>
+                    <label class="control-label col-md-4">วันที่ภาครับร่างคำพิพากษาที่ตรวจแล้วเสร็จ</label>
                     <div class="col-md-8">
-                        <span mode="0" ng-model="editingItem.date_received3" placeholder="ยังไม่มีข้อมูล" custom-date-field></span>
+                        <span mode="0" ng-model="editingItem.date_received4" placeholder="ยังไม่มีข้อมูล" custom-date-field></span>
                     </div>
                 </div>
+            
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">ชื่อผู้พิพากษาผู้ตรวจ</label>
+                    <div class="col-md-8">
+               
+                            <select class="form-control input-md" name="role" ng-model="editingItem.judge2_id" select-default ng-options="it.id as it.name for it  in Lookups.getJudge2()">
+                                <option value=""></option>
+                            </select>
+          
+                    </div>
+                </div>
+                <div class="row clearfix">
 
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">เลขที่รับของภาค</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control input-md" ng-model="editingItem.number_received4">
+                    </div>
+                </div>
+            
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">ชื่อผู้พิพากษาผู้ตรวจ2</label>
+                    <div class="col-md-8">
+        
+                            <select class="form-control input-md" name="role" ng-model="editingItem.judge4_id" select-default ng-options="it.id as it.name for it  in Lookups.getJudge2()">
+                                <option value=""></option>
+                            </select>
+
+                    </div>
+                </div>
 
                 <div class="form-group col-md-6">
                     <label class="control-label col-md-4">ผลการปฏิบัติ</label>
                     <div class="col-md-8">
-
-                        <select class="form-control input-md" name="role" ng-model="editingItem.result" select-default ng-options="it.id as it.name for it  in Lookups.getResult()">
-                            <option value=""></option>
-                        </select>
-
-                    </div>
-                </div>
-
-                <div class="row clearfix"></div>
-                <div class="form-group col-md-6">
-                    <label class="control-label col-md-4">เลขที่รับหนังสือสำนวนของภาค</label>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control input-md" ng-model="editingItem.number_received3">
+       
+                            <select class="form-control input-md" name="role" ng-model="editingItem.result" select-default ng-options="it.id as it.name for it  in Lookups.getResult()">
+                                <option value=""></option>
+                            </select>
+                    
                     </div>
                 </div>
 
                 <div class="col-md-12" style="margin-top:2em">
                     <label class="control-label col-md-2" style="padding-right:3em">หมายเหตุ</label>
                     <div class="col-md-9">
-                        <textarea class="form-control" rows="3" ng-model="editingItem.form2_note"></textarea>
+                        <textarea class="form-control" rows="3" ng-model="editingItem.form5_note"></textarea>
                     </div>
                 </div>
 
@@ -133,7 +150,7 @@
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
                 <div class="col-md-6">
-                    <button type="button" class="btn btn-success btn-block" ng-disabled="!editingItem.auto_received_num" ng-click="saveForm(editingItem,2)"><span class="fa fa-save"></span> บันทึกข้อมูล</button>
+                    <button type="button" class="btn btn-success btn-block" ng-click="saveForm(editingItem,2)"><span class="fa fa-save"></span> บันทึกข้อมูล</button>
                 </div>
                 <div class="col-md-6">
                     <button type="button" class="btn btn-warning btn-block" ng-click="goBack()"><span class="fa fa-close"></span> ยกเลิก</button>

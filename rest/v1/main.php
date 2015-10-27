@@ -329,7 +329,7 @@ class NGTABLE{
       return false;
   }
   function update(){
-      $this->api->api_require_fields($this->required);
+      $this->api->api_require_fields($this->required, isset($_POST[$this->pk]));
 
       foreach($this->uniques as $fd=>$err){
         if(isset($_POST[$fd]) && $_POST[$fd]){
@@ -559,6 +559,88 @@ class NGTABLE_ADMIN_CASES  extends NGTABLE{
   function __construct($table='cases', $pk='id') {
     parent::__construct($table, $pk);
   }
+  function post_setnumber(){
+    global $norm;
+    $r=$norm->cases()->where('id',$_POST['id'])->fetch();
+    if($r){
+      $code='';
+      $auto_received_num=$r['auto_received_num'];
+      $date_received3=$r['date_received3'];
+      if(empty($auto_received_num)){
+        $year=intval(date('Y'));
+        $tr=$norm->types()->where('id',$r['type_id'])->fetch();
+        if($tr && $tr['code']){
+          $code=trim($tr['code']);
+          $ars=$norm->auto_received_nums()->where('type_id',$r['type_id'])->where('year_val',$year);
+          $nextid=0;
+          $ar=$ars->fetch();
+          if($ar){
+            $nextid=intval($ar['number_val']) + 1;
+            $ar['number_val']= $nextid;
+            $ar->update();
+          }else{
+            $nextid=1;
+            $ar=$ars->insert(array('year_val'=>$year, 'type_id'=>$r['type_id'], 'number_val'=>$nextid));
+          }
+          if($ar){
+            $auto_received_num=$code . $nextid . '/' . ($year + 543);
+            $r['auto_received_num']=$auto_received_num;
+            $r['date_received3']=date('Y-m-d');
+            $r->update();
+            $date_received3=$r['date_received3'];
+          }
+        }
+      }
+      return array('auto_received_num'=>$auto_received_num,'date_received3'=>$date_received3);
+    }
+   return false;
+  }
+  function post_clearnumber(){
+    global $norm;
+    $r=$norm->cases()->where('id',$_POST['id'])->fetch();
+    if($r){
+      $code='';
+      $auto_received_num=$r['auto_received_num'];
+      $date_received3=$r['date_received3'];
+      if(!empty($auto_received_num)){
+        $year=0;
+        $tr=$norm->types()->where('id',$r['type_id'])->fetch();
+        if($tr && $tr['code']){
+          $code=trim($tr['code']);
+          $tm=explode('/',  $auto_received_num);
+          if(count($tm)>1){
+            $year=intval($tm[1])-543;
+            $nextid=$tm[0];
+            if(preg_match("|\d+|", $nextid, $m)){
+              $nextid=intval($m[0]);
+            }else{
+              $nextid=0;
+            }
+          }else{
+            $nextid=0;
+          }
+          if(($year>0) && ($nextid>0)){
+            $ars=$norm->auto_received_nums()->where('type_id',$r['type_id'])->where('year_val',$year);
+            $ar=$ars->fetch();
+            if($ar){
+              if($ar['number_val']==$nextid){
+                $ar['number_val']=max(0,$nextid-1);
+                $ar->update();
+              }
+            }
+          }
+          $auto_received_num='';
+          $date_received3=null;
+          $r['auto_received_num']=$auto_received_num;
+          $r['date_received3']=$date_received3;
+          $r->update();
+         }
+      }
+      return array('auto_received_num'=>$auto_received_num,'date_received3'=>$date_received3);
+    }
+    return false;
+  }  
+  
   function buildFilter(&$rs, $data){
     if($rs && $data){
   
@@ -602,7 +684,7 @@ class NGTABLE_ADMIN_CASES  extends NGTABLE{
           $rs->where($q, $qs);
         }
         if(isset($p['_view']) && ($p['_view'])){
-          $rs->where('date_ap IS NOT NULL')->where('command_id>1')->where('date_received2 IS  NOT NULL');
+          //$rs->where('date_received3 IS  NOT NULL');
         }  
 	    }else if(isset($data['month']) && isset($data['year']) && $data['month'] && $data['year']){
           $dt=$this->getDateRange($data['year'].'-'. $data['month'] . '-1');
@@ -611,11 +693,12 @@ class NGTABLE_ADMIN_CASES  extends NGTABLE{
             $rs->where('user_id', $data['court']);
           }
       }
-      if(isset($data['_view']) && ($data['_view'])){
-        $rs->where('date_ap IS NOT NULL')->where('command_id>1')->where('date_received2 IS  NOT NULL');
-      }   
+      if(isset($data['date_received']) && $data['date_received']){
+          $rs->where('date_received3',$data['date_received']); //วันที่ภาครับสำนวน
+      }
+ 
       $rs->order('date_sent desc, id desc');
-      $rs->select('id,number_black,number_red,plaintiff,defendant,title,topic_ids,date_sent,date_received2,date_ap,file1,file2');
+      $rs->select('id,no_case_sent,auto_received_num,number_black,number_red,plaintiff,defendant,title,topic_ids,date_sent,date_received3,date_ap,file1,file2');
 
 
       /*
@@ -662,7 +745,7 @@ class NGTABLE_COURT_CASES  extends NGTABLE{
   }  
   function buildFilter(&$rs, $data){
     if($rs){
-    
+      $usr=$this->api->api_get_user();
       if($data && isset($data['search']) && is_array($data['search'])){
 		    $p=$data['search'];
         $q='';
@@ -688,31 +771,32 @@ class NGTABLE_COURT_CASES  extends NGTABLE{
             $qs[]='%'. $p[$fd] . '%';
 		      }		    
         }
-	
-		    if(isset($data['court']) && ($data['court'])){
+
+		    if($usr['id']){
 			    if($q) $q.=' AND ';
-			    $q.='(user_id=%d)';
-          $qs[]=$data['court'];
+			    $q.='(user_id=?)';
+          $qs[]=$usr['id'];
 		    }
-    
+
         if($qs){
           $rs->where($q, $qs);
         }
         if(isset($p['_view']) && ($p['_view'])){
-          $rs->where('date_ap IS NOT NULL')->where('command_id>1')->where('date_received2 IS  NOT NULL');
+           $rs->where('date_received3 IS  NOT NULL');
         }          
 	    }else if(isset($data['month']) && isset($data['year']) && $data['month'] && $data['year']){
           $dt=$this->getDateRange($data['year'].'-'. $data['month'] . '-1');
           $rs->where('date_sent>=? AND date_sent<?',$dt['begin'],$dt['end']);
-          if(isset($data['court'])){
-            $rs->where('user_id', $data['court']);
-          }
+
       }
-      if(isset($data['_view']) && ($data['_view'])){
-        $rs->where('date_ap IS NOT NULL')->where('command_id>1')->where('date_received2 IS  NOT NULL');
+      if($usr['id']){
+        $rs->where('user_id', $usr['id']);
+      }      
+      if(isset($data['date_received']) && ($data['date_received'])){
+        $rs->where('date_received3',$data['date_received']);
       }        
       $rs->order('date_sent desc, id desc');
-      $rs->select('id,number_black,number_red,plaintiff,defendant,title,topic_ids,result,command_id,date_sent,file1,date_received2,date_ap,file2');
+      $rs->select('id,no_case_sent,auto_received_num,number_black,number_red,plaintiff,defendant,title,topic_ids,result,command_id,date_sent,file1,date_received3,date_ap,file2');
     }
   }
 }

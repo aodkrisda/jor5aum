@@ -93,7 +93,7 @@
                 require: '?ngModel',
                 scope: { xmodel: '@dataModel', startDate: '=', endDate: '=', mode: "@", placeholder: "@", weekDaysOnly: "@" },
 
-                template: '<div class="input-group date"><input disabled style="background-color:#ffffff;cursor:default" type="text" placeholder="{{placeholder}}" class="form-control"><span class="input-group-addon" ><i class="glyphicon glyphicon-calendar"></i></span></div>',
+                template: '<div class="input-group date"><input  type="text" placeholder="{{placeholder}}" class="form-control date"><span class="input-group-addon" ><i class="glyphicon glyphicon-calendar"></i></span></div>',
                 link: function (scope, element, attr, ngModel) {
                     var _mode = parseInt(scope.mode || 0);
                     var _startMode = 0;

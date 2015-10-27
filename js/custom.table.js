@@ -99,36 +99,49 @@ angular.module('custom.table', [])
 
     $scope.searchOption = null;
     $scope.startSearch = function (option) {
+        var param={}
         if (_advancedParam) {
-            angular.extend(option,_advancedParam);
+            angular.extend(param, option,_advancedParam);
         }
-        $scope.searchOption = {search: option };
+        $scope.searchOption = {search: param };
         $scope.tableParams.filter($scope.searchOption);
     }
-    $scope.newItem = function (o) {
+    var oldData = null;
+    $scope.newItem = function (o,formid) {
         $scope.$saving=false;
         $scope.editingItem = {};
+        oldData = null;
         if(o){
         	_.extend($scope.editingItem,o);
         }
-        createForm();
+        createForm(formid);
         formModal.$scope.title = 'เพิ่มข้อมูลใหม่';
         formModal.$promise.then(formModal.show);
     }
 
     $scope.startIdx = 0;
     var formModal = null;
-    function createForm() {
-        if (!formModal) formModal = $modal({ scope: $scope, title: '', backdrop: 'static', template: $scope.formID, placement: "top", html: true, show: false });
+    var __forms = {};
+    function createForm(formid) {
+        if (!formid) formid = $scope.formID;
+        if (__forms[formid]) {
+            formModal = __forms[formid];
+        } else {
+            formModal = $modal({ scope: $scope, title: '', backdrop: 'static', template: formid, placement: "top", html: true, show: false });
+            __forms[formid]= formModal;
+        }
         return formModal;
     }
-    $scope.editItem = function () {
+    $scope.editItem = function (formid) {
         if ($scope.$it) {
             var d = {};
             d[$scope.pkField] = $scope.$it[$scope.pkField];
+            oldData = null;
             Auth.post($scope.apiName + '/get', d).success(function (data) {
                 $scope.editingItem = data.data;
-                createForm();
+                oldData = {};
+                angular.copy(data.data, oldData);
+                createForm(formid);
                 formModal.$scope.title = 'แก้ไขข้อมูล';
                 formModal.$promise.then(formModal.show);
             });
@@ -141,26 +154,28 @@ angular.module('custom.table', [])
         	},800);        
     }
     $scope.saveForm = function (_close) {
-    	if(_close==undefined) _close=true;
-        if ($scope.editingItem) {
-            $scope.$saving = true;
-            var act = ($scope.editingItem[$scope.pkField]) ? 'update' : 'add';
+        if (_close == undefined) _close = true;
+        var changes = angular.getChanges($scope.editingItem, oldData, $scope.pkField);
+        if (changes) {
+            
+            var act = (changes[$scope.pkField]) ? 'update' : 'add';
             if($scope._id_){
-            	if($scope.editingItem['_id_']){
+                if (changes['_id_']) {
             		act='update';
             	}else{
             		act='add';
             	}
             }
             var tm={};
-            angular.forEach($scope.editingItem, function(a,b){
+            angular.forEach(changes, function (a, b) {
             	if(angular.isString(a)){
             		tm[b]=a.trim();
             	}else{
             		tm[b]=a;
             	}
             });
-
+            changes = null;
+            $scope.$saving = true;
             return Auth.post($scope.apiName + '/' + act, tm).success(function (data) {
                 
                 if (data.data && data.data[$scope.pkField]) {
@@ -207,8 +222,17 @@ angular.module('custom.table', [])
                 $scope.$saving = false;
 
             });
+        } else {//nochanges
+            $scope.$saving = false;
+            if (_close) {
+                $timeout(function () {
+                    $scope.editingItem = null;
+                }, 800);
+                formModal.$promise.then(formModal.hide);
+            }
         }
     }
+
     this.callEditItem=function(it){
     	if(it){
 	    	$scope.$it=it;

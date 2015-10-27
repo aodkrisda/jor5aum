@@ -101,7 +101,7 @@
                     <label class="control-label col-md-4">จำเลยต้องขัง</label>
                     <div class="col-md-8">
                         <div class="input-group">
-                            <select class="form-control input-md" name="role" ng-model="editingItem.imprison_id" select-default ng-options="it.id as it.name for it  in Lookups.getResult()">
+                            <select class="form-control input-md" name="role" ng-model="editingItem.imprison_id" select-default ng-options="it.id as it.name for it  in Lookups.getImprison()">
                                 <option value=""></option>
                             </select>
                             <span class="input-group-addon btn" id="add-imprison" ng-click="popupImprison()"><span class="glyphicon glyphicon-plus"></span></span>
@@ -112,7 +112,7 @@
                     <label class="control-label col-md-4">จำเลยสารภาพ</label>
                     <div class="col-md-8">
                         <div class="input-group">
-                            <select class="form-control input-md" name="role" ng-model="editingItem.accept_id" select-default ng-options="it.id as it.name for it  in Lookups.getResult()">
+                            <select class="form-control input-md" name="role" ng-model="editingItem.accept_id" select-default ng-options="it.id as it.name for it  in Lookups.getAccept()">
                                 <option value=""></option>
                             </select>
                             <span class="input-group-addon btn" id="add-accept" ng-click="popupAccept()"><span class="glyphicon glyphicon-plus"></span></span>
@@ -124,7 +124,8 @@
                     <div class="col-md-8">
                         <span mode="0" ng-model="editingItem.date_ap" placeholder="ยังไม่มีข้อมูล" custom-date-field></span> 
                     </div>
-                </div><div class="form-group col-md-6">
+                </div>
+                <div class="form-group col-md-6">
                     <label class="control-label col-md-4">วันที่ส่งสำนวน</label>
                     <div class="col-md-8">
                         <span mode="0" ng-model="editingItem.date_sent2" placeholder="ยังไม่มีข้อมูล" custom-date-field></span> 

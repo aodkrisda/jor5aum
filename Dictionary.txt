@@ -1,9 +1,23 @@
-ALTER TABLE `info_users` ADD `check_out` INT NOT NULL DEFAULT '0';
-ALTER TABLE `info_cases` ADD `judge4_id` INT NOT NULL DEFAULT '0';
+ADD NEW FIELDS
+===============
+ALTER TABLE `info_users` ADD `check_out` INT DEFAULT 0;
+ALTER TABLE `info_cases` ADD `judge4_id` INT DEFAULT 0;
 ALTER TABLE `info_cases` ADD `topic_ids` VARCHAR(255) DEFAULT '';
 UPDATE `info_cases` set topic_ids=CONCAT('[',topic_id,']');
+ALTER TABLE `info_cases` ADD `form1_note` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '';
+ALTER TABLE `info_cases` ADD `form2_note` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '';
+ALTER TABLE `info_cases` ADD `form3_note` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '';
+ALTER TABLE `info_cases` ADD `form4_note` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '';
+ALTER TABLE `info_cases` ADD `form5_note` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '';
+ALTER TABLE `info_cases` ADD `judge_checkout1_id` INT DEFAULT 0;
+ALTER TABLE `info_cases` ADD `judge_checkout2_id` INT DEFAULT 0;
+ALTER TABLE `info_cases` ADD `date_at_received1` DATE;
+ALTER TABLE `info_cases` ADD `date_at_received2` DATE;
 
+ALTER TABLE `info_at` ADD `checked` INT DEFAULT 0;
 
+ALTER TABLE `info_at` ADD `copyied` INT DEFAULT 0;
+ALTER TABLE `info_at` ADD `regulared` INT DEFAULT 0;
 
 
 --field types:
@@ -69,7 +83,7 @@ number_sent4=เลขที่หนังสือแจ้งรายงานคดี
 
 --3. ภาคร่วมนั่งพิจารณา
 date_received2=วันที่ภาครับสำนวน
-number_received2=เลขที่รับของภาค
+number_received2=(เลขที่รับของภาค) เลขที่รับหนังสือสำนวนของภาค
 judge2_id=FK(USERS); ผู้พิพากษาผู้ตรวจ
 judge4_id=FK(USERS); ผู้พิพากษาผู้ตรวจ 2 (ภาค) +
 
@@ -78,17 +92,35 @@ judge4_id=FK(USERS); ผู้พิพากษาผู้ตรวจ 2 (ภาค) +
 date_received3=วันที่ภาครับสำนวนคำพิพากษา
 number_received3=เลขที่รับของภาค	
 date_sent5=วันที่ภาคส่งสำนวนกลับ
-number_sent5=เลขที่ส่งของภาค
+number_sent5=(เลขที่ส่งของภาค) เลขที่ส่งสำนวนกลับของภาค
 
 --5. ภาครับสำเนาคำพิพากษา
 number_received4=เลขที่รับของภาค	
-date_received4	=วันที่ภารครับร่างคำพิพากษาที่ตรวจแล้วเสร็จ
+date_received4	=วันที่ภาครับร่างคำพิพากษาที่ตรวจแล้วเสร็จ
 
 
 date_modified=วันที่แก้ไขข้อมูลล่าสุด (system)
 date_finish=(***** ไม่ได้ใช้)
 
-	
+--new form1 admin
+form1_note=หมายเหตุ
+
+--new form2 admin
+form2_note=หมายเหตุ
+
+--new form3 admin
+date_at_received1=วันที่ อธ. จ่ายสำนวน/หน.ภาค รับสำนวน
+date_at_received2=วันที่ รอง อธ. รับสำนวน
+form3_note=หมายเหตุ
+
+--new form4 admin
+judge_checkout1_id=ผู้ตรวจ 1 สั่งออก
+judge_checkout2_id=สั่งออกแทน
+form4_note=หมายเหตุ
+
+--new form5 admin
+form5_note=หมายเหตุ
+
 
 	
 	
@@ -131,6 +163,10 @@ name=จำเลยสารภาพ
 [AT]
 id=PK();
 name=คำสั่ง อธ.
+checked=1 ตรวจ
+copyied=1 ส่งสำนวน
+regulared=1 ตามระเบียบ
+
 
 
 [GROUPS]
