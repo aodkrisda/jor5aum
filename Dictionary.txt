@@ -14,10 +14,17 @@ ALTER TABLE `info_cases` ADD `judge_checkout2_id` INT DEFAULT 0;
 ALTER TABLE `info_cases` ADD `date_at_received1` DATE;
 ALTER TABLE `info_cases` ADD `date_at_received2` DATE;
 
+
+ALTER TABLE `info_users` ADD `no_case_sent` INT DEFAULT 0;
+
 ALTER TABLE `info_at` ADD `checked` INT DEFAULT 0;
 
 ALTER TABLE `info_at` ADD `copyied` INT DEFAULT 0;
 ALTER TABLE `info_at` ADD `regulared` INT DEFAULT 0;
+
+ALTER TABLE `info_cases` ADD `at_correct` INt NULL DEFAULT 1;
+ALTER TABLE `info_cases` ADD `at_result_id` INT NULL DEFAULT 0;
+ALTER TABLE `info_cases` ADD `capital` DECIMAL(10,2) NULL DEFAULT 0;
 
 
 --field types:

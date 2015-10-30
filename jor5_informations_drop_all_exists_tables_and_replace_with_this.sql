@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 27, 2015 at 03:06 AM
+-- Generation Time: Oct 29, 2015 at 02:32 AM
 -- Server version: 5.6.26
 -- PHP Version: 5.6.12
 
@@ -509,7 +509,7 @@ CREATE TABLE IF NOT EXISTS `info_auto_received_nums` (
 --
 
 INSERT INTO `info_auto_received_nums` (`id`, `type_id`, `year_val`, `number_val`) VALUES
-(1, 4, 2015, 4),
+(1, 4, 2015, 7),
 (2, 5, 2015, 2);
 
 -- --------------------------------------------------------
@@ -576,18 +576,20 @@ CREATE TABLE IF NOT EXISTS `info_cases` (
   `judge_checkout2_id` int(11) DEFAULT '0',
   `date_at_received1` date DEFAULT NULL,
   `date_at_received2` date DEFAULT NULL,
-  `auto_received_num` varchar(20) CHARACTER SET utf8 NOT NULL DEFAULT ''
-) ENGINE=MyISAM AUTO_INCREMENT=6272 DEFAULT CHARSET=latin1;
+  `auto_received_num` varchar(20) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `no_case_sent` int(11) NOT NULL DEFAULT '0'
+) ENGINE=MyISAM AUTO_INCREMENT=6273 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `info_cases`
 --
 
-INSERT INTO `info_cases` (`id`, `user_id`, `type_id`, `date_sent`, `number_sent`, `date_received`, `number_received`, `date_received2`, `number_received2`, `date_received3`, `number_received3`, `date_sent2`, `number_sent2`, `command_id`, `number_black`, `number_red`, `title`, `result`, `plaintiff`, `defendant`, `judge_id`, `judge2_id`, `judge3_id`, `date_ap`, `date_sent3`, `number_sent3`, `date_case`, `topic_id`, `imprison_id`, `file1`, `file2`, `date_finish`, `date_read`, `accept_id`, `date_sent4`, `number_sent4`, `date_received4`, `number_received4`, `date_sent5`, `number_sent5`, `date_modified`, `date_upload`, `note1`, `note2`, `note3`, `judge4_id`, `topic_ids`, `form1_note`, `form2_note`, `form3_note`, `form4_note`, `form5_note`, `judge_checkout1_id`, `judge_checkout2_id`, `date_at_received1`, `date_at_received2`, `auto_received_num`) VALUES
-(6269, 3, 4, '2015-10-26', '', '2015-10-05', '511/2558', NULL, '', '2015-10-26', '333/2558', NULL, '', 2, 'อ.1/2558', '', 'วางระเบิด', 5, 'พนักงานอัยการ', 'นายทำผิด', 0, 0, 0, NULL, NULL, '', '2015-10-01', 0, 0, '', '', NULL, NULL, 0, '2015-10-08', '522/2558', NULL, '', NULL, '', NULL, NULL, '-', '', '', 0, '[151]', '-', 'test', NULL, NULL, NULL, 0, 0, NULL, NULL, 'ผภ.3/2558'),
-(6268, 3, 3, '2015-10-26', '111', '2015-10-26', '1', NULL, '', '2015-10-26', '2226', NULL, '', 2, 'สว.1/2558', '', 'gggggggggggggg', 5, '222', '3333', 0, 0, 0, NULL, NULL, '', '2015-10-01', 0, 0, '', '', NULL, NULL, 0, '2015-10-21', '2', NULL, '', NULL, '', NULL, NULL, 'ggggggggggggggggg2', '', '', 0, '[119,120]', 'ccccccccccccccc', '-', NULL, NULL, NULL, 0, 0, NULL, NULL, 'ผภ.1/2558'),
-(6270, 7, 4, '2015-10-26', '777', '2015-10-26', '123', NULL, '', NULL, '', '2015-10-26', '9012', 1, 'อ.5678/2558', '', 'กบฎ', 4, 'อัยการจังหวัดน่าน', 'นายจำเลย จริงจริง', 104, 0, 266, '2015-12-03', NULL, '', '2015-10-02', 0, 0, '', '', NULL, NULL, 0, '2015-10-26', '4567', NULL, '', NULL, '', NULL, NULL, 'ข', '-', '', 0, '[139]', NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, 'ผภ.4/2558'),
-(6271, 3, 5, '2015-10-26', '', NULL, '', NULL, '', NULL, '', NULL, '', 0, 'อด.111/111', '', '', 0, 'xxxxอด1', '11111', 0, 0, 0, NULL, NULL, '', NULL, 0, 0, '', '', NULL, NULL, 0, NULL, '', NULL, '', NULL, '', NULL, NULL, '', '', '', 0, '', NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, 'อด.2/2558');
+INSERT INTO `info_cases` (`id`, `user_id`, `type_id`, `date_sent`, `number_sent`, `date_received`, `number_received`, `date_received2`, `number_received2`, `date_received3`, `number_received3`, `date_sent2`, `number_sent2`, `command_id`, `number_black`, `number_red`, `title`, `result`, `plaintiff`, `defendant`, `judge_id`, `judge2_id`, `judge3_id`, `date_ap`, `date_sent3`, `number_sent3`, `date_case`, `topic_id`, `imprison_id`, `file1`, `file2`, `date_finish`, `date_read`, `accept_id`, `date_sent4`, `number_sent4`, `date_received4`, `number_received4`, `date_sent5`, `number_sent5`, `date_modified`, `date_upload`, `note1`, `note2`, `note3`, `judge4_id`, `topic_ids`, `form1_note`, `form2_note`, `form3_note`, `form4_note`, `form5_note`, `judge_checkout1_id`, `judge_checkout2_id`, `date_at_received1`, `date_at_received2`, `auto_received_num`, `no_case_sent`) VALUES
+(6269, 3, 4, '2015-10-26', '', '2015-10-05', '511/2558', NULL, '', '2015-10-26', '333/2558', NULL, '', 2, 'อ.1/2558', '', 'วางระเบิด', 5, 'พนักงานอัยการ', 'นายทำผิด', 0, 287, 0, NULL, NULL, '', '2015-10-01', 0, 0, '', '', NULL, NULL, 0, '2015-10-08', '522/2558', '2015-10-01', 'addddd', NULL, '', NULL, NULL, '-', '', '', 294, '[151]', '-', 'test', NULL, NULL, NULL, 0, 0, NULL, NULL, 'ผภ.3/2558', 0),
+(6268, 3, 3, '2015-10-26', '111', '2015-10-26', '1', NULL, '', '2015-10-26', '2226', '2015-10-06', 'qqqqq', 2, 'สว.1/2558', '', 'gggggggggggggg', 5, '222', '3333', 258, 0, 349, '2015-10-02', NULL, '', '2015-10-01', 0, 1, '', '', NULL, NULL, 1, '2015-10-21', '2', NULL, '', NULL, '', NULL, NULL, 'ggggggggggggggggg2', 'xxxxxxx', '', 0, '[119,120]', 'ccccccccccccccc', '-', NULL, NULL, NULL, 0, 0, NULL, NULL, 'ผภ.1/2558', 0),
+(6270, 7, 4, '2015-10-26', '777', '2015-10-26', '123', NULL, '', '2015-10-27', '', '2015-10-26', '9012', 1, 'อ.5678/2558', '', 'กบฎ', 4, 'อัยการจังหวัดน่าน', 'นายจำเลย จริงจริง', 104, 0, 266, '2015-12-03', NULL, '', '2015-10-02', 0, 0, '', '', NULL, NULL, 0, '2015-10-26', '4567', NULL, '', NULL, '', NULL, NULL, 'ข', '-', '', 0, '[139]', NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, 'อ.7/2558', 0),
+(6271, 3, 5, '2015-10-26', '', NULL, '', NULL, '', NULL, '', NULL, '', 0, 'อด.111/111', '', '', 0, 'xxxxอด1', '11111', 0, 0, 0, NULL, NULL, '', NULL, 0, 0, '', '', NULL, NULL, 0, NULL, '', NULL, '', NULL, '', NULL, NULL, '', '', '', 0, '', NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, 'อด.2/2558', 0),
+(6272, 3, 1, '2015-10-27', '', NULL, '', NULL, '', NULL, '', NULL, '', 0, '', '', 'sdfsf', 0, 'xxx', '', 0, 0, 0, NULL, NULL, '', NULL, 0, 0, '', '', NULL, NULL, 0, NULL, '', NULL, '', NULL, '', NULL, NULL, 'xxxxxxxxxxxxxxxxxxx', '', '', 0, '[71,72]', NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, '', 1);
 
 -- --------------------------------------------------------
 
@@ -1596,7 +1598,7 @@ ALTER TABLE `info_auto_received_nums`
 -- AUTO_INCREMENT for table `info_cases`
 --
 ALTER TABLE `info_cases`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6272;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6273;
 --
 -- AUTO_INCREMENT for table `info_groups`
 --

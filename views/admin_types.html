@@ -71,7 +71,7 @@
                 <p class="text-right">
 
                     <button ng-click="newItem()" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> เพิ่มข้อมูล</button>
-                    <button ng-click="editItem()" ng-show="hasSelected()" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span> แก้เขข้อมูล</button>
+                    <button ng-click="editItem()" ng-show="hasSelected()" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span> แก้ไขข้อมูล</button>
                     <button data-placement="bottom"  data-trigger="click" bs-popover data-template="custom.confirm.popover.html"
                             ng-click="removeItem()" ng-show="hasSelected()" class="btn btn-danger" data-auto-close="true">
                         <span class="glyphicon glyphicon-remove"></span> ลบข้อมูล
@@ -114,7 +114,7 @@
 
                                 <td data-title="'ความ'" sortable="'group_id'" class="text-center" header-class="'text-center'">
                                     {{it.group_id | lookup_group}}
-                                    <span ng-if="isSelected(it)" class="pull-right glyphicon glyphicon-asterisk"></span>
+                                    <span ng-if="isSelected(it)" class="row-action2"><span class="glyphicon glyphicon-star-empty"></span></span>
                                 </td>
                             </tr>
                         </tbody>

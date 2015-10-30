@@ -42,11 +42,12 @@
                     </div>
                 </div>
                 <div class="form-group col-md-6">
-                    <label class="control-label col-md-4">ข้อหาสถิติ</label>
+                    <label class="control-label col-md-4">ข้อหาพิมพ์ปก</label>
                     <div class="col-md-8">
-                        <custom-readonly-topics ng-model="editingItem.topic_ids"></custom-readonly-topics>
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.title}}">
                     </div>
                 </div>
+
                 <div class="form-group col-md-6">
                     <label class="control-label col-md-4">วันที่รับฟ้อง</label>
                     <div class="col-md-8">
@@ -54,30 +55,35 @@
                     </div>
                 </div>
                 <div class="form-group col-md-6">
-                    <label class="control-label col-md-4">ข้อหาพิมพ์ปก</label>
+                    <label class="control-label col-md-4">ข้อหาสถิติ</label>
                     <div class="col-md-8">
-                        <input type="text" readonly class="form-control input-md" value="{{editingItem.title}}">
+                        <custom-readonly-topics ng-model="editingItem.topic_ids"></custom-readonly-topics>
                     </div>
                 </div>
                 <div class="form-group col-md-6">
                     <label class="control-label col-md-4">วันที่ศาลส่งสำนวน</label>
                     <div class="col-md-8">
-                        <input type="text" readonly class="form-control input-md" value="{{editingItem.date_sent | thai_date}}">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.date_sent2 | thai_date}}">
                     </div>
                 </div>
                 <div class="form-group col-md-6">
                     <label class="control-label col-md-4">เลขที่ส่งสำนวนของศาล</label>
                     <div class="col-md-8">
-                        <input type="text" readonly class="form-control input-md" value="{{editingItem.number_sent}}">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.number_sent2}}">
                     </div>
                 </div>
                 <div class="form-group col-md-6">
                     <label class="control-label col-md-4">ชื่อผู้พิพากษาเจ้าของสำนวน</label>
                     <div class="col-md-8">
-                        <input type="text" readonly class="form-control input-md" value="{{editingItem.judge  | lookup_judge}}">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.judge_id  | lookup_judge}}">
                     </div>
                 </div>
-            
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">วันที่นัดฟังคำพิพากษา</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.date_ap  | thai_date}}">
+                    </div>
+                </div>            
                 <div class="row clearfix"></div>
                 <hr />
                 <div ng-if="editingItem.auto_received_num">
@@ -141,6 +147,29 @@
                                 <option value=""></option>
                             </select>
 
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">คำสั่ง อธ.</label>
+                    <div class="col-md-8">
+
+                        <select class="form-control input-md" name="role" ng-model="editingItem.command_id" select-default ng-options="it.id as it.id | lookup_at group by it.checked |iif:'1':'ตรวจ':'ไม่ตรวจ' for it  in Lookups.getAt()">
+                            <option value=""></option>
+                        </select>
+                        <div ng-if="(editingItem.command_id | lookup_at:'checked')=='1'">
+                            <label class="checkbox text-danger" style="padding-left:20px">
+                                <input type="checkbox" ng-model="editingItem.at_correct" ng-true-value="'0'" ng-false-value="'1'">  ไม่ถูกต้องตามระเบียบ
+                            </label>
+                            <div ng-if="editingItem.at_correct=='0'">
+                                <label style="padding-top:0.5em">เหตุผล</label>
+                                <div class="input-group">
+                                    <select class="form-control input-md" name="role" ng-model="editingItem.at_result_id" select-default ng-options="it.id as it.id | lookup_at_result  for it  in Lookups.getAtResult()">
+                                        <option value=""></option>
+                                    </select>
+                                    <span class="input-group-addon btn" id="add-at-result" ng-click="popupAtResult()"><span class="glyphicon glyphicon-plus"></span></span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-12" style="margin-top:2em">

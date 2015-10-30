@@ -230,6 +230,16 @@
                 }
             }
         }])
+        .filter('iif', [function () {
+            return function(v, eq, tstr, fstr){
+                if(v==eq){
+                    if(tstr===undefined)tstr='true';
+                    return tstr;
+                }
+                if(fstr==undefined)fstr='false';
+                return fstr;
+            }
+        }])
         .filter('thai_date', ['moment', function (moment) {
             var INC_YEAR = 543;
             return function (dt, format) {
@@ -352,20 +362,51 @@
 		}
 		
 		var config=function(){
-			   //config lazy load
-			   try{
-					module.controller=$injector.get('$controllerProvider').register;
-					module.directive=$injector.get('$compileProvider').directive;
-					module.filter=$injector.get('$filterProvider').register;
-					module.factory=$injector.get('$provide').factory;
-					module.service=$injector.get('$provide').service;
-					
-					$q=$injector.get('$controllerProvider');
-					var $injector2=angular.injector(['ng']);
-					$http=$injector2.get('$http');
-					$q=$injector2.get('$q');
-					config=null;
-				}catch(e){}
+		    //config lazy load
+		   
+			try{
+			    module.controller = function () {
+			        var args = Array.prototype.slice.call(arguments);
+			        $injector.get('$controllerProvider').register.apply(null,args);
+			        return module;
+			    };
+			    module.directive = function () {
+			        var args = Array.prototype.slice.call(arguments);
+			        $injector.get('$compileProvider').directive.apply(null, args);
+			        return module;
+			    };
+			    module.filter = function () {
+			        var args = Array.prototype.slice.call(arguments);
+			        $injector.get('$filterProvider').register.apply(null, args);
+			        return module;
+			    };
+			    module.factory = function () {
+			        var args = Array.prototype.slice.call(arguments);
+			        $injector.get('$provide').factory.apply(null, args);
+			        return module;
+			    };
+			    module.service = function () {
+			        var args = Array.prototype.slice.call(arguments);
+			        $injector.get('$provide').service.apply(null, args);
+			        return module;
+			    };
+	
+			    module.state = function () {
+			        var e;
+			        try{
+			            var args = Array.prototype.slice.call(arguments)
+			            $injector.get('$stateProvider').state.apply(null, args);
+			        } catch (e) {
+			            console.error(e.toString());
+			        }
+			        return module;
+			    };
+
+				var $injector2=angular.injector(['ng']);
+				$http=$injector2.get('$http');
+				$q=$injector2.get('$q');
+				config=null;
+			}catch(e){}
 		}
 		
 		var lazyLoad=function(src){

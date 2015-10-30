@@ -1,5 +1,5 @@
 ﻿
-<script type="text/ng-template" id="custom.form.ats.html">
+<script type="text/ng-template" id="custom.form.at_results.html">
     <div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -14,30 +14,13 @@
                             <div class="form-group">
 
                                 <!-- Text input-->
-                                <label class="col-md-4 control-label">คำสั่ง อธ.</label>
+                                <label class="col-md-4 control-label">เหตุผล.</label>
                                 <div class="col-md-7">
                                     <input type="text" name="name" placeholder="ยังไม่ได้กำหนดชื่อ" required ng-model="editingItem.name" class="form-control input-md">
                                     <p class="help-block has-error" ng-show="form.name.$error.required">ต้องกำหนดชื่อ</p>
                                 </div>
                             </div>
-                            <div class="col-md-4 text-right">
-                                <label>ตรวจ</label>
-                            </div>
-                            <div class="col-md-7">
-                                <span ios-toggle ng-model="editingItem.checked" ng-true-value="'1'" ng-false-value="'0'"></span>
-                            </div>
-                            <div class="col-md-4 text-right"  style="padding-top:1em">
-                                <label>ส่งสำเนา</label>
-                            </div>
-                            <div class="col-md-7" style="padding-top:0.5em">
-                                <span ios-toggle ng-model="editingItem.copyied" ng-true-value="'1'" ng-false-value="'0'"></span>
-                            </div>
-                            <div class="col-md-4 text-right"  style="padding-top:1em">
-                                <label>ตามระเบียบ</label>
-                            </div>
-                            <div class="col-md-7" style="padding-top:0.5em">
-                                <div ios-toggle ng-model="editingItem.regulared" ng-true-value="'1'" ng-false-value="'0'"></div>
-                            </div>
+   
                         </fieldset>
                     </form>
 
@@ -56,10 +39,10 @@
 <div class="container-fluid">
 
     <p>
-        <div class="panel panel-default" ng-controller="CustomTableCtrl" ng-init="setAPI('ats','custom.form.ats.html')">
+        <div class="panel panel-default" ng-controller="CustomTableCtrl" ng-init="setAPI('at_results','custom.form.at_results.html')">
             <div class="panel-heading">
                 <div class="text-left pull-left">
-                    <h2 style="padding:0px;margin:0px;"><span class="fa fa-windows"></span> คำสั่ง อธ. ({{tableParams.total()}})</h2>
+                    <h2 style="padding:0px;margin:0px;"><span class="fa fa-windows"></span> เหตุผลที่ไม่ถูกต้องตามระเบียบ ({{tableParams.total()}})</h2>
                 </div>
                 <p class="text-right">
 
@@ -98,9 +81,7 @@
                                 <td width="30" header="'custom.checked.html'">
                                     <input type="checkbox" ng-model="checkboxes.items[it[pkField]]" />
                                 </td>-->
-                                <td data-title="'คำสั่ง อธ.'" sortable="'name'" >
-                                    <span ng-if="it.checked!='1'" class="glyphicon glyphicon-remove"></span>
-                                    <span ng-if="it.checked=='1'"class="glyphicon glyphicon-ok"></span>
+                                <td data-title="'เหตุผล'" sortable="'name'" >
                                     {{it.name}}
                                     <span ng-if="isSelected(it)" class="row-action2"><span class="glyphicon glyphicon-star-empty"></span></span>
                                 </td>

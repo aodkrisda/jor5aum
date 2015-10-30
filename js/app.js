@@ -2,7 +2,7 @@
 
 
 
-angular.module('App', ['lazyLoadJs', 'ui.router', 'angular-loading-bar', 'ngAnimate', 'mgcrea.ngStrap', 'ngTable', 'ngSanitize', 'custom.table', 'flow', 'angular-storage'])
+angular.module('App', ['lazyLoadJs','wt.responsive', 'ui.router', 'angular-loading-bar', 'ngAnimate', 'mgcrea.ngStrap', 'ngTable', 'ngSanitize', 'custom.table', 'flow', 'angular-storage'])
 .constant('API_URL', 'rest/api.php/v1/')
 .constant('BDAYS',15)
 .factory('myHttpInterceptor', ['$q', '$rootScope', function ($q, $rootScope) {
@@ -62,7 +62,14 @@ angular.module('App', ['lazyLoadJs', 'ui.router', 'angular-loading-bar', 'ngAnim
         }
         return null;
     }
-
+    $rootScope.ifcall=function(exp,func){
+        if (func && exp) {
+            if (angular.isFunction(func)) {
+                var args = Array.prototype.slice.call(arguments, 2);
+                func.apply(null, args)
+            }
+        }
+    }
     $rootScope.detectResponseError = function (rejection) {
         if (rejection) {
             
@@ -184,7 +191,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
           .state("admin", {
               // Use a url of "/" to set a state as the "index".
               url: "/admin",
-              abstract:true,
+              abstract: true,
               templateUrl:'views/admin.html'
           })
           .state("admin.cases", {
@@ -196,7 +203,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
                   }
               }
           })
-
+       
           .state("admin.cases.form1", {
               url: "/form1",
               roles: ['admin'],
@@ -206,6 +213,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
                   }
               }
           })
+ 
           .state("admin.cases.form5", {
               url: "/form5",
               roles: ['admin'],
@@ -274,12 +282,10 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
               roles: ['admin'],
               onEnter:['Lookups',function(Lookups){
             	  Lookups.load();
-              }],
-              resolve:{dyn: function(){ return angular.loadJs('js/report.js')}},       
+              }],     
               views: {
                   '': {
-                      templateUrl: 'views/admin_print_report1.html',
-                      _controller: 'PrintReportCtrl'
+                      templateUrl: 'views/admin_print_report1.html'
                   }
               }
           })
@@ -349,6 +355,15 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
               views: {
                   '': {
                       templateUrl: 'views/admin_ats.html'
+                  }
+              }
+          })
+          .state("admin.management.at_results", {
+              url: "/at_results",
+              roles: ['admin'],
+              views: {
+                  '': {
+                      templateUrl: 'views/admin_at_results.html'
                   }
               }
           })
@@ -567,7 +582,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
 
 .factory('Lookups', ['Auth', '_', '$rootScope', 'moment', '$filter', 'store', function (Auth, _, $rootScope, moment, $filter, store) {
     /*group, level, type, subject*/
-    var lookups = {ownjudges:[],imprisons:[],  accepts:[], server_date: new Date(), courts: [], roles: [], topics:[], ats:[], results:[], groups: [] ,ugroups:[],years:[],judges:[], judges2:[]};
+    var lookups = {at_results:[],ownjudges:[],imprisons:[],  accepts:[], server_date: new Date(), courts: [], roles: [], topics:[], ats:[], results:[], groups: [] ,ugroups:[],years:[],judges:[], judges2:[]};
     lookups.months=_.map(moment.months(), function (v, idx) {
         return {id: String(idx+1), name: v};
     });
@@ -690,6 +705,10 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
             }
             return lookups.ownjudges;
         },
+        getJudgeBy: function (id) {
+            id = id || $rootScope.getUserId();
+            return _.filter(lookups.judges, function (it) { return it['parent_id'] == id });
+        },
         getGroup: function (id, fd) {
             if (id !== undefined) {
                 if (!fd) fd = 'name';
@@ -717,6 +736,13 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
                 return _.find(lookups.ats, function (it) { return (it.id == id) });
             }
             return lookups.ats;
+        },
+        getAtResult: function (id, fd) {
+            if (id !== undefined) {
+                if (!fd) fd = 'name';
+                return _.find(lookups.at_results, function (it) { return (it.id == id) });
+            }
+            return lookups.at_results;
         },
         getImprison: function (id, fd) {
             if (id !== undefined) {
@@ -808,10 +834,19 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
             if (!fd) fd = 'name';
             var it = Lookups.getAt(id);
             if (it && (it[fd] !== undefined)) str = it[fd];
-            if (it && it['checked']!=undefined) {
-                str = str + ((it['checked'] == '1') ? ' (ตรวจ)' : ' (ไม่ตรวจ)');
-        
-            }
+
+        }
+        return str;
+    }
+}])
+.filter('lookup_at_result', ['Lookups', function (Lookups) {
+    return function (id, fd) {
+        var str = '';
+        if (id !== undefined) {
+            if (!fd) fd = 'name';
+            var it = Lookups.getAtResult(id);
+            if (it && (it[fd] !== undefined)) str = it[fd];
+
         }
         return str;
     }
@@ -943,497 +978,8 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
 }])
 
 
-.controller('AdminReportCtrl', ['$scope', '$element','$rootScope','$timeout', 'Auth', '$state', 'Lookups', '$modal', '$popover','Lookups', '_',function ($scope,$element, $rootScope, $timeout, Auth, $state, Lookups, $modal, $popover,$Lookups,_) {
-    $scope.Lookups = Lookups;
-    $scope.pkField = 'id';
-    $scope.apiName = 'admin_cases';
-    $scope.editItem = null;
-    $scope.prefix = $element.attr('data-prefix') || '';
-    $scope.clearRunNumber=function(item){
-        if (item.id) {
-            Auth.post($scope.apiName + '/clearnumber', { id: item.id }).success(function (data) {
-                if (data && data.data && data.data['auto_received_num']!=undefined) {
-                    item['auto_received_num'] = data.data['auto_received_num'];
-                    if ('date_received3' in data.data) {
-                        item['date_received3'] = data.data['date_received3'];
-                    }
-                }
-            });
-        }
-    }
-    $scope.setRunNumber=function(item){
-        if (item.id) {
-            Auth.post($scope.apiName + '/setnumber', {id:item.id}).success(function (data) {
-                if (data && data.data && data.data['auto_received_num']) {
-                    item['auto_received_num'] = data.data['auto_received_num'];
-                    if ('date_received3' in data.data) {
-                        item['date_received3'] = data.data['date_received3'];
-                    }
-                }
-            });
-        }
-    }
-    $scope.saveForm = function (item, idx) {
-        if (item) {
-            item = angular.getChanges(item, oldData, $scope.pkField)
-            if (item) {
-                var d = {};
-                _.extendOwn(d, item);
-                Auth.post($scope.apiName + '/update', d).success(function (data) {
-                    $scope.editingItem = null;
-                    $scope.goBack();
-                });
-            } else {
-                $scope.goBack();
-            }
-        }
-    }
-
-    $scope.goBack = function () {
-        $rootScope.storeData('admin_cases_id', null);
-        if ($state.previousState && ($state.previousState.name=='admin.vcases')) {
-            $state.go('admin.vcases');
-        } else {
-            $state.go('admin.cases');
-        }
-    }
-    var oldData = null;
-    $scope.go = function (a, b) {
-        if (a && b) {
-            var d = {};
-            d[$scope.pkField] = b[$scope.pkField];
-            $scope.editingItem = null;
-            oldData = null;
-            Auth.post($scope.apiName + '/get', d).success(function (data) {
-                $scope.editingItem = data.data;
-               
-                oldData = {};
-                angular.copy(data.data, oldData);
-                $rootScope.storeData('admin_cases_id', b[$scope.pkField]);
-                $state.go(a);
-  
-            });
-
-        }
-    }
-
-    $scope.resultPopover = null;
-    $scope.popupResult = function () {
-        if (!$scope.resultPopover) {
-            $scope.resultPopover = $popover(angular.element('#add-result'), { scope: $scope,container:'body', autoClose: true, trigger: 'manual', placement: 'auto', template: "custom.result.popover.html", show: false });
-        }
-        $scope.resultPopover.$promise.then($scope.resultPopover.show);
-    }
-    $scope.addResult = function (it) {
-        if (it && it.name) {
-            Auth.post('results/add', it).success(function (data) {
-                Lookups.getResult().push(data.data);
-                $scope.resultPopover.$promise.then($scope.resultPopover.hide);
-            });
-        }
-    }
-
-    $scope.commandPopover = null;
-    $scope.popupCommand = function () {
-        if (!$scope.commandPopover) {
-            $scope.commandPopover = $popover(angular.element('#add-command'), { scope: $scope,container:'body', autoClose: true, placement: 'auto', trigger: 'manual', template: "custom.command.popover.html", show: false });
-        }
-        $scope.commandPopover.$promise.then($scope.commandPopover.show);
-    }
-
-    $scope.addCommand = function (it) {
-        if (it && it.name) {
-            Auth.post('ats/add', it).success(function (data) {
-                Lookups.getAt().push(data.data);
-                $scope.commandPopover.$promise.then($scope.commandPopover.hide);
-            });
-        }
-    }
-
-    $scope.judgePopover = null;
-    $scope.popupJudge = function () {
-        if (!$scope.judgePopover) {
-            $scope.judgePopover = $popover(angular.element('#add-judge'), { scope: $scope, container: 'body', autoClose: true, placement: 'auto', trigger: 'manual', template: "custom.judge.popover.html", show: false });
-        }
-        $scope.judgePopover.$promise.then($scope.judgePopover.show);
-    }
-
-    $scope.addJudge = function (it) {
-        if (it && it.name) {
-            Auth.post('judges/add', it).success(function (data) {
-                Lookups.getJudge2().push(data.data);
-                $scope.judgePopover.$promise.then($scope.judgePopover.hide);
-            });
-        }
-    }
-    var str = $state.current.name;
-    var n = $rootScope.fetchData('admin_cases_id');
-    if (n) {
-        if (str.indexOf('admin.') == 0) {
-            var d = {};
-            d[$scope.pkField] = n;
-            $scope.go(str, d);
-        }
-    }
-    $scope.setCourtId = function (id) {
-        $rootScope.storeData($scope.prefix + 'admin_cases_court', id);
-    }
-    $scope.setMonthId = function (id) {
-        $rootScope.storeData($scope.prefix + 'admin_cases_month', id);
-    }
-    $scope.setYearId = function (id) {
-        $rootScope.storeData($scope.prefix + 'admin_cases_year', id);
-    }
-    $scope.setDateId = function (id) {
-        $rootScope.storeData($scope.prefix + 'admin_cases_date', id);
-    }
-    n = $rootScope.fetchData($scope.prefix + 'admin_cases_court');
-    if(n)$scope.searchCourt = n;
-    n = $rootScope.fetchData($scope.prefix + 'admin_cases_month');
-    if (n) $scope.searchMonth = n;
-    n = $rootScope.fetchData($scope.prefix+'admin_cases_year');
-    if (n) $scope.searchYear = n;
-    n = $rootScope.fetchData($scope.prefix + 'admin_cases_date') || $rootScope.today();
-    if (n) $scope.searchDate = n;
-    
-
-}])
 
 
-.controller('MoveUserCtrl', ['$scope', '$rootScope', '$timeout', 'Auth', '$state', 'Lookups', '$modal', '$popover', 'Lookups', '_', function ($scope, $rootScope, $timeout, Auth, $state, Lookups, $modal, $popover, $Lookups, _) {
-    var _successHlr = null;
-    $scope.moveUser = function (tpl, hlr) {
-        if (tpl) {
-            _successHlr = hlr;
-            if (!$scope._Panel) {
-                $scope._Panel = $modal({ scope: $scope, title: '', backdrop: 'static', template: tpl, placement: "top", html: true, show: false });
-            }
-            $scope._Panel.$promise.then($scope._Panel.show);
-        }
-    }
-    $scope.doMoveUser = function (scope,hlr) {
-        if (scope && scope.$it) {
-            var d = {};
-            d[$scope.pkField] = scope.$it[scope.pkField];
-            console.dir(d);
-            console.log(scope.apiName + '/checkin');
-            Auth.post(scope.apiName + '/checkin_user', d).success(function (data) {
-                if (data.data == true) {
-                    if (hlr) hlr();
-                    if (_successHlr) {
-                        _successHlr();
-                        _successHlr = null;
-                    }
-                }
-            });
-        }
-    }
-
-}])
-  
-.controller('TopicsCtrl', ['$scope', '$filter', '$rootScope', '$timeout', 'Auth', '$state', 'Lookups', '$modal', '$popover', 'Lookups', '_', function ($scope, $filter, $rootScope, $timeout, Auth, $state, Lookups, $modal, $popover, $Lookups, _) {
-    $scope.$items = [];
-    $scope.groupTitle = '';
-    $scope.search={name:''}
-    var _editingItem = null;
-    var _key = null;
-    $scope.clearSearch = function () {
-        if($scope.search.name) $scope.search.name = '';
-    }
-    $scope.createList = function (editingItem, key) {
-        _key = key;
-        _editingItem = editingItem;
-        var temp = '';
-        if (_editingItem && _editingItem[_key]) {
-            temp = _editingItem[_key];
-        }
-       var v= $scope.$eval(temp)
-       if (!v) v = [];
-       if (!angular.isArray(v)) {
-           v = [v];
-       }
-        var a = Lookups.getTopicByType(editingItem.type_id);
-        if (a) {
-            $scope.$items = _.map(a, function (it) {
-                var it2=_.mapObject(it, function (v) {
-                    return v;
-                });
-                var s = parseInt(it2.id);
-                it2._checked = (v.indexOf(s)>=0);
-                return it2;
-            });
-        } else {
-            $scope.$items = [];
-        }
-        if ($scope.$items.length > 0) {
-            var it = $scope.$items[0];
-            $scope.groupTitle=$filter('lookup_type')(it.type_id,'name','code');
-        }
-    }
-    $scope.clearChecked = function () {
-         _.each($scope.$items, function (it) {
-             if (it._checked === true) {
-                 it._checked = false;
-             }
-        })
-
-    }
-
-    $scope.setTopics = function () {
-        var ids = [];
-        _.each($scope.$items, function (it) {
-            if (it._checked === true) {
-                ids.push(it.id);
-            }
-        })
-        if (_editingItem && _key) {
-            _editingItem[_key] =(ids.length)? ('['+ ids.join(',') + ']'):'';
-        }
-        ids = null;
-    }
-
-}])
-
-.controller('CourtReportCtrl', ['$scope','$element', '$filter','$rootScope', '$timeout', 'Auth', '$state', 'Lookups', '$modal', '$popover', 'Lookups', '_', function ($scope,$element, $filter, $rootScope, $timeout, Auth, $state, Lookups, $modal, $popover, $Lookups, _) {
-    $scope.Lookups = Lookups;
-    $scope.pkField = 'id';
-    $scope.apiName = 'court_cases';
-    $scope.editItem = null;
-    $scope.prefix = $element.attr('data-prefix') || '';
-    
-    $scope.years = [];
-    $scope.blkPopover = null;
-    var i = (new Date()).getFullYear() + 543;
-    for (var j = 0; j < 10; j++) {
-        $scope.years.push((i - j) + '');
-    }
-
-    var __it = null;
-    $scope.popupBlackNumber = function (it) {
-        __it = it;
-        $scope.editingItem = it;
-        var tm = {black_number:'',year:''};
-        if (__it.number_black) {
-            var str = __it.number_black;
-            var i = str.indexOf("/");
-            if (i >= 0) {
-                tm.year = str.substr(i + 1);
-                str = str.substr(0, i);
-                var str2 = $filter('lookup_type')($scope.editingItem.type_id, 'code');
-                i = str.indexOf(str2);
-                if (i == 0) {
-                    str = str.substr(str2.length);
-                }
-                tm.number_black = str;
-            }
-        }
-        $scope.temp = tm;
-        //if (!$scope.blkPopover) {
-            $scope.blkPopover = null;
-            $scope.blkPopover = $popover(angular.element('#edit-blacknum'), { scope: $scope, container: 'body', autoClose: true, trigger: 'manual', placement: 'left', template: "popup.black_number.tpl.html", show: false });
-        //}
-        $scope.blkPopover.$promise.then($scope.blkPopover.show);
-    }
-    $scope.changeTypeId = function (it) {
-        if (it && it.number_black) {
-            it.number_black = '';
-        }
-    }
-    $scope.setBlackNumber = function (temp) {
-        var str = '';
-        temp.number_black = (temp.number_black || '').trim();
-        temp.year = (temp.year || '').trim();
-        if (temp.number_black && temp.year) {
-            str = $filter('lookup_type')($scope.editingItem.type_id, 'code');
-            str += temp.number_black;
-            if (temp.year) str += '/' + temp.year;
-        }
-        __it.number_black = str;
-    }
-    $scope.clearBlackNumber = function (temp) {
-        if (temp) {
-            temp.number_black = '';
-            temp.year = '';
-        }
-    }
-    $scope.popupTopics = function (it) {
-        __it = it;
-        $scope.editingItem = it;
-        var tm = { topic_ids:[] };
-
-        $scope.temp = tm;
-        //if (!$scope.blkPopover) {
-        $scope.topicsPopover = null;
-        $scope.topicsPopover = $popover(angular.element('#edit-topics'), { scope: $scope, container: 'body', autoClose: true, trigger: 'manual', placement: 'left', template: "popup.topics.tpl.html", show: false });
-        //}
-        $scope.topicsPopover.$promise.then($scope.topicsPopover.show);
-    }
-
-    $scope.getFileTitle = function (f) {
-        if (f && f.name && f.size) {
-            return f.name + ' (' + $filter('number')(f.size / 1024, 1) + ' KB)'
-        }
-        return '';
-    }
-    var oldData=null;
-    $scope.saveForm = function (item, idx) {
-        if (item) {
-            item = angular.getChanges(item, oldData, $scope.pkField)
-            if(item){
-                var d = {};
-                _.extendOwn(d, item);
-                Auth.post($scope.apiName + '/update', d).success(function (data) {
-                    $scope.editingItem = null;
-                    $scope.goBack();
-                });
-            } else {
-                $scope.goBack();
-            }
-        }
-    }
-
-    $scope.goBack = function () {
-        $rootScope.storeData('court_cases_id', null);
-        if ($state.previousState && ($state.previousState.name == 'court.vcases')) {
-            $state.go('court.vcases');
-        } else {
-            $state.go('court.cases');
-        }
-    }
-    var _reRead = [];
-    $scope.go = function (a, b) {
-        if (a && b) {
-            var d = {};
-            d[$scope.pkField] = b[$scope.pkField];
-            $scope.editingItem = null;
-            oldData=null;
-            Auth.post($scope.apiName + '/get', d).success(function (data) {
-                _reRead = null;
-                _reRead = [a,b];
-                oldData={};
-                $scope.editingItem = data.data;
-                angular.copy(data.data,oldData);
-                $rootScope.storeData('court_cases_id', b[$scope.pkField]);
-                $state.go(a);
-            });
-
-        }
-    }
-    $scope.$fetch = function () {
-        if (_reRead.length==2) {
-            $scope.go(_reRead[0], _reRead[1]);
-        }
-    }
-    
-    $scope.resultPopover = null;
-    $scope.popupResult = function () {
-        if (!$scope.resultPopover) {
-            $scope.resultPopover = $popover(angular.element('#add-result'), { scope: $scope, container: 'body', autoClose: true, trigger: 'manual', placement: 'auto', template: "custom.result.popover.html", show: false });
-        }
-        $scope.resultPopover.$promise.then($scope.resultPopover.show);
-    }
-    $scope.addResult = function (it) {
-        if (it && it.name) {
-            Auth.post('results/add', it).success(function (data) {
-                Lookups.getResult().push(data.data);
-                $scope.resultPopover.$promise.then($scope.resultPopover.hide);
-            });
-        }
-    }
-
-    $scope.commandPopover = null;
-    $scope.popupCommand = function () {
-        if (!$scope.commandPopover) {
-            $scope.commandPopover = $popover(angular.element('#add-command'), { scope: $scope, container: 'body', autoClose: true, placement: 'auto', trigger: 'manual', template: "custom.command.popover.html", show: false });
-        }
-        $scope.commandPopover.$promise.then($scope.commandPopover.show);
-    }
-
-    $scope.addCommand = function (it) {
-        if (it && it.name) {
-            Auth.post('ats/add', it).success(function (data) {
-                Lookups.getAt().push(data.data);
-                $scope.commandPopover.$promise.then($scope.commandPopover.hide);
-            });
-        }
-    }
-
-    $scope.imprisonPopover = null;
-    $scope.popupImprison = function () {
-        if (!$scope.imprisonPopover) {
-            $scope.imprisonPopover = $popover(angular.element('#add-imprison'), { scope: $scope, container: 'body', autoClose: true, placement: 'auto', trigger: 'manual', template: "custom.imprison.popover.html", show: false });
-        }
-        $scope.imprisonPopover.$promise.then($scope.imprisonPopover.show);
-    }
-
-    $scope.addImprison = function (it) {
-        if (it && it.name) {
-            Auth.post('imprisons/add', it).success(function (data) {
-                Lookups.getImprison().push(data.data);
-                $scope.imprisonPopover.$promise.then($scope.imprisonPopover.hide);
-            });
-        }
-    }
-    $scope.acceptPopover = null;
-    $scope.popupAccept = function () {
-        if (!$scope.acceptPopover) {
-            $scope.acceptPopover = $popover(angular.element('#add-accept'), { scope: $scope, container: 'body', autoClose: true, placement: 'auto', trigger: 'manual', template: "custom.accept.popover.html", show: false });
-        }
-        $scope.acceptPopover.$promise.then($scope.acceptPopover.show);
-    }
-
-    $scope.addAccept = function (it) {
-        if (it && it.name) {
-            Auth.post('accepts/add', it).success(function (data) {
-                Lookups.getAccept().push(data.data);
-                $scope.acceptPopover.$promise.then($scope.acceptPopover.hide);
-            });
-        }
-    }
-    $scope.judgePopover = null;
-    $scope.popupJudge = function () {
-        if (!$scope.judgePopover) {
-            $scope.judgePopover = $popover(angular.element('#add-judge'), { scope: $scope, container: 'body', autoClose: true, placement: 'auto', trigger: 'manual', template: "custom.judge.popover.html", show: false });
-        }
-        $scope.judgePopover.$promise.then($scope.judgePopover.show);
-    }
-
-    $scope.addJudge = function (it) {
-        if (it && it.name) {
-            it.parent_id = Auth.getUserId();
-            Auth.post('judges/add', it).success(function (data) {
-                Lookups.getOwnJudge().push(data.data);
-                Lookups.getJudge().push(data.data);
-                $scope.judgePopover.$promise.then($scope.judgePopover.hide);
-            });
-        }
-    }
-    var str = $state.current.name;
-    var n = $rootScope.fetchData('court_cases_id');
-    if (n) {
-        if (str.indexOf('court.cases.form') == 0) {
-            var d = {};
-            d[$scope.pkField]=n;
-            $scope.go(str, d);
-        }
-    }
-
-    $scope.setMonthId = function (id) {
-        $rootScope.storeData($scope.prefix + 'court_cases_month', id);
-    }
-    $scope.setYearId = function (id) {
-        $rootScope.storeData($scope.prefix + 'court_cases_year', id);
-    }
-    $scope.setDateId = function (id) {
-        $rootScope.storeData($scope.prefix + 'court_cases_date', id);
-    }
-    n = $rootScope.fetchData($scope.prefix + 'court_cases_month');
-    if (n) $scope.searchMonth = n;
-    n = $rootScope.fetchData($scope.prefix + 'court_cases_year');
-    if (n) $scope.searchYear = n;
-    n = $rootScope.fetchData($scope.prefix + 'court_cases_date') || $rootScope.today();
-    if (n) $scope.searchDate = n;
-}])
 .controller('LoginCtrl', ['$scope', '$timeout', 'Auth', '$state', 'Lookups', '$rootScope', 'cfpLoadingBar', function ($scope, $timeout, Auth, $state, Lookups, $rootScope, cfpLoadingBar) {
     $scope.userid = '';
     $scope.password = '';
@@ -1730,4 +1276,662 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
         },
         restrict: 'EA'
     }
+}])
+
+
+.controller('AdminReportCtrl', ['$scope', '$filter','$element', '$rootScope', '$timeout', 'Auth', '$state', 'Lookups', '$modal', '$popover', 'Lookups', '_', function ($scope,$filter, $element, $rootScope, $timeout, Auth, $state, Lookups, $modal, $popover, $Lookups, _) {
+    $scope.Lookups = Lookups;
+    $scope.pkField = 'id';
+    $scope.apiName = 'admin_cases';
+    $scope.editItem = null;
+    $scope.prefix = $element.attr('data-prefix') || '';
+    $scope.years = [];
+    $scope.blkPopover = null;
+    var i = (new Date()).getFullYear() + 543;
+    for (var j = 0; j < 10; j++) {
+        $scope.years.push((i - j) + '');
+    }
+    $scope.clearRunNumber = function (item) {
+        if (item.id) {
+            Auth.post($scope.apiName + '/clearnumber', { id: item.id }).success(function (data) {
+                if (data && data.data && data.data['auto_received_num'] != undefined) {
+                    item['auto_received_num'] = data.data['auto_received_num'];
+                    if ('date_received3' in data.data) {
+                        item['date_received3'] = data.data['date_received3'];
+                    }
+                }
+            });
+        }
+    }
+
+    $scope.imprisonPopover = null;
+    $scope.popupImprison = function () {
+        if (!$scope.imprisonPopover) {
+            $scope.imprisonPopover = $popover(angular.element('#add-imprison'), { scope: $scope, container: 'body', autoClose: true, placement: 'auto', trigger: 'manual', template: "custom.imprison.popover.html", show: false });
+        }
+        $scope.imprisonPopover.$promise.then($scope.imprisonPopover.show);
+    }
+
+    $scope.addImprison = function (it) {
+        if (it && it.name) {
+            Auth.post('imprisons/add', it).success(function (data) {
+                Lookups.getImprison().push(data.data);
+                $scope.imprisonPopover.$promise.then($scope.imprisonPopover.hide);
+            });
+        }
+    }
+    $scope.acceptPopover = null;
+    $scope.popupAccept = function () {
+        if (!$scope.acceptPopover) {
+            $scope.acceptPopover = $popover(angular.element('#add-accept'), { scope: $scope, container: 'body', autoClose: true, placement: 'auto', trigger: 'manual', template: "custom.accept.popover.html", show: false });
+        }
+        $scope.acceptPopover.$promise.then($scope.acceptPopover.show);
+    }
+
+    $scope.addAccept = function (it) {
+        if (it && it.name) {
+            Auth.post('accepts/add', it).success(function (data) {
+                Lookups.getAccept().push(data.data);
+                $scope.acceptPopover.$promise.then($scope.acceptPopover.hide);
+            });
+        }
+    }
+    var __it = null;
+    $scope.popupBlackNumber = function (it) {
+        __it = it;
+        $scope.editingItem = it;
+        var tm = { black_number: '', year: '' };
+        if (__it.number_black) {
+            var str = __it.number_black;
+            var i = str.indexOf("/");
+            if (i >= 0) {
+                tm.year = str.substr(i + 1);
+                str = str.substr(0, i);
+                var str2 = $filter('lookup_type')($scope.editingItem.type_id, 'code');
+                i = str.indexOf(str2);
+                if (i == 0) {
+                    str = str.substr(str2.length);
+                }
+                tm.number_black = str;
+            }
+        }
+        $scope.temp = tm;
+        //if (!$scope.blkPopover) {
+        $scope.blkPopover = null;
+        $scope.blkPopover = $popover(angular.element('#edit-blacknum'), { scope: $scope, container: 'body', autoClose: true, trigger: 'manual', placement: 'left', template: "popup.black_number.tpl.html", show: false });
+        //}
+        $scope.blkPopover.$promise.then($scope.blkPopover.show);
+    }
+    $scope.changeTypeId = function (it) {
+        if (it && it.number_black) {
+            it.number_black = '';
+        }
+    }
+    $scope.setBlackNumber = function (temp, hlr) {
+    
+        if (!__it) return;
+        var str = '';
+        temp.number_black = (temp.number_black || '').trim();
+        temp.year = (temp.year || '').trim();
+        if (temp.number_black && temp.year) {
+            str = $filter('lookup_type')($scope.editingItem.type_id, 'code');
+            str += temp.number_black;
+            if (temp.year) str += '/' + temp.year;
+        }
+        if (str && (__it.number_black !== str)) {
+            var d = {};
+            if (__it.id) d.id = __it.id;
+            d.user_id = __it.user_id || $scope.$root.getUserId();
+            d.value = str;
+            Auth.post($scope.apiName + '/checkblknumber', d).success(function (data) {
+                if (data && data.data) {
+                    __it.number_black = str;
+                    if (hlr) hlr();
+                }
+            });
+        } else {
+            __it.number_black = str;
+            if (hlr) hlr();
+        }
+    }
+    $scope.clearBlackNumber = function (temp) {
+        if (temp) {
+            temp.number_black = '';
+            temp.year = '';
+        }
+    }
+    $scope.setRunNumber = function (item) {
+        if (item.id) {
+            Auth.post($scope.apiName + '/setnumber', { id: item.id }).success(function (data) {
+                if (data && data.data && data.data['auto_received_num']) {
+                    item['auto_received_num'] = data.data['auto_received_num'];
+                    if ('date_received3' in data.data) {
+                        item['date_received3'] = data.data['date_received3'];
+                    }
+                }
+            });
+        }
+    }
+    $scope.saveForm = function (item, idx) {
+        if (item) {
+            item = angular.getChanges(item, oldData, $scope.pkField)
+            if (item) {
+                var d = {};
+                _.extendOwn(d, item);
+                Auth.post($scope.apiName + '/update', d).success(function (data) {
+                    $scope.editingItem = null;
+                    $scope.goBack();
+                });
+            } else {
+                $scope.goBack();
+            }
+        }
+    }
+
+    $scope.goBack = function () {
+        $rootScope.storeData('admin_cases_id', null);
+        if ($state.previousState && ($state.previousState.name == 'admin.vcases')) {
+            $state.go('admin.vcases');
+        } else {
+            $state.go('admin.cases');
+        }
+    }
+    var oldData = null;
+    $scope.go = function (a, b) {
+        if (a && b) {
+            var d = {};
+            d[$scope.pkField] = b[$scope.pkField];
+            $scope.editingItem = null;
+            oldData = null;
+            Auth.post($scope.apiName + '/get', d).success(function (data) {
+                $scope.editingItem = data.data;
+
+                oldData = {};
+                angular.copy(data.data, oldData);
+                $rootScope.storeData('admin_cases_id', b[$scope.pkField]);
+                $state.go(a);
+
+            });
+
+        }
+    }
+    $scope.popupTopics = function (it) {
+        __it = it;
+        $scope.editingItem = it;
+        var tm = { topic_ids: [] };
+
+        $scope.temp = tm;
+        //if (!$scope.blkPopover) {
+        $scope.topicsPopover = null;
+        $scope.topicsPopover = $popover(angular.element('#edit-topics'), { scope: $scope, container: 'body', autoClose: true, trigger: 'manual', placement: 'left', template: "popup.topics.tpl.html", show: false });
+        //}
+        $scope.topicsPopover.$promise.then($scope.topicsPopover.show);
+    }
+    $scope.resultPopover = null;
+    $scope.popupResult = function () {
+        if (!$scope.resultPopover) {
+            $scope.resultPopover = $popover(angular.element('#add-result'), { scope: $scope, container: 'body', autoClose: true, trigger: 'manual', placement: 'auto', template: "custom.result.popover.html", show: false });
+        }
+        $scope.resultPopover.$promise.then($scope.resultPopover.show);
+    }
+    $scope.addResult = function (it) {
+        if (it && it.name) {
+            Auth.post('results/add', it).success(function (data) {
+                Lookups.getResult().push(data.data);
+                $scope.resultPopover.$promise.then($scope.resultPopover.hide);
+            });
+        }
+    }
+
+    $scope.atResultPopover = null;
+    $scope.popupAtResult = function () {
+        //if (!$scope.atResultPopover) {
+            $scope.atResultPopover = $popover(angular.element('#add-at-result'), { scope: $scope, container: 'body', autoClose: true, trigger: 'manual', placement: 'auto', template: "custom.atresult.popover.html", show: false });
+        //}
+        $scope.atResultPopover.$promise.then($scope.atResultPopover.show);
+    }
+    $scope.addAtResult = function (it) {
+        if (it && it.name) {
+            Auth.post('at_results/add', it).success(function (data) {
+                Lookups.getAtResult().push(data.data);
+                $scope.atResultPopover.$promise.then($scope.atResultPopover.hide);
+            });
+        }
+    }
+
+    $scope.commandPopover = null;
+    $scope.popupCommand = function () {
+        if (!$scope.commandPopover) {
+            $scope.commandPopover = $popover(angular.element('#add-command'), { scope: $scope, container: 'body', autoClose: true, placement: 'auto', trigger: 'manual', template: "custom.command.popover.html", show: false });
+        }
+        $scope.commandPopover.$promise.then($scope.commandPopover.show);
+    }
+
+    $scope.addCommand = function (it) {
+        if (it && it.name) {
+            Auth.post('ats/add', it).success(function (data) {
+                Lookups.getAt().push(data.data);
+                $scope.commandPopover.$promise.then($scope.commandPopover.hide);
+            });
+        }
+    }
+
+    $scope.judgePopover = null;
+    $scope.popupJudge = function () {
+        if (!$scope.judgePopover) {
+            $scope.judgePopover = $popover(angular.element('#add-judge'), { scope: $scope, container: 'body', autoClose: true, placement: 'auto', trigger: 'manual', template: "custom.judge.popover.html", show: false });
+        }
+        $scope.judgePopover.$promise.then($scope.judgePopover.show);
+    }
+
+    $scope.addJudge = function (it) {
+        if (it && it.name) {
+            it.parent_id = $scope.editingItem.user_id;
+            Auth.post('judges/add', it).success(function (data) {
+                Lookups.getJudge2().push(data.data);
+                Lookups.getJudge().push(data.data);
+                $scope.judgePopover.$promise.then($scope.judgePopover.hide);
+            });
+        }
+    }
+    var str = $state.current.name;
+    var n = $rootScope.fetchData('admin_cases_id');
+    if (n) {
+        if (str.indexOf('admin.') == 0) {
+            var d = {};
+            d[$scope.pkField] = n;
+            $scope.go(str, d);
+        }
+    }
+    $scope.setCourtId = function (id) {
+        $rootScope.storeData($scope.prefix + 'admin_cases_court', id);
+    }
+    $scope.setMonthId = function (id) {
+        $rootScope.storeData($scope.prefix + 'admin_cases_month', id);
+    }
+    $scope.setYearId = function (id) {
+        $rootScope.storeData($scope.prefix + 'admin_cases_year', id);
+    }
+    $scope.setDateId = function (id) {
+        $rootScope.storeData($scope.prefix + 'admin_cases_date', id);
+    }
+    $scope.setTypeId = function (id) {
+        $rootScope.storeData($scope.prefix + 'admin_cases_type', id);
+    }
+    n = $rootScope.fetchData($scope.prefix + 'admin_cases_court');
+    if (n) $scope.searchCourt = n;
+    n = $rootScope.fetchData($scope.prefix + 'admin_cases_month');
+    if (n) $scope.searchMonth = n;
+    n = $rootScope.fetchData($scope.prefix + 'admin_cases_year');
+    if (n) $scope.searchYear = n;
+    n = $rootScope.fetchData($scope.prefix + 'admin_cases_date') || $rootScope.today();
+    if (n) $scope.searchDate = n;
+    n = $rootScope.fetchData($scope.prefix + 'admin_cases_type');
+    if (n) $scope.searchType = n;
+}])
+
+.controller('PrintReportCtrl', ['$scope', '$timeout', 'Auth', '$state', 'Lookups', '$rootScope', 'cfpLoadingBar', function ($scope, $timeout, Auth, $state, Lookups, $rootScope, cfpLoadingBar) {
+    $scope.Lookups = Lookups;
+    $scope.toGroupName = function (id) {
+        var it = Lookups.getGroup(id);
+        if (it) {
+            return it.name;
+        }
+        return id + '???';
+    }
+
+}])
+
+
+.controller('MoveUserCtrl', ['$scope', '$rootScope', '$timeout', 'Auth', '$state', 'Lookups', '$modal', '$popover', 'Lookups', '_', function ($scope, $rootScope, $timeout, Auth, $state, Lookups, $modal, $popover, $Lookups, _) {
+    var _successHlr = null;
+    $scope.moveUser = function (tpl, hlr) {
+        if (tpl) {
+            _successHlr = hlr;
+            if (!$scope._Panel) {
+                $scope._Panel = $modal({ scope: $scope, title: '', backdrop: 'static', template: tpl, placement: "top", html: true, show: false });
+            }
+            $scope._Panel.$promise.then($scope._Panel.show);
+        }
+    }
+    $scope.doMoveUser = function (scope, hlr) {
+        if (scope && scope.$it) {
+            var d = {};
+            d[$scope.pkField] = scope.$it[scope.pkField];
+            console.dir(d);
+            console.log(scope.apiName + '/checkin');
+            Auth.post(scope.apiName + '/checkin_user', d).success(function (data) {
+                if (data.data == true) {
+                    if (hlr) hlr();
+                    if (_successHlr) {
+                        _successHlr();
+                        _successHlr = null;
+                    }
+                }
+            });
+        }
+    }
+
+}])
+
+.controller('TopicsCtrl', ['$scope', '$filter', '$rootScope', '$timeout', 'Auth', '$state', 'Lookups', '$modal', '$popover', 'Lookups', '_', function ($scope, $filter, $rootScope, $timeout, Auth, $state, Lookups, $modal, $popover, $Lookups, _) {
+    $scope.$items = [];
+    $scope.groupTitle = '';
+    $scope.search = { name: '' }
+    var _editingItem = null;
+    var _key = null;
+    $scope.clearSearch = function () {
+        if ($scope.search.name) $scope.search.name = '';
+    }
+    $scope.createList = function (editingItem, key) {
+        _key = key;
+        _editingItem = editingItem;
+        var temp = '';
+        if (_editingItem && _editingItem[_key]) {
+            temp = _editingItem[_key];
+        }
+        var v = $scope.$eval(temp)
+        if (!v) v = [];
+        if (!angular.isArray(v)) {
+            v = [v];
+        }
+        var a = Lookups.getTopicByType(editingItem.type_id);
+        if (a) {
+            $scope.$items = _.map(a, function (it) {
+                var it2 = _.mapObject(it, function (v) {
+                    return v;
+                });
+                var s = parseInt(it2.id);
+                it2._checked = (v.indexOf(s) >= 0);
+                return it2;
+            });
+        } else {
+            $scope.$items = [];
+        }
+        if ($scope.$items.length > 0) {
+            var it = $scope.$items[0];
+            $scope.groupTitle = $filter('lookup_type')(it.type_id, 'name', 'code');
+        }
+    }
+    $scope.clearChecked = function () {
+        _.each($scope.$items, function (it) {
+            if (it._checked === true) {
+                it._checked = false;
+            }
+        })
+
+    }
+
+    $scope.setTopics = function () {
+        var ids = [];
+        _.each($scope.$items, function (it) {
+            if (it._checked === true) {
+                ids.push(it.id);
+            }
+        })
+        if (_editingItem && _key) {
+            _editingItem[_key] = (ids.length) ? ('[' + ids.join(',') + ']') : '';
+        }
+        ids = null;
+    }
+
+}])
+
+.controller('CourtReportCtrl', ['$scope', '$element', '$filter', '$rootScope', '$timeout', 'Auth', '$state', 'Lookups', '$modal', '$popover', 'Lookups', '_', function ($scope, $element, $filter, $rootScope, $timeout, Auth, $state, Lookups, $modal, $popover, $Lookups, _) {
+    $scope.Lookups = Lookups;
+    $scope.pkField = 'id';
+    $scope.apiName = 'court_cases';
+    $scope.editItem = null;
+    $scope.prefix = $element.attr('data-prefix') || '';
+
+    $scope.years = [];
+    $scope.blkPopover = null;
+    var i = (new Date()).getFullYear() + 543;
+    for (var j = 0; j < 10; j++) {
+        $scope.years.push((i - j) + '');
+    }
+
+    var __it = null;
+    $scope.popupBlackNumber = function (it) {
+        __it = it;
+        $scope.editingItem = it;
+        var tm = { black_number: '', year: '' };
+        if (__it.number_black) {
+            var str = __it.number_black;
+            var i = str.indexOf("/");
+            if (i >= 0) {
+                tm.year = str.substr(i + 1);
+                str = str.substr(0, i);
+                var str2 = $filter('lookup_type')($scope.editingItem.type_id, 'code');
+                i = str.indexOf(str2);
+                if (i == 0) {
+                    str = str.substr(str2.length);
+                }
+                tm.number_black = str;
+            }
+        }
+        $scope.temp = tm;
+        //if (!$scope.blkPopover) {
+        $scope.blkPopover = null;
+        $scope.blkPopover = $popover(angular.element('#edit-blacknum'), { scope: $scope, container: 'body', autoClose: true, trigger: 'manual', placement: 'left', template: "popup.black_number.tpl.html", show: false });
+        //}
+        $scope.blkPopover.$promise.then($scope.blkPopover.show);
+    }
+    $scope.changeTypeId = function (it) {
+        if (it && it.number_black) {
+            it.number_black = '';
+        }
+    }
+    $scope.setBlackNumber = function (temp, hlr) {
+        if (!__it) return;
+
+        var str = '';
+        temp.number_black = (temp.number_black || '').trim();
+        temp.year = (temp.year || '').trim();
+        if (temp.number_black && temp.year) {
+            str = $filter('lookup_type')($scope.editingItem.type_id, 'code');
+            str += temp.number_black;
+            if (temp.year) str += '/' + temp.year;
+        }
+        if (str && (__it.number_black !== str)) {
+            var d = {};
+            if (__it.id) d.id = __it.id;
+            d.user_id = __it.user_id || $scope.$root.getUserId();
+            d.value = str;
+            Auth.post($scope.apiName + '/checkblknumber', d).success(function (data) {
+                if (data && data.data) {
+                    __it.number_black = str;
+                    if (hlr) hlr();
+                }
+            });
+        } else {
+            __it.number_black = str;
+            if (hlr) hlr();
+        }
+    }
+    $scope.clearBlackNumber = function (temp) {
+        if (temp) {
+            temp.number_black = '';
+            temp.year = '';
+        }
+    }
+    $scope.popupTopics = function (it) {
+        __it = it;
+        $scope.editingItem = it;
+        var tm = { topic_ids: [] };
+
+        $scope.temp = tm;
+        //if (!$scope.blkPopover) {
+        $scope.topicsPopover = null;
+        $scope.topicsPopover = $popover(angular.element('#edit-topics'), { scope: $scope, container: 'body', autoClose: true, trigger: 'manual', placement: 'left', template: "popup.topics.tpl.html", show: false });
+        //}
+        $scope.topicsPopover.$promise.then($scope.topicsPopover.show);
+    }
+
+    $scope.getFileTitle = function (f) {
+        if (f && f.name && f.size) {
+            return f.name + ' (' + $filter('number')(f.size / 1024, 1) + ' KB)'
+        }
+        return '';
+    }
+    var oldData = null;
+    $scope.saveForm = function (item, idx) {
+        if (item) {
+            item = angular.getChanges(item, oldData, $scope.pkField)
+            if (item) {
+                var d = {};
+                _.extendOwn(d, item);
+                Auth.post($scope.apiName + '/update', d).success(function (data) {
+                    $scope.editingItem = null;
+                    $scope.goBack();
+                });
+            } else {
+                $scope.goBack();
+            }
+        }
+    }
+
+    $scope.goBack = function () {
+        $rootScope.storeData('court_cases_id', null);
+        if ($state.previousState && ($state.previousState.name == 'court.vcases')) {
+            $state.go('court.vcases');
+        } else {
+            $state.go('court.cases');
+        }
+    }
+    var _reRead = [];
+    $scope.go = function (a, b) {
+        if (a && b) {
+            var d = {};
+            d[$scope.pkField] = b[$scope.pkField];
+            $scope.editingItem = null;
+            oldData = null;
+            Auth.post($scope.apiName + '/get', d).success(function (data) {
+                _reRead = null;
+                _reRead = [a, b];
+                oldData = {};
+                $scope.editingItem = data.data;
+                angular.copy(data.data, oldData);
+                $rootScope.storeData('court_cases_id', b[$scope.pkField]);
+                $state.go(a);
+            });
+
+        }
+    }
+    $scope.$fetch = function () {
+        if (_reRead.length == 2) {
+            $scope.go(_reRead[0], _reRead[1]);
+        }
+    }
+
+    $scope.resultPopover = null;
+    $scope.popupResult = function () {
+        if (!$scope.resultPopover) {
+            $scope.resultPopover = $popover(angular.element('#add-result'), { scope: $scope, container: 'body', autoClose: true, trigger: 'manual', placement: 'auto', template: "custom.result.popover.html", show: false });
+        }
+        $scope.resultPopover.$promise.then($scope.resultPopover.show);
+    }
+    $scope.addResult = function (it) {
+        if (it && it.name) {
+            Auth.post('results/add', it).success(function (data) {
+                Lookups.getResult().push(data.data);
+                $scope.resultPopover.$promise.then($scope.resultPopover.hide);
+            });
+        }
+    }
+
+    $scope.commandPopover = null;
+    $scope.popupCommand = function () {
+        if (!$scope.commandPopover) {
+            $scope.commandPopover = $popover(angular.element('#add-command'), { scope: $scope, container: 'body', autoClose: true, placement: 'auto', trigger: 'manual', template: "custom.command.popover.html", show: false });
+        }
+        $scope.commandPopover.$promise.then($scope.commandPopover.show);
+    }
+
+    $scope.addCommand = function (it) {
+        if (it && it.name) {
+            Auth.post('ats/add', it).success(function (data) {
+                Lookups.getAt().push(data.data);
+                $scope.commandPopover.$promise.then($scope.commandPopover.hide);
+            });
+        }
+    }
+
+    $scope.imprisonPopover = null;
+    $scope.popupImprison = function () {
+        if (!$scope.imprisonPopover) {
+            $scope.imprisonPopover = $popover(angular.element('#add-imprison'), { scope: $scope, container: 'body', autoClose: true, placement: 'auto', trigger: 'manual', template: "custom.imprison.popover.html", show: false });
+        }
+        $scope.imprisonPopover.$promise.then($scope.imprisonPopover.show);
+    }
+
+    $scope.addImprison = function (it) {
+        if (it && it.name) {
+            Auth.post('imprisons/add', it).success(function (data) {
+                Lookups.getImprison().push(data.data);
+                $scope.imprisonPopover.$promise.then($scope.imprisonPopover.hide);
+            });
+        }
+    }
+    $scope.acceptPopover = null;
+    $scope.popupAccept = function () {
+        if (!$scope.acceptPopover) {
+            $scope.acceptPopover = $popover(angular.element('#add-accept'), { scope: $scope, container: 'body', autoClose: true, placement: 'auto', trigger: 'manual', template: "custom.accept.popover.html", show: false });
+        }
+        $scope.acceptPopover.$promise.then($scope.acceptPopover.show);
+    }
+
+    $scope.addAccept = function (it) {
+        if (it && it.name) {
+            Auth.post('accepts/add', it).success(function (data) {
+                Lookups.getAccept().push(data.data);
+                $scope.acceptPopover.$promise.then($scope.acceptPopover.hide);
+            });
+        }
+    }
+    $scope.judgePopover = null;
+    $scope.popupJudge = function () {
+        if (!$scope.judgePopover) {
+            $scope.judgePopover = $popover(angular.element('#add-judge'), { scope: $scope, container: 'body', autoClose: true, placement: 'auto', trigger: 'manual', template: "custom.judge.popover.html", show: false });
+        }
+        $scope.judgePopover.$promise.then($scope.judgePopover.show);
+    }
+
+    $scope.addJudge = function (it) {
+        if (it && it.name) {
+            it.parent_id = Auth.getUserId();
+            Auth.post('judges/add', it).success(function (data) {
+                Lookups.getOwnJudge().push(data.data);
+                Lookups.getJudge().push(data.data);
+                $scope.judgePopover.$promise.then($scope.judgePopover.hide);
+            });
+        }
+    }
+    var str = $state.current.name;
+    var n = $rootScope.fetchData('court_cases_id');
+
+    if (n) {
+
+        if (str.indexOf('court.') == 0) {
+            var d = {};
+            d[$scope.pkField] = n;
+            $scope.go(str, d);
+        }
+    }
+
+    $scope.setMonthId = function (id) {
+        $rootScope.storeData($scope.prefix + 'court_cases_month', id);
+    }
+    $scope.setYearId = function (id) {
+        $rootScope.storeData($scope.prefix + 'court_cases_year', id);
+    }
+    $scope.setDateId = function (id) {
+        $rootScope.storeData($scope.prefix + 'court_cases_date', id);
+    }
+    n = $rootScope.fetchData($scope.prefix + 'court_cases_month');
+    if (n) $scope.searchMonth = n;
+    n = $rootScope.fetchData($scope.prefix + 'court_cases_year');
+    if (n) $scope.searchYear = n;
+    n = $rootScope.fetchData($scope.prefix + 'court_cases_date') || $rootScope.today();
+    if (n) $scope.searchDate = n;
 }])

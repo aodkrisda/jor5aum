@@ -8,7 +8,7 @@
 <div ng-controller="AdminReportCtrl" data-prefix="a2">
     <div ui-view></div>
     <div  ng-hide="!urlEq('/admin/vcases')">
-        <div class="panel panel-default" ng-controller="CustomTableCtrl" ng-init="_view=true;setAPI('admin_cases','custom.admin.form1.html',{date_received:'searchDate',_view:'_view'})">
+        <div class="panel panel-default" ng-controller="CustomTableCtrl" ng-init="_view=true;setAPI('admin_cases','custom.admin.form1.html',{date_received:'searchDate',_view:'_view',type_id:'searchType'})">
             <div class="panel-heading">
                 <div class="text-right pull-right">
                     <button class="btn btn-success" ng-show="isSearchMode()" ng-click="setFilter()">
@@ -26,17 +26,20 @@
 
                 <div loading-container="tableParams.settings().$loading">
                     <div ng-show="!isSearchMode()">
-                        <div class="input-group col-md-4 col-md-offset-4">
+                        <div class="input-group col-md-10 col-md-offset-1">
                             
+                            <div class="input-group-addon"><strong>ประเภทคดี</strong></div>
+                            <select class="form-control" style="min-width:450px" ng-model="searchType" ng-change="setTypeId(searchType);setFilter()" select-value-type="string" ng-options="it.id as it.id | lookup_type:'name':'code'  for it in Lookups.getType()"><option value="">ทั้งหมด</option></select>
                             <div class="input-group-addon"><strong>วันที่ภาครับสำนวนคำพิพากษา</strong></div>
                             <span mode="0" ng-model="searchDate" ng-change="setDateId(searchDate);setFilter()" placeholder="แสดงคดีที่รับสำนวนวันที่่" custom-date-field></span>
+
                             <!--
                             <div class="input-group-addon btn btn-default" ng-click="setFilter(true)" title="เริ่มค้นหา"><span class="glyphicon glyphicon-refresh"></span></div>
                                 -->
                         </div>
                         <hr />
                     </div>
-                    <table ng-table="tableParams" show-filter="false" class="table table-hover table-bordered">
+                    <table ng-table="tableParams" ng-init="tableParams.not_found='ไม่ได้ส่งรายงานคดี'" show-filter="false" class="table table-hover table-bordered">
                         <tbody>
 
                             <tr ng-repeat="it in $data"
@@ -44,13 +47,16 @@
                                 ng-init="it._days=date_diff(it.date_ap, it.date_received3)"
                                 ng-class="{'active': isSelected(it),'text-red':it.no_case_sent=='1'}">
                                 <td width="30" class="text-right text-muted"><span title="#{{it.id}}">{{startIdx + $index + 1}}.</span></td>
-                                <td data-title="'เลขรับ'" sortable="'auto_received_num'">
+                                <td data-title="'เลขรับสำนวนของภาค'" sortable="'auto_received_num'">
                                     {{it.auto_received_num}}
                                 </td>
                                 <td data-title="'เลขคดีดำ'" sortable="'number_black'">
                                     {{it.number_black}}
                                 </td>
+                                <td data-title="'ศาล'" sortable="'user_id'">
+                                    {{it.user_id | lookup_court}}
 
+                                </td>
                                 <td data-title="'เลขคดีแดง'" sortable="'number_red'">
                                     {{it.number_red}}
 
@@ -79,8 +85,8 @@
                                 <td data-title="'ส่งตามกำหนด(ก่อน 15 วัน)'" class="text-center" >
                                     <span ng-if="it._days<0">หลัง {{it._days | math_abs}} วัน</span>
                                     <span ng-if="it._days>0">ก่อน {{it._days}} วัน</span>
-                                    <span ng-if="isSelected(it)" class="pull-right">
-                                        <button class="btn btn-info btn-circle btn-xs" data-placement="left" data-trigger="click" bs-popover data-template="custom.confirm.admin.actions2.html"
+                                    <span ng-if="isSelected(it)" class="row-action">
+                                        <button class="btn btn-success btn-circle btn-xs" data-placement="left" data-trigger="click" bs-popover data-template="custom.confirm.admin.actions2.html"
                                                 data-auto-close="true">
                                             <span class="glyphicon glyphicon-edit"></span>
                                         </button>

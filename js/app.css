@@ -56,8 +56,7 @@ fieldset[disabled] .input-group.date  input.date{
 .drop.drag-over {background: #5CB85C;color: #fff;}
 
 table[ng-table] tr.active td {
-    background-color:rgba(169,211,207,0.2) !important;
-    color:#3072AB;
+    background-color:rgba(81,170,81,0.4) !important;
 }
 
 .btn.btn-min{
@@ -205,4 +204,18 @@ form.readonly.form input[readonly], form.readonly.form .form-control.readonly{
 }
 .ios-toggle.disabled{
 opacity:0.4;
+}
+
+.adon-label{
+    min-width:100px;
+}
+.row-action {
+    position: absolute;
+    right: 18px;
+}
+.row-action2 {
+    position: absolute;
+    right:20px;
+    font-size:1.5em;
+    color:blue;
 }

@@ -23,14 +23,6 @@
 
                             <div class="form-group">
 
-                                <!-- Text input-->
-                                <label class="col-md-4 control-label">รหัส</label>
-                                <div class="col-md-7">
-                                    <input type="text" name="code" placeholder="ยังไม่ได้กำหนด" required ng-model="editingItem.code" class="form-control input-md">
-                                </div>
-                            </div>
-                            <div class="form-group">
-
                                 <!-- Select Basic -->
                                 <label class="col-md-4 control-label">ประเภทคดี</label>
                                 <div class="col-md-7">
@@ -41,6 +33,13 @@
                                 </div>
                             </div>
 
+                            <div class="form-group">
+                                <!-- Text input-->
+                                <label class="col-md-4 control-label">รหัส</label>
+                                <div class="col-md-7">
+                                    <input type="text" name="code" placeholder="ยังไม่ได้กำหนด" required ng-model="editingItem.code" class="form-control input-md">
+                                </div>
+                            </div>
 
                         </fieldset>
                     </form>
@@ -119,7 +118,7 @@
                     </td>
                     <td data-title="'ความ'" class="text-center" header-class="'text-center'">
                         {{it.type_id | lookup_type : 'name' : true}}
-                        <span ng-if="isSelected(it)" class="pull-right glyphicon glyphicon-asterisk"></span>
+                        <span ng-if="isSelected(it)" class="row-action2"><span class="glyphicon glyphicon-star-empty"></span></span>
                     </td>
                 </tr>
             </tbody>

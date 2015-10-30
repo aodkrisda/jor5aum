@@ -148,6 +148,7 @@ function post_getlookups(){
    $topics=$norm->toArray($norm->topics()->limit(2000));
    $imprisons=$norm->toArray($norm->imprisons()->limit(2000));
    $accepts=$norm->toArray($norm->accepts()->limit(2000));
+   $atresults=$norm->toArray($norm->at_results()->limit(2000));
    $judges=$norm->toArray($norm->users()->select('id,name,admin,parent_id')->where('admin > ?',1)->order('name')->limit(2000));
    $roles=array(
         array('id'=> '0', 'name'=> 'ศาล'),
@@ -155,7 +156,7 @@ function post_getlookups(){
         array('id'=> '2', 'name'=> 'ผู้พิพากษา' ),
         array('id'=> '3', 'name'=> 'ผู้พิพากษา (ภาค)')
    );
-   return array('server_date'=>$norm->now() ,'accepts'=>$accepts, 'imprisons'=>$imprisons, 'courts'=>&$courts, 'roles'=>&$roles,'ugroups'=>&$groups2, 'groups'=>&$groups, 'types'=>&$types, 'ats'=>&$ats, 'results'=>&$results, 'topics'=>&$topics, 'judges'=>&$judges);
+   return array('server_date'=>$norm->now() ,'at_results'=>$atresults,'accepts'=>$accepts, 'imprisons'=>$imprisons, 'courts'=>&$courts, 'roles'=>&$roles,'ugroups'=>&$groups2, 'groups'=>&$groups, 'types'=>&$types, 'ats'=>&$ats, 'results'=>&$results, 'topics'=>&$topics, 'judges'=>&$judges);
 }
 
 function magic_restfull(){
@@ -261,6 +262,7 @@ class NGTABLE{
   protected $pk='id';
   protected $required=array();
   protected $uniques=array();
+  protected $unique_group='';
   protected $roles=array();
   
   function __construct($table='samples', $pk='id') {
@@ -367,12 +369,15 @@ class NGTABLE{
         foreach($this->uniques as $fd=>$err){
           if(isset($_POST[$fd]) && $_POST[$fd]){
             $rs=$this->norm->{$this->tb}()->where($fd,$_POST[$fd])->limit(1);
+            if($this->unique_group && isset($_POST[$this->unique_group])){
+              $rs=$rs->where($this->unique_group,$_POST[$this->unique_group]);
+            }
             if(count($rs)){
               $this->api->sendJson(array('error'=>true, 'message'=>$err),400);
             }
           }
         }        
-     
+
         $obj=$this->norm->{$this->tb}()->insert($_POST);
         if($obj){
           if(isset($obj['password'])){
@@ -490,6 +495,7 @@ class NGTABLE_TYPES  extends NGTABLE{
     parent::__construct($table, $pk);
     $this->required[]='name';
     $this->uniques['name']='ชื่อประเภทคดีซ้ำ กรุณาเปลี่ยนใหม่';
+
   }  
   function buildFilter(&$rs, $fs){
     if($rs){
@@ -509,7 +515,8 @@ class NGTABLE_TOPICS  extends NGTABLE{
   function __construct($table='topics', $pk='id') {
     parent::__construct($table, $pk);
     $this->required[]='name';
-    $this->uniques['name']='ชื่อข้อหาซ้ำ กรูณาเปลี่ยนใหม่';
+    $this->unique_group='type_id';
+    $this->uniques['name']='ชื่อข้อหาซ้ำ กรุณาเปลี่ยนใหม่';
     $this->uniques['code']='รหัสซ้ำ กรุณาเปลี่ยนใหม่';
   }  
   function buildFilter(&$rs, $fs){
@@ -555,10 +562,34 @@ class NGTABLE_ACCEPTS  extends NGTABLE{
     $this->uniques['name']='จำเลยสารภาพซ้ำ กรูณาเปลี่ยนใหม่';
   }  
 }
+class NGTABLE_AT_RESULTS  extends NGTABLE{
+  function __construct($table='at_results', $pk='id') {
+    parent::__construct($table, $pk);
+    $this->required[]='name';
+    $this->uniques['name']='เหตุผลซ้ำ กรูณาเปลี่ยนใหม่';
+  }  
+}
 class NGTABLE_ADMIN_CASES  extends NGTABLE{
   function __construct($table='cases', $pk='id') {
     parent::__construct($table, $pk);
   }
+  function post_checkblknumber(){
+    global $norm;
+    global $api;
+    if( isset($_POST['value']) &&  $_POST['value']){
+        $r=$norm->cases()->where('number_black',$_POST['value']);
+        if(isset($_POST['id']) && $_POST['id']){
+          $r=$r->where('id!=?',$_POST['id']);
+        }
+        if(isset($_POST['user_id']) && $_POST['user_id']){
+          $r=$r->where('user_id',$_POST['user_id']);
+        }        
+        if(count($r)>0){
+          $api->sendJson(array('error'=>true, 'message'=>'เลขคดีดำซ้ำ กรุณาแก้ไขใหม่'),404);
+        }
+    }
+    return true;
+  }  
   function post_setnumber(){
     global $norm;
     $r=$norm->cases()->where('id',$_POST['id'])->fetch();
@@ -696,9 +727,11 @@ class NGTABLE_ADMIN_CASES  extends NGTABLE{
       if(isset($data['date_received']) && $data['date_received']){
           $rs->where('date_received3',$data['date_received']); //วันที่ภาครับสำนวน
       }
- 
+      if(isset($data['type_id']) && $data['type_id']){
+          $rs->where('type_id',$data['type_id']); 
+      }
       $rs->order('date_sent desc, id desc');
-      $rs->select('id,no_case_sent,auto_received_num,number_black,number_red,plaintiff,defendant,title,topic_ids,date_sent,date_received3,date_ap,file1,file2');
+      $rs->select('id,user_id,no_case_sent,date_case,auto_received_num,number_black,number_red,plaintiff,defendant,title,topic_ids,date_sent,date_received3,date_ap,file1,file2');
 
 
       /*
@@ -714,6 +747,23 @@ class NGTABLE_ADMIN_CASES  extends NGTABLE{
 class NGTABLE_COURT_CASES  extends NGTABLE{
   function __construct($table='cases', $pk='id') {
     parent::__construct($table, $pk);
+  }
+  function post_checkblknumber(){
+    global $norm;
+    global $api;
+    if( isset($_POST['value']) &&  $_POST['value']){
+        $r=$norm->cases()->where('number_black',$_POST['value']);
+        if(isset($_POST['id']) && $_POST['id']){
+          $r=$r->where('id!=?',$_POST['id']);
+        }
+        if(isset($_POST['user_id']) && $_POST['user_id']){
+          $r=$r->where('user_id',$_POST['user_id']);
+        }        
+        if(count($r)>0){
+          $api->sendJson(array('error'=>true, 'message'=>'เลขคดีดำซ้ำ กรุณาแก้ไขใหม่'),404);
+        }
+    }
+    return true;
   }
   
   function add(){
@@ -794,9 +844,12 @@ class NGTABLE_COURT_CASES  extends NGTABLE{
       }      
       if(isset($data['date_received']) && ($data['date_received'])){
         $rs->where('date_received3',$data['date_received']);
-      }        
+      }  
+      if(isset($data['type_id']) && $data['type_id']){
+          $rs->where('type_id',$data['type_id']); 
+      }      
       $rs->order('date_sent desc, id desc');
-      $rs->select('id,no_case_sent,auto_received_num,number_black,number_red,plaintiff,defendant,title,topic_ids,result,command_id,date_sent,file1,date_received3,date_ap,file2');
+      $rs->select('id,user_id,no_case_sent,date_case,auto_received_num,number_black,number_red,plaintiff,defendant,title,topic_ids,result,command_id,date_sent,file1,date_received3,date_ap,file2');
     }
   }
 }
@@ -846,6 +899,10 @@ function post_imprisons($action=''){
 }
 function post_accepts($action=''){
   $cls=new NGTABLE_ACCEPTS();
+  return $cls->process($action);
+}
+function post_at_results($action=''){
+  $cls=new NGTABLE_AT_RESULTS();
   return $cls->process($action);
 }
 function post_admin_cases($action=''){

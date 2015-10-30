@@ -42,11 +42,12 @@
                     </div>
                 </div>
                 <div class="form-group col-md-6">
-                    <label class="control-label col-md-4">ข้อหาสถิติ</label>
+                    <label class="control-label col-md-4">ข้อหาพิมพ์ปก</label>
                     <div class="col-md-8">
-                        <custom-readonly-topics ng-model="editingItem.topic_ids"></custom-readonly-topics>
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.title}}">
                     </div>
                 </div>
+
                 <div class="form-group col-md-6">
                     <label class="control-label col-md-4">วันที่รับฟ้อง</label>
                     <div class="col-md-8">
@@ -54,30 +55,35 @@
                     </div>
                 </div>
                 <div class="form-group col-md-6">
-                    <label class="control-label col-md-4">ข้อหาพิมพ์ปก</label>
+                    <label class="control-label col-md-4">ข้อหาสถิติ</label>
                     <div class="col-md-8">
-                        <input type="text" readonly class="form-control input-md" value="{{editingItem.title}}">
+                        <custom-readonly-topics ng-model="editingItem.topic_ids"></custom-readonly-topics>
                     </div>
                 </div>
                 <div class="form-group col-md-6">
-                    <label class="control-label col-md-4">วันที่ส่งศาลส่งสำนวน</label>
+                    <label class="control-label col-md-4">วันที่ส่งศาลส่งสำเนาคำพิพากษา</label>
                     <div class="col-md-8">
-                        <input type="text" readonly class="form-control input-md" value="{{editingItem.date_sent | thai_date}}">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.date_sent3 | thai_date}}">
                     </div>
                 </div>
                 <div class="form-group col-md-6">
-                    <label class="control-label col-md-4">เลขที่ส่งสำนวนของศาล</label>
+                    <label class="control-label col-md-4">เลขที่ส่งสำนำคำพิพากษา</label>
                     <div class="col-md-8">
-                        <input type="text" readonly class="form-control input-md" value="{{editingItem.number_sent}}">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.number_sent3}}">
                     </div>
                 </div>
                 <div class="form-group col-md-6">
                     <label class="control-label col-md-4">ชื่อผู้พิพากษาเจ้าของสำนวน</label>
                     <div class="col-md-8">
-                        <input type="text" readonly class="form-control input-md" value="{{editingItem.judge  | lookup_judge}}">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.judge_id  | lookup_judge}}">
                     </div>
                 </div>
-
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">วันที่นัดฟังคำพิพากษา</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.date_ap  | thai_date}}">
+                    </div>
+                </div>
                 <div class="row clearfix"></div>
                 <hr />
                 <div ng-if="editingItem.auto_received_num">
