@@ -68,7 +68,7 @@
                         </div>
 
                     <hr/>
-                    <table ng-table="tableParams" show-filter="false" class="table table-hover" >
+                    <table ng-table="tableParams" show-filter="false" class="table table-hover table-bordered" >
                         <tbody>
 
                             <tr ng-repeat="it in $data"
@@ -77,10 +77,7 @@
                                 ng-class="{'active': isSelected(it)}">
 
                                 <td width="30" class="text-right text-muted">{{startIdx + $index + 1}}.</td>
-                                <!--
-                                <td width="30" header="'custom.checked.html'">
-                                    <input type="checkbox" ng-model="checkboxes.items[it[pkField]]" />
-                                </td>-->
+      
                                 <td data-title="'เหตุผล'" sortable="'name'" >
                                     {{it.name}}
                                     <span ng-if="isSelected(it)" class="row-action2"><span class="glyphicon glyphicon-star-empty"></span></span>

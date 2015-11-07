@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 29, 2015 at 02:32 AM
+-- Generation Time: Nov 02, 2015 at 03:44 AM
 -- Server version: 5.6.26
 -- PHP Version: 5.6.12
 
@@ -30,7 +30,7 @@ DROP TABLE IF EXISTS `info_accepts`;
 CREATE TABLE IF NOT EXISTS `info_accepts` (
   `id` int(11) NOT NULL,
   `name` text CHARACTER SET utf8 NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `info_accepts`
@@ -46,8 +46,7 @@ INSERT INTO `info_accepts` (`id`, `name`) VALUES
 (7, 'จำเลยที่ 1 รับสารภาพ ส่วนจำเลยที่ 2 และที่ 3 ให้การปฏิเสธฐานจำหน่าย'),
 (8, 'จำเลยที่ 1 ปฏิเสธ  จำเลยที่ 2 รับสารภาพ'),
 (9, 'จำเลยที่ 1 ที่ 2 ให้การรับสารภาพ จำเลยที่ 3 และที่ 4  ให้การปฏิเสธ'),
-(10, 'จำเลยที่ 1 ถึง 3 ให้การรับสารภาพ  จำเลยที่ 4 ที่ 5 ให้การปฏิเสธ'),
-(0, '');
+(10, 'จำเลยที่ 1 ถึง 3 ให้การรับสารภาพ  จำเลยที่ 4 ที่ 5 ให้การปฏิเสธ');
 
 -- --------------------------------------------------------
 
@@ -493,6 +492,25 @@ INSERT INTO `info_at` (`id`, `name`, `checked`, `copyied`, `regulared`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `info_at_results`
+--
+
+DROP TABLE IF EXISTS `info_at_results`;
+CREATE TABLE IF NOT EXISTS `info_at_results` (
+  `id` int(11) NOT NULL,
+  `name` text CHARACTER SET utf8 NOT NULL
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `info_at_results`
+--
+
+INSERT INTO `info_at_results` (`id`, `name`) VALUES
+(1, 'aaaaawwwwwww');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `info_auto_received_nums`
 --
 
@@ -502,15 +520,14 @@ CREATE TABLE IF NOT EXISTS `info_auto_received_nums` (
   `type_id` int(11) NOT NULL,
   `year_val` int(11) NOT NULL,
   `number_val` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `info_auto_received_nums`
 --
 
 INSERT INTO `info_auto_received_nums` (`id`, `type_id`, `year_val`, `number_val`) VALUES
-(1, 4, 2015, 7),
-(2, 5, 2015, 2);
+(4, 3, 2015, 1);
 
 -- --------------------------------------------------------
 
@@ -577,19 +594,25 @@ CREATE TABLE IF NOT EXISTS `info_cases` (
   `date_at_received1` date DEFAULT NULL,
   `date_at_received2` date DEFAULT NULL,
   `auto_received_num` varchar(20) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `no_case_sent` int(11) NOT NULL DEFAULT '0'
-) ENGINE=MyISAM AUTO_INCREMENT=6273 DEFAULT CHARSET=latin1;
+  `no_case_sent` int(11) NOT NULL DEFAULT '0',
+  `at_correct` int(11) DEFAULT '1',
+  `at_result_id` int(11) DEFAULT '0',
+  `capital` decimal(10,2) DEFAULT '0.00'
+) ENGINE=MyISAM AUTO_INCREMENT=6280 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `info_cases`
 --
 
-INSERT INTO `info_cases` (`id`, `user_id`, `type_id`, `date_sent`, `number_sent`, `date_received`, `number_received`, `date_received2`, `number_received2`, `date_received3`, `number_received3`, `date_sent2`, `number_sent2`, `command_id`, `number_black`, `number_red`, `title`, `result`, `plaintiff`, `defendant`, `judge_id`, `judge2_id`, `judge3_id`, `date_ap`, `date_sent3`, `number_sent3`, `date_case`, `topic_id`, `imprison_id`, `file1`, `file2`, `date_finish`, `date_read`, `accept_id`, `date_sent4`, `number_sent4`, `date_received4`, `number_received4`, `date_sent5`, `number_sent5`, `date_modified`, `date_upload`, `note1`, `note2`, `note3`, `judge4_id`, `topic_ids`, `form1_note`, `form2_note`, `form3_note`, `form4_note`, `form5_note`, `judge_checkout1_id`, `judge_checkout2_id`, `date_at_received1`, `date_at_received2`, `auto_received_num`, `no_case_sent`) VALUES
-(6269, 3, 4, '2015-10-26', '', '2015-10-05', '511/2558', NULL, '', '2015-10-26', '333/2558', NULL, '', 2, 'อ.1/2558', '', 'วางระเบิด', 5, 'พนักงานอัยการ', 'นายทำผิด', 0, 287, 0, NULL, NULL, '', '2015-10-01', 0, 0, '', '', NULL, NULL, 0, '2015-10-08', '522/2558', '2015-10-01', 'addddd', NULL, '', NULL, NULL, '-', '', '', 294, '[151]', '-', 'test', NULL, NULL, NULL, 0, 0, NULL, NULL, 'ผภ.3/2558', 0),
-(6268, 3, 3, '2015-10-26', '111', '2015-10-26', '1', NULL, '', '2015-10-26', '2226', '2015-10-06', 'qqqqq', 2, 'สว.1/2558', '', 'gggggggggggggg', 5, '222', '3333', 258, 0, 349, '2015-10-02', NULL, '', '2015-10-01', 0, 1, '', '', NULL, NULL, 1, '2015-10-21', '2', NULL, '', NULL, '', NULL, NULL, 'ggggggggggggggggg2', 'xxxxxxx', '', 0, '[119,120]', 'ccccccccccccccc', '-', NULL, NULL, NULL, 0, 0, NULL, NULL, 'ผภ.1/2558', 0),
-(6270, 7, 4, '2015-10-26', '777', '2015-10-26', '123', NULL, '', '2015-10-27', '', '2015-10-26', '9012', 1, 'อ.5678/2558', '', 'กบฎ', 4, 'อัยการจังหวัดน่าน', 'นายจำเลย จริงจริง', 104, 0, 266, '2015-12-03', NULL, '', '2015-10-02', 0, 0, '', '', NULL, NULL, 0, '2015-10-26', '4567', NULL, '', NULL, '', NULL, NULL, 'ข', '-', '', 0, '[139]', NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, 'อ.7/2558', 0),
-(6271, 3, 5, '2015-10-26', '', NULL, '', NULL, '', NULL, '', NULL, '', 0, 'อด.111/111', '', '', 0, 'xxxxอด1', '11111', 0, 0, 0, NULL, NULL, '', NULL, 0, 0, '', '', NULL, NULL, 0, NULL, '', NULL, '', NULL, '', NULL, NULL, '', '', '', 0, '', NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, 'อด.2/2558', 0),
-(6272, 3, 1, '2015-10-27', '', NULL, '', NULL, '', NULL, '', NULL, '', 0, '', '', 'sdfsf', 0, 'xxx', '', 0, 0, 0, NULL, NULL, '', NULL, 0, 0, '', '', NULL, NULL, 0, NULL, '', NULL, '', NULL, '', NULL, NULL, 'xxxxxxxxxxxxxxxxxxx', '', '', 0, '[71,72]', NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, '', 1);
+INSERT INTO `info_cases` (`id`, `user_id`, `type_id`, `date_sent`, `number_sent`, `date_received`, `number_received`, `date_received2`, `number_received2`, `date_received3`, `number_received3`, `date_sent2`, `number_sent2`, `command_id`, `number_black`, `number_red`, `title`, `result`, `plaintiff`, `defendant`, `judge_id`, `judge2_id`, `judge3_id`, `date_ap`, `date_sent3`, `number_sent3`, `date_case`, `topic_id`, `imprison_id`, `file1`, `file2`, `date_finish`, `date_read`, `accept_id`, `date_sent4`, `number_sent4`, `date_received4`, `number_received4`, `date_sent5`, `number_sent5`, `date_modified`, `date_upload`, `note1`, `note2`, `note3`, `judge4_id`, `topic_ids`, `form1_note`, `form2_note`, `form3_note`, `form4_note`, `form5_note`, `judge_checkout1_id`, `judge_checkout2_id`, `date_at_received1`, `date_at_received2`, `auto_received_num`, `no_case_sent`, `at_correct`, `at_result_id`, `capital`) VALUES
+(6269, 3, 4, '2015-10-26', '', '2015-10-05', '511/2558', NULL, '', '2015-10-26', '333/2558', NULL, '', 2, 'อ.2/2558', '', 'วางระเบิด', 5, 'พนักงานอัยการ', 'นายทำผิด', 0, 287, 0, NULL, NULL, '', '2015-10-01', 0, 0, '', '', NULL, NULL, 0, '2015-10-08', '522/2558', '2015-10-01', 'addddd', NULL, '', NULL, NULL, '-', '', '', 294, '[151]', '-', 'test', NULL, NULL, NULL, 0, 0, NULL, NULL, '', 0, 1, 0, '0.00'),
+(6268, 3, 3, '2015-10-26', '111', '2015-10-26', '1', NULL, '', '2015-10-26', '2226', '2015-10-06', 'qqqqq', 2, 'สว.1/2558', '', 'gggggggggggggg', 5, '222', '3333', 258, 0, 349, '2015-10-02', NULL, '', '2015-10-01', 0, 1, '', '', NULL, NULL, 1, '2015-10-21', '2', NULL, '', NULL, '', NULL, NULL, 'ggggggggggggggggg2', 'xxxxxxx', '', 0, '[119,120]', 'ccccccccccccccc', '-', NULL, NULL, NULL, 0, 0, NULL, NULL, '', 0, 1, 0, '0.00'),
+(6270, 7, 4, '2015-10-26', '777', '2015-10-26', '123', NULL, '', '2015-10-27', '', '2015-10-26', '9012', 1, 'อ.5678/2558', '', 'กบฎ', 4, 'อัยการจังหวัดน่าน', 'นายจำเลย จริงจริง', 104, 0, 266, '2015-12-03', NULL, '', '2015-10-02', 0, 0, '', '', NULL, NULL, 0, '2015-10-26', '4567', NULL, '', NULL, '', NULL, NULL, 'ข', '-', '', 0, '[139]', NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, '', 0, 1, 0, '0.00'),
+(6271, 3, 5, '2015-10-26', '', NULL, '', NULL, '', NULL, '', NULL, '', 0, 'อด.111/111', '', '', 0, 'xxxxอด1', '11111', 0, 0, 0, NULL, NULL, '', NULL, 0, 0, '', '', NULL, NULL, 0, NULL, '', NULL, '', NULL, '', NULL, NULL, '', '', '', 0, '', NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, '', 0, 1, 0, '0.00'),
+(6273, 14, 1, '2015-10-29', '', NULL, '', NULL, '', NULL, '', NULL, '', 0, '', '', '', 0, '', '', 0, 0, 0, NULL, NULL, '', '2015-10-14', 0, 0, '', '', NULL, NULL, 0, NULL, '', NULL, '', NULL, '', NULL, NULL, '', '', '', 0, '', NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, '', 1, 1, 0, '0.00'),
+(6274, 3, 4, '2015-10-29', '22', NULL, '', NULL, '', '2015-10-29', '', '2015-10-08', '22', 0, 'อ.1/2558', '', '', 0, '', '', 336, 0, 333, '2015-10-01', NULL, '', '2015-10-02', 0, 1, '', '', NULL, NULL, 2, NULL, '', NULL, '', NULL, '', NULL, NULL, '', 'ข', '', 0, '', NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, '', 0, 1, 0, '0.00'),
+(6278, 7, 3, '2015-10-29', '', NULL, '', NULL, '', '2015-10-30', '', NULL, '', 0, 'สว.2/2558', '', '', 0, '', '', 0, 0, 0, NULL, NULL, '', NULL, 0, 0, '', '', NULL, NULL, 0, NULL, '', NULL, '', NULL, '', NULL, NULL, '', '', '', 0, '', NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, 'สว.1/2558', 0, 1, 0, '0.00'),
+(6279, 3, 1, '2015-10-30', 'wwwwwww', NULL, '', NULL, '', NULL, '', NULL, '', 2, 'ผบ.111/333', '', '', 0, '2', '', 0, 0, 0, NULL, NULL, '', NULL, 0, 0, '', '', NULL, NULL, 0, NULL, '', NULL, '', NULL, '', NULL, NULL, '', '', '', 0, '', NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, '', 1, 0, 1, '75000.33');
 
 -- --------------------------------------------------------
 
@@ -700,7 +723,7 @@ CREATE TABLE IF NOT EXISTS `info_topics` (
   `name` text CHARACTER SET utf8 NOT NULL,
   `code` text CHARACTER SET utf8 NOT NULL,
   `type_id` int(11) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=376 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=377 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `info_topics`
@@ -1068,7 +1091,8 @@ INSERT INTO `info_topics` (`id`, `name`, `code`, `type_id`) VALUES
 (372, 'สิทธิครอบครอง', '79', 2),
 (373, 'พ.ร.บ.จัดหางาน', '113', 4),
 (374, 'อื่นๆ', '', 4),
-(375, 'ผิดสัญญา', '049', 1);
+(375, 'ผิดสัญญา', '049', 1),
+(376, 'ซื้อขาย (อาคารชุด)', '', 2);
 
 -- --------------------------------------------------------
 
@@ -1150,7 +1174,7 @@ CREATE TABLE IF NOT EXISTS `info_users` (
   `parent_id` int(11) NOT NULL DEFAULT '0',
   `active` int(11) DEFAULT '1' COMMENT 'Is this account active',
   `check_out` int(11) NOT NULL DEFAULT '0'
-) ENGINE=MyISAM AUTO_INCREMENT=393 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=396 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `info_users`
@@ -1465,7 +1489,10 @@ INSERT INTO `info_users` (`id`, `account`, `password`, `usergroup_id`, `name`, `
 (389, '', '', 0, 'yy', 2, 'yy', 3, 1, 0),
 (390, '', '', 0, 'xx', 2, 'xx', 3, 1, 0),
 (391, '', '', 0, 'krisdada', 2, 'nopost', 8, 1, 0),
-(392, '', '', 0, 'Krisda', 2, 'doi', 3, 1, 0);
+(392, '', '', 0, 'Krisda', 2, 'doi', 3, 1, 0),
+(393, '', '', 0, 'qqqqqqq', 2, '', 1, 1, 0),
+(394, '', '', 0, 'qqqq2', 2, '', 3, 1, 0),
+(395, '', '', 0, 'qqqq3', 2, '', 3, 1, 0);
 
 --
 -- Indexes for dumped tables
@@ -1493,6 +1520,12 @@ ALTER TABLE `info_appointments2`
 -- Indexes for table `info_at`
 --
 ALTER TABLE `info_at`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `info_at_results`
+--
+ALTER TABLE `info_at_results`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1573,7 +1606,7 @@ ALTER TABLE `info_users`
 -- AUTO_INCREMENT for table `info_accepts`
 --
 ALTER TABLE `info_accepts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT for table `info_appointments`
 --
@@ -1590,15 +1623,20 @@ ALTER TABLE `info_appointments2`
 ALTER TABLE `info_at`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
 --
+-- AUTO_INCREMENT for table `info_at_results`
+--
+ALTER TABLE `info_at_results`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
 -- AUTO_INCREMENT for table `info_auto_received_nums`
 --
 ALTER TABLE `info_auto_received_nums`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `info_cases`
 --
 ALTER TABLE `info_cases`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6273;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6280;
 --
 -- AUTO_INCREMENT for table `info_groups`
 --
@@ -1623,7 +1661,7 @@ ALTER TABLE `info_settings`
 -- AUTO_INCREMENT for table `info_topics`
 --
 ALTER TABLE `info_topics`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=376;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=377;
 --
 -- AUTO_INCREMENT for table `info_types`
 --
@@ -1643,7 +1681,7 @@ ALTER TABLE `info_usergroups`
 -- AUTO_INCREMENT for table `info_users`
 --
 ALTER TABLE `info_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Row id',AUTO_INCREMENT=393;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Row id',AUTO_INCREMENT=396;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

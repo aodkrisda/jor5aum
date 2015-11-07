@@ -696,7 +696,7 @@
             <table class="table table-striped table-hover">
                 <tr ng-repeat="it in $items | filter:search">
                     <td width="30"  ng-class="{'bg-info':it._checked}"><input type="checkbox" ng-model="it._checked" /></td>
-                    <td ng-class="{'text-success':it._checked, 'bg-info':it._checked}">{{it.name}} <span class="pull-right label label-info">{{it.code}}</span></td>
+                    <td ng-class="{'text-success':it._checked, 'bg-info':it._checked}"><strong>{{it.name}}</strong> <span class="pull-right label label-info">{{it.code}}</span></td>
                 </tr>
             </table>
         </div>
@@ -704,6 +704,27 @@
             <button type="button" title="ยกเลิกการเลือกทั้งหมด" class="btn btn-danger pull-left" ng-click="clearChecked()"><span class="glyphicon glyphicon-repeat"></span> Clear</button>
             <button type="button" class="btn btn-success btn-min" ng-click="setTopics();$hide()"><span class="glyphicon glyphicon-ok-sign"></span> ตกลง</button>
             <button type="button" class="btn btn-warning btn-min" ng-click="$hide()"><span class="glyphicon glyphicon-remove-sign"></span> ยกเลิก</button>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="custom.columns.menu.html">
+    <div class="popover" style="min-width:400px;max-width:95%;height:400px">
+        <div class="arrow"></div>
+        <div class="popover-title">
+            <button type="button" title="Close" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+            <h4>
+                <i class="fa fa-windows"></i>
+                แสดง / ซ่อน คอลัมน์
+            </h4>
+        </div>
+        <div class="popover-content" style="overflow-y:auto;max-height:320px;">
+            <table class="table table-striped table-hover">
+                <tr ng-repeat="it in $columns" ng-if="it.title!=''">
+                    <td width="30"><input type="checkbox" ng-model="it.show"  ng-disabled="$last"/></td>
+                    <td ng-class="{'bg-warning':!it.show,'text-muted':$last}"><strong>{{it.title}}</strong></td>
+                </tr>
+            </table>
         </div>
     </div>
 </script>

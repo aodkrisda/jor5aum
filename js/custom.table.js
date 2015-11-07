@@ -1,7 +1,56 @@
 ﻿
 angular.module('custom.table', [])
-
-.controller('CustomTableCtrl', function ($scope, $timeout, ngTableParams, Auth, ngTableDefaults, $modal, $popover, $alert, Lookups, cfpLoadingBar, _,API_URL) {
+.directive('ngTableInit', ['$timeout','$compile', function ($timeout, $compile) {
+    return {
+        priority: 3000,
+        compile: function compile(tElement, tAttrs, transclude) {
+            var els = angular.element('tbody>tr>td', tElement);
+            var cols = [];
+            angular.forEach(els, function (v, i) {
+                var el = angular.element(v);
+                el.attr('ng-if', 'params.isVisible(' + i + ')');
+                cols[i] = (el.attr('hide') === undefined);
+            });
+            
+            return function (scope, element, attrs) {
+                element.addClass('hidden');
+                element.data('cols', cols);
+                $timeout(function () {
+                    element.removeClass('hidden');
+                }, 2);
+            }
+        }
+    }
+}])
+.directive('ngTableResizable', ['$timeout', '$compile', '$window', function ($timeout, $compile, $window) {
+        return function (scope, element, attrs) {
+            $timeout(function(){
+                element.resizableColumns();
+            },100)
+        }
+}])
+.directive('ngTableInitColumns', ['$timeout', '$compile','$window', function ($timeout, $compile,$window) {
+    return function (scope, element, attrs) {
+        if (scope.params) {
+            $timeout(function () {
+                var tm= element.data('cols');
+                if (tm) {
+                    scope.params.setColumns(scope.$columns, tm);
+                    element.data('cols', null);
+                }
+            }, 1);
+         }
+       
+     }
+}])
+.directive('ngTableMenu', ['$timeout', '$compile', function ($timeout, $compile) {
+    return {
+        template: '<div ng-click="table.showMenu($event)" ng-class="{\'hidden\':!(table && table.$columns)}" class="btn btn-info btn-circle hidden" style="position:relative;top:16px;opacity:0.8"><span class="glyphicon glyphicon-list"></span></div>',
+        replace:true,
+        scope: { table: '=ngTableMenu' }
+    }
+}])
+.controller('CustomTableCtrl', function ($scope, $timeout, ngTableParams, Auth, ngTableDefaults, $modal, $popover, $alert, Lookups, cfpLoadingBar, _,API_URL,$state, $rootScope) {
     $scope.Lookups = Lookups;
     $scope._first_ = true;
     $scope.pkField = 'id';
@@ -117,6 +166,12 @@ angular.module('custom.table', [])
         createForm(formid);
         formModal.$scope.title = 'เพิ่มข้อมูลใหม่';
         formModal.$promise.then(formModal.show);
+    }
+    $scope.setColumns = function (cols) {
+        if (cols) {
+            cols[1].show = false;
+        }
+        console.dir(cols[1].title())
     }
 
     $scope.startIdx = 0;
@@ -428,36 +483,6 @@ angular.module('custom.table', [])
                 //return;
             }
 
-            /*
-                        var b = true;
-                        if(!($scope.searchOption && ($scope.tableParams.filter() === $scope.searchOption))){
-                            if ($scope.requiredFilters) {
-                                var f = params.filter();
-                                _.each($scope.requiredFilters, function (v, k) {
-                                    if (v && (f[k] == undefined)) {
-                                        b = false;
-                                    }
-                                });
-                                if (!b) {
-                                    params.total(0);
-                                    $defer.resolve([]);
-            
-                                }
-                            }
-                        }
-            
-                        if (params.sorting) {
-                            var key = Object.keys(params.sorting)[0];
-                            key = key + ':' + params.sorting[key];
-                            if (key != $scope._sortfield_) {
-                                $scope._sortfield_ = key;
-                                if (params['page'] != 1) {
-                                    $scope.tableParams.page(1);
-                                    return;
-                                }
-                            }
-                        }
-            */
 
             var p={
                 filter: params.filter(),
@@ -550,7 +575,58 @@ angular.module('custom.table', [])
         }
         $scope.checkboxes.checked = (checked > 0);
     }, true);
-
+    var popup = null;
+    var cols = null;
+    $scope.tableParams.setColumns = function (xcols, xdef) {
+        $scope.tableParams.$columns = xcols;
+        if (!cols) {
+            var _l = $rootScope.fetchData($scope.tableParams.name());
+            if (_l) xdef = _l;
+            cols = _.map($scope.tableParams.$columns, function ($it,idx) {
+                var old = $it.show;
+                $it.show = function (it) {
+                    if (it && cols[it.$index]) {
+                        return cols[it.$index].show;
+                    }
+                    return old($it);
+                }
+                var b = true;
+                if (xdef && xdef[idx] != undefined) {
+                    b = xdef[idx];
+                }
+                return { title: $it.title(), show: b};
+            });
+        }
+    }
+    $scope.tableParams.isVisible = function (idx) {
+        if (cols && cols[idx]) {
+            return cols[idx].show;
+        }
+        return true;
+    }
+    var _md5str = '';
+    $scope.tableParams.name = function () {
+        if (!_md5str) {
+            $str = ($state.current.name || '');
+            $str += '_' + ($scope.apiName || '');
+            _md5str = 'tb'+ md5($str);
+        }
+        return _md5str;
+    }
+    var _cols = null;
+    $scope.tableParams.showMenu = function (event) {
+        $scope.$columns=cols;
+        popup = $popover(angular.element(event.target), { scope: $scope, container: 'body', autoClose: true, trigger: 'manual', placement: 'right', template: "custom.columns.menu.html", show: false });
+        popup.$promise.then(popup.show);
+        var hlr = $scope.$on('tooltip.hide', function () {
+            hlr(); hlr = null;
+            //save cols
+            _cols = _.map(cols, function (it) {
+                return it.show;
+            });
+            $rootScope.storeData($scope.tableParams.name(), _cols);
+        }); 
+    }
 
     $timeout(function () {
         $scope.setFilter(true);

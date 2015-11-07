@@ -127,6 +127,31 @@ angular.module('App', ['lazyLoadJs','wt.responsive', 'ui.router', 'angular-loadi
             $state.go('login');
         })
     }
+
+    $rootScope.caseReceived = function (it) {
+        var b = 0;
+        var v = (it.command_id > 0);
+        var v1 = $filter('lookup_at')(it.command_id, 'checked');
+        var v2 = $filter('lookup_at')(it.command_id, 'copyied');
+        if (v && (v1 != '1')) {
+            b = 2;
+        } else if (v && (v2 != '1')) {
+            b = 2;
+        } else if (it && it.auto_received_num) {
+            if (it.number_received && it.date_received) {
+                b = 1;
+            }
+        }
+        return b;
+    }
+    $rootScope.caseCopyReceived = function (it) {
+        var b = 0;
+
+        if (it && it.date_received4) {
+            b = 1;
+        }
+        return b;
+    }
     $rootScope.urlEq = function (url) {
         return ($state.$current.url.source == url);
     }
@@ -1934,4 +1959,28 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
     if (n) $scope.searchYear = n;
     n = $rootScope.fetchData($scope.prefix + 'court_cases_date') || $rootScope.today();
     if (n) $scope.searchDate = n;
+
+
+    $scope.isValid = function (it) {
+        var b = false;
+        if (it) {
+            b = (it.number_black && (it.type_id > 0) && it.date_sent && it.number_sent && it.date_case && it.plaintiff && it.defendant && it.topic_ids);
+        }
+        return b;
+    }
+    $scope.isValid1 = function (it) {
+        var b = false;
+        if (it) {
+            b = ((it.judge_id > 0) && (it.judge3_id > 0) && (it.imprison_id > 0) && (it.accept_id > 0) && it.date_ap && it.date_sent2 && it.number_sent2);
+        }
+        return b;
+    }
+    $scope.isValid2 = function (it) {
+        var b = false;
+        if (it) {
+            b = (it.number_red && (it.judge_id > 0) && it.date_read && it.date_sent3 && it.number_sent3);
+        }
+        return b;
+    }
+
 }])

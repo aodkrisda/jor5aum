@@ -58,19 +58,16 @@
                         </div>
                         <hr />
                     </div>
-                    <table ng-table="tableParams" show-filter="false" class="table table-hover table-bordered">
+                    <div ng-table-menu="tableParams"></div>
+                    <table ng-table-resizable ng-table="tableParams" ng-table-init ng-table-init-columns wt-responsive-table show-filter="false" class="table table-hover table-bordered" >
                         <tbody>
-
                             <tr ng-repeat="it in $data"
                                 ng-click="selectRow(it);"
                                 ng-class="{'active': isSelected(it),'text-red':it.no_case_sent=='1'}">
                                 <td width="30" class="text-right text-muted"><span title="#{{it.id}}">{{startIdx + $index + 1}}.</span></td>
-                                <!--
-                                <td width="30" header="'custom.checked.html'">
-                                    <input type="checkbox" ng-model="checkboxes.items[it[pkField]]" />
-
+                                <td data-title="'เลขรับสำนวนของภาค'" sortable="'auto_received_num'" hide>
+                                    {{it.auto_received_num}}
                                 </td>
-                                    -->
                                 <td data-title="'เลขคดีดำ'" sortable="'number_black'">{{it.number_black}}</td>
                                 <td data-title="'โจทก์'" sortable="'plaintiff'">{{it.plaintiff}}</td>
                                 <td data-title="'จำเลย'" sortable="'defendant'">{{it.defendant}}</td>
@@ -81,12 +78,15 @@
                                 <td data-title="'วันที่รับรายงานคดี'" sortable="'date_sent'">
                                     {{it.date_case | thai_date:'short'}}
                                 </td>
-                                <td data-title="'ส่งสำนวน'" class="text-center">
-                                    <span ng-if="!it.file1" class="label label-warning">ยังไม่ได้ส่ง</span>
-                                    <a ng-if="it.file1" href="{{open_pdf(it.file1)}}" target="_bank"><span title="เปิดไฟล์สำนวน {{it.file1}}" class="label label-success">ส่งแล้ว</span></a>
+                                <td data-title="'ส่งสำนวน'" class="text-center" ng-switch="caseReceived(it)">
+                                       <span ng-switch-when="1" class="label label-success">ส่งแล้ว</span>
+                                        <span ng-switch-when="2" class="label label-danger">ไม่ต้องส่ง</span>
+                                        <span ng-switch-default class="label label-warning">ยังไม่ได้ส่ง</span>
                                  </td>
-                                <td data-title="'ส่งไฟล์คำพิพากษา'" class="text-center">
-                                    <span ng-if="!it.file2" class="label label-warning">ยังไม่ได้ส่ง</span>
+                                <td data-title="'ส่งไฟล์คำพิพากษา'" class="text-center" ng-switch="caseCopyReceived(it)">
+                                        <span ng-switch-when="1" class="label label-success">ส่งแล้ว</span>
+                                        <span ng-switch-when="2" class="label label-danger">ไม่ต้องส่ง</span>
+                                        <span ng-switch-default class="label label-warning">ยังไม่ได้ส่ง</span>
                                     <a ng-if="it.file2" href="{{open_pdf(it.file2)}}" target="_bank"><span title="เปิดไฟล์คำพิพากษา {{it.file2}}" class="label label-success">ส่งแล้ว</span></a>
                                     <span ng-if="isSelected(it)" class="row-action">
                                         <button class="btn btn-success btn-circle btn-xs" data-placement="left" data-trigger="click" bs-popover data-template="custom.confirm.admin.actions.html"
@@ -97,7 +97,9 @@
                                 </td>
 
                             </tr>
+
                         </tbody>
+
                     </table>
                 </div>
 

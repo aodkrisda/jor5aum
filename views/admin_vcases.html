@@ -39,7 +39,8 @@
                         </div>
                         <hr />
                     </div>
-                    <table ng-table="tableParams" ng-init="tableParams.not_found='ไม่ได้ส่งรายงานคดี'" show-filter="false" class="table table-hover table-bordered">
+                    <div ng-table-menu="tableParams"></div>
+                    <table ng-table-resizable ng-table="tableParams" ng-table-init ng-table-init-columns wt-responsive-table ng-init="tableParams.not_found='ไม่ได้ส่งรายงานคดี'" show-filter="false" class="table table-hover table-bordered">
                         <tbody>
 
                             <tr ng-repeat="it in $data"
@@ -76,7 +77,7 @@
                                 <td data-title="'วันที่ส่งสำนวน'" sortable="'date_sent'">
                                     {{it.date_sent | thai_date:'short'}}
                                 </td>
-                                <td data-title="'วันที่ภาครับสำนวนคำพิพากษา'" sortable="'date_received3'">
+                                <td data-title="'วันที่ภาครับสำนวน'" sortable="'date_received3'">
                                     {{it.date_received3 | thai_date:'short'}}
                                 </td>
                                 <td data-title="'นัดฟังคำพิพากษา'" sortable="'date_ap'">

@@ -10,7 +10,8 @@
 		<link rel="stylesheet" type="text/css" href="yamm/yamm.css">
 		<link rel="stylesheet" type="text/css" href="awesome/css/font-awesome.min.css">
 		<link rel="stylesheet" type="text/css" href="js/ng-table/ng-table.min.css">
-		 <link rel="stylesheet" href="js/res-table/angular-responsive-tables.css">
+		<link rel="stylesheet" href="js/res-table/angular-responsive-tables.css">
+		<link rel="stylesheet" href="js/res-table/jquery.resizableColumns.css">
 		<link rel="stylesheet" type="text/css" href="js/angular-strap/angular-motion.css">
 		<link rel="stylesheet" type="text/css" href="js/loading-bar/loading-bar.min.css">
 		<link rel="stylesheet" type="text/css" href="js/date/css/bootstrap-datepicker3.css">
@@ -30,13 +31,15 @@
 		<script src="js/lib/angular-ui-router.min.js"></script>
 		<script src="js/loading-bar/loading-bar.min.js"></script>
 		<script src="js/ng-table/ng-table.js"></script>
-		<script src="js/res-table/angular-responsive-tables.js"></script>  
+		<script src="js/res-table/angular-responsive-tables.js"></script> 
+		<script src="js/res-table/jquery.resizableColumns.js"></script>  
 		<script src="js/angular-strap/angular-strap.min.js"></script>
 		<script src="js/angular-strap/angular-strap.tpl.min.js"></script>
 		<script src="js/custom.table.js"></script>
 		<script src="js/lib/ng-flow-standalone.min.js"></script>
 		<script src="js/lazyload.js"></script>
 		<script src="js/app.js"></script>
+		<script src="js/md5.min.js"></script>
 	</head>
 	<body id="body">
 		<div ng-include="'views/main.template.html'"></div>

@@ -82,13 +82,13 @@
                     </div>
                     <hr />
                     <div class="form-group col-md-6">
-                        <label class="control-label col-md-4">เลขที่คดีแดง</label>
+                        <label class="control-label col-md-4 text-required">เลขที่คดีแดง</label>
                         <div class="col-md-8">
                             <input type="text" class="form-control input-md" ng-model="editingItem.number_red">
                         </div>
                     </div>
                     <div class="form-group col-md-6">
-                        <label class="control-label col-md-4">ผู้พิพากษาเจ้าของสำนวน</label>
+                        <label class="control-label col-md-4 text-required">ผู้พิพากษาเจ้าของสำนวน</label>
                         <div class="col-md-8">
                             <div class="input-group">
                                 <select class="form-control input-md" name="role" ng-model="editingItem.judge_id" select-default ng-options="it.id as it.name for it  in Lookups.getOwnJudge()">
@@ -100,19 +100,19 @@
                     </div>
 
                 <div class="form-group col-md-6">
-                    <label class="control-label col-md-4">วันที่อ่านคำพิพากษา</label>
+                    <label class="control-label col-md-4 text-required">วันที่อ่านคำพิพากษา</label>
                     <div class="col-md-8">
                         <span mode="0" ng-model="editingItem.date_read" placeholder="ยังไม่มีข้อมูล" custom-date-field></span> 
                     </div>
                 </div><div class="form-group col-md-6">
-                    <label class="control-label col-md-4">วันที่ส่งสำเนาคำพิพากษา</label>
+                    <label class="control-label col-md-4 text-required">วันที่ส่งสำเนาคำพิพากษา</label>
                     <div class="col-md-8">
                         <span mode="0" ng-model="editingItem.date_sent3" placeholder="ยังไม่มีข้อมูล" custom-date-field></span> 
                     </div>
                 </div>
 
                 <div class="form-group col-md-6">
-                    <label class="control-label col-md-4">เลขที่หนังสือส่งสำเนาคำพิพากษา</label>
+                    <label class="control-label col-md-4 text-required">เลขที่หนังสือส่งสำเนาคำพิพากษา</label>
                     <div class="col-md-8">
                         <input type="text"  class="form-control input-md" ng-model="editingItem.number_sent3">
                     </div>
@@ -126,14 +126,26 @@
                 </div>
 
 
-</fieldset>
+            </fieldset>
+            <div class="col-md-10 col-md-offset-2" ng-hide="isValid2(editingItem)">
+                <div class="help-block">
+
+                    <p class="text-info">
+                        <span class="glyphicon glyphicon-question-sign pull-left"></span>
+                        <ul>
+                            <li class="text-warning">* ข้อมูลที่บังคับให้ต้องป้อนก่อน จึงจะสามารถบันทึกข้อมูลได้</li>
+
+                        </ul>
+                    </p>
+                </div>
+            </div>
         </form>
     </div>
     <div class="panel-footer">
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
                 <div class="col-md-6">
-                    <button type="button" class="btn btn-success btn-block" ng-click="saveForm(editingItem,1)"><span class="fa fa-save"></span> บันทึกข้อมูล</button>
+                    <button type="button" ng-disabled="!isValid2(editingItem)"  class="btn btn-success btn-block" ng-click="saveForm(editingItem,1)"><span class="fa fa-save"></span> บันทึกข้อมูล</button>
                 </div>
                 <div class="col-md-6">
                     <button type="button" class="btn btn-warning btn-block" ng-click="goBack()"><span class="fa fa-close"></span> ยกเลิก</button>

@@ -731,7 +731,7 @@ class NGTABLE_ADMIN_CASES  extends NGTABLE{
           $rs->where('type_id',$data['type_id']); 
       }
       $rs->order('date_sent desc, id desc');
-      $rs->select('id,user_id,no_case_sent,date_case,auto_received_num,number_black,number_red,plaintiff,defendant,title,topic_ids,date_sent,date_received3,date_ap,file1,file2');
+      $rs->select('id,user_id,no_case_sent,date_case,auto_received_num,number_black,number_red,plaintiff,defendant,title,topic_ids,date_sent,date_received3,date_received4,date_ap,file1,file2,date_received,number_received');
 
 
       /*
@@ -849,7 +849,7 @@ class NGTABLE_COURT_CASES  extends NGTABLE{
           $rs->where('type_id',$data['type_id']); 
       }      
       $rs->order('date_sent desc, id desc');
-      $rs->select('id,user_id,no_case_sent,date_case,auto_received_num,number_black,number_red,plaintiff,defendant,title,topic_ids,result,command_id,date_sent,file1,date_received3,date_ap,file2');
+      $rs->select('id,user_id,no_case_sent,date_case,auto_received_num,number_black,number_red,plaintiff,defendant,title,topic_ids,result,command_id,date_sent,file1,date_received3,date_received4,date_ap,file2,date_received,number_received');
     }
   }
 }

@@ -16,12 +16,12 @@
                     <div class="modal-body">
 
                         <form class="form-horizontal" name="form">
-                            <fieldset>
+                            
                                 <div class="row">
                                     <div class="form-group col-md-6">
 
                                         <!-- Text input-->
-                                        <label class="col-md-4 control-label">วันที่ส่ง</label>
+                                        <label class="col-md-4 control-label text-required">วันที่ส่ง</label>
                                         <div class="col-md-7">
                                             <span mode="0" ng-model="editingItem.date_sent" placeholder="ยังไม่มีข้อมูล" custom-date-field></span>
 
@@ -31,7 +31,7 @@
 
                                     <div class="form-group col-md-6">
                                         <!-- Text input-->
-                                        <label class=" col-md-4 control-label">เลขที่หนังสือส่ง</label>
+                                        <label class=" col-md-4 control-label text-required">เลขที่หนังสือส่ง</label>
                                         <div class="col-md-7">
                                             <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control input-md" ng-model="editingItem.number_sent">
 
@@ -43,7 +43,7 @@
                                     <div class="form-group col-md-6">
 
                                         <!-- Text input-->
-                                        <label class="col-md-4 control-label">วันที่รับฟ้อง</label>
+                                        <label class="col-md-4 control-label text-required">วันที่รับฟ้อง</label>
                                         <div class="col-md-7">
                                             <span mode="0" ng-model="editingItem.date_case" placeholder="ยังไม่มีข้อมูล" custom-date-field></span>
 
@@ -62,7 +62,7 @@
                                 <div class="row">
                                     <div class="form-group col-md-6">
                                         <!-- Text input-->
-                                        <label class="col-md-4 control-label">ประเภทคดี</label>
+                                        <label class="col-md-4 control-label text-required">ประเภทคดี</label>
                                         <div class="col-md-7">
                                             <select ng-change="changeTypeId(editingItem)" title="ไม่สามารถแก้ไขได้ถ้าบันทึกเลขคดีแล้ว (ต้องลบคดีนี้แล้วเพิ่มใหม่เท่านั้น)" ng-disabled="editingItem.id && editingItem.number_black" class="form-control input-md" name="role" ng-model="editingItem.type_id" select-default ng-options="it.id as it.id | lookup_type:'name':'code' group by it.group_id | lookup_group for it  in Lookups.getType()">
                                                 <option value=""></option>
@@ -73,7 +73,7 @@
                                     <div class="form-group col-md-6">
 
                                         <!-- Text input-->
-                                        <label class="col-md-4 control-label">เลขคดีดำ</label>
+                                        <label class="col-md-4 control-label text-required">เลขคดีดำ</label>
                                         <div class="col-md-7">
                                             <div class="input-group">
                                                 <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control input-md" style="background-color:#ffffff" readonly value="{{editingItem.number_black}}">
@@ -82,11 +82,12 @@
                                         </div>
                                     </div>
                                 </div>
+                            <fieldset ng-disabled="!((editingItem.type_id>0) && editingItem.number_black)">
                                 <div class="row">
                                     <div class="form-group col-md-6">
 
                                         <!-- Text input-->
-                                        <label class="col-md-4 control-label">โจทก์</label>
+                                        <label class="col-md-4 control-label text-required">โจทก์</label>
                                         <div class="col-md-7">
                                             <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control input-md" ng-model="editingItem.plaintiff">
 
@@ -96,7 +97,7 @@
                                     <div class="form-group col-md-6">
 
                                         <!-- Text input-->
-                                        <label class="col-md-4 control-label">จำเลย</label>
+                                        <label class="col-md-4 control-label text-required">จำเลย</label>
                                         <div class="col-md-7">
                                             <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control input-md" ng-model="editingItem.defendant">
 
@@ -116,7 +117,7 @@
                                 <div class="form-group">
 
                                     <!-- Text input-->
-                                    <label class="col-md-2 control-label">ข้อหาสถิติ</label>
+                                    <label class="col-md-2 control-label text-required">ข้อหาสถิติ</label>
                                     <div class="col-md-9">
                                         <div class="input-group">
                                             <div class="form-control" style="height:auto;min-height:50px;border-right:none">
@@ -151,13 +152,15 @@
 
                                 <div class="col-md-10 col-md-offset-2">
                                     <div class="help-block">
+
                                         <p class="text-info">
-                                            <span class="glyphicon glyphicon-question-sign pull-left"></span> 
+                                            <span class="glyphicon glyphicon-question-sign pull-left"></span>
                                             <ul>
+                                                <li ng-hide="isValid(editingItem)" class="text-warning">* ข้อมูลที่บังคับให้ต้องป้อนก่อน จึงจะสามารถบันทึกข้อมูลได้</li>
                                                 <li>ต้องเลือกประเภทคดีก่อนจึงจะสามารถ ป้อนเลขคดี และ ข้อหาหลักได้</li>
                                                 <li>ถ้ามีเลขคดีแล้วประเภทคดีไม่สามารถเปลี่ยนได้ (ต้องลบเลขคดีก่อน)</li>
                                             </ul>
-                                       </p>
+                                        </p>
                                     </div>
                                 </div>
                             </fieldset> 
@@ -166,7 +169,7 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary btn-min" ng-click="saveForm()"><span class="fa fa-save"></span> บันทึกข้อมูล</button>
+                        <button type="button" ng-disabled="!isValid(editingItem)" class="btn btn-primary btn-min" ng-click="saveForm()"><span class="fa fa-save"></span> บันทึกข้อมูล</button>
                         <button type="button" class="btn btn-warning btn-min" ng-click="cancelForm()"><span class="fa fa-close"></span> ยกเลิก</button>
                     </div>
                 </div>
@@ -220,7 +223,7 @@
                             <div class="col-md-3">
                                 <div class="input-group">
                                     <div class="input-group-addon  adon-label">เดือน</div>
-                                    <select class="form-control" ng-model="searchMonth" ng-change="setFilter()" select-value-type="string" ng-options="it.id as it.name for it in Lookups.getMonth()"></select>
+                                    <select class="form-control" ng-model="searchMonth" ng-change="setMonthId(searchMonth);setFilter()" select-value-type="string" ng-options="it.id as it.name for it in Lookups.getMonth()"></select>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -233,7 +236,8 @@
                            
                          </div>
                         <hr />
-                        <table ng-table="tableParams" show-filter="false" class="table table-hover table-bordered" wt-responsive-table>
+                        <div ng-table-menu="tableParams"></div>
+                        <table ng-table-resizable ng-table="tableParams" show-filter="false" class="table table-hover table-bordered" ng-table-init ng-table-init-columns wt-responsive-table>
                             <tbody>
 
                                 <tr ng-repeat="it in $data"
@@ -241,7 +245,9 @@
                                     ng-dblclick="ifcall(($it.no_case_sent!='1'),editItem)"
                                     ng-class="{'active': isSelected(it),'text-red':it.no_case_sent=='1'}">
                                     <td width="30" class="text-right text-muted"><span title="#{{it.id}}">{{startIdx + $index + 1}}.</span></td>
-  
+                                    <td data-title="'เลขรับสำนวนของภาค'" sortable="'auto_received_num'" hide">
+                                        {{it.auto_received_num}}
+                                    </td>
                                     <td data-title="'เลขคดีดำ'" sortable="'number_black'">
                                         {{it.number_black}}
                                     </td>
@@ -254,7 +260,7 @@
                                         {{it.defendant}}
 
                                     </td>
-                                    <td data-title="'ข้อหาหลัก'" sortable="'topic_ids'">
+                                    <td data-title="'ข้อหาพิมพ์ปก'" sortable="'topic_ids'">
                                         {{it.topic_ids | lookup_topic}}
 
                                     </td>
@@ -266,12 +272,16 @@
                                         {{it.result | lookup_result}}
 
                                     </td>
-                                    <td data-title="'ส่งสำนวน'" class="text-center">
-                                        <span ng-if="!it.file1" class="label label-warning">ยังไม่ได้ส่ง</span>
-                                        <a ng-if="it.file1" href="{{open_pdf(it.file1)}}" target="_bank"><span title="เปิดไฟล์สำนวน {{it.file1}}" class="label label-success">ส่งแล้ว</span></a>
+                                    <td data-title="'ส่งสำนวน'" class="text-center" ng-switch="caseReceived(it)">
+                                       <span ng-switch-when="1" class="label label-success">ส่งแล้ว</span>
+                                        <span ng-switch-when="2" class="label label-danger">ไม่ต้องส่ง</span>
+                                        <span ng-switch-default class="label label-warning">ยังไม่ได้ส่ง</span>
                                     </td>
-                                    <td data-title="'ส่งไฟล์คำพิพากษา'" class="text-center">
-                                        <span ng-if="!it.file2" class="label label-warning">ยังไม่ได้ส่ง</span>
+                                    <td data-title="'ส่งไฟล์คำพิพากษา'" class="text-center" ng-switch="caseCopyReceived(it)">
+                                        <span ng-switch-when="1" class="label label-success">ส่งแล้ว</span>
+                                        <span ng-switch-when="2" class="label label-danger">ไม่ต้องส่ง</span>
+                                        <span ng-switch-default class="label label-warning">ยังไม่ได้ส่ง</span>
+
                                         <a ng-if="it.file2" href="{{open_pdf(it.file2)}}" target="_bank"><span title="เปิดไฟล์คำพิพากษา {{it.file2}}" class="label label-success">ส่งแล้ว</span></a>
 
                                         <span ng-if="isSelected(it)" title="เลือกทำรายการ" class="row-action">
@@ -292,6 +302,5 @@
             </div>
         </div>
     </div>
-
 
 
