@@ -106,14 +106,11 @@
                 </div>
 
 
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6  has-feedback custom-dropdown">
                     <label class="control-label col-md-4">ผลการปฏิบัติ</label>
                     <div class="col-md-8">
-
-                        <select class="form-control input-md" name="role" ng-model="editingItem.result" select-default ng-options="it.id as it.name for it  in Lookups.getResult()">
-                            <option value=""></option>
-                        </select>
-
+                        <div custom-dropdown class="form-control input-md" ng-model="editingItem.result" data-options="result_options"></div>
+                        <span class="form-control-feedback"><span class="caret"></span></span>
                     </div>
                 </div>
 

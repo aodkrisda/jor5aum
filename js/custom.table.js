@@ -45,7 +45,7 @@ angular.module('custom.table', [])
 }])
 .directive('ngTableMenu', ['$timeout', '$compile', function ($timeout, $compile) {
     return {
-        template: '<div ng-click="table.showMenu($event)" ng-class="{\'hidden\':!(table && table.$columns)}" class="btn btn-info btn-circle hidden" style="position:relative;top:16px;opacity:0.8"><span class="glyphicon glyphicon-list"></span></div>',
+        template: '<div title="แสดง / ซ่อนคอลัมน์" ng-click="table.showMenu($event)" ng-class="{\'hidden\':!(table && table.$columns)}" class="btn btn-info btn-circle hidden" style="position:relative;top:16px;opacity:0.8"><span class="glyphicon glyphicon-list"></span></div>',
         replace:true,
         scope: { table: '=ngTableMenu' }
     }
@@ -84,6 +84,7 @@ angular.module('custom.table', [])
     }
 
     $scope._lastFilters = {};
+
     $scope.setFilter = function (refresh) {
 
         if ($scope.customFilters) {
@@ -111,8 +112,8 @@ angular.module('custom.table', [])
 
                 $scope._lastFilters = s;
                 $scope.tableParams.filter(s);
-                //$scope.refresh();
-                
+                $scope.refresh();
+              
             } else {
                 if ($scope.tableParams.filter() !== $scope._lastFilters) {
                     $scope.tableParams.filter($scope._lastFilters);

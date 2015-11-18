@@ -76,31 +76,24 @@
 
                     </div>
                     <hr />
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-6 has-feedback custom-dropdown">
                         <label class="control-label col-md-4 text-required">ผู้พิพากษาเจ้าของสำนวน</label>
                         <div class="col-md-8">
-                            <div class="input-group">
-                                <select class="form-control input-md" name="role" ng-model="editingItem.judge_id" select-default ng-options="it.id as it.name for it  in Lookups.getOwnJudge()">
-                                    <option value=""></option>
-                                </select>
-                                <span class="input-group-addon btn" id="add-judge" ng-click="popupJudge()"><span class="glyphicon glyphicon-plus"></span></span>
-                            </div>
-                        </div>
+                            <div custom-dropdown class="form-control input-md" ng-model="editingItem.judge_id" data-options="judge_court_options"></div>
+                            <span class="form-control-feedback"><span class="caret"></span></span>
+                         </div>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-6 has-feedback custom-dropdown">
                         <label class="control-label col-md-4 text-required">องค์คณะ</label>
                         <div class="col-md-8">
-                            <div class="input-group">
-                                <select class="form-control input-md" name="role" ng-model="editingItem.judge3_id" select-default ng-options="it.id as it.name for it  in Lookups.getOwnJudge()">
-                                    <option value=""></option>
-                                </select>
-                                <span class="input-group-addon btn"  ng-click="popupJudge()"><span class="glyphicon glyphicon-plus"></span></span>
-                            </div>
+                                <div custom-dropdown class="form-control input-md"   ng-model="editingItem.judge3_id" data-options="judge_court_options"></div>
+                                <span class="form-control-feedback" ><span class="caret"></span></span>
                         </div>
                     </div>
                 <div class="form-group col-md-6">
                     <label class="control-label col-md-4 text-required">จำเลยต้องขัง</label>
                     <div class="col-md-8">
+
                         <div class="input-group">
                             <select class="form-control input-md" name="role" ng-model="editingItem.imprison_id" select-default ng-options="it.id as it.name for it  in Lookups.getImprison()">
                                 <option value=""></option>

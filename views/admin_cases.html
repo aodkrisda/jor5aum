@@ -12,54 +12,50 @@
     <div ui-view></div>
 
 
-    <div ng-hide="!urlEq('/admin/cases')">
-        <div class="panel panel-default" ng-controller="CustomTableCtrl" ng-init="setAPI('admin_cases','custom.admin.form1.html',{search:'searchText', court:'searchCourt', month:'searchMonth', year:'searchYear'},{court:true, month:true,year:true})">
+    <div ng-hide="!(urlEq('/admin/cases') || urlEq('/admin/cases/notify'))">
+        <div class="panel panel-default" ng-controller="CustomTableCtrl as cmt" ng-init="$parent.cmt=cmt;setAPI('admin_cases','custom.admin.form1.html',{search:'searchText', court:'searchCourt', month:'searchMonth', year:'searchYear',_view:'_view()'},{court:true, month:true,year:true,_view:false})">
             <div class="panel-heading">
-                <div class="text-right pull-right">
-                    <button class="btn btn-success" ng-show="isSearchMode()" ng-click="setFilter()">
-                        <span class="glyphicon glyphicon-arrow-left"></span> ออกจากโหมดการค้นหา
-                    </button>
-                    <button class="btn btn-info" ng-click="advancedSearch('custom.cases.search.html')">
-                        <span class="glyphicon glyphicon-search"></span> ค้นหา
-                    </button>
-                    <button ng-click="newItem({date_sent:today(),no_case_sent:1,user_id:searchCourt},'custom.court.form2.html')" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span><span class="hidden-sm hidden-xs"> เพิ่มคดี (ไม่ได้ส่งรายงานคดี)</span></button>
-                    <button ng-click="ifcall(($it.no_case_sent!='1'),editItem('custom.court.form2.html'))" ng-show="($it.no_case_sent=='1') && hasSelected()" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span><span class="hidden-sm hidden-xs"> แก้ไขคดี (ไม่ได้ส่งรายงานคดี)</span></button>
-                    <button data-placement="bottom" data-trigger="click" bs-popover data-template="custom.confirm.popover.html"
-                            ng-click="removeItem()" ng-show="($it.no_case_sent=='1') && hasSelected()" class="btn btn-danger" data-auto-close="true">
-                        <span class="glyphicon glyphicon-remove"></span><span class="hidden-sm hidden-xs"> ลบคดี (ไม่ได้ส่งรายงานคดี)</span>
-                    </button>
-
-                    <!--
-                    <button data-placement="bottom" data-trigger="click" bs-popover data-template="custom.confirm.admin.report.html"
-                            ng-show="hasSelected()" class="btn btn-success" data-auto-close="true">
-                        <span class="glyphicon glyphicon-pencil"></span> รับคดี
-                    </button>-->
-
+                <div class="text-right pull-right" style="position:relative;top:-0.9em">
+                    <span class="btn btn-notify" ng-click="notify()" style="padding-right:3em"><img height="32" src="images/notify3.png" title="ยังไม่ได้จัดส่งผลรายงานคดี" /><span class="badge badge-notify">{{TableMeta.notsent || 0}}</span></span>
+                    <span ng-hide="urlEq('/admin/cases/notify')">
+                        <button class="btn btn-success" ng-show="isSearchMode()" ng-click="setFilter()">
+                            <span class="glyphicon glyphicon-arrow-left"></span> ออกจากโหมดการค้นหา
+                        </button>
+                        <button class="btn btn-info" ng-click="advancedSearch('custom.cases.search.html')">
+                            <span class="glyphicon glyphicon-search"></span> ค้นหา
+                        </button>
+                        <button data-placement="bottom" data-trigger="click" bs-popover data-template="custom.confirm.popover.html"
+                                ng-click="removeItem()" ng-show="($it.no_case_sent=='1') && hasSelected()" class="btn btn-danger" data-auto-close="true">
+                            <span class="glyphicon glyphicon-remove"></span><span class="hidden-sm hidden-xs"> ลบคดี (ไม่ได้ส่งรายงานคดี)</span>
+                        </button>
+                    </span>
                 </div>
                 <h2 style="padding:0px;margin:0px;"><span class="fa fa-windows"></span> รายงานคดี ({{tableParams.total()}})</h2>
 
             </div>
-            
+
             <div class="panel-body" style="padding-bottom:0px;">
 
                 <div loading-container="tableParams.settings().$loading">
-                    <div ng-show="!isSearchMode()">
+                    <div ng-show="!(isSearchMode() || urlEq('/admin/cases/notify'))">
                         <div class="input-group col-md-10 col-md-offset-1">
-                            <div class="input-group-addon  adon-label">ศาล</div>
+                            <div class="input-group-addon  adon-label"><strong>ศาล</strong></div>
                             <select class="form-control" ng-model="searchCourt" ng-change="setCourtId(searchCourt);setFilter()" select-value-type="string" ng-options="it.id as it.name for it in Lookups.getCourt()"></select>
-                            <div class="input-group-addon  adon-label">เดือน</div>
+                            <div class="input-group-addon  adon-label"><strong>เดือน</strong></div>
 
 
 
                             <select class="form-control" ng-model="searchMonth" ng-change="setMonthId(searchMonth);setFilter()" select-value-type="string" ng-options="it.id as it.name for it in Lookups.getMonth()"></select>
-                            <div class="input-group-addon  adon-label">พ.ศ</div>
+                            <div class="input-group-addon  adon-label"><strong>พ.ศ</strong></div>
                             <select class="form-control" ng-model="searchYear" ng-change="setYearId(searchYear);setFilter()" select-value-type="string" ng-options="it.id as it.name for it in Lookups.getYear()"></select>
                             <div class="input-group-addon btn btn-default" ng-click="setFilter(true)" title="เริ่มค้นหา"><span class="glyphicon glyphicon-refresh"></span></div>
                         </div>
                         <hr />
                     </div>
+
                     <div ng-table-menu="tableParams"></div>
-                    <table ng-table-resizable ng-table="tableParams" ng-table-init ng-table-init-columns wt-responsive-table show-filter="false" class="table table-hover table-bordered" >
+                    <table ng-table-resizable ng-table="tableParams" ng-table-init ng-table-init-columns wt-responsive-table show-filter="false" class="table table-hover table-bordered">
+
                         <tbody>
                             <tr ng-repeat="it in $data"
                                 ng-click="selectRow(it);"
@@ -72,21 +68,22 @@
                                 <td data-title="'โจทก์'" sortable="'plaintiff'">{{it.plaintiff}}</td>
                                 <td data-title="'จำเลย'" sortable="'defendant'">{{it.defendant}}</td>
                                 <td data-title="'ข้อหาพิมพ์ปก'" sortable="'title'"> {{it.title}}</td>
-                                <td data-title="'วันที่รับส่งงานคดี'" sortable="'date_sent'">
-                                    {{it.date_sent | thai_date:'short'}}
+                                <td data-title="'วันที่รับรายงานคดี'" sortable="'received'">
+                                    {{it.date_received | thai_date:'short'}}
                                 </td>
-                                <td data-title="'วันที่รับรายงานคดี'" sortable="'date_sent'">
-                                    {{it.date_case | thai_date:'short'}}
+                                <td data-title="'วันที่ภาคส่งงานคดี'" sortable="'date_sent4'">
+                                    {{it.date_sent4 | thai_date:'short'}}
                                 </td>
+
                                 <td data-title="'ส่งสำนวน'" class="text-center" ng-switch="caseReceived(it)">
-                                       <span ng-switch-when="1" class="label label-success">ส่งแล้ว</span>
-                                        <span ng-switch-when="2" class="label label-danger">ไม่ต้องส่ง</span>
-                                        <span ng-switch-default class="label label-warning">ยังไม่ได้ส่ง</span>
-                                 </td>
+                                    <span ng-switch-when="1" class="label label-success">ส่งแล้ว</span>
+                                    <span ng-switch-when="2" class="label label-danger">ไม่ต้องส่ง</span>
+                                    <span ng-switch-default class="label label-warning">ยังไม่ได้ส่ง</span>
+                                </td>
                                 <td data-title="'ส่งไฟล์คำพิพากษา'" class="text-center" ng-switch="caseCopyReceived(it)">
-                                        <span ng-switch-when="1" class="label label-success">ส่งแล้ว</span>
-                                        <span ng-switch-when="2" class="label label-danger">ไม่ต้องส่ง</span>
-                                        <span ng-switch-default class="label label-warning">ยังไม่ได้ส่ง</span>
+                                    <span ng-switch-when="1" class="label label-success">ส่งแล้ว</span>
+                                    <span ng-switch-when="2" class="label label-danger">ไม่ต้องส่ง</span>
+                                    <span ng-switch-default class="label label-warning">ยังไม่ได้ส่ง</span>
                                     <a ng-if="it.file2" href="{{open_pdf(it.file2)}}" target="_bank"><span title="เปิดไฟล์คำพิพากษา {{it.file2}}" class="label label-success">ส่งแล้ว</span></a>
                                     <span ng-if="isSelected(it)" class="row-action">
                                         <button class="btn btn-success btn-circle btn-xs" data-placement="left" data-trigger="click" bs-popover data-template="custom.confirm.admin.actions.html"

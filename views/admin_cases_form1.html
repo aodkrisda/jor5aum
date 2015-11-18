@@ -101,16 +101,16 @@
 
   
                         <div ng-if="(editingItem.command_id | lookup_at:'checked')=='1'">
-                            <label class="checkbox text-danger" style="padding-left:20px">
-                                <input type="checkbox" ng-model="editingItem.at_correct" ng-true-value="'0'" ng-false-value="'1'">  ไม่ถูกต้องตามระเบียบ
+                            <label class="checkbox text-muted" style="padding-left:20px">
+                                <input type="checkbox" ng-model="editingItem.at_correct" disabled ng-true-value="'0'" ng-false-value="'1'">  ไม่ถูกต้องตามระเบียบ
                             </label>
                             <div ng-if="editingItem.at_correct=='0'">
                                 <label style="padding-top:0.5em">เหตุผล</label>
                                 <div class="input-group">
-                                    <select class="form-control input-md" name="role" ng-model="editingItem.at_result_id" select-default ng-options="it.id as it.id | lookup_at_result  for it  in Lookups.getAtResult()">
+                                    <select class="form-control input-md" disabled name="role" ng-model="editingItem.at_result_id" select-default ng-options="it.id as it.id | lookup_at_result  for it  in Lookups.getAtResult()">
                                         <option value=""></option>
                                     </select>
-                                    <span class="input-group-addon btn" id="add-at-result" ng-click="popupAtResult()"><span class="glyphicon glyphicon-plus"></span></span>
+                                    <span class="input-group-addon btn" id="add-at-result" xxng-click="popupAtResult()"><span class="glyphicon glyphicon-plus"></span></span>
                                 </div>
                             </div>
                         </div>

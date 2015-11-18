@@ -99,50 +99,44 @@
                         <input type="text" readonly class="form-control input-md" value="{{editingItem.date_received3 | thai_date}}">
                     </div>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6  has-feedback custom-dropdown">
                     <label class="control-label col-md-4">ผู้ตรวจ 1 สั่งออก</label>
                     <div class="col-md-8">
-            
-                            <select class="form-control input-md" name="role" ng-model="editingItem.judge_checkout1_id" select-default ng-options="it.id as it.name for it  in Lookups.getJudge2()">
-                                <option value=""></option>
-                            </select>
-     
+                        <div custom-dropdown class="form-control input-md" ng-model="editingItem.judge_checkout1_id" data-options="judge_jor5_options"></div>
+                        <span class="form-control-feedback"><span class="caret"></span></span>
+    
                     </div>
                 </div>
                 <div class="row clearfix">
 
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6  has-feedback custom-dropdown">
                     <label class="control-label col-md-4">ชื่อผู้พิพากษาผู้ตรวจ</label>
                     <div class="col-md-8">
    
-                            <select class="form-control input-md" name="role" ng-model="editingItem.judge2_id" select-default ng-options="it.id as it.name for it  in Lookups.getJudge2()">
-                                <option value=""></option>
-                            </select>
+                        <div custom-dropdown class="form-control input-md" ng-model="editingItem.judge2_id" data-options="judge_jor5_options"></div>
+                        <span class="form-control-feedback"><span class="caret"></span></span>
      
                     </div>
                 </div>
 
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6  has-feedback custom-dropdown">
                     <label class="control-label col-md-4">สั่งออกแทน</label>
                     <div class="col-md-8">
-             
-                            <select class="form-control input-md" name="role" ng-model="editingItem.judge_checkout2_id" select-default ng-options="it.id as it.name for it  in Lookups.getJudge2()">
-                                <option value=""></option>
-                            </select>
+                        <div custom-dropdown class="form-control input-md" ng-model="editingItem.judge_checkout2_id" data-options="judge_jor5_options"></div>
+                        <span class="form-control-feedback"><span class="caret"></span></span>
          
                     </div>
                 </div>
 
-
+                <div class="clearfix"></div>
             
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6 has-feedback custom-dropdown">
                     <label class="control-label col-md-4">ชื่อผู้พิพากษาผู้ตรวจ2</label>
                     <div class="col-md-8">
                
-                            <select class="form-control input-md" name="role" ng-model="editingItem.judge4_id" select-default ng-options="it.id as it.name for it  in Lookups.getJudge2()">
-                                <option value=""></option>
-                            </select>
+                        <div custom-dropdown class="form-control input-md" ng-model="editingItem.judge4_id" data-options="judge_jor5_options"></div>
+                        <span class="form-control-feedback"><span class="caret"></span></span>
 
                     </div>
                 </div>
@@ -152,14 +146,11 @@
                         <span mode="0" ng-model="editingItem.date_sent5" placeholder="ยังไม่มีข้อมูล" custom-date-field></span>
                     </div>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6  has-feedback custom-dropdown">
                     <label class="control-label col-md-4">ผลการปฏิบัติ</label>
                     <div class="col-md-8">
-       
-                            <select class="form-control input-md" name="role" ng-model="editingItem.result" select-default ng-options="it.id as it.name for it  in Lookups.getResult()">
-                                <option value=""></option>
-                            </select>
-      
+                        <div custom-dropdown class="form-control input-md" ng-model="editingItem.result" data-options="result_options"></div>
+                        <span class="form-control-feedback"><span class="caret"></span></span>
                     </div>
                 </div>
 

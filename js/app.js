@@ -2,7 +2,7 @@
 
 
 
-angular.module('App', ['lazyLoadJs','wt.responsive', 'ui.router', 'angular-loading-bar', 'ngAnimate', 'mgcrea.ngStrap', 'ngTable', 'ngSanitize', 'custom.table', 'flow', 'angular-storage'])
+angular.module('App', ['lazyLoadJs', 'wt.responsive', 'ui.router', 'angular-loading-bar', 'ngAnimate', 'mgcrea.ngStrap', 'ngTable', 'ngSanitize', 'custom.table', 'flow', 'angular-storage'])
 .constant('API_URL', 'rest/api.php/v1/')
 .constant('BDAYS',15)
 .factory('myHttpInterceptor', ['$q', '$rootScope', function ($q, $rootScope) {
@@ -127,18 +127,59 @@ angular.module('App', ['lazyLoadJs','wt.responsive', 'ui.router', 'angular-loadi
             $state.go('login');
         })
     }
+    $rootScope.caseAdminForm5 = function (it) {
+        if (it) {
+            if (it.command_id) {
+                var v1 = $filter('lookup_at')(it.command_id, 'checked');
+                var v2 = $filter('lookup_at')(it.command_id, 'copyied');
+                if (v1 == '0' && v2 == '0') {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+    $rootScope.vcaseAdminForm = function (it) {
+        if (it) {
+            if (it.command_id) {
+                var v1 = $filter('lookup_at')(it.command_id, 'checked');
+                var v2 = $filter('lookup_at')(it.command_id, 'copyied');
+                if (v1 == '0' && v2 == '0') {
+                    return 0;
+                } else if (v1 == '0' && v2 == '1') {
+                    return 1;
+                }
+            }
+        }
+        return 2;
+    }
+    $rootScope.caseCourtForm = function (it) {
+        if (it) {
+            if (it.command_id) {
+                var v1 = $filter('lookup_at')(it.command_id, 'checked');
+                var v2 = $filter('lookup_at')(it.command_id, 'copyied');
 
+                if (v1 == '0' && v2 == '0') {
+                    return 1;
+                } else if (v1 == '0' && v2 == '1') {
+                    return 2;
+                }
+            }
+        }
+        return 3;
+    }
     $rootScope.caseReceived = function (it) {
         var b = 0;
         var v = (it.command_id > 0);
         var v1 = $filter('lookup_at')(it.command_id, 'checked');
-        var v2 = $filter('lookup_at')(it.command_id, 'copyied');
+        var v2 = '1';
         if (v && (v1 != '1')) {
             b = 2;
         } else if (v && (v2 != '1')) {
             b = 2;
         } else if (it && it.auto_received_num) {
-            if (it.number_received && it.date_received) {
+            if (it.number_received3 && it.date_received3) {
                 b = 1;
             }
         }
@@ -147,8 +188,16 @@ angular.module('App', ['lazyLoadJs','wt.responsive', 'ui.router', 'angular-loadi
     $rootScope.caseCopyReceived = function (it) {
         var b = 0;
 
-        if (it && it.date_received4) {
-            b = 1;
+        if (it){
+            if (it.date_received4) {
+                b = 1;
+            }
+            if (it.command_id) {
+                var v2 = $filter('lookup_at')(it.command_id, 'copyied');
+                if (v2 == '0') {
+                    b = 2;
+                }
+            }
         }
         return b;
     }
@@ -184,6 +233,60 @@ angular.module('App', ['lazyLoadJs','wt.responsive', 'ui.router', 'angular-loadi
     Auth.fetch();
     if (Auth.isLoggedIn) {
         Lookups.load();
+    }
+
+    $rootScope.judge_jor5_options = {
+        dataField: 'id',
+        labelField: 'name',
+        groupField: '',
+        multiple: false,
+        title: 'เลือกผู้พิพากษาภาค',
+        xxitemTemplate: '<span>xxxxxxxxxx{{::$labelFunction($item)}} </span>',
+        getData: function () {
+            return Lookups.getJudge2()
+        },
+        labelFunction: function (it) {
+            if (it) {
+                return $filter('lookup_judge')(it['id'] || 0);
+            }
+            return '';
+        }
+    }
+    $rootScope.judge_court_options = {
+        dataField: 'id',
+        labelField: 'name',
+        groupField: '',
+        multiple: false,
+        title: 'เลือกผู้พิพากษา',
+        getData: function () {
+            if (arguments.length) {
+                return Lookups.getJudgeBy(arguments[0]);
+            }
+            return Lookups.getOwnJudge();
+        },
+        labelFunction: function (it) {
+            if (it) {
+                return $filter('lookup_judge')(it['id'] || 0);
+            }
+            return '';
+        }
+    }
+    $rootScope.result_options = {
+        dataField: 'id',
+        labelField: 'name',
+        groupField: '',
+        title: 'เลือกผลการปฏิบัติ',
+        multiple: false,
+
+        getData: function () {
+            return Lookups.getResult();
+        },
+        labelFunction: function (it) {
+            if (it) {
+                return $filter('lookup_result')(it['id'] || 0);
+            }
+            return '';
+        }
     }
 }])
 .config(['$stateProvider', '$urlRouterProvider', '$httpProvider', '$controllerProvider', 'storeProvider','flowFactoryProvider',
@@ -254,6 +357,44 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
               views: {
                   '': {
                       templateUrl: 'views/admin_vcases.html'
+                  }
+              }
+          })
+          .state("admin.cases.notify", {
+              url: "/notify",
+              roles: ['admin'],
+              onExit: function ($state) {
+                  if ($state.current._scope) {
+                      $state.current._scope.notifyReport(false);
+                      delete $state.current._scope;
+                  }
+              },
+              views: {
+                  '': {
+                      controller: function ($scope, $state) {
+                          $state.current._scope = $scope.$parent;
+                          $scope.$parent.notifyReport(true);
+                      },
+                      template: '<h3 class="text-center text-danger">รายงานแจ้งเตือน ค้างส่งผลรายงานคดีให้ศาล</h3>'
+                  }
+              }
+          })
+          .state("admin.vcases.notify", {
+              url: "/notify",
+              roles: ['admin'],
+              onExit: function ($state) {
+                  if ($state.current._scope) {
+                      $state.current._scope.notify2Report(false);
+                      delete $state.current._scope;
+                  }
+              },
+              views: {
+                  '': {
+                      controller: function ($scope, $state) {
+                          $state.current._scope = $scope.$parent;
+                          $scope.$parent.notify2Report(true);
+                      },
+                      template: '<h3 class="text-center text-danger">รายงานแจ้งเตือน ค้างส่งสำนวนและร่างคำพิพากษาที่ตรวจแล้วคืนศาล</h3>'
                   }
               }
           })
@@ -508,6 +649,44 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
               // Use a url of "/" to set a state as the "index".
               url: "/login",
               templateUrl: 'views/login.html'
+          })
+          .state("court.cases.notify", {
+              url: "/notify",
+              roles: ['court'],
+              onExit: function ($state) {
+                  if ($state.current._scope) {
+                      $state.current._scope.notifyReport(false);
+                      delete $state.current._scope;
+                  }
+              },
+              views: {
+                  '': {
+                      controller: function ($scope, $state) {
+                          $state.current._scope = $scope.$parent;
+                          $scope.$parent.notifyReport(true);
+                      },
+                      template: '<h3 class="text-center text-danger">แจ้งเตือนค้างส่งสำนวนและร่างคำพิพากษาให้ภาคตรวจ</h3>'
+                  }
+              }
+          })
+          .state("court.vcases.notify", {
+              url: "/notify",
+              roles: ['court'],
+              onExit: function ($state) {
+                  if ($state.current._scope) {
+                      $state.current._scope.notify2Report(false);
+                      delete $state.current._scope;
+                  }
+              },
+              views: {
+                  '': {
+                      controller: function ($scope, $state) {
+                          $state.current._scope = $scope.$parent;
+                          $scope.$parent.notify2Report(true);
+                      },
+                      template: '<h3 class="text-center text-danger">แจ้งเตือนค้างส่งสำเนาคำพิพากษาให้ภาค(หลังอ่านคำพิพากษา {{BDAYS}} วัน)</h3>'
+                  }
+              }
           })
 
 
@@ -1079,6 +1258,11 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
         });
     };
 })
+.directive('jqSlider', function () {
+    return function (scope, element, attrs) {
+        element.slider();
+    };
+})
 .directive('selectValueType', ['$filter', '$timeout', function ($filter, $timeout) {
     /* can't use with track by ...*/
     return {
@@ -1304,7 +1488,23 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
 }])
 
 
-.controller('AdminReportCtrl', ['$scope', '$filter','$element', '$rootScope', '$timeout', 'Auth', '$state', 'Lookups', '$modal', '$popover', 'Lookups', '_', function ($scope,$filter, $element, $rootScope, $timeout, Auth, $state, Lookups, $modal, $popover, $Lookups, _) {
+.controller('AdminReportCtrl', ['$scope', '$filter', '$element', '$rootScope', '$timeout', 'Auth', '$state', 'Lookups', '$modal', '$popover', 'Lookups', '_', function ($scope, $filter, $element, $rootScope, $timeout, Auth, $state, Lookups, $modal, $popover, $Lookups, _) {
+
+
+    $scope.opt = {
+        dataField: 'id',
+        labelField: 'name',
+        groupField: 'parent_id',
+        multiple:false,
+        groupFunction:function(it){
+            return $filter('lookup_court')(it,'name') || 'Unknow';
+        },
+        getData: function () {
+            return Lookups.getJudge();
+        }
+        
+    }
+
     $scope.Lookups = Lookups;
     $scope.pkField = 'id';
     $scope.apiName = 'admin_cases';
@@ -1316,6 +1516,39 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
     for (var j = 0; j < 10; j++) {
         $scope.years.push((i - j) + '');
     }
+    $scope._view = function () {
+        if ($state.current.name == 'admin.vcases.notify') {
+            return 'notify2';
+        }
+        if ($state.current.name == 'admin.cases.notify') {
+            return 'notify';
+        }
+        if ($state.current.name == 'admin.vcases') {
+            return true;
+        }
+        return null;
+    }
+    $scope.notify = function () {
+        if ($state.current.name == 'admin.cases.notify') {
+            $state.go('admin.cases');
+        } else {
+            $state.go('admin.cases.notify');
+        }
+    }
+    $scope.notifyReport = _.debounce(function (b) {
+        $scope.cmt.getScope().setFilter(true);
+    }, 50);
+    $scope.notify2 = function () {
+        if ($state.current.name == 'admin.vcases.notify') {
+            $state.go('admin.vcases');
+        } else {
+            $state.go('admin.vcases.notify');
+        }
+    }
+    $scope.notify2Report = _.debounce(function (b) {
+        $scope.cmt.getScope().setFilter(true);
+    }, 50);
+
     $scope.clearRunNumber = function (item) {
         if (item.id) {
             Auth.post($scope.apiName + '/clearnumber', { id: item.id }).success(function (data) {
@@ -1715,6 +1948,34 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
     for (var j = 0; j < 10; j++) {
         $scope.years.push((i - j) + '');
     }
+    $scope._view = function () {
+        if ($state.current.name == 'court.vcases.notify') {
+            return 'notify2';
+        }
+        if ($state.current.name == 'court.cases.notify') {
+            return 'notify';
+        }
+        if ($state.current.name == 'court.vcases') {
+            return true;
+        }
+        return null;
+    }
+    $scope.notify = function () {
+
+            $state.go('court.cases.notify');
+ 
+    }
+    $scope.notifyReport = _.debounce(function (b) {
+        $scope.cmt.getScope().setFilter(true);
+    }, 50);
+    $scope.notify2 = function () {
+
+            $state.go('court.vcases.notify');
+
+    }
+    $scope.notify2Report = _.debounce(function (b) {
+        $scope.cmt.getScope().setFilter(true);
+    }, 50);
 
     var __it = null;
     $scope.popupBlackNumber = function (it) {
@@ -1983,4 +2244,404 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
         return b;
     }
 
+}])
+
+.controller('AdminSettingCtrl', ['$scope', '$element', '$filter', '$rootScope', '$timeout', 'Auth', '$state', 'Lookups', '$modal', '$popover', 'Lookups', '_', '$dropdown', function ($scope, $element, $filter, $rootScope, $timeout, Auth, $state, Lookups, $modal, $popover, $Lookups, _, $dropdown) {
+    $scope.settings = [
+        {name: 'field1', label: 'กำหนดวันที่่ต้องส่งสำนวนก่อนวันอ่านคำพิพากษา', value: '', type:'integer', max:100, min:0 },
+        { name: 'field2', label: 'เปิด / ปิดการใช้งานบางส่วน', value: '', type: "checkbox" },
+        {
+            name: 'field3', label: 'Choices', value: '', type: "select", options: [ ]
+        }
+    ];
+
+    $scope.getType=function(it){
+        var r='text';
+        if(it && it.type){
+            r=it.type;
+        }
+        return r;
+    }
+    $scope.panelNumber=function(it,event){
+
+    }
+    $scope.panelDefault = function (it, event) {
+        $scope.content = it.options;
+        $dropdown(angular.element(event.target), { scope: $scope, placement:'left'});
+    }
+}])
+
+.directive('customDropdown', ['$filter', '$timeout','_', function ($filter, $timeout,_) {
+    return {
+        restrict: 'A',
+        replace: true,
+        /*<div class="form-group has-feedback custom-dropdown"> <span class="btn form-control-feedback"><span class="caret"></span></span></div>*/
+        template: '<p class="form-control" ng-disabled="ngDisabled || false" ng-readonly="ngReadonly || false" ng-click="open($event)" style="height:auto;min-height:36px;"><span ng-switch="$multiple"><span ng-switch-when="true" ng-repeat="v in selectedValues"><span class="badge choice">{{$index+1}}. {{$dataFunction(v)}}</span> </span><span ng-switch-default>{{$dataFunction(selectedValue)}}</span></span><span ng-if="placeholder && (!$countValue())" class="text-muted">{{placeholder}}<span></p>',
+        require: '?ngModel',
+        scope: { 'options': '=', params:'=?params', selectedValue: '=ngModel', placeholder: '@?', title: '@?' ,ngDisabled:'=?', ngReadonly:'=?'},
+        controllerAs:'ctrl',
+        controller: function ($scope, $popover, $element) {
+            var popup = null;
+            var template = 'custom-dropdown-pupup.html';
+            this.open = function ($event) {
+                if (!popup) {
+                    popup = $popover(angular.element($element), { scope: $scope, container: 'body', autoClose: true, trigger: 'manual', placement: 'auto', template: template, show: false });
+                }
+                popup.$promise.then(popup.show);
+            }
+            this.close = function () {
+               popup.$promise.then(popup.hide);
+            }
+        },
+        link: function (scope, element, attr, ngModel) {
+            if (ngModel) {
+                scope.search = { text: '' };
+                
+                if (angular.isArray(scope.params)) {
+
+                    scope.$items = scope.options.getData.apply(null, scope.params);
+                } else {
+                    scope.$items = scope.options.getData();
+                }
+                scope.$itemTemplate = scope.options.itemTemplate || '';
+                scope.$dataField=scope.options.dataField || 'id';
+                scope.$labelField = scope.options.labelField || 'name';
+                scope.$groupField = scope.options.groupField || '';
+                scope.$multiple = (scope.options.multiple === true) || false;
+                scope.title = scope.options.title || scope.title || 'เลือกรายการ';
+                scope.placeholder = scope.options.placeholder || scope.placeholder || 'ยังไม่มีข้อมูล';
+                
+
+                scope.selectedItems = [];
+                scope.selectedValues = [];
+                scope.$groupFunction = scope.options.groupFunction || function (it) {
+                    return it;
+                }
+                scope.has = function (it) {
+                    return (angular.isDefined(it) && it && true);
+                }
+
+                scope.$count=function(){
+                    var i = 0;
+                    if (scope.$multiple) {
+                        i = scope.selectedItems.length;
+                    } else {
+                        if (scope.$selected && (scope.$dataField in scope.$selected)) {
+                            i = 1;
+                        }
+                    }
+                    return i;
+                }
+                scope.$countValue = function () {
+                    var i = scope.selectedValues.length;
+                    return i;
+                }
+                scope.$groupFilter = function () {
+                    var its = $filter('filter')(scope.$items, scope.search.text);
+                    var r= _.groupBy(its,function (it) {
+                        var g = '';
+                        if (it && (scope.$groupField in it)) {
+                            g = it[scope.$groupField];
+                        }
+                        return g;
+                    });
+                    return r;
+                }
+                scope.select = function (it) {
+                    if (scope.$multiple) {
+                        var i;
+                        if (it) {
+                            var it2 = null;
+                            if (scope.$dataField in it) {
+                                it2=_.find(scope.selectedItems, function (f) {
+                                    if (f && (scope.$dataField in f)) {
+                                        if (f[scope.$dataField] == it[scope.$dataField]) {
+                                            return true;
+                                        }
+                                    }
+                                    return false;
+                                });
+                            }
+                            if (it2) {
+                                   i = scope.selectedItems.indexOf(it2);
+                                   if(i>=0) scope.selectedItems.splice(i, 1);
+                            } else {
+                                scope.selectedItems.push(it);
+                            }
+                        } else {
+                            scope.selectedItems.length = 0;
+                        }
+                        i = scope.selectedItems.length;
+                        if (i > 0) {
+                            if (scope.selected !== scope.selectedItems[0]) {
+                                scope.selected = scope.selectedItems[0];
+                            }
+                        } else {
+                            if (scope.$selected) {
+                                scope.$selected = null;
+                            }
+                        }
+                   
+                        return;
+                    }
+                    if (it) {
+                        if (scope.$dataField in it) {
+                            scope.$selected = it;
+                        }
+                    } else {
+                        scope.$selected = it;
+                    }
+                }
+                scope.isEditable = function () {
+                    return !(scope.ngDisabled || scope.ngReadonly || false);
+                }
+
+                scope.isSelected=function(it){
+                    var b = false;
+                    if (scope.$multiple) {
+                        var it2 = null;
+                        if (scope.$dataField in it) {
+                            it2 = _.find(scope.selectedItems, function (f) {
+                                if (f && (scope.$dataField in f)) {
+                                    if (f[scope.$dataField] == it[scope.$dataField]) {
+                                        return true;
+                                    }
+                                }
+                                return false;
+                            });
+                        }
+                        b = (it2 != null);
+                    }else if (scope.$selected && it) {
+                        b = ((scope.$dataField in it) && (it[scope.$dataField] == scope.$selected[scope.$dataField]));
+                    }
+                    return b;
+                }
+                scope.$dataFunction = function (it) {
+                       if (scope.$dataField) {
+                        var item = _.find(scope.$items, function (it2) {
+                            if (scope.$dataField in it2) {
+                                return (it2[scope.$dataField] == it);
+                            }
+                            return false;
+                        });
+                        if (item) {
+                            return scope.$labelFunction(item);
+                        }
+                    }
+                    return '';
+                }
+                scope.$dataToItem = function (it) {
+                    if (scope.$dataField) {
+                        if (angular.isString(it)) {
+                            if (scope.$multiple) {
+                                it = it.trim();
+                                if (it.indexOf('[') == 0) {
+                                    var ar = null;
+                                    try {
+                                        ar = scope.$eval(it)
+                                    } catch (e) { }
+                                    if (ar) {
+                                        return _.filter(scope.$items, function (t) {
+                                            if(t && (scope.$dataField in t)){
+                                                var tf=t[scope.$dataField];
+                                                tf = _.find(ar, function (t2) {
+                                                    return (t2 == tf);
+                                                });
+                                                return (tf!=null);
+                                            }
+                                            return false;
+                                        });
+                                    }
+                                    return [];
+                                }
+                            }
+                        }
+                        return  _.find(scope.$items, function (it2) {
+                            if (scope.$dataField in it2) {
+                                return (it2[scope.$dataField] == it);
+                            }
+                            return false;
+                        });
+                        
+                    }
+                    return null;
+                }
+
+                scope.accept = function (it) {
+                    if (scope.isEditable()) {
+                        oldValue = null;
+                        if (scope.$multiple) {
+                            if (arguments.length == 0) {
+                                if (scope.selectedItems.length) {
+                                    var r=_.map(scope.selectedItems, function (t) {
+                                        return t[scope.$dataField];
+                                    });
+                                    scope.selectedValue = '[' + r.join(', ') + ']';
+                                    scope.selectedValues = r;
+                                } else {
+                                    scope.selectedValue = '';
+                                    scope.selectedValues.length = 0;
+                                }
+                                return;
+                            } 
+                        }
+                        if (arguments.length == 0) {
+                            it = scope.$selected;
+                        }
+                        if (it && (scope.$dataField in it)) {
+                            scope.selectedValue = it[scope.$dataField];
+                            scope.selectedItems.length = 0;
+                            scope.selectedValues.length = 0;
+                            scope.selectedItems.push(it);
+                            scope.selectedValues.push(it[scope.$dataField]);
+                        } else {
+                            scope.selectedValue = '';
+                            scope.selectedItems.length = 0;
+                            scope.selectedValues.length = 0;
+                        }
+                        if (it !== scope.$selected) {
+                            scope.$selected = it;
+                        }
+                    }
+                }
+                var oldValue = null;
+                scope.open = function (e) {
+                    if (scope.isEditable()) {
+                        oldValue = scope.selectedValue;
+                        var _uns = scope.$on('tooltip.show', function (e,t) {
+                           //
+                        });
+                        scope.ctrl.open(e);
+                        var _wtc=null;
+                        if (scope.has(scope.$groupField)) {
+                            scope.$groupItems = scope.$groupFilter(scope.$items, scope.search.text);
+                            _wtc = scope.$watch('search.text', function (v, o) {
+                                if (v !== o) {
+                                    scope.$groupItems = scope.$groupFilter(scope.$items, v);
+                                }
+                            });
+                        }
+                        var _un = scope.$on('tooltip.hide', function () {
+                            if (oldValue != null) {
+                                initView();
+                                oldValue = null;
+                            }
+                            if (_uns) _uns();
+                            _uns = null;
+                            if(_wtc) _wtc();
+                            _wtc=null;
+                            if(_un) _un();
+                            _un = null;
+                        });
+                    }
+                }
+
+                scope.close = function () {
+                    scope.ctrl.close();
+                }
+                scope.$labelFunction = scope.options.labelFunction || function (it) {
+                      if(it){
+                        if(angular.isDefined(it[scope.$labelField])){
+                            return  it[scope.$labelField];
+                        }
+                        if(angular.isDefined(it[scope.$dataField])){
+                            return it[scope.$dataField];
+                        }
+                    }
+                    return it;
+                }
+                var initView = function () {
+                    scope.selectedItems.length = 0;
+                    scope.selectedValues.length = 0;
+                    if (scope.$multiple) {
+                        scope.selectedItems = scope.$dataToItem(scope.selectedValue);
+                        if (!angular.isArray(scope.selectedItems)) {
+                            scope.selectedItems = [];
+                        }
+                        if (scope.selectedItems.length) {
+                            scope.$selected = scope.selectedItems[0];
+                        } else {
+                            scope.$selected = null;
+                        }
+                        scope.selectedValues = _.map(scope.selectedItems, function (t) {
+                            return t[scope.$dataField];
+                        });
+                    } else {
+                        scope.$selected = scope.$dataToItem(scope.selectedValue);
+                        if (scope.$selected) {
+                            scope.selectedItems = [scope.$selected];
+                            scope.selectedValues = [scope.$selected[scope.$dataField]];
+                        }
+                    }
+                }
+
+                initView();
+
+                var _unl = scope.$watch('selectedValue', function (v, o) {
+                    if (v !== o) {
+                        initView();
+                    }
+                });
+                scope.$on('$destroy',function(){
+                    if(_unl)_unl();
+                    _unl=null;
+                });
+            }
+        }
+    }
+}])
+
+.directive('customTemplate', ['_', '$compile', function (_, $compile) {
+    return {
+        restrict: 'A',
+        replace: true,
+        terminal: true,
+        priority: 599,
+        scope:{template:'=customTemplate'},
+        link: function (scope, element, attr) {
+            var currentElement = element;
+            var currentScope = null;
+            var nodeName = (element[0].nodeName).toLowerCase();
+            var render = function (tpl) {
+                if (currentElement) {
+                    if (!angular.isString(tpl)) {
+                        tpl = String(tpl);
+                    }
+                    tpl = tpl.trim();
+                    if (tpl.indexOf('<') !== 0) {
+                        tpl = ['<' + nodeName + '>', tpl, '</' + nodeName + '>'].join('');
+                    }
+                    if (currentScope) {
+                        currentScope.$destroy();
+                        currentScope = null;
+                    }
+                    currentScope=scope.$parent.$new();
+                    var e = $compile(tpl)(currentScope);
+                    currentElement.replaceWith(e);
+                    currentElement = null;
+                    currentElement = e;
+                }
+            }
+
+            render(scope.template);
+
+            var unload = scope.$watch('template', function (v, o) {
+                if (v !== o) {
+                    render(v);
+                }
+            })
+
+            scope.$on('$destroy', function () {
+                if (unload) {
+                    unload();
+                    unload = null;
+                }
+                if (currentScope) {
+                    currentScope.$destroy();
+                    currentScope = null;
+                }
+                currentElement = null;
+            });
+        }
+    }
 }])

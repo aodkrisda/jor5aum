@@ -61,12 +61,17 @@
     }  
 	$param2=$param;
 	$param2[]=$user_id;
-
+  $t=$orm->at()->select('id')->where('checked',1)->toArray();
+  $checked_ids=array();
+  foreach($t as $i){
+    $checked_ids[]=intval($i['id']);
+  }
+  if(empty($checked_ids))$checked_ids[]=-1;
 	$type_ids=array();
 	if($type_id!==null){
 		$type_ids[]=intval($type_id);
 	}else{
-		$sql="select distinct info_cases.type_id, info_types.name FROM info_cases inner join info_types on info_cases.type_id = info_types.id WHERE (info_cases.date_sent>=? AND info_cases.date_sent<? AND info_cases.user_id=?) ORDER BY info_types.group_id, info_types.name";
+		$sql="select distinct info_cases.type_id, info_types.name FROM info_cases inner join info_types on info_cases.type_id = info_types.id WHERE (info_cases.no_case_sent!=1) AND (info_cases.date_received>=? AND info_cases.date_received<? AND info_cases.user_id=?) ORDER BY info_types.group_id, info_types.name";
 		$rs=$orm->execute($sql,$param2);
 
 		if($rs){
@@ -90,7 +95,7 @@
 		if($type_id){
 			$where=sprintf(' AND (type_id=%d) ', $type_id);
 		}	
-		$sql="select * FROM info_cases WHERE (date_sent>=? AND date_sent<? AND user_id=? {$where}) "; //GROUP BY user_id";
+		$sql="select * FROM info_cases WHERE (no_case_sent!=1) AND (date_received>=? AND date_received<? AND user_id=? {$where}) "; //GROUP BY user_id";
 
     	$dic=$orm->execute($sql,$param2);
 	    $case_name='???';
@@ -104,7 +109,7 @@
 	    $cases[]=array('case_name'=>$case_name, 'case_items'=>$dic);
 
 	}
-  	    	    
-    echo $twig->render(($date2)?'report2_2.html':'report2_1.html', array('date1'=>$date1, 'date2'=>$date2, 'user_id'=>$user_id, 'court'=>$court, 'cases'=>$cases, 'type_id'=> $type_id));
+ 	    
+    echo $twig->render(($date2)?'report2_2.html':'report2_1.html', array('checked_ids'=>$checked_ids,'date1'=>$date1, 'date2'=>$date2, 'user_id'=>$user_id, 'court'=>$court, 'cases'=>$cases, 'type_id'=> $type_id));
 
 ?>

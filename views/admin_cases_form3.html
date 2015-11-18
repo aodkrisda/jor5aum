@@ -1,4 +1,6 @@
-﻿
+﻿<style>
+    .xreadonly{background-color:#F9DADA}
+</style>
 
 
 <div class="panel panel-default">
@@ -43,8 +45,11 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label class="control-label col-md-4">ข้อหาพิมพ์ปก</label>
-                    <div class="col-md-8">
-                        <input type="text" readonly class="form-control input-md" value="{{editingItem.title}}">
+                    <div class="col-md-8" ng-init="_xedit=false">
+                        <div class="input-group">
+                            <input type="text" ng-readonly="!_xedit" class="form-control input-md" ng-model="editingItem.title">
+                            <span class="input-group-addon"  title="แก้ไข" ng-click="_xedit=true"><span class="glyphicon glyphicon-pencil"></span></span>
+                        </div>
                     </div>
                 </div>
 
@@ -57,7 +62,16 @@
                 <div class="form-group col-md-6">
                     <label class="control-label col-md-4">ข้อหาสถิติ</label>
                     <div class="col-md-8">
-                        <custom-readonly-topics ng-model="editingItem.topic_ids"></custom-readonly-topics>
+   
+                            <div class="input-group" ng-controller="TopicsCtrl" ng-init="_xedit2=false">
+                                <div class="form-control" ng-class="{xreadonly:!_xedit2}" style="height:auto;min-height:36px;">
+                                    <custom-choices ng-model="editingItem.topic_ids"></custom-choices>
+                                </div>
+                                <div class="input-group-addon" style="vertical-align:top;" title="แก้ไข" id="edit-topics" ng-click="ifcall(editingItem.type_id>0,popupTopics, editingItem);_xedit2=true">
+                                    <span style="background:none"><span class="glyphicon glyphicon-pencil"></span></span>
+                                </div>
+                            </div>
+              
                     </div>
                 </div>
                 <div class="form-group col-md-6">
@@ -94,20 +108,18 @@
                     <hr />
                 </div>
                 <div class="form-group col-md-6">
-                    <label class="control-label col-md-4">วันที่ภาครับสำนวนคำพิพากษา</label>
+                    <label class="control-label col-md-4">วันที่ภาครับสำนวนและร่างคำพิพากษา</label>
                     <div class="col-md-8">
                         <input type="text" readonly class="form-control input-md" value="{{editingItem.date_received3 | thai_date}}">
                     
                     </div>
                 </div>
             
-                <div class="form-group col-md-6">
-                    <label class="control-label col-md-4">ชื่อผู้พิพากษาผู้ตรวจ</label>
+                <div class="form-group col-md-6 has-feedback custom-dropdown">
+                    <label class="control-label col-md-4">รองอธิบดีฯผู้ตรวจ</label>
                     <div class="col-md-8">
-
-                            <select class="form-control input-md" name="role" ng-model="editingItem.judge2_id" select-default ng-options="it.id as it.name for it  in Lookups.getJudge2()">
-                                <option value=""></option>
-                            </select>
+                        <div custom-dropdown class="form-control input-md" ng-model="editingItem.judge2_id" data-options="judge_jor5_options"></div>
+                        <span class="form-control-feedback"><span class="caret"></span></span>
 
                     </div>
                 </div>
@@ -121,14 +133,11 @@
                     </div>
                 </div>
             
-                <div class="form-group col-md-6">
-                    <label class="control-label col-md-4">ชื่อผู้พิพากษาผู้ตรวจ2</label>
+                <div class="form-group col-md-6 has-feedback custom-dropdown">
+                    <label class="control-label col-md-4">หน.ศาลประจำภาคฯ ผู้ตรวจ</label>
                     <div class="col-md-8">
-           
-                            <select class="form-control input-md" name="role" ng-model="editingItem.judge4_id" select-default ng-options="it.id as it.name for it  in Lookups.getJudge2()">
-                                <option value=""></option>
-                            </select>
-    
+                        <div custom-dropdown class="form-control input-md" ng-model="editingItem.judge4_id" data-options="judge_jor5_options" ></div>
+                        <span class="form-control-feedback"><span class="caret"></span></span>
                     </div>
                 </div>
                 <div class="row clearfix"></div>
@@ -139,14 +148,11 @@
                         <span mode="0" ng-model="editingItem.date_at_received2" placeholder="ยังไม่มีข้อมูล" custom-date-field></span>
                     </div>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6  has-feedback custom-dropdown">
                     <label class="control-label col-md-4">ผลการปฏิบัติ</label>
                     <div class="col-md-8">
-        
-                            <select class="form-control input-md" name="role" ng-model="editingItem.result" select-default ng-options="it.id as it.name for it  in Lookups.getResult()">
-                                <option value=""></option>
-                            </select>
-
+                        <div custom-dropdown class="form-control input-md" ng-model="editingItem.result" data-options="result_options"></div>
+                        <span class="form-control-feedback"><span class="caret"></span></span>
                     </div>
                 </div>
                 <div class="form-group col-md-6">
@@ -195,4 +201,3 @@
         </div>
     </div>
 </div>
-

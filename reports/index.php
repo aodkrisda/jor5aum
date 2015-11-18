@@ -1,4 +1,5 @@
 <?php
+
 /*
 //$_POST['date1']='2015-01-01';
 //$_POST['date2']='2015-02-01';
@@ -53,7 +54,7 @@
 	if($type_id!==null){
 		$type_ids[]=intval($type_id);
 	}else{
-		$sql="select distinct info_cases.type_id, info_types.name FROM info_cases inner join info_types on info_cases.type_id = info_types.id WHERE (info_cases.date_sent>=? AND info_cases.date_sent<?) ORDER BY info_types.group_id, info_types.name";
+		$sql="select distinct info_cases.type_id, info_types.name FROM info_cases inner join info_types on info_cases.type_id = info_types.id WHERE (info_cases.no_case_sent!=1) AND (info_cases.date_received>=? AND info_cases.date_received<?) ORDER BY info_types.group_id, info_types.name";
 		//echo $sql ."\r\n";
 		$rs=$orm->execute($sql,$param);
 		if($rs){
@@ -62,9 +63,15 @@
 			}
 		}
 	}
-	
-    $param2=$param;
-    $param2[]=1;
+  $t=$orm->at()->select('id')->where('checked',1)->toArray();
+  $checked_ids=array();
+  foreach($t as $i){
+    $checked_ids[]=$i['id'];
+  }
+  if(empty($checked_ids))$checked_ids[]=-1;
+  $param2=$param;
+  $checked_ids=implode(', ',$checked_ids);
+  
 	$cases=array();
 	foreach($type_ids as $type_id){
 		$where='';
@@ -72,14 +79,15 @@
 			$where=sprintf(' AND (type_id=%d) ', $type_id);
 		}
 		
-		$sql="select user_id, count(id) as 'total' FROM info_cases WHERE (date_sent>=? AND date_sent<?) {$where} GROUP BY user_id";
-		//echo $sql ."\r\n";
-		
+		$sql="select user_id, count(id) as 'total' FROM info_cases WHERE (no_case_sent!=1) AND (date_received>=? AND date_received<?) {$where} GROUP BY user_id";
+		  //echo $sql ."\r\n";
+
 	    $xrs=$orm->execute($sql,$param);
       $drs=array();
       foreach($xrs as &$r){
         $drs[$r['user_id']]=$r;
       }
+   
       $rs=array();
 	    $sql="select id, name, usergroup_id FROM info_users WHERE admin=0 and parent_id=0 ORDER BY usergroup_id, name";
 	    //echo $sql ."\r\n";
@@ -97,15 +105,14 @@
 	    }
       
 
-	    $sql="select user_id, count(id) as 'check'  FROM info_cases WHERE (date_sent>=? AND date_sent<? AND command_id > ?) {$where} GROUP BY user_id";
+	    $sql="select user_id, count(id) as 'check'  FROM info_cases WHERE (no_case_sent!=1) AND (date_received>=? AND date_received<? AND command_id in ({$checked_ids})) {$where} GROUP BY user_id";
 	    //echo $sql ."\r\n";
-	    
-	    $rs2=$orm->execute($sql,$param2);    
+
+	    $rs2=$orm->execute($sql,$param);    
 	    $dic=array();
 	    foreach($rs2 as &$r){
 	      $dic[$r['user_id']]=$r['check'];
 	    }
-      
 
 	    
 	    $rs2=$orm->execute("select id,name  FROM info_usergroups");    

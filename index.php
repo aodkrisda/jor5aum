@@ -15,6 +15,7 @@
 		<link rel="stylesheet" type="text/css" href="js/angular-strap/angular-motion.css">
 		<link rel="stylesheet" type="text/css" href="js/loading-bar/loading-bar.min.css">
 		<link rel="stylesheet" type="text/css" href="js/date/css/bootstrap-datepicker3.css">
+		<link rel="stylesheet" type="text/css" href="js/slider/css/slider.css">
 		<link rel="stylesheet" type="text/css" href="js/app.css">
 		<script src="js/lib/underscore.min.js"></script>
 		<script src="js/lib/jquery.min.js"></script>
@@ -35,6 +36,9 @@
 		<script src="js/res-table/jquery.resizableColumns.js"></script>  
 		<script src="js/angular-strap/angular-strap.min.js"></script>
 		<script src="js/angular-strap/angular-strap.tpl.min.js"></script>
+		<script src="js/slider/js/bootstrap-slider.js"></script>
+		
+		
 		<script src="js/custom.table.js"></script>
 		<script src="js/lib/ng-flow-standalone.min.js"></script>
 		<script src="js/lazyload.js"></script>
@@ -48,5 +52,8 @@
 			<div id="alert-messages" class="hidden-print" style="z-index:10000"></div>
 			<div ui-view></div>
 		</div>
+
+	
+
 	</body>
 </html>

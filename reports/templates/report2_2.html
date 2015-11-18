@@ -60,7 +60,7 @@
             {% set sum_total=0 %}
             {% set sum_check=0 %}
             {% for it in case.case_items %}
-            {% if it.command_id > 1 %}
+            {% if it.command_id in checked_ids %}
             {% set sum_check=sum_check + 1 %}
             {% endif %}
             {% set sum_total=sum_total + 1 %}

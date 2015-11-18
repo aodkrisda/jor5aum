@@ -14,6 +14,14 @@ body{
 	background: url('../images/header.jpg') repeat !important;
 }
 
+.bg-header, .bg-footer{
+    background: url('../images/header2.jpg') repeat;
+}
+.bg-content{
+    background: url('../images/paper2.jpg') repeat;
+     
+}
+
 .add-top-padding{
     padding-top:5em;
 }
@@ -94,9 +102,13 @@ table[ng-table] tr.active td {
     vertical-align: middle;
     float: none;
 }
-form.readonly.form input[readonly], form.readonly.form .form-control.readonly{
-    background-color:#F9DADA;  
+form.readonly.form input[readonly]:not([disabled]), form.readonly.form .form-control[readonly]:not([disabled]){
+    background-color:#F9DADA;
 }
+form.readonly.form div.form-control.readonly  {
+    background-color:#F9DADA;
+}
+
 
 /* ng table */
 
@@ -225,4 +237,50 @@ opacity:0.4;
       padding-left:0.25em;
       font-weight:bolder;
        content: '*'; 
+}
+
+/*custom dropdown*/
+.custom-dropdown ul.list-group .list-group-item.header{
+    background-color:rgba(200, 200, 200,0.1);
+}
+.custom-dropdown ul.list-group li.list-group-item.header{
+    border-color:rgba(100,100,100,0.1);
+}
+.custom-dropdown ul.list-group li.list-group-item.child{
+    padding-left:2em;
+}
+.custom-dropdown ul.list-group li.list-group-item.child:nth-child(2n+1){
+    background-color:#fefffe;
+}
+.custom-dropdown ul.list-group li.list-group-item.child.active{
+    background:none;
+    border-color:#fefefe;
+    color:#fefefe;
+    background-color:#58B358 !important;
+}
+.custom-dropdown span.badge.choice{
+    background-color:rgba(0, 0, 0,0);
+    color:#333333;
+    font-size:1em;
+    font-weight:normal;
+    padding-left:1em;
+    padding-right:1em;
+    display:block;
+    text-align:left;
+}
+.custom-dropdown[disabled] span.badge.choice{
+    color:#777777;
+}
+.badge.badge-notify{
+    position:relative;background-color:#ff7e00 !important;
+    top:-1em;left:-1.2em;font-size:1.2em;
+}
+.btn.btn-notify{
+    padding:0px !important;
+    margin:0px !important;
+}
+.btn.btn-notify img{
+    position:relative;
+    height:46px;
+    top:5px;
 }
