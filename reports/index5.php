@@ -21,8 +21,7 @@
     require_once $dir . 'filters.php';
     
     $date1='';
-    $type_id=0;  
-	$user_id=0;  
+    $type_id=0;    
     if(isset($_POST['date1'])){
     	$date1=$_POST['date1'];
     }
@@ -35,10 +34,7 @@
     }
     if(isset($_POST['type_id'])){
     	$type_id=intval($_POST['type_id']);
-    }  
-    if(isset($_POST['user_id'])){
-    	$user_id=intval($_POST['user_id']);
-    }  	 
+    }   
     $orm=NotORM::getInstance();
 	$dt2=null;
     if($date2){
@@ -65,20 +61,9 @@
 		$courts[$r['usergroup_id']][]=$r;
 	}
 
-
-	$checked=$orm->at()->select('id')->where('checked',1);
-	$uchecked=$orm->at()->select('id')->where('checked!=1',1);
-
-	$r=$orm->cases()->where('no_case_sent!=?',1);
 	$atype=array();
-	$court=array();
-	if($user_id>0){
-		$r->where('user_id',$user_id);
-		$t=$orm->users()->where('id',$user_id)->fetch();
-		if($t){
-			$court=$t->toArray();
-		}
-	}
+	$checked=$orm->at()->select('id')->where('checked',1);
+	$r=$orm->cases()->order('id asc')->where('command_id',$checked)->where('auto_received_num!=?','');
 	if($type_id>0){
 		$r->where('type_id',$type_id);
 		$t=$orm->types()->where('id',$type_id)->fetch();
@@ -86,36 +71,15 @@
 			$atype=$t->toArray();
 		}
 	}
-	$r->where('date_received>=?',$dt1['begin']);
+	$r->where('date_received3>=?',$dt1['begin']);
 	if($dt2){
-		$r->where('date_received<?',$dt2['end']);
+		$r->where('date_received3<?',$dt2['end']);
 	}else{
 		$r->where('date_received3<?',$dt1['end']);
 	}
-
-	$tm=$r->push();
-	$tm->select('count(id) as n')->where('command_id',$checked);
-	$tm=$tm->fetch();
-	$t_checked=0;
-	if($tm){
-		$t_checked=intval($tm['n']);
+	$rs2=$r->toArray();
+	foreach($rs2 as &$r){
+		$cases[$r['user_id']][]=$r;
 	}
-
-	$tm=$r->push();
-	$tm->select('count(id) as n')->where('command_id',$uchecked);
-	$tm=$tm->fetch();
-	$t_uchecked=0;
-	if($tm){
-		$t_uchecked=intval($tm['n']);
-	}
-
-	$cases=$r->toArray();
-    $lookups=$orm->at()->fetchPairs('id','name');
-    $filter = new Twig_SimpleFilter('lookup_at', function ($id) use ($lookups) {
-      if(isset($lookups[$id])){
-        return $lookups[$id];
-      }
-      return '';
-    });
-    $twig->addFilter($filter);
-    echo $twig->render('report2.html', array('date1'=>$date1,  'date2'=>$date2, 'type_id'=>$type_id,'court'=>$court, 't_checked'=>$t_checked, 't_uchecked'=>$t_uchecked, 'type_item'=>$atype, 'user_id'=>$user_id, 'cases'=>$cases, 'groups'=>$groups, 'courts'=>$courts));
+	$_DICT=$cases;
+    echo $twig->render('report5.html', array('date1'=>$date1,  'date2'=>$date2, 'type_id'=>$type_id, 'type_item'=>$atype, 'groups'=>$groups, 'courts'=>$courts));

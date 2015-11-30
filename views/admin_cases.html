@@ -15,7 +15,7 @@
     <div ng-hide="!(urlEq('/admin/cases') || urlEq('/admin/cases/notify'))">
         <div class="panel panel-default" ng-controller="CustomTableCtrl as cmt" ng-init="$parent.cmt=cmt;setAPI('admin_cases','custom.admin.form1.html',{search:'searchText', court:'searchCourt', month:'searchMonth', year:'searchYear',_view:'_view()'},{court:true, month:true,year:true,_view:false})">
             <div class="panel-heading">
-                <div class="text-right pull-right" style="position:relative;top:-0.9em">
+                <div class="text-right pull-right" style="position:relative;top:-0.6em">
                     <span class="btn btn-notify" ng-click="notify()" style="padding-right:3em"><img height="32" src="images/notify3.png" title="ยังไม่ได้จัดส่งผลรายงานคดี" /><span class="badge badge-notify">{{TableMeta.notsent || 0}}</span></span>
                     <span ng-hide="urlEq('/admin/cases/notify')">
                         <button class="btn btn-success" ng-show="isSearchMode()" ng-click="setFilter()">
@@ -24,9 +24,8 @@
                         <button class="btn btn-info" ng-click="advancedSearch('custom.cases.search.html')">
                             <span class="glyphicon glyphicon-search"></span> ค้นหา
                         </button>
-                        <button data-placement="bottom" data-trigger="click" bs-popover data-template="custom.confirm.popover.html"
-                                ng-click="removeItem()" ng-show="($it.no_case_sent=='1') && hasSelected()" class="btn btn-danger" data-auto-close="true">
-                            <span class="glyphicon glyphicon-remove"></span><span class="hidden-sm hidden-xs"> ลบคดี (ไม่ได้ส่งรายงานคดี)</span>
+                        <button class="btn btn-success" data-placement="left" data-trigger="click" bs-popover data-template="admin.cases.reports.html" data-auto-close="true">
+                            <span class="glyphicon glyphicon-print"></span> สรุปรายงานคดี
                         </button>
                     </span>
                 </div>

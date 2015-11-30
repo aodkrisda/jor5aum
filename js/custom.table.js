@@ -172,7 +172,6 @@ angular.module('custom.table', [])
         if (cols) {
             cols[1].show = false;
         }
-        console.dir(cols[1].title())
     }
 
     $scope.startIdx = 0;
@@ -210,11 +209,20 @@ angular.module('custom.table', [])
         	},800);        
     }
     $scope.saveForm = function (_close) {
+        var n = arguments.length;
+        var __saveCompltedHlr = angular.noop;
+        if (n) {
+            if (angular.isFunction(arguments[n - 1])) {
+                __saveCompltedHlr = arguments[n - 1];
+                if (n == 1) {
+                    _close = undefined;
+                }
+            }
+        }
         if (_close == undefined) _close = true;
         var changes = angular.getChanges($scope.editingItem, oldData, $scope.pkField);
+        var act = (changes && changes[$scope.pkField]) ? 'update' : 'add';
         if (changes) {
-            
-            var act = (changes[$scope.pkField]) ? 'update' : 'add';
             if($scope._id_){
                 if (changes['_id_']) {
             		act='update';
@@ -270,7 +278,11 @@ angular.module('custom.table', [])
                 	$timeout(function(){
                 		$scope.editingItem = null;
                 	},800);
-                	formModal.$promise.then(formModal.hide);
+                	formModal.$promise.then(formModal.hide).then(function () {
+                	    
+                	    __saveCompltedHlr(data.data,act);
+
+                	});
                 }
         
             }).error(function () {
@@ -281,10 +293,11 @@ angular.module('custom.table', [])
         } else {//nochanges
             $scope.$saving = false;
             if (_close) {
+                var old = $scope.editingItem;
                 $timeout(function () {
                     $scope.editingItem = null;
                 }, 800);
-                formModal.$promise.then(formModal.hide);
+                formModal.$promise.then(formModal.hide).then(__saveCompltedHlr(old, act));
             }
         }
     }

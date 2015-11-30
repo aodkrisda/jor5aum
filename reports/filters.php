@@ -1,5 +1,5 @@
 <?php
-$filter = new Twig_SimpleFilter( 'th_date', function ( $dtstr ,$format='') {
+$filter = new Twig_SimpleFilter( 'th_date', function ( $dtstr ,$format='',$inc=0) {
 	$dt=strtotime($dtstr);
 	if($dt){
 		$dd=intval(date('j',$dt));
@@ -14,10 +14,13 @@ $filter = new Twig_SimpleFilter( 'th_date', function ( $dtstr ,$format='') {
 			return sprintf('%s',$months[$mm-1]);
 			break;
 			case 'year':
+				if($inc){
+					$yy+=intval($inc);
+				}
 				return sprintf('%s',$yy);
 			break;
 			case 'short':
-				return sprintf("%s %s %s", $dd, $smonths[$mm-1] ,$yy-2500); 
+				return sprintf("%s %s %s", $dd, $smonths[$mm-1] ,$yy); 
 			break;
 	
 		}
@@ -38,3 +41,73 @@ $filter = new Twig_SimpleFilter( 'user_group', function ( $id) {
 });
 $twig->addFilter($filter);
 
+$twig->addFilter($filter);
+$filter = new Twig_SimpleFilter( 'user_name', function ( $id) {
+	global $_USERS;
+	if(isset($_USERS)){
+		if(isset($_USERS[$id])){
+			return $_USERS[$id];
+		}
+	}
+	return '';
+});
+$twig->addFilter($filter);
+
+$filter = new Twig_SimpleFilter( 'split', function ($id, $idx=0, $sep='/') {
+	$str=$id;
+	if($sep){
+		$ar=explode($sep,$str);
+		$idx=intval($idx);
+		if(isset($ar[$idx])){
+			$str=$ar[$idx];
+		}
+	}
+	return $str;
+});
+$twig->addFilter($filter);
+
+$filter = new Twig_SimpleFilter( 'xdays', function ($it) {
+	$n=0;
+	$str='';
+	if($it){
+		if(isset($it['date_ap']) && isset($it['date_received3'])){
+			if($it['date_ap'] && $it['date_received3']){
+				$ap=date_create($it['date_ap']);
+				$rc=date_create($it['date_received3']);
+				$diff=date_diff($ap,$rc);
+				$n = intval($diff->y * 365.25 + $diff->m * 30 + $diff->d);
+				if($n>=15){
+					$str='ไม่ช้า (' . $n . ' วัน)';
+				}else{
+					$str='ช้า (' . abs($n) . ' วัน)';
+				}
+			}
+		}
+	}
+	
+	return $str;
+});
+$twig->addFilter($filter);
+$func=new Twig_SimpleFunction('getDict', function($key, $def=null){
+	global $_DICT;
+	if(isset($_DICT) && is_array($_DICT)){
+		if(isset($_DICT[$key])){
+			return $_DICT[$key];
+		}
+	}
+	return $def;
+}
+);
+$twig->addFunction($func);
+
+$func=new Twig_SimpleFunction('percentOf', function($a,$b){
+	$str='-';
+	if($b!=0){
+		$n=ceil(($a/$b) * 10000)/100;
+		$str=$n;
+
+	}
+	return $str;
+}
+);
+$twig->addFunction($func);

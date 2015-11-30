@@ -52,8 +52,6 @@
 			<div id="alert-messages" class="hidden-print" style="z-index:10000"></div>
 			<div ui-view></div>
 		</div>
-
-	
-
+		<form style="width:0px;height:0px" method="post" id="_postform_" action="reports/index3.php" target="_blank"></form>
 	</body>
 </html>

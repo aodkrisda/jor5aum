@@ -189,7 +189,7 @@
         <div ng-hide="!(urlEq('/court/cases') || urlEq('/court/cases/notify'))">
             <div class="panel panel-default" ng-controller="CustomTableCtrl  as cmt" ng-init="$parent.cmt=cmt;setAPI('court_cases','custom.court.form1.html',{search:'searchText', court:'searchCourt', month:'searchMonth', year:'searchYear',_view:'_view()'},{court:true, month:true,year:true})">
                 <div class="panel-heading">
-                    <div class="text-right pull-right" style="position:relative;top:-0.9em">
+                    <div class="text-right pull-right" style="position:relative;top:-0.6em">
                         <span class="btn btn-notify" ng-click="notify()"><img   src="images/notify2.png" title="สำนวนไม่ได้จัดส่ง" /><span class="badge badge-notify">{{TableMeta.notsent || 0}}</span></span>
                         <span class="btn btn-notify" ng-click="notify2()" style="padding-right:3em"><img src="images/notify1.png" title="สำเนาคำพิพากษาไม่ได้จัดส่ง" /><span  class="badge badge-notify">{{TableMeta.notsent2 || 0}}</span></span>
                         <span ng-hide="urlEq('/court/cases/notify')" >

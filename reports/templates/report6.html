@@ -1,0 +1,111 @@
+﻿<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>รายงาน</title>
+    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap-theme.css">
+    <link rel="stylesheet" type="text/css" href="./report.css">
+</head>
+<body>
+    {% set year1 -%}พ.ศ. {{date1 | th_date('year')}}{%- endset %}
+    {% set year2 -%}{% if date2 %}พ.ศ. {{date2 | th_date('year')}}{% endif %}{%- endset %}
+    {% if year1==year2%}
+    {% set year1='' %}
+    {% endif %}
+    <div class="container-fluid">
+        <div class="text-center">
+            <h4>รายงานข้อมูลการส่งสำนวนและร่างคำพิพากษาของศาลในภาค 5</h4>
+            <h4>เดือน {{date1 | th_date('month')}} {{year1}}{% if date2 and date1!=date2 %} ถึงเดือน {{date2 | th_date('month')}} {{year2}}{% endif %}</h4>
+        </div>
+        <div style="position:fixed;top:8px;right:8px" class="hidden-print"><a href="javascript:window.print()" title="พิมพ์รายงาน" class="btn btn-default"><span class="glyphicon glyphicon-print"></span></a></div>
+
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th rowspan="2" class="text-center">ลำดับที่</th>
+                    <th rowspan="2" class="text-center">ศาล</th>
+                    <th rowspan="2" class="text-center">ปริมาณที่ศาลส่งสำนวน</th>
+                    <th colspan="2" class="text-center">ปริมาณคดีที่ศ่าลส่งตรวจ</th>
+                    <th colspan="4" class="text-center">ผลการส่งสำนวนตรวจของศาล</th>
+                </tr>
+                <tr>
+                    <th class="text-center">แพ่ง</th>
+                    <th class="text-center">อาญา</th>
+                    <th class="text-center">ตรงตราระเบียบ</th>
+                    <th class="text-center">ร้อยละ</th>
+                    <th class="text-center">ไม่ตรงตามระเบียบ</th>
+                    <th class="text-center">ร้อยละ</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set index=0 %}
+                {% set t_total=0 %}
+                {% set t_pang=0 %}
+                {% set t_aya=0 %}
+                {% set t_reg=0 %}
+                {% set t_ireg=0 %}
+                {% for group in groups %}
+                <tr>
+                    <td></td>
+                    <td><h4>{{group.name}}</h4></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                {% for court in courts[ group.id] %}
+                {% set it=getDict(court.id,[]) %}
+                {% set index=index+1 %}
+                {% set t_total=t_total + it.total %}
+                {% set t_pang=t_pang + it.pang %}
+                {% set t_aya=t_aya + it.aya %}
+                {% set t_reg=t_reg + it.reg %}
+                {% set t_ireg=t_ireg + it.ireg %}
+                <tr>
+                    <td class="text-center">{{index}}</td>
+                    <td>{{court.name}}</td>
+                    <td class="text-center">{{it.total}}</td>
+                    <td class="text-center">{{it.pang}}</td>
+                    <td class="text-center">{{it.aya}}</td>
+                    <td class="text-center">{{it.reg}}</td>
+                    <td class="text-center">{{percentOf(it.reg, it.total)}}</td>
+                    <td class="text-center">{{it.ireg}}</td>
+                    <td class="text-center">{{percentOf(it.ireg, it.total)}}</td>
+                </tr>
+
+                {% endfor %}
+                {% endfor %}
+                <tr class="total">
+                    <td class="text-center"></td>
+                    <td>รวม</td>
+                    <td class="text-center">{{t_total}}</td>
+                    <td class="text-center">{{t_pang}}</td>
+                    <td class="text-center">{{t_aya}}</td>
+                    <td class="text-center">{{t_reg}}</td>
+                    <td class="text-center">{{percentOf(t_reg,t_total)}}</td>
+                    <td class="text-center">{{t_ireg}}</td>
+                    <td class="text-center">{{percentOf(t_ireg,t_total)}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-sm-offset-2 col-sm-8">
+                <dl class="dl-horizontal">
+                    <dt>ตรงตามระเบียบ หมายถึง</dt>
+                    <dd>สำนวนและร่างคำพิพากษาของศาลส่งมายัง สำนักงานอธิบดีผู้พิพากษาภาค ๕ ก่อนวันนัดฟังคำพิพากษาหรือคำสั่งไม่น้อยกว่า ๑๕ วัน</dd>
+                    <dt>ไม่ตรงตามระเบียบ หมายถึง</dt>
+                    <dd>สำนวนและร่างคำพิพากษาของศาลส่งมายัง สำนักงานอธิบดีผู้พิพากษาภาค ๕ ก่อนวันฟังคำพิพากษาหรือคำสั่งน้อยกว่า ๑๕ วัน</dd>
+                </dl>
+                <div>ศาลในเขตอำนาจ ฯ ส่งสำนวนและร่างฯ ตรงตามระเบียบ คิดเป็นร้อยละ  <span class="percent">{{percentOf(t_reg,t_total)}}</span></div>
+                <div>ศาลในเขตอำนาจ ฯ ส่งสำนวนและร่างฯ ไม่ตรงตามระเบียบ คิดเป็นร้อยละ <span class="percent">{{percentOf(t_ireg,t_total)}}</span></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

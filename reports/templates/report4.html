@@ -1,0 +1,70 @@
+﻿<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>รายงาน</title>
+    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap-theme.css">
+    <link rel="stylesheet" type="text/css" href="./report.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="text-center">
+            <h3>สรุปการส่งสำนวนและร่างคำพิพากษาของศาลในเขตอำนาจอธิบดีผู้พิพากษาภาค 5</h3>
+            <h4>วันที่ {{date1 | th_date}}</h4>
+        </div>
+        <div style="position:fixed;top:8px;right:8px" class="hidden-print"><a href="javascript:window.print()" title="พิมพ์รายงาน" class="btn btn-default"><span class="glyphicon glyphicon-print"></span></a></div>
+        <br />
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th width="80">ลำดับที่</th>
+                    <th class="text-center">ศาล</th>
+                    <th class="text-center">เลขที่หนังสือ</th>
+                    <th class="text-center">หมายเลขคดี</th>
+                    <th class="text-center">โจทก์</th>
+                    <th class="text-center">จำเลย</th>
+                    <th class="text-center">เรื่อง</th>
+                    <th class="text-center">นัดฟังคำพิพากษา</th>
+                    <th class="text-center">เจ้าของสำนวน</th>
+                    <th class="text-center">วันส่งคืน</th>
+                    <th class="text-center">หมายเหตุ</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set index=0 %}
+                {% for it in cases %}
+                {% set index=index+1 %}
+                <tr>
+                    <td class="text-center">{{index}}</td>
+                    <td class="text-center">{{it.user_id | user_name}}</td>
+                    <td class="text-center">{{it.number_sent2}}</td>
+                    <td class="text-center">{{it.number_black}}</td>
+                    <td>{{it.plaintiff}}</td>
+                    <td>{{it.defendant}}</td>
+                    <td>{{it.title}}</td>
+                    <td class="text-center">{{it.date_ap | th_date('short')}}</td>
+                    <td>{{it.judge_id | user_name}}</td>
+                    <td class="text-center">{{it.date_sent5 | th_date('short')}}</td>
+                    <td>{{it.form2_note}}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td class="text-center">&nbsp;</td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-center"></td>
+                    <td></td>
+                    <td class="text-center"></td>
+                    <td></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

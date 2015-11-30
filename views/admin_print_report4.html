@@ -1,0 +1,32 @@
+<div class="row" ng-controller="PrintReportCtrl" ng-init="options.date_from=today()">
+	<div class="col-md-6 col-md-offset-3">
+		<div class="panel panel-default">
+		  <div class="panel-heading">
+		    	<h2 class="text-primary"><span class="glyphicon glyphicon-cog"></span> ตั้งค่ารายงาน</h2>
+		    	<h4 class="text-info">รายงานข้อมูลการจัดส่งสำนวนเพื่อตรวจร่างคำพิพากษาของศาลในภาค5</h4>
+		  </div>
+		  <div class="panel-body">
+		  	<div class="row">
+		  	<div class="col-md-8 col-md-offset-2">
+		  	<form cutom-form name="frm_report" method="post" action="reports/index4.php" target="_blank">
+		  	<input type="hidden" name="date1" value="{{options.date_from}}">
+
+      	                  		  
+        		<label>ภาครับสำนวน</label>
+        		<div class="row">
+        			<div class="col-md-12">
+                    	<span mode="0"  ng-model="options.date_from"  placeholder="วันที่" custom-date-field></span>
+                    </div>
+                </div>
+               
+            	<hr>
+            	<div class="col-md-6 col-md-offset-3">
+            		<button class="btn btn-primary btn-block" ng-disabled="!options.date_from"><span class="glyphicon glyphicon-print"></span> สร้างรายงาน</button>
+ 				</div>
+ 			</form>
+ 			</div>
+ 			</div>
+		  </div>
+		</div>
+	<div>
+<div>

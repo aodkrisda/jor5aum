@@ -41,12 +41,15 @@
                         <input type="text" readonly class="form-control input-md" value="{{editingItem.type_id | lookup_type:'name':true}} - {{editingItem.type_id | lookup_type}}">
                     </div>
                 </div>
-                <div class="form-group col-md-6">
-                    <label class="control-label col-md-4">ข้อหาพิมพ์ปก</label>
-                    <div class="col-md-8">
-                        <input type="text" readonly class="form-control input-md" value="{{editingItem.title}}">
+            <div class="form-group col-md-6">
+                <label class="control-label col-md-4">ข้อหาพิมพ์ปก</label>
+                <div class="col-md-8" ng-init="_xedit=false">
+                    <div class="input-group">
+                        <input type="text" ng-readonly="!_xedit" class="form-control input-md" ng-model="editingItem.title">
+                        <span class="input-group-addon" title="แก้ไข" ng-click="_xedit=true"><span class="glyphicon glyphicon-pencil"></span></span>
                     </div>
                 </div>
+            </div>
 
                 <div class="form-group col-md-6">
                     <label class="control-label col-md-4">วันที่รับฟ้อง</label>
@@ -54,12 +57,21 @@
                         <input type="text" readonly class="form-control input-md" value="{{editingItem.date_case | thai_date}}">
                     </div>
                 </div>
-                <div class="form-group col-md-6">
-                    <label class="control-label col-md-4">ข้อหาสถิติ</label>
-                    <div class="col-md-8">
-                        <custom-readonly-topics ng-model="editingItem.topic_ids"></custom-readonly-topics>
+            <div class="form-group col-md-6">
+                <label class="control-label col-md-4">ข้อหาสถิติ</label>
+                <div class="col-md-8">
+
+                    <div class="input-group" ng-controller="TopicsCtrl" ng-init="_xedit2=false">
+                        <div class="form-control" ng-class="{readonly:!_xedit2}" style="height:auto;min-height:36px;">
+                            <custom-choices ng-model="editingItem.topic_ids"></custom-choices> 
+                        </div>
+                        <div class="input-group-addon" style="vertical-align:top;" title="แก้ไข" id="edit-topics" ng-click="ifcall(editingItem.type_id>0,popupTopics, editingItem);_xedit2=true">
+                            <span style="background:none"><span class="glyphicon glyphicon-pencil"></span></span>
+                        </div>
                     </div>
+
                 </div>
+            </div>
                 <div class="form-group col-md-6">
                     <label class="control-label col-md-4">วันที่ศาลส่งสำนวน</label>
                     <div class="col-md-8">

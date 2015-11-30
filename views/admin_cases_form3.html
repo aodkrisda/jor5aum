@@ -64,7 +64,7 @@
                     <div class="col-md-8">
    
                             <div class="input-group" ng-controller="TopicsCtrl" ng-init="_xedit2=false">
-                                <div class="form-control" ng-class="{xreadonly:!_xedit2}" style="height:auto;min-height:36px;">
+                                <div class="form-control" ng-class="{readonly:!_xedit2}" style="height:auto;min-height:36px;">
                                     <custom-choices ng-model="editingItem.topic_ids"></custom-choices>
                                 </div>
                                 <div class="input-group-addon" style="vertical-align:top;" title="แก้ไข" id="edit-topics" ng-click="ifcall(editingItem.type_id>0,popupTopics, editingItem);_xedit2=true">

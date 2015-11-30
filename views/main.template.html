@@ -154,7 +154,7 @@
 </script>
 
 <script type="text/ng-template" id="custom.confirm.popover.html">
-    <div class="popover">
+    <div class="popover" style="min-width:300px">
         <div class="arrow"></div>
         <h3 class="popover-title text-center text-danger"><strong>ยืนยันการลบข้อมูล</strong></h3>
         <div class="popover-content">
@@ -325,6 +325,99 @@
         </div>
     </div>
 </script>
+<script type="text/ng-template" id="admin.cases.reports.html">
+    <div class="popover" style="min-width:400px">
+        <div class="arrow"></div>
+        <h3 class="popover-title"><span class="glyphicon glyphicon-share"></span> <strong>สรุปรายงานคดี</strong></h3>
+        <div class="popover-content" style="padding-top:2em;padding-bottom:2em">
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <ul class="media-list" style="padding-left:2em">
+                        <li class="media">
+                            <div class="media-body">
+                                <a href="#admin/report1">
+                                    <h4 class="media-heading text-primary"><span class="glyphicon glyphicon-print"></span> สรุปปริมาณรายงานคดีของศาลในภาค 5</h4>
+                                </a>
+                              </div>
+                        </li>
+                        <li class="media">
+                            <div class="media-body">
+                                <a href="#admin/report2">
+                                    <h4 class="media-heading text-primary"><span class="glyphicon glyphicon-print"></span> สรุปรายงานคดีแยกเป็นรายศาล</h4>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="admin.vcases.reports.html">
+    <div class="popover" style="min-width:400px">
+        <div class="arrow"></div>
+        <h3 class="popover-title"><span class="glyphicon glyphicon-share"></span> <strong>สรุปรายงานคดี</strong></h3>
+        <div class="popover-content" style="padding-top:2em;padding-bottom:2em">
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <ul class="media-list" style="padding-left:2em">
+                        <li class="media">
+                             <div class="media-left">
+                                 <span class="glyphicon glyphicon-print"></span>
+                            </div>
+                            <div class="media-body">
+                                <a href="#admin/report4">
+                                    <h4 class="media-heading text-primary">รายงานการส่งสำนวนเพื่อตรวจร่างคำพิพากษาประจำวัน</h4>
+                                </a>
+                            </div>
+                        </li>
+                        <li class="media">
+                            <div class="media-left">
+                                <span class="glyphicon glyphicon-print"></span>
+                            </div>
+                            <div class="media-body">
+                                <a href="#admin/report5">
+                                    <h4 class="media-heading text-primary">รายงานข้อมูลการส่งสำนวนและร่างคำพิพากษาของศาลในภาค 5 (ประจำเดือน)</h4>
+                                </a>
+                            </div>
+                        </li>
+                        <li class="media">
+                            <div class="media-left">
+                                <span class="glyphicon glyphicon-print"></span>
+                            </div>
+                            <div class="media-body">
+                                <a href="#admin/report6">
+                                    <h4 class="media-heading text-primary">สรุปการส่งสำนวนและร่างคำพิพากษาศาลในภาค 5(ประจำเดือน)</h4>
+                                </a>
+                            </div>
+                        </li>
+                        <li class="media">
+                            <div class="media-left">
+                                <span class="glyphicon glyphicon-print"></span>
+                            </div>
+                            <div class="media-body">
+                                <a href="#admin/report7">
+                                    <h4 class="media-heading text-primary">รายงานสำนวนที่ไม่ได้ส่งสำเนาคำพิพากษา</h4>
+                                </a>
+                            </div>
+                        </li>
+                        <li class="media">
+                            <div class="media-left">
+                                <span class="glyphicon glyphicon-print"></span>
+                            </div>
+                            <div class="media-body">
+                                <a href="#admin/report8">
+                                    <h4 class="media-heading text-primary">รายงานคดีที่ไม่ได้ส่งสำนวน</h4>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+</script>
 
 <script type="text/ng-template" id="custom.confirm.admin.actions.html">
     <div class="popover"  style="min-width:300px">
@@ -338,6 +431,7 @@
         </div>
     </div>
 </script>
+
 <script type="text/ng-template" id="custom.confirm.admin.actions2.html">
     <div class="popover" style="min-width:300px">
         <div class="arrow"></div>
@@ -348,6 +442,8 @@
                 <button type="button" ng-disabled="vcaseAdminForm($it)<2"  class="btn btn-info btn-block" ng-click="go('admin.vcases.form3',$it);$hide()"><div class="text-left"><span class="badge">3</span> จ่ายสำนวนเพื่อตรวจร่างคำพิพากษา</div></button>
                 <button type="button" ng-disabled="vcaseAdminForm($it)<2"  class="btn btn-info btn-block" ng-click="go('admin.vcases.form4',$it);$hide()"><div class="text-left"><span class="badge">4</span> ส่งสำนวนและร่างคำพิพากษาคืนศาล</div></button>
                 <button type="button" ng-disabled="!(vcaseAdminForm($it)>0)"  class="btn btn-info btn-block" ng-click="go('admin.vcases.form5',$it);$hide()"><div class="text-left"><span class="badge">5</span> รับสำเนาคำพิพากษา</div></button>
+
+                <button type="button" ng-if="($it.number_black && $it.date_received3)" class="btn btn-success btn-block" ng-click="printCover($it);$hide()"><div class="text-left"><span class="glyphicon glyphicon-print"></span> พิมพ์ปกสำนวน</div></button>
             </p>
         </div>
     </div>
@@ -412,6 +508,7 @@
 
 <script type="text/ng-template" id="custom.court.form2.html">
     <div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+
         <div class="modal-dialog" style="width:95%;">
             <div class="modal-content">
                 <div class="modal-header" ng-show="title">
@@ -420,7 +517,16 @@
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal" name="form">
-                        <fieldset>
+                        <div class="row">
+                            <div class="form-group col-md-6  has-feedback custom-dropdown">
+                                <!-- Text input-->
+                                <label class="col-md-4 control-label">ศาล</label>
+                                <div class="col-md-7">
+                                    <div custom-dropdown class="form-control input-md" ng-model="editingItem.user_id" data-options="court_options"></div>
+                                    <span class="form-control-feedback"><span class="caret"></span></span>                                </div>
+                            </div>
+                        </div>
+                        <fieldset ng-disabled="!editingItem.user_id">
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <!-- Text input-->
@@ -447,15 +553,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <style>
-                                .bnl {
-                                    border-left: none;
-                                }
 
-                                .bnr {
-                                    border-right: none;
-                                }
-                            </style>
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <!-- Text input-->
@@ -531,7 +629,7 @@
                             <div class="form-group col-md-6 has-feedback custom-dropdown">
                                 <label class="control-label col-md-4">ผู้พิพากษาเจ้าของสำนวน</label>
                                 <div class="col-md-8">
-                                    <div custom-dropdown class="form-control input-md" ng-model="editingItem.judge_id" data-options="judge_court_options"  data-params="[editingItem.user_id]">></div>
+                                    <div custom-dropdown class="form-control input-md" ng-model="editingItem.judge_id" data-options="judge_court_options"  data-params="[editingItem.user_id]"></div>
                                     <span class="form-control-feedback"><span class="caret"></span></span>
                                 </div>
                             </div>
@@ -571,30 +669,6 @@
                                     <span mode="0" ng-model="editingItem.date_ap" placeholder="ยังไม่มีข้อมูล" custom-date-field></span>
                                 </div>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label class="control-label col-md-4">คำสั่ง อธ.</label>
-                                <div class="col-md-8">
-
-                                    <select class="form-control input-md" name="role" ng-model="editingItem.command_id" select-default ng-options="it.id as it.id | lookup_at group by it.checked |iif:'1':'ตรวจ':'ไม่ตรวจ' for it  in Lookups.getAt()">
-                                        <option value=""></option>
-                                    </select>
-                                    <div ng-if="(editingItem.command_id | lookup_at:'checked')=='1'">
-                                        <label class="checkbox text-danger" style="padding-left:20px">
-                                            <input type="checkbox" ng-model="editingItem.at_correct" ng-true-value="'0'" ng-false-value="'1'">  ไม่ถูกต้องตามระเบียบ
-                                        </label>
-                                        <div ng-if="editingItem.at_correct=='0'">
-                                            <label style="padding-top:0.5em">เหตุผล</label>
-                                            <div class="input-group">
-                                                <select class="form-control input-md" name="role" ng-model="editingItem.at_result_id" select-default ng-options="it.id as it.id | lookup_at_result  for it  in Lookups.getAtResult()">
-                                                    <option value=""></option>
-                                                </select>
-                                                <span class="input-group-addon btn" id="add-at-result" ng-click="popupAtResult()"><span class="glyphicon glyphicon-plus"></span></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                             <div class="row clearfix">
 
                             </div>
@@ -621,7 +695,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary btn-min" ng-disabled="form.$invalid" ng-click="saveForm()"><span class="fa fa-save"></span> บันทึกข้อมูล</button>
+                    <button type="button" class="btn btn-primary btn-min" ng-disabled="form.$invalid" ng-click="saveForm(afterSaved)"><span class="fa fa-save"></span> บันทึกข้อมูล</button>
                     <button type="button" class="btn btn-warning btn-min" ng-click="cancelForm()"><span class="fa fa-close"></span> ยกเลิก</button>
                 </div>
             </div>
@@ -641,15 +715,15 @@
             <form class="xform" style="padding:10px; max-width:480px">
                 <div class="form-group">
                     <label class="control-label">เลขคดีดำ</label>
-                    <div class="input-group">
+                    <div class="input-group" ng-init="temp.year=getBlkYear(editingItem)">
                         <span class="input-group-addon">{{editingItem.type_id | lookup_type:'code'}}</span>
                         <input type="text" maxlength="10" placeholder="เลขคดีเช่น 823" class="form-control" ng-model="temp.number_black">
                         <span class="input-group-addon">/</span>
-                        <input type="text" maxlength="4" placeholder="ปีเช่น 2558" class="form-control" ng-model="temp.year" bs-options="year for year in years" bs-typeahead>
+                        <input type="text" maxlength="4" placeholder="ปีเช่น 2558" class="form-control" ng-readonly="temp.year.length==4" ng-model="temp.year" bs-options="year for year in years" bs-typeahead>
                         <span class="input-group-addon btn btn-danger" title="ลบเลขคดี" style="color:#ffffff" ng-click="clearBlackNumber(temp);">
                             <span class="glyphicon glyphicon-repeat"></span> ลบเลขคดี
                         </span>
-
+                      
                     </div>
 
                     <div class="text-center text-primary" style="margin-top:2em" ng-show="temp.number_black && temp.year">
@@ -762,6 +836,22 @@
             <button type="button" class="btn btn-success btn-min" ng-click="accept();$hide()"><span class="glyphicon glyphicon-ok-sign"></span> ตกลง
             </button>
             <button type="button" class="btn btn-warning btn-min" ng-click="$hide()"><span class="glyphicon glyphicon-remove-sign"></span> ยกเลิก</button>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="custom-report-pupup.html">
+    <div class="custom-dropdown popover" style="min-width:100%;height:100%">
+        <div class="arrow"></div>
+        <div class="popover-title bg-header">
+            <button type="button" title="Close" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+            <h4>
+                <i class="fa fa-windows"></i>
+                {{::title}}
+                
+            </h4>
+        </div>
+        <div class="popover-content bg-content" style="overflow-y:auto;">
+            <div ng-include="template"></div>
         </div>
     </div>
 </script>

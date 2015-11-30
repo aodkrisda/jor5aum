@@ -21,7 +21,7 @@ angular.module('App', ['lazyLoadJs', 'wt.responsive', 'ui.router', 'angular-load
 }])
 
 
-.run(['$rootScope', '$state', '$stateParams', 'Auth', '$filter', '$alert', 'store', 'Lookups', 'API_URL', 'moment', 'BDAYS','_', function ($rootScope, $state, $stateParams, Auth, $filter, $alert, store, Lookups, API_URL, moment, BDAYS,_) {
+.run(['$rootScope', '$state', '$stateParams', 'Auth', '$filter', '$alert', 'store', 'Lookups', 'API_URL', 'moment', 'BDAYS','_', '$popover',function ($rootScope, $state, $stateParams, Auth, $filter, $alert, store, Lookups, API_URL, moment, BDAYS,_,$popover) {
     angular.getChanges = function getChanges(item, old, pk) {
         if (pk && item && old && old[pk] && old[pk] == item[pk]) {
             var fds = {};
@@ -78,7 +78,7 @@ angular.module('App', ['lazyLoadJs', 'wt.responsive', 'ui.router', 'angular-load
                 var b=(rejection.data.error2===true);
                 if (b || (Auth.isLoggedIn() !== false)) {
                     var str = rejection.data.message;
-                     $.notify('แจ้งเตือนความผิดพลาด : ' + str);
+                    $.notify('แจ้งเตือนความผิดพลาด : ' + str);
                 }
             }
         }
@@ -229,6 +229,15 @@ angular.module('App', ['lazyLoadJs', 'wt.responsive', 'ui.router', 'angular-load
                 break;
         }
     });
+    $rootScope.getBlkYear = function (it) {
+        if (it && it.date_case) {
+            var d = new moment(it.date_case);
+            if (d && d.isValid()) {
+                return (d.year() + 543) + '';
+            }
+        }
+        return '';
+    }
 
     Auth.fetch();
     if (Auth.isLoggedIn) {
@@ -241,7 +250,6 @@ angular.module('App', ['lazyLoadJs', 'wt.responsive', 'ui.router', 'angular-load
         groupField: '',
         multiple: false,
         title: 'เลือกผู้พิพากษาภาค',
-        xxitemTemplate: '<span>xxxxxxxxxx{{::$labelFunction($item)}} </span>',
         getData: function () {
             return Lookups.getJudge2()
         },
@@ -271,6 +279,22 @@ angular.module('App', ['lazyLoadJs', 'wt.responsive', 'ui.router', 'angular-load
             return '';
         }
     }
+    $rootScope.court_options = {
+        dataField: 'id',
+        labelField: 'name',
+        groupField: '',
+        multiple: false,
+        title: 'เลือกศาล',
+        getData: function () {
+            return Lookups.getCourt();
+        },
+        labelFunction: function (it) {
+            if (it) {
+                return $filter('lookup_court')(it['id'] || 0);
+            }
+            return '';
+        }
+    }
     $rootScope.result_options = {
         dataField: 'id',
         labelField: 'name',
@@ -288,6 +312,7 @@ angular.module('App', ['lazyLoadJs', 'wt.responsive', 'ui.router', 'angular-load
             return '';
         }
     }
+
 }])
 .config(['$stateProvider', '$urlRouterProvider', '$httpProvider', '$controllerProvider', 'storeProvider','flowFactoryProvider',
 function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider, storeProvider, flowFactoryProvider) {
@@ -295,402 +320,462 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
         singleFile: true
     };
     storeProvider.setStore("sessionStorage");
-        //$filterProvider
-       // angular.configDynamic($controllerProvider);
+    //$filterProvider
+    // angular.configDynamic($controllerProvider);
 	
-        $httpProvider.interceptors.push('myHttpInterceptor');
-        /////////////////////////////
-        // Redirects and Otherwise //
-        /////////////////////////////
+    $httpProvider.interceptors.push('myHttpInterceptor');
+    /////////////////////////////
+    // Redirects and Otherwise //
+    /////////////////////////////
 
-        // Use $urlRouterProvider to configure any redirects (when) and invalid urls (otherwise).
-        $urlRouterProvider
+    // Use $urlRouterProvider to configure any redirects (when) and invalid urls (otherwise).
+    $urlRouterProvider
 
-          // If the url is ever invalid, e.g. '/asdf', then redirect to '/' aka the home state
-          .otherwise('/login');
+      // If the url is ever invalid, e.g. '/asdf', then redirect to '/' aka the home state
+      .otherwise('/login');
 
 
-        //////////////////////////
-        // State Configurations //
-        //////////////////////////
+    //////////////////////////
+    // State Configurations //
+    //////////////////////////
 
-        // Use $stateProvider to configure your states.
-        $stateProvider
-          .state("admin", {
-              // Use a url of "/" to set a state as the "index".
-              url: "/admin",
-              abstract: true,
-              templateUrl:'views/admin.html'
-          })
-          .state("admin.cases", {
-              url: "/cases",
-              roles:['admin'],          
-              views:{
-                  '': {
-                      templateUrl: 'views/admin_cases.html'
-                  }
+    // Use $stateProvider to configure your states.
+    $stateProvider
+      .state("admin", {
+          // Use a url of "/" to set a state as the "index".
+          url: "/admin",
+          abstract: true,
+          templateUrl:'views/admin.html'
+      })
+      .state("admin.cases", {
+          url: "/cases",
+          roles:['admin'],          
+          views:{
+              '': {
+                  templateUrl: 'views/admin_cases.html'
               }
-          })
+          }
+      })
        
-          .state("admin.cases.form1", {
-              url: "/form1",
-              roles: ['admin'],
-              views: {
-                  '': {
-                      templateUrl: 'views/admin_cases_form1.html'
-                  }
+      .state("admin.cases.form1", {
+          url: "/form1",
+          roles: ['admin'],
+          views: {
+              '': {
+                  templateUrl: 'views/admin_cases_form1.html'
               }
-          })
+          }
+      })
  
-          .state("admin.cases.form5", {
-              url: "/form5",
-              roles: ['admin'],
-              views: {
-                  '': {
-                      templateUrl: 'views/admin_cases_form5.html'
-                  }
+      .state("admin.cases.form5", {
+          url: "/form5",
+          roles: ['admin'],
+          views: {
+              '': {
+                  templateUrl: 'views/admin_cases_form5.html'
               }
-          })
-          .state("admin.vcases", {
-              url: "/vcases",
-              roles: ['admin'],
-              views: {
-                  '': {
-                      templateUrl: 'views/admin_vcases.html'
-                  }
+          }
+      })
+      .state("admin.vcases", {
+          url: "/vcases",
+          roles: ['admin'],
+          views: {
+              '': {
+                  templateUrl: 'views/admin_vcases.html'
               }
-          })
-          .state("admin.cases.notify", {
-              url: "/notify",
-              roles: ['admin'],
-              onExit: function ($state) {
-                  if ($state.current._scope) {
-                      $state.current._scope.notifyReport(false);
-                      delete $state.current._scope;
-                  }
-              },
-              views: {
-                  '': {
-                      controller: function ($scope, $state) {
-                          $state.current._scope = $scope.$parent;
-                          $scope.$parent.notifyReport(true);
-                      },
-                      template: '<h3 class="text-center text-danger">รายงานแจ้งเตือน ค้างส่งผลรายงานคดีให้ศาล</h3>'
-                  }
+          }
+      })
+      .state("admin.cases.notify", {
+          url: "/notify",
+          roles: ['admin'],
+          onExit: function ($state) {
+              if ($state.current._scope) {
+                  $state.current._scope.notifyReport(false);
+                  delete $state.current._scope;
               }
-          })
-          .state("admin.vcases.notify", {
-              url: "/notify",
-              roles: ['admin'],
-              onExit: function ($state) {
-                  if ($state.current._scope) {
-                      $state.current._scope.notify2Report(false);
-                      delete $state.current._scope;
-                  }
-              },
-              views: {
-                  '': {
-                      controller: function ($scope, $state) {
-                          $state.current._scope = $scope.$parent;
-                          $scope.$parent.notify2Report(true);
-                      },
-                      template: '<h3 class="text-center text-danger">รายงานแจ้งเตือน ค้างส่งสำนวนและร่างคำพิพากษาที่ตรวจแล้วคืนศาล</h3>'
-                  }
+          },
+          views: {
+              '': {
+                  controller: function ($scope, $state) {
+                      $state.current._scope = $scope.$parent;
+                      $scope.$parent.notifyReport(true);
+                  },
+                  template: '<h3 class="text-center text-danger">รายงานแจ้งเตือน ค้างส่งผลรายงานคดีให้ศาล</h3>'
               }
-          })
-          .state("admin.vcases.form2", {
-              url: "/form2",
-              roles: ['admin'],
-              views: {
-                  '': {
-                      templateUrl: 'views/admin_cases_form2.html'
-                  }
+          }
+      })
+      .state("admin.vcases.notify", {
+          url: "/notify",
+          roles: ['admin'],
+          onExit: function ($state) {
+              if ($state.current._scope) {
+                  $state.current._scope.notify2Report(false);
+                  delete $state.current._scope;
               }
-          })
-          .state("admin.vcases.form3", {
-              url: "/form3",
-              roles: ['admin'],
-              views: {
-                  '': {
-                      templateUrl: 'views/admin_cases_form3.html'
-                  }
+          },
+          views: {
+              '': {
+                  controller: function ($scope, $state) {
+                      $state.current._scope = $scope.$parent;
+                      $scope.$parent.notify2Report(true);
+                  },
+                  template: '<h3 class="text-center text-danger">รายงานแจ้งเตือน ค้างส่งสำนวนและร่างคำพิพากษาที่ตรวจแล้วคืนศาล</h3>'
               }
-          })
-          .state("admin.vcases.form4", {
-              url: "/form4",
-              roles: ['admin'],
-              views: {
-                  '': {
-                      templateUrl: 'views/admin_cases_form4.html'
-                  }
+          }
+      })
+      .state("admin.vcases.form2", {
+          url: "/form2",
+          roles: ['admin'],
+          views: {
+              '': {
+                  templateUrl: 'views/admin_cases_form2.html'
               }
-          })
-          .state("admin.vcases.form5", {
-              url: "/form5",
-              roles: ['admin'],
-              views: {
-                  '': {
-                      templateUrl: 'views/admin_cases_form5.html'
-                  }
+          }
+      })
+      .state("admin.vcases.form3", {
+          url: "/form3",
+          roles: ['admin'],
+          views: {
+              '': {
+                  templateUrl: 'views/admin_cases_form3.html'
               }
-          })
-          .state("admin.cases.form6", {
-              url: "/form6",
-              roles: ['admin'],
-              views: {
-                  '': {
-                      templateUrl: 'views/admin_cases_form6.html'
-                  }
+          }
+      })
+      .state("admin.vcases.form4", {
+          url: "/form4",
+          roles: ['admin'],
+          views: {
+              '': {
+                  templateUrl: 'views/admin_cases_form4.html'
               }
-          })
-          .state("admin.report1", {
-              url: "/report1",
-              roles: ['admin'],
-              onEnter:['Lookups',function(Lookups){
-            	  Lookups.load();
-              }],     
-              views: {
-                  '': {
-                      templateUrl: 'views/admin_print_report1.html'
-                  }
+          }
+      })
+      .state("admin.vcases.form5", {
+          url: "/form5",
+          roles: ['admin'],
+          views: {
+              '': {
+                  templateUrl: 'views/admin_cases_form5.html'
               }
-          })
-          .state("admin.report2", {
-              url: "/report2",
-              roles: ['admin'],
-              onEnter:['Lookups',function(Lookups){
-            	  Lookups.load();
-              }],                
-              views: {
-                  '': {
-                      templateUrl: 'views/admin_print_report2.html'
-                  }
+          }
+      })
+      .state("admin.cases.form6", {
+          url: "/form6",
+          roles: ['admin'],
+          views: {
+              '': {
+                  templateUrl: 'views/admin_cases_form6.html'
               }
-          })
-          .state("admin.users", {
-              url: "/users",
-              roles: ['admin'],
-              views:{
-                  '': {
-                      templateUrl: 'views/admin_users.html'
-                  }}
-          })
-          .state("admin.management", {
-              // Use a url of "/" to set a state as the "index".
-              url: "/management",
-              abstract: true,
-              templateUrl: 'views/admin_management.html'
-          })
-          .state("admin.management.users", {
-              url: "/users",
-              roles: ['admin'],
-              views: {
-                  '': {
-                      templateUrl: 'views/admin_users.html'
-                  }
+          }
+      })
+      .state("admin.report1", {
+          url: "/report1",
+          roles: ['admin'],
+          onEnter:['Lookups',function(Lookups){
+              Lookups.load();
+          }],     
+          views: {
+              '': {
+                  templateUrl: 'views/admin_print_report1.html'
               }
-          })
-          .state("admin.management.types", {
-              url: "/types",
-              views:{
-                  '': {
-                      templateUrl: 'views/admin_types.html'
-                  }}
-          })
-          .state("admin.management.topics", {
-              url: "/topics",
-              roles: ['admin'],
-              views: {
-                  '': {
-                      templateUrl: 'views/admin_topics.html'
-                  }
+          }
+      })
+      .state("admin.report2", {
+          url: "/report2",
+          roles: ['admin'],
+          onEnter:['Lookups',function(Lookups){
+              Lookups.load();
+          }],                
+          views: {
+              '': {
+                  templateUrl: 'views/admin_print_report2.html'
               }
-          })
-          .state("admin.management.results", {
-              url: "/results",
-              roles: ['admin'],
-              views: {
-                  '': {
-                      templateUrl: 'views/admin_results.html'
-                  }
+          }
+      })
+      .state("admin.report4", {
+          url: "/report4",
+          roles: ['admin'],
+          onEnter: ['Lookups', function (Lookups) {
+              Lookups.load();
+          }],
+          views: {
+              '': {
+                  templateUrl: 'views/admin_print_report4.html'
               }
-          })
-          .state("admin.management.ats", {
-              url: "/ats",
-              roles: ['admin'],
-              views: {
-                  '': {
-                      templateUrl: 'views/admin_ats.html'
-                  }
+          }
+      })
+      .state("admin.report5", {
+          url: "/report5",
+          roles: ['admin'],
+          onEnter: ['Lookups', function (Lookups) {
+              Lookups.load();
+          }],
+          views: {
+              '': {
+                  templateUrl: 'views/admin_print_report5.html'
               }
-          })
-          .state("admin.management.at_results", {
-              url: "/at_results",
-              roles: ['admin'],
-              views: {
-                  '': {
-                      templateUrl: 'views/admin_at_results.html'
-                  }
+          }
+      })
+      .state("admin.report6", {
+          url: "/report6",
+          roles: ['admin'],
+          onEnter: ['Lookups', function (Lookups) {
+              Lookups.load();
+          }],
+          views: {
+              '': {
+                  templateUrl: 'views/admin_print_report6.html'
               }
-          })
-          .state("admin.management.settings", {
-              url: "/settings",
-              roles: ['admin'],
-              views: {
-                  '': {
-                      templateUrl: 'views/admin_settings.html'
-                  }
+          }
+      })
+      .state("admin.report7", {
+          url: "/report7",
+          roles: ['admin'],
+          onEnter: ['Lookups', function (Lookups) {
+              Lookups.load();
+          }],
+          views: {
+              '': {
+                  templateUrl: 'views/admin_print_report7.html'
               }
-          })
-          .state("court", {
-              // Use a url of "/" to set a state as the "index".
-              url: "/court",
-              abstract: true,
-              templateUrl: 'views/court.html'
-          })
-          .state("court.cases", {
-              url: "/cases",
-              roles: ['court'],
-              onEnter: ['Lookups', function (Lookups) {
-                  Lookups.load();
-              }],
-              views: {
-                  '': {
-                      templateUrl: 'views/court_cases.html'
-                  }
+          }
+      })
+      .state("admin.report8", {
+          url: "/report8",
+          roles: ['admin'],
+          onEnter: ['Lookups', function (Lookups) {
+              Lookups.load();
+          }],
+          views: {
+              '': {
+                  templateUrl: 'views/admin_print_report8.html'
               }
+          }
+      })
+      .state("admin.users", {
+          url: "/users",
+          roles: ['admin'],
+          views:{
+              '': {
+                  templateUrl: 'views/admin_users.html'
+              }}
+      })
+      .state("admin.management", {
+          // Use a url of "/" to set a state as the "index".
+          url: "/management",
+          abstract: true,
+          templateUrl: 'views/admin_management.html'
+      })
+      .state("admin.management.users", {
+          url: "/users",
+          roles: ['admin'],
+          views: {
+              '': {
+                  templateUrl: 'views/admin_users.html'
+              }
+          }
+      })
+      .state("admin.management.types", {
+          url: "/types",
+          views:{
+              '': {
+                  templateUrl: 'views/admin_types.html'
+              }}
+      })
+      .state("admin.management.topics", {
+          url: "/topics",
+          roles: ['admin'],
+          views: {
+              '': {
+                  templateUrl: 'views/admin_topics.html'
+              }
+          }
+      })
+      .state("admin.management.results", {
+          url: "/results",
+          roles: ['admin'],
+          views: {
+              '': {
+                  templateUrl: 'views/admin_results.html'
+              }
+          }
+      })
+      .state("admin.management.ats", {
+          url: "/ats",
+          roles: ['admin'],
+          views: {
+              '': {
+                  templateUrl: 'views/admin_ats.html'
+              }
+          }
+      })
+      .state("admin.management.at_results", {
+          url: "/at_results",
+          roles: ['admin'],
+          views: {
+              '': {
+                  templateUrl: 'views/admin_at_results.html'
+              }
+          }
+      })
+      .state("admin.management.settings", {
+          url: "/settings",
+          roles: ['admin'],
+          views: {
+              '': {
+                  templateUrl: 'views/admin_settings.html'
+              }
+          }
+      })
+      .state("court", {
+          // Use a url of "/" to set a state as the "index".
+          url: "/court",
+          abstract: true,
+          templateUrl: 'views/court.html'
+      })
+      .state("court.cases", {
+          url: "/cases",
+          roles: ['court'],
+          onEnter: ['Lookups', function (Lookups) {
+              Lookups.load();
+          }],
+          views: {
+              '': {
+                  templateUrl: 'views/court_cases.html'
+              }
+          }
 
-          })
+      })
 
-          .state("court.cases.form1", {
-              url: "/form1",
-              roles: ['court'],
-              views: {
-                  '': {
-                      templateUrl: 'views/court_cases_form1.html'
-                  }
+      .state("court.cases.form1", {
+          url: "/form1",
+          roles: ['court'],
+          views: {
+              '': {
+                  templateUrl: 'views/court_cases_form1.html'
               }
-          })
-          .state("court.cases.form2", {
-              url: "/form2",
-              roles: ['court'],
-              views: {
-                  '': {
-                      templateUrl: 'views/court_cases_form2.html'
-                  }
+          }
+      })
+      .state("court.cases.form2", {
+          url: "/form2",
+          roles: ['court'],
+          views: {
+              '': {
+                  templateUrl: 'views/court_cases_form2.html'
               }
-          })
-          .state("court.cases.form3", {
-              url: "/form3",
-              roles: ['court'],
-              views: {
-                  '': {
-                      templateUrl: 'views/court_cases_form3.html'
-                  }
+          }
+      })
+      .state("court.cases.form3", {
+          url: "/form3",
+          roles: ['court'],
+          views: {
+              '': {
+                  templateUrl: 'views/court_cases_form3.html'
               }
-          })
-          .state("court.cases.form4", {
-              url: "/form4",
-              roles: ['court'],
-              views: {
-                  '': {
-                      templateUrl: 'views/court_cases_form4.html'
-                  }
+          }
+      })
+      .state("court.cases.form4", {
+          url: "/form4",
+          roles: ['court'],
+          views: {
+              '': {
+                  templateUrl: 'views/court_cases_form4.html'
               }
-          })
-          .state("court.vcases", {
-              url: "/vcases",
-              roles: ['court'],
-              views: {
-                  '': {
-                      templateUrl: 'views/court_vcases.html'
-                  }
+          }
+      })
+      .state("court.vcases", {
+          url: "/vcases",
+          roles: ['court'],
+          views: {
+              '': {
+                  templateUrl: 'views/court_vcases.html'
               }
-          })
-         .state("court.vcases.form2", {
-             url: "/form2",
-             roles: ['court'],
-             views: {
-                 '': {
-                     templateUrl: 'views/court_cases_form2.html'
-                 }
+          }
+      })
+     .state("court.vcases.form2", {
+         url: "/form2",
+         roles: ['court'],
+         views: {
+             '': {
+                 templateUrl: 'views/court_cases_form2.html'
              }
-         })
-          .state("court.vcases.form3", {
-              url: "/form3",
-              roles: ['court'],
-              views: {
-                  '': {
-                      templateUrl: 'views/court_cases_form3.html'
-                  }
+         }
+     })
+      .state("court.vcases.form3", {
+          url: "/form3",
+          roles: ['court'],
+          views: {
+              '': {
+                  templateUrl: 'views/court_cases_form3.html'
               }
-          })
-          .state("court.vcases.form4", {
-              url: "/form4",
-              roles: ['court'],
-              views: {
-                  '': {
-                      templateUrl: 'views/court_cases_form4.html'
-                  }
+          }
+      })
+      .state("court.vcases.form4", {
+          url: "/form4",
+          roles: ['court'],
+          views: {
+              '': {
+                  templateUrl: 'views/court_cases_form4.html'
               }
-          })
-          .state("court.users", {
-              url: "/users",
-              roles: ['court'],
-              views: {
-                  '': {
-                      templateUrl: 'views/court_users.html'
-                  }
+          }
+      })
+      .state("court.users", {
+          url: "/users",
+          roles: ['court'],
+          views: {
+              '': {
+                  templateUrl: 'views/court_users.html'
               }
-          })
+          }
+      })
 
-          .state("login", {
+      .state("login", {
 
-              // Use a url of "/" to set a state as the "index".
-              url: "/login",
-              templateUrl: 'views/login.html'
-          })
-          .state("court.cases.notify", {
-              url: "/notify",
-              roles: ['court'],
-              onExit: function ($state) {
-                  if ($state.current._scope) {
-                      $state.current._scope.notifyReport(false);
-                      delete $state.current._scope;
-                  }
-              },
-              views: {
-                  '': {
-                      controller: function ($scope, $state) {
-                          $state.current._scope = $scope.$parent;
-                          $scope.$parent.notifyReport(true);
-                      },
-                      template: '<h3 class="text-center text-danger">แจ้งเตือนค้างส่งสำนวนและร่างคำพิพากษาให้ภาคตรวจ</h3>'
-                  }
+          // Use a url of "/" to set a state as the "index".
+          url: "/login",
+          templateUrl: 'views/login.html'
+      })
+      .state("court.cases.notify", {
+          url: "/notify",
+          roles: ['court'],
+          onExit: function ($state) {
+              if ($state.current._scope) {
+                  $state.current._scope.notifyReport(false);
+                  delete $state.current._scope;
               }
-          })
-          .state("court.vcases.notify", {
-              url: "/notify",
-              roles: ['court'],
-              onExit: function ($state) {
-                  if ($state.current._scope) {
-                      $state.current._scope.notify2Report(false);
-                      delete $state.current._scope;
-                  }
-              },
-              views: {
-                  '': {
-                      controller: function ($scope, $state) {
-                          $state.current._scope = $scope.$parent;
-                          $scope.$parent.notify2Report(true);
-                      },
-                      template: '<h3 class="text-center text-danger">แจ้งเตือนค้างส่งสำเนาคำพิพากษาให้ภาค(หลังอ่านคำพิพากษา {{BDAYS}} วัน)</h3>'
-                  }
+          },
+          views: {
+              '': {
+                  controller: function ($scope, $state) {
+                      $state.current._scope = $scope.$parent;
+                      $scope.$parent.notifyReport(true);
+                  },
+                  template: '<h3 class="text-center text-danger">แจ้งเตือนค้างส่งสำนวนและร่างคำพิพากษาให้ภาคตรวจ</h3>'
               }
-          })
+          }
+      })
+      .state("court.vcases.notify", {
+          url: "/notify",
+          roles: ['court'],
+          onExit: function ($state) {
+              if ($state.current._scope) {
+                  $state.current._scope.notify2Report(false);
+                  delete $state.current._scope;
+              }
+          },
+          views: {
+              '': {
+                  controller: function ($scope, $state) {
+                      $state.current._scope = $scope.$parent;
+                      $scope.$parent.notify2Report(true);
+                  },
+                  template: '<h3 class="text-center text-danger">แจ้งเตือนค้างส่งสำเนาคำพิพากษาให้ภาค(หลังอ่านคำพิพากษา {{BDAYS}} วัน)</h3>'
+              }
+          }
+      })
 
 
-    }
+}
 ])
 
 
@@ -1217,17 +1302,17 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
           
             $scope.checking = true;
             Auth.post('login', { user_number: $scope.userid, password: $scope.password }).success(function (result) {
-                    $scope.checking = false;
-                    Auth.setUser(result.data.user, result.data.api_key);
-                    cfpLoadingBar.start();
-                    Lookups.load().success(function () {
-                        cfpLoadingBar.complete();
-                        if ($rootScope.isAdmin()) {
-                            $state.go('admin.cases');
-                        }else{
-                            $state.go('court.cases');
-                        }
-                    });
+                $scope.checking = false;
+                Auth.setUser(result.data.user, result.data.api_key);
+                cfpLoadingBar.start();
+                Lookups.load().success(function () {
+                    cfpLoadingBar.complete();
+                    if ($rootScope.isAdmin()) {
+                        $state.go('admin.cases');
+                    }else{
+                        $state.go('court.cases');
+                    }
+                });
             }).error(function (result) {
                 var str = '';
                 if (result.error && result.message) {
@@ -1369,9 +1454,9 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
                 $timeout(function () {
                     if ( $scope._flow.files[0].response) {
                         
-						    $scope._flow.cancel();
-						    $.notify('อัพโหลดเสร็จแล้ว', 'success');
-						    $scope.$parent.$fetch();  
+                        $scope._flow.cancel();
+                        $.notify('อัพโหลดเสร็จแล้ว', 'success');
+                        $scope.$parent.$fetch();  
                     }
                 },100);
             }
@@ -1488,9 +1573,20 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
 }])
 
 
-.controller('AdminReportCtrl', ['$scope', '$filter', '$element', '$rootScope', '$timeout', 'Auth', '$state', 'Lookups', '$modal', '$popover', 'Lookups', '_', function ($scope, $filter, $element, $rootScope, $timeout, Auth, $state, Lookups, $modal, $popover, $Lookups, _) {
-
-
+.controller('AdminReportCtrl', ['$scope', '$filter', '$element', '$rootScope', '$timeout', 'Auth', '$state', 'Lookups', '$modal', '$popover', 'Lookups', '_','$window', function ($scope, $filter, $element, $rootScope, $timeout, Auth, $state, Lookups, $modal, $popover, $Lookups, _, $window) {
+    var _postform = null;
+    $scope.printCover = function (it) {
+        if (!_postform) {
+            _postform = angular.element('#_postform_');
+        }
+        if (_postform.length) {
+            _postform.empty();
+            var fd = angular.element('<input type="hidden" name="case_id"/>');
+            fd.val(it['id']);
+            _postform.append(fd);
+            _postform.submit();
+        }
+    }
     $scope.opt = {
         dataField: 'id',
         labelField: 'name',
@@ -1504,7 +1600,11 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
         }
         
     }
-
+    $scope.afterSaved = function (it, act) {
+        if (it && act == 'add') {
+            $scope.go('admin.vcases.form2', it);
+        }
+    }
     $scope.Lookups = Lookups;
     $scope.pkField = 'id';
     $scope.apiName = 'admin_cases';
@@ -1672,6 +1772,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
     }
     $scope.saveForm = function (item, idx) {
         if (item) {
+ 
             item = angular.getChanges(item, oldData, $scope.pkField)
             if (item) {
                 var d = {};
@@ -1744,7 +1845,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
     $scope.atResultPopover = null;
     $scope.popupAtResult = function () {
         //if (!$scope.atResultPopover) {
-            $scope.atResultPopover = $popover(angular.element('#add-at-result'), { scope: $scope, container: 'body', autoClose: true, trigger: 'manual', placement: 'auto', template: "custom.atresult.popover.html", show: false });
+        $scope.atResultPopover = $popover(angular.element('#add-at-result'), { scope: $scope, container: 'body', autoClose: true, trigger: 'manual', placement: 'auto', template: "custom.atresult.popover.html", show: false });
         //}
         $scope.atResultPopover.$promise.then($scope.atResultPopover.show);
     }
@@ -1962,7 +2063,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
     }
     $scope.notify = function () {
 
-            $state.go('court.cases.notify');
+        $state.go('court.cases.notify');
  
     }
     $scope.notifyReport = _.debounce(function (b) {
@@ -1970,7 +2071,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
     }, 50);
     $scope.notify2 = function () {
 
-            $state.go('court.vcases.notify');
+        $state.go('court.vcases.notify');
 
     }
     $scope.notify2Report = _.debounce(function (b) {
@@ -2290,19 +2391,25 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
                 popup.$promise.then(popup.show);
             }
             this.close = function () {
-               popup.$promise.then(popup.hide);
+                popup.$promise.then(popup.hide);
             }
         },
         link: function (scope, element, attr, ngModel) {
             if (ngModel) {
                 scope.search = { text: '' };
-                
-                if (angular.isArray(scope.params)) {
-
-                    scope.$items = scope.options.getData.apply(null, scope.params);
-                } else {
-                    scope.$items = scope.options.getData();
+                scope.$items=[]
+                scope.loadData=function(){
+                    var tm=null;
+                    if (angular.isArray(scope.params)) {
+                        tm= scope.options.getData.apply(null, scope.params);
+                    } else {
+                        tm = scope.options.getData();
+                    }
+                    if (scope.$items !== tm) {
+                        scope.$items = tm;
+                    }
                 }
+                scope.loadData();
                 scope.$itemTemplate = scope.options.itemTemplate || '';
                 scope.$dataField=scope.options.dataField || 'id';
                 scope.$labelField = scope.options.labelField || 'name';
@@ -2363,8 +2470,8 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
                                 });
                             }
                             if (it2) {
-                                   i = scope.selectedItems.indexOf(it2);
-                                   if(i>=0) scope.selectedItems.splice(i, 1);
+                                i = scope.selectedItems.indexOf(it2);
+                                if(i>=0) scope.selectedItems.splice(i, 1);
                             } else {
                                 scope.selectedItems.push(it);
                             }
@@ -2417,7 +2524,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
                     return b;
                 }
                 scope.$dataFunction = function (it) {
-                       if (scope.$dataField) {
+                    if (scope.$dataField) {
                         var item = _.find(scope.$items, function (it2) {
                             if (scope.$dataField in it2) {
                                 return (it2[scope.$dataField] == it);
@@ -2507,9 +2614,10 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
                 var oldValue = null;
                 scope.open = function (e) {
                     if (scope.isEditable()) {
+                        scope.loadData();
                         oldValue = scope.selectedValue;
                         var _uns = scope.$on('tooltip.show', function (e,t) {
-                           //
+                            //
                         });
                         scope.ctrl.open(e);
                         var _wtc=null;
@@ -2540,7 +2648,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
                     scope.ctrl.close();
                 }
                 scope.$labelFunction = scope.options.labelFunction || function (it) {
-                      if(it){
+                    if(it){
                         if(angular.isDefined(it[scope.$labelField])){
                             return  it[scope.$labelField];
                         }
@@ -2590,6 +2698,8 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
         }
     }
 }])
+
+
 
 .directive('customTemplate', ['_', '$compile', function (_, $compile) {
     return {

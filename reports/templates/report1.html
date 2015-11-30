@@ -1,0 +1,128 @@
+﻿<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>รายงาน</title>
+        <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap-theme.css">
+        <link rel="stylesheet" type="text/css" href="./report.css">
+    </head>
+    <body>
+        {% set year1 -%}พ.ศ. {{date1 | th_date('year')}}{%- endset %}
+        {% set year2 -%}{% if date2 %}พ.ศ. {{date2 | th_date('year')}}{% endif %}{%- endset %}
+        {% if year1==year2%}
+        {% set year1='' %}
+        {% endif %}
+
+        {% set index=0 %}
+        {% set t_checked=0 %}
+        {% set t_checked_pang=0 %}
+        {% set t_checked_aya=0 %}
+        {% set t_uchecked=0 %}
+        {% set t_uchecked_pang=0 %}
+        {% set t_uchecked_aya=0 %}
+        {% set t_total=0 %}
+        {% set t_total_pang=0 %}
+        {% set t_total_aya=0 %}
+    	<div class="container-fluid page-break">
+        <div class="text-center">
+            <h4>สรุปรายงานคดีของศาลในเขตอำนาจอธิบดีผู้พิพากษาภาค 5</h4>
+            <h4>เดือน {{date1 | th_date('month')}} {{year1}}{% if date2 and date1!=date2 %} ถึงเดือน {{date2 | th_date('month')}} {{year2}}{% endif %}</h4>
+            <h4>{% if type_item %}คดี  {{type_item.name}}{% else %}ทุกประเภทคดี{% endif %}</h4>
+        </div>
+            <div style="position:fixed;top:8px;right:8px"  class="hidden-print"><a href="javascript:window.print()" title="พิมพ์รายงาน" class="btn btn-default"><span class="glyphicon glyphicon-print"></span></a></div>
+        <br/>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th rowspan="2" width="80">ลำดับที่</th>
+                    <th rowspan="2">ศาล</th>
+                    <th colspan="3"  class="text-center">ปริมาณรายงานคดี</th>
+                    <th colspan="3" class="text-center">ไม่ตรวจ</th>
+                    <th colspan="3"  class="text-center">ตรวจ</th>
+
+                </tr>
+                <tr>
+                    <th class="text-center">คดีแพ่ง</th>
+                    <th class="text-center">คดีอาญา</th>
+                    <th class="text-center">รวม</th>
+                    <th class="text-center">แพ่ง</th>
+                    <th class="text-center">อาญา</th>
+                    <th class="text-center">ร้อยละ</th>
+                    <th class="text-center">แพ่ง</th>
+                    <th class="text-center">อาญา</th>
+                    <th class="text-center">ร้อยละ</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for group in groups %}
+                <tr class="bold">
+                    <td colspan="11"><h4>{{group.name}}</h4></td>
+                </tr>
+                {% for court in courts[ group.id] %}
+                {% set it=getDict(court.id,[]) %}
+                {% set t_checked=t_checked + it.checked %}
+                {% set t_checked_pang=t_checked_pang + it.checked_pang %}
+                {% set t_checked_aya=t_checked_aya + it.checked_aya %}
+                {% set t_uchecked=t_uchecked + it.uchecked %}
+                {% set t_uchecked_pang=t_uchecked_pang + it.uchecked_pang %}
+                {% set t_uchecked_aya=t_uchecked_aya + it.uchecked_aya %}
+                {% set t_total=t_total + it.total %}
+                {% set t_total_pang=t_total_pang + it.total_pang %}
+                {% set t_total_aya=t_total_aya + it.total_aya %}
+                <tr>
+                    {% set index=index + 1 %}
+                    <td class="text-center">{{index}}</td>
+                    <td><h4 class="normal">{{court.name}}</h4></td>
+                    <td class="text-center">{{it.total_pang}}</td>
+                    <td class="text-center">{{it.total_aya}}</td>
+                    <td class="text-center">{{it.total}}</td>
+                    <td class="text-center">{{it.uchecked_pang}}</td>
+                    <td class="text-center">{{it.uchecked_aya}}</td>
+                    <td class="text-center">{{percentOf(it.uchecked, it.total)}}</td>
+                    <td class="text-center">{{it.checked_pang}}</td>
+                    <td class="text-center">{{it.checked_aya}}</td>
+                    <td class="text-center">{{percentOf(it.checked, it.total)}}</td>
+                </tr>
+                {% endfor %}
+                {% endfor %}
+                <tr class="bold">
+                    <th></th>
+                    <th>รวม</th>
+                    <th class="text-center sumary">{{t_total_pang}}</th>
+                    <th class="text-center sumary">{{t_total_aya}}</th>
+                    <th class="text-center sumary">{{t_total}}</th>
+                    <th class="text-center sumary">{{t_uchecked_pang}}</th>
+                    <th class="text-center sumary">{{t_uchecked_aya}}</th>
+                    <th class="text-center sumary">{{percentOf(t_uchecked, t_total)}}</th>
+                    <th class="text-center sumary">{{t_checked_pang}}</th>
+                    <th class="text-center sumary">{{t_checked_aya}}</th>
+                    <th class="text-center sumary">{{percentOf(t_checked, t_total)}}</th>
+                </tr>
+              </tbody>
+        </table>
+
+            <center style="padding-top:3em">
+                <table style="width:400px;" class="bold">
+                    <tr>
+                        <td>รวมทั้งหมด</td>
+                        <td class="text-right padding">{{t_total}} &nbsp;</td>
+                        <td style="padding-left:1em">คดี</td>
+                    </tr>
+                    <tr>
+                        <td>ไม่ตรวจ</td>
+                        <td class="text-right padding">{{t_uchecked}} &nbsp;</td>
+                        <td style="padding-left:1em">คดี ร้อยละ {{percentOf(t_uchecked, t_total)}}</td>
+                    </tr>
+                    <tr>
+                        <td>ตรวจ</td>
+                        <td class="text-right padding">{{t_checked}} &nbsp;</td>
+                        <td style="padding-left:1em">คดี ร้อยละ  {{percentOf(t_checked, t_total)}}</td>
+                    </tr>
+
+                </table>
+            </center>
+    </div>
+</body>
+</html>

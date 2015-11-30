@@ -138,7 +138,7 @@ function post_getlookups(){
   //NotORM_Row
    $api->api_check_user();
    
-   $courts=$norm->toArray($norm->users()->select('id,name')->where('admin < ?',1)->order('name')->limit(1000));
+   $courts=$norm->toArray($norm->users()->select('id,name')->where('admin < ?',1)->order('id')->limit(1000));
    $courts[]=array('id'=>'1','name'=>'ภาค');
    $groups=$norm->toArray($norm->groups()->limit(1000));
    $groups2=$norm->toArray($norm->usergroups()->limit(1000));
