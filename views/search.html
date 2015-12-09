@@ -101,11 +101,11 @@
 
 <script type="text/ng-template" id="custom.dropdown.actions.html">
     <ul tabindex="-1" class="dropdown-menu" role="menu">
-        <li> <a ng-click="selectAll()" href="javascript://void()"><span class="glyphicon glyphicon-check"></span> เลือกทั้งหมด</a></li>
-        <li><a ng-click="selectInverse()" href="javascript://void()"><span class="glyphicon glyphicon-ok-sign"></span> เลือกกลับกัน</a></li>
-        <li><a ng-click="selectNone()" href="javascript://void()"><span class="glyphicon glyphicon-ban-circle"></span> ยกเลิกการเลือกทั้งหมด</a></li>
+        <li> <a ng-click="selectAll()" href="javascript://void(0)"><span class="glyphicon glyphicon-check"></span> เลือกทั้งหมด</a></li>
+        <li><a ng-click="selectInverse()" href="javascript://void(0)"><span class="glyphicon glyphicon-ok-sign"></span> เลือกกลับกัน</a></li>
+        <li><a ng-click="selectNone()" href="javascript://void(0)"><span class="glyphicon glyphicon-ban-circle"></span> ยกเลิกการเลือกทั้งหมด</a></li>
         <li ng-if="hasChecked()" class="divider"></li>
-        <li ng-if="hasChecked()"><a ng-click="removeChecked()" href="javascript://void()"><span class="glyphicon glyphicon-remove"></span> ลบข้อมูลที่เลือก</a></li>
+        <li ng-if="hasChecked()"><a ng-click="removeChecked()" href="javascript://void(0)"><span class="glyphicon glyphicon-remove"></span> ลบข้อมูลที่เลือก</a></li>
 
     </ul>
 </script>

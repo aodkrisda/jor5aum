@@ -1,12 +1,13 @@
-﻿<html>
+﻿<!DOCTYPE html>
+<html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>รายงาน</title>
-    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap-theme.css">
-    <link rel="stylesheet" type="text/css" href="./report.css">
+    {%if base_url %}
+    <base href="{{base_url}}/">{% endif %}
+    <title>{{report_name}}</title>
+    {{ include('pdf-css.html') }}
 </head>
 <body>
     {% set year1 -%}พ.ศ. {{date1 | th_date('year')}}{%- endset %}
@@ -16,57 +17,56 @@
     {% endif %}
     {% set kadees=0 %}
     <div class="container-fluid">
-        <div class="text-center" >
-            <h4>บัญชีรายละเอียดสำนวนที่ไม่ได้ส่งสำนวนให้สำนักงานอธิบดีผู้พิพากษาภาค 5</h4>
-            <h4>คดีที่เกิดในปี  {{year1}}{% if date2 and date1!=date2 %}{{year2}}{% endif %}</h4>
-            <h4 class="normal">{{court.name}}</h4>
-            <h4>{% if type_item %}คดี  {{type_item.name}}{% else %}ทุกประเภทคดี{% endif %}</h4>
-       </div>
-        <div style="position:fixed;top:8px;right:8px" class="hidden-print"><a href="javascript:window.print()" title="พิมพ์รายงาน" class="btn btn-default"><span class="glyphicon glyphicon-print"></span></a></div>
+        <div class="c">
+            <div class="s2 b">บัญชีรายละเอียดสำนวนที่ไม่ได้ส่งสำนวนให้สำนักงานอธิบดีผู้พิพากษาภาค 5</div>
+            <div class="s2 b">คดีที่เกิดในปี  {{year1}}{% if date2 and date1!=date2 %}{{year2}}{% endif %}</div>
+            <div  class="s2 b">{{court.name}}</div>
+            <div class="s2 b">{% if type_item %}คดี  {{type_item.name}}{% else %}ทุกประเภทคดี{% endif %}</div>
+        </div>
+        <br />
 
 
-           
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th class="text-center">ลำดับที่</th>
-                        <th class="text-center">คดี</th>
-                        <th class="text-center">หมายเลขคดีดำ</th>
-                        <th class="text-center">หมายเลขคดีแดง</th>
-                        <th class="text-center">โจทก์</th>
-                        <th class="text-center">จำเลย</th>
-                        <th class="text-center">เรื่อง</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% set index=0 %}
-                    {% for it in cases %}
-                    {% set index=index+1 %}
-                    {% set tm=getDict(it.type_id,[]) %}
-                    <tr>
-                        <td class="text-center">{{index}}</td>
-                        <td class="text-center">{{tm.kwam}}</td>
-                        <td class="text-center">{{it.number_black}}</td>
-                        <td class="text-center">{{it.number_red}}</td>
-                        <td>{{it.plaintiff}}</td>
-                        <td>{{it.defendant}}</td>
-                        <td>{{it.title}}</td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% set kadees=kadees + index %}
-            <h4 class="text-center">จำนวนสำนวนที่ไม่ได้ส่งสำเนาคำพิพากษา   <span class="count-kadee">{{kadees}}</span> คดี</h4>
+        <table class="bordered">
+            <thead>
+                <tr>
+                    <th class="c"  style="width:1.2cm">ลำดับที่</th>
+                    <th class="c" >คดี</th>
+                    <th class="c" style="width:15%">หมายเลขคดีดำ</th>
+                    <th class="c" style="width:15%">หมายเลขคดีแดง</th>
+                    <th class="c" style="width:18%">โจทก์</th>
+                    <th class="c" style="width:18%">จำเลย</th>
+                    <th class="c" style="width:18%">เรื่อง</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set index=0 %}
+                {% for it in cases %}
+                {% set index=index+1 %}
+                {% set tm=getDict(it.type_id,[]) %}
+                <tr>
+                    <td class="c">{{index}}</td>
+                    <td class="c">{{tm.kwam}}</td>
+                    <td class="c">{{it.number_black}}</td>
+                    <td class="c">{{it.number_red}}</td>
+                    <td>{{it.plaintiff}}</td>
+                    <td>{{it.defendant}}</td>
+                    <td>{{it.title}}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td>&nbsp;</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% set kadees=kadees + index %}
+        <div class="s1 b c pt2">จำนวนสำนวนที่ไม่ได้ส่งสำเนาคำพิพากษา   &nbsp; {{kadees}} &nbsp;  คดี</div>
     </div>
 </body>
 </html>

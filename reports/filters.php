@@ -1,4 +1,17 @@
 <?php
+$dir=__DIR__;
+require($dir.'/../rest/autoload.php');
+
+Twig_Autoloader::register();
+$loader = new Twig_Loader_Filesystem($dir.'/templates/');
+$twig = new Twig_Environment($loader, array(
+    '__cache' => $dir.'/cache/',
+));
+
+global $base_url;
+$base_url = dirname("http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
+$twig->addGlobal('base_url', $base_url);
+
 $filter = new Twig_SimpleFilter( 'th_date', function ( $dtstr ,$format='',$inc=0) {
 	$dt=strtotime($dtstr);
 	if($dt){
@@ -111,3 +124,14 @@ $func=new Twig_SimpleFunction('percentOf', function($a,$b){
 }
 );
 $twig->addFunction($func);
+
+function printPdf(&$html, $paper='A4-L'){
+	try{
+		$mpdf=new mPDF('th', $paper, '0', 'garuda');
+		$mpdf->WriteHTML($html);
+		$mpdf->Output();
+	}catch(Exception $e){
+		echo $html;
+	}
+	exit();
+}

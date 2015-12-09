@@ -1,397 +1,157 @@
-﻿<!doctype html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>รายงาน</title>
-    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap-theme.css">
-    <script src="../js/lib/jquery.min.js"></script>
-    <script>
-        $(function () {
-            var body = $('body:first');
-            $('#printmode').click(function () {
-                if ($(this).is(':checked')) {
-                    body.addClass('cover');
-                } else {
-                    body.removeClass('cover');
-                }
-            });
-        })
-    </script>
+    {%if base_url %}<base href="{{base_url}}/">{% endif %}
+    <title>{{report_name}}</title>
+    {{ include('pdf-css.html') }}
 </head>
 <style>
-    @page {
-      size: A4;
-      margin: 0mm 0mm 0mm 0mm;
-      border:0mm;
-      padding:0mm;
-    }
+   body{
+        font-size:18pt;
+   }
+   div.fill-data{
+       position:fixed;
+       font-weight:bold;
+       border:none;
+   }
+   .elm-title1{
+       left:12.7cm;
+       top:2.4cm;
+       width:2.4cm;
+       text-align:center;
+   }
+   .elm-title2{
+       left:15.5cm;
+       top:2.4cm;
+       width:2cm;
+       text-align:center;
+   }
+   .elm-5{
+       left:11cm;
+       top:4.9cm;
+       width:1.5cm;
+       text-align:left;
+   }
+   .elm-blacknum1{
+       left:3.9cm;
+       top:6.9cm;
+       width:2.3cm;
+       text-align:center;
+   }
+   .elm-blacknum2{
+       left:6.6cm;
+       top:6.9cm;
+       width:2.3cm;
+       text-align:center;
+   }
+   .elm-blacknum-of{
+       left:11.9cm;
+       top:6.9cm;
+       width:15cm;
+       text-align:left;
+       {%if _court | length > 25 %}
+       font-size:0.85em;
+       top:7cm;
+       {% endif %}
+   }
 
-    @font-face {
-        font-family: ThaiFont;
-        src: url('fonts/THSarabunIT๙ Bold.ttf');
-    }
-    *{
-        font-family:ThaiFont;
-        font-size:20pt;
-    }
-    body {
-      font-size:16pt;
-      background: rgb(204,204,204); 
-    }
+   .elm-kwam{
+       left:7.9cm;
+       top:8.6cm;
+       width:10cm;
+       text-align:left;
+   }
+   .elm-jot{
+       left:3cm;
+       top:10.35cm;
+       width:13cm;
+       text-align:left;
+       {%if plaintiff | length > 50 %}
+       font-size:0.8em;
+       top:10.4cm;
+       {% endif %}
+   }
+   .elm-jumloei{
+       left:3cm;
+       top:13.35cm;
+       width:13cm;
+       text-align:left;
+       {%if defendant | length > 50 %}
+       font-size:0.8em;
+       top:13.4cm;
+       {% endif %}
+   }
+   .elm-topic{
+       left:5.7cm;
+       top:15.85cm;
+       width:18cm;
+       text-align:left;
+       {%if title | length > 50 %}
+       font-size:0.8em;
+       top:16cm;
+       {% endif %}
+   }
+   .elm-date-1{
+       left:2.1cm;
+       top:17.4cm;
+       width:2cm;
+       text-align:center;
+   }
+   .elm-date-2{
+       left:5.4cm;
+       top:17.4cm;
+       width:6.9cm;
+       text-align:center;
+   }
+   .elm-date-3{
+       left:15.2cm;
+       top:17.4cm;
+       width:2.4cm;
+       text-align:left;
+   }
+   .elm-date2-1{
+       left:3.2cm;
+       top:18.9cm;
+       width:2.5cm;
+       text-align:center;
+   }
+   .elm-date2-2{
+       left:7cm;
+       top:18.9cm;
+       width:5cm;
+       text-align:center;
+   }
+   .elm-date2-3{
+       left:14.9cm;
+       top:18.9cm;
+       width:2.5cm;
+       text-align:left;
+   }
 
-    page[size="A4"] {
-      background:white;
-      width: 21cm;
-      height: 29.7cm;
-      display: block;
-      margin: 0 auto;
-      position:relative;
-      padding:0cm;
-      box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
-    }
-
-    @media print {
-      body, page[size="A4"] {
-        margin: 0 !important;
-        padding:0 !important;
-        border:0 !important;
-        box-shadow:0 !important;
-      }
-    }
-    page div{width:17cm;padding:0cm;margin:0cm;border:0cm}
-    page div.text-center{width:100%}
-    .elm-for{
-        font-size:0.75em;
-        position:absolute;
-        text-align:right;
-        top: 1cm;
-        right:2cm;
-
-    }
-    .elm-cover{
-        font-size:0.75em;
-        position:absolute;
-        top: 2.5cm;
-        left:2cm;
-    }
-    .elm-title{
-        position:absolute;
-        text-align:right;
-        top: 4cm;
-        right:2cm;
-        width:6cm;
-    }
-    .elm-krut{
-        position:absolute;
-        width:3cm;
-        height:3cm;
-        top:2cm;
-        left:9cm;
-    }
-    .elm-kwam{
-        position:absolute;
-        right:2cm;
-        width:11cm;
-        top: 10.2cm;
-    }
-    .elm-org{
-        position:absolute;
-        text-align:center;
-        top: 6.5cm;
-       
-    }
-    .elm-blacknum{
-        position:absolute;
-        left:2cm;
-        top: 8.5cm;
-       
-    }
-    .elm-blacknum-of{
-        width:7.5cm;
-    }
-    .elm-between{
-        position:absolute;
-        left:2cm;
-        top: 13.6cm;
-    }
-    .elm-jot{
-        position:absolute;
-        right:2cm;
-        top: 12cm;
-    }
-    .elm-jumloei{
-        position:absolute;
-        right:2cm;
-        top: 15cm;
-    }
-    .elm-topic{
-        position:absolute;
-        left:2cm;
-        top: 17.5cm;
-    }
-    .elm-date{
-        position:absolute;
-        left:2cm;
-        top: 19cm;
-    }
-
-    .elm-date-b1{
-        width:2cm;
-        text-align:center;
-    }
-    .elm-date-b2{
-        width:7cm;
-        text-align:center;
-    }
-    .elm-date-b3{
-        width:1.7cm;
-        text-align:left;
-    }
-    .elm-date2{
-        position:absolute;
-        left:2cm;
-        top: 20.5cm;
-        
-    }
-    .elm-date2-b1{
-        width:2.5cm;
-        text-align:center;
-    }
-    .elm-date2-b2{
-        width:5cm;
-        text-align:center;
-    }
-    .elm-date2-b3{
-        width:2cm;
-        text-align:left;
-    }
-    .elm-blank1{
-        position:absolute;
-        left:2cm;
-        top: 23cm;
-    }
-    .elm-blank2{
-        position:absolute;
-        left:2cm;
-        top: 24.5cm;
-    }
-    .elm-blank3{
-        position:absolute;
-        left:2cm;
-        top: 26cm;
-    }
-    .elm-blank4{
-        position:absolute;
-        left:2cm;
-        top: 27.5cm;
-    }
-    .elm-jot-b1{
-        width:13.5cm;
-        text-align:center;
-    }
-    .elm-jumloei-b1{
-        width:13.5cm;
-        text-align:center;
-    }
-    .elm-kwam-b1{
-        width:9.5cm;
-    }
-    .elm-blacknum-b1{
-        width:2.3cm;
-         text-align:right;
-    }
-    .elm-blacknum-b2{
-        width:2.3cm;
-         text-align:left;
-    }
-    .elm-blacknum-b3{
-        width:5.5cm;
-    }
-    .elm-org-b1{
-        width:2.5cm;
-        text-align:left;
-    }
-    .fill-data{
-        position:absolute;
-        top:-2mm !important;
-        left:0cm;
-    }
-    .fill-data.no{
-        top:-1.5mm !important;
-    }
-    .fill-line{
-        display:inline-block;
-        border-bottom:rgba(0,0,0,0.4) 1px dashed;
-    }
-    .fill{
-        position:relative;
-    }
-    .elm-title-b1{
-        width:2.2cm;
-        text-align:right;
-    }
-    .elm-title-b2{
-        width:2cm;
-        text-align:left;
-    }
-    .elm-blacknum-of-b1{
-        width:5.5cm;
-        text-align:left;
-    }
-    .elm-topic-b1{
-        width:11.7cm;
-        text-align:left;
-    }
-    .elm-between-brace{
-        display:inline-block;
-        x-ms-transform: scale(2,3); /* IE 9 */
-        x-webkit-transform: scale(2,3); /* Safari */
-        transform: scale(2,7.3);
-        top:-0.4cm;
-        position:relative;
-    }
-    body.cover .fill-line{
-        border-bottom:none;
-    }
-    body.cover .xlabel{
-        visibility:hidden;
-    }
-    body form{
-         width: 21cm;
-         margin:auto;
-         padding:5px;
-         padding-bottom:0.5em;
-    }
-    body form label{
-        font-size:0.7em;
-    }
 </style>
 <body>
-    <form class="hidden-print text-center">
-        <h2>โหมดการพิมพ์</h2>
-        <div class="form-group">
-            <label><input type="checkbox" id="printmode" value="1" /> พิมพ์ลงกระดาษปก</label>
-        </div>
-        <div><a style="padding-top:3px" href="javascript:window.print()" title="พิมพ์รายงาน" class="btn btn-success"><span style="font-size:0.9em;padding:0px" class="glyphicon glyphicon-print"> พิมพ์</span></a></div>
-    </form>
-    <page size="A4">
-        <div class="elm-for xlabel">สำหรับภาคใช้</div>
-        <div class="elm-cover xlabel">ปกสำนวน</div>
-        <div class="elm-krut xlabel"><img src="templates/krut.jpg" width="100%"/></div>
-        <div class="elm-title">
-            <span class="xlabel">เรื่อง</span>
-            <span class="fill">
-                <span class="elm-title-b1 fill-line"></span>
-                <span class="elm-title-b1 fill-data">{{auto_received_num | split(0)}}</span>
-            </span>
-            /
-            <span class="fill">
-                <span class="elm-title-b2 fill-line"></span>
-                <span class="elm-title-b2 fill-data">{{auto_received_num | split(1)}}</span>
-            </span>
-        </div>
-        <div class="elm-org text-center">
-            <span class="xlabel">สำนักงานอธิบดีผู้พิพากษาภาค</span>
-            <span class="fill">
-                <span class="elm-org-b1 fill-line"></span>
-                <span class="elm-org-b1 fill-data">5</span>
-            </span>
-       </div>
-        <div class="elm-blacknum">
-            <span>
-                <span class="xlabel">คดีหมายเลขดำที่</span>
-                <span class="fill">
-                    <span class="elm-blacknum-b1 fill-line"></span>
-                    <span class="elm-blacknum-b1 fill-data">{{number_black | split(0)}}</span>
-                </span>
-                /
-                <span class="fill">
-                    <span class="elm-blacknum-b2 fill-line"></span>
-                    <span class="elm-blacknum-b2 fill-data">{{number_black | split(1)}}</span>
-                </span>
-            </span>
-            <span class="elm-blacknum-of pull-right">
-                <span class="xlabel">ของศาล</span>
-                <span class="fill">
-                    <span class="elm-blacknum-of-b1 fill-line"></span>
-                    <span class="elm-blacknum-of-b1 fill-data">{{_court}}</span>
-                </span>
-            </span>
-        </div>
-        <div class="elm-kwam">
-            <span class="xlabel">ความ</span>
-            <span class="fill">
-                <span class="elm-kwam-b1 fill-line"></span>
-                <span class="elm-kwam-b1 fill-data" style="padding-left:2em">{{_type_id_name}}</span>
-            </span>
-        </div>
-        <div class="elm-jot text-right">
-            <span class="fill">
-                <span class="elm-jot-b1 fill-line"></span>
-                <span class="elm-jot-b1 fill-data">{{plaintiff}}</span>
-            </span>
-            <span class="xlabel">โจทก์</span>
-        </div>
-        <div class="elm-between xlabel">
-            ระหว่าง
-            <span class="elm-between-brace">{</span>
-        </div>
-        <div class="elm-jumloei text-right">
-            <span class="fill">
-                <span class="elm-jumloei-b1 fill-line"></span>
-                <span class="elm-jumloei-b1 fill-data">{{defendant}}</span>
-            </span>
-            <span class="xlabel">จำเลย</span>
-        </div>
-        <div class="elm-topic">
-            <span class="xlabel">เรื่อง/ข้อหา/ฐานความผิด</span>
-            <span class="fill">
-                <span class="elm-topic-b1 fill-line"></span>
-                <span class="elm-topic-b1 fill-data">{{title}}</span>
-            </span>
-        </div>
-        <div class="elm-date">
-            <span class="xlabel">รับวันที่</span>
-            <span class="fill">
-                <span class="elm-date-b1 fill-line"></span>
-                <span class="elm-date-b1 fill-data">{{date_received3 | th_date('date')}}</span>
-            </span>
-            <span class="xlabel">เดือน</span>
-            <span class="fill">
-                <span class="elm-date-b2 fill-line"></span>
-                <span class="elm-date-b2 fill-data">{{date_received3 | th_date('month')}}</span>
-            </span>
-            <span class="xlabel">พุทธศักราช  ๒๕</span>{% spaceless %}
-            <span class="fill">
-                <span class="elm-date-b3 fill-line"></span>
-                <span class="elm-date-b3 fill-data no">{{date_received3 | th_date('year',-2500)}}</span>
-            </span>{% endspaceless %}
-        </div>
-        <div class="elm-date2">
-            <span class="xlabel">ตัดตัดสินวันที่</span>
-            <span class="fill">
-                <span class="elm-date2-b1 fill-line"></span>
-                <span class="elm-date2-b1 fill-data">{{date_ap | th_date('date')}}</span>
-            </span>
-            <span class="xlabel">เดือน</span>
-            <span class="fill">
-                <span class="elm-date2-b2 fill-line"></span>
-                <span class="elm-date2-b2 fill-data">{{date_ap | th_date('month')}}</span>
-            </span>
-            <span class="xlabel">พุทธศักราช  ๒๕</span>{% spaceless %}
-            <span class="fill">
-                <span class="elm-date2-b3 fill-line"></span>
-                <span class="elm-date2-b3 fill-data no">{{date_ap | th_date('year',-2500)}}</span>
-            </span>{% endspaceless %}        
-        </div>
-        <div class="elm-blank1 fill-line"></div>
-        <div class="elm-blank2 fill-line"></div>
-        <div class="elm-blank3 fill-line"></div>
-        <div class="elm-blank4 fill-line"></div>
-    </page>
-    <br class="hidden-print" />
+    <div class="elm-title1 fill-data">{{auto_received_num | split(0)}}</div>
+    <div class="elm-title2 fill-data">{{auto_received_num | split(1)}}</div>
+    <div class="elm-5 fill-data">5</div>
+
+    <div class="elm-blacknum1 fill-data">{{number_black | split(0)}}</div>
+    <div class="elm-blacknum2 fill-data">{{number_black | split(1)}}</div>
+    <div class="elm-blacknum-of fill-data">{{_court}}</div>
+    
+    <div class="elm-kwam fill-data">{{_type_id_name}}</div>
+
+    <div class="elm-jot fill-data">{{plaintiff}}</div>
+    <div class="elm-jumloei fill-data">{{defendant}}</div>
+    <div class="elm-topic fill-data">{{title}}</div>
+
+    <div class="elm-date-1 fill-data">{{date_received3 | th_date('date')}}</div>
+    <div class="elm-date-2 fill-data">{{date_received3 | th_date('month')}}</div>
+    <div class="elm-date-3 fill-data no">{{date_received3 | th_date('year',-0)}}</div>
+    <div class="elm-date2-1 fill-data">{{date_ap | th_date('date')}}</div>
+    <div class="elm-date2-2 fill-data">{{date_ap | th_date('month')}}</div>
+    <div class="elm-date2-3 fill-data no">{{date_ap | th_date('year',-0)}}</div>
 </body>
 </html>

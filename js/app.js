@@ -6,13 +6,20 @@ angular.module('App', ['lazyLoadJs', 'wt.responsive', 'ui.router', 'angular-load
 .constant('API_URL', 'rest/api.php/v1/')
 .constant('BDAYS',15)
 .factory('myHttpInterceptor', ['$q', '$rootScope', function ($q, $rootScope) {
+
     return {
-        /*
-         'response': function(response) {
-             // do something on success
-             return response;
-         },
-         */
+        'request': function (config) {
+            /*
+            if (config.method == 'POST') {
+
+                        var canceller = $q.defer();
+                        config.timeout = canceller.promise;
+                        canceller.resolve();
+                        alert('error')
+      
+            }*/
+            return config;
+        },
         'responseError': function (rejection) {
             $rootScope.detectResponseError(rejection);
             return $q.reject(rejection);
@@ -21,7 +28,7 @@ angular.module('App', ['lazyLoadJs', 'wt.responsive', 'ui.router', 'angular-load
 }])
 
 
-.run(['$rootScope', '$state', '$stateParams', 'Auth', '$filter', '$alert', 'store', 'Lookups', 'API_URL', 'moment', 'BDAYS','_', '$popover',function ($rootScope, $state, $stateParams, Auth, $filter, $alert, store, Lookups, API_URL, moment, BDAYS,_,$popover) {
+.run(['$rootScope', '$state', '$stateParams', 'Auth', '$filter', '$alert', 'store', 'Lookups', 'API_URL', 'moment', 'BDAYS','_', '$popover','$window',function ($rootScope, $state, $stateParams, Auth, $filter, $alert, store, Lookups, API_URL, moment, BDAYS,_,$popover,$window) {
     angular.getChanges = function getChanges(item, old, pk) {
         if (pk && item && old && old[pk] && old[pk] == item[pk]) {
             var fds = {};
@@ -40,7 +47,10 @@ angular.module('App', ['lazyLoadJs', 'wt.responsive', 'ui.router', 'angular-load
     }
 
     $rootScope.API_URL = API_URL;
-    $rootScope.BDAYS=BDAYS;
+    $rootScope.BDAYS = BDAYS;
+    if (!$window.name) {
+        $window.name='A' + Number(new Date());
+    }
     var _StoreData = store.get('_StoreData') || {};
    
     var _today = new Date();
@@ -72,13 +82,15 @@ angular.module('App', ['lazyLoadJs', 'wt.responsive', 'ui.router', 'angular-load
     }
     $rootScope.detectResponseError = function (rejection) {
         if (rejection) {
-            
             if (rejection.data && rejection.data.error && rejection.data.message) {
                 if($state.current.name=='login') return;
                 var b=(rejection.data.error2===true);
                 if (b || (Auth.isLoggedIn() !== false)) {
                     var str = rejection.data.message;
                     $.notify('แจ้งเตือนความผิดพลาด : ' + str);
+                    if (rejection.status == 401) {
+                        $rootScope.logOut();
+                    }
                 }
             }
         }
@@ -240,7 +252,7 @@ angular.module('App', ['lazyLoadJs', 'wt.responsive', 'ui.router', 'angular-load
     }
 
     Auth.fetch();
-    if (Auth.isLoggedIn) {
+    if (Auth.isLoggedIn()) {
         Lookups.load();
     }
 
@@ -312,7 +324,6 @@ angular.module('App', ['lazyLoadJs', 'wt.responsive', 'ui.router', 'angular-load
             return '';
         }
     }
-
 }])
 .config(['$stateProvider', '$urlRouterProvider', '$httpProvider', '$controllerProvider', 'storeProvider','flowFactoryProvider',
 function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider, storeProvider, flowFactoryProvider) {
@@ -549,6 +560,30 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
           views: {
               '': {
                   templateUrl: 'views/admin_print_report8.html'
+              }
+          }
+      })
+      .state("admin.report9", {
+          url: "/report9",
+          roles: ['admin'],
+          onEnter: ['Lookups', function (Lookups) {
+              Lookups.load();
+          }],
+          views: {
+              '': {
+                  templateUrl: 'views/admin_print_report9.html'
+              }
+          }
+      })
+      .state("admin.report10", {
+          url: "/report10",
+          roles: ['admin'],
+          onEnter: ['Lookups', function (Lookups) {
+              Lookups.load();
+          }],
+          views: {
+              '': {
+                  templateUrl: 'views/admin_print_report10.html'
               }
           }
       })
@@ -800,11 +835,18 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
         user = null;
         token = null;
         store.remove('utoken');
+        delete $http.defaults.headers.post.Authorization;
     }
-
+    function __setToken() {
+        if (user && user.id && token) {
+            $http.defaults.headers.post.Authorization = 'Basic ' + btoa(user.id + ':' + token);
+        } else {
+            delete $http.defaults.headers.post.Authorization;
+        }
+    }
     return {
         showMessage: showMessage,
-        logOut:logOut,
+        logOut: logOut,
 
         setUser: function (aUser, aToken) {
             user = aUser;
@@ -813,6 +855,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
             }
             if (user) {
                 store.set('utoken', { user: user, token: token });
+                __setToken();
             } else {
                 store.remove('utoken');
             }
@@ -826,6 +869,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
                 user = tm.user;
                 token = tm.token;
             }
+            __setToken();
         },
         canAccess:function(toState){
             var role = ((user && user.id) ? user.admin : '');
@@ -1066,6 +1110,29 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
                 return _.filter(lookups.topics, function (it) { return (it.type_id == id) });
             }
             return lookups.topics;
+        },
+        getTopicByTypeGroup: function (id) {
+            if (id !== undefined) {
+                var xit = _.find(lookups.types, function (it) { return (it.id == id) });
+                var dic = {};
+                var gids = _.chain(lookups.types)
+                    .filter(function (it) {
+                        return (it.group_id == xit.group_id);
+                    })
+                    .map(function (it) {
+                        dic[it.id] = it.name;
+                        return it.id;
+                    })
+                    .value();
+                gids = _.filter(lookups.topics, function (it) { return _.contains(gids, it.type_id) });
+                return _.map(gids, function (it) {
+                    var it2 = _.clone(it);
+                    it2.gname = dic[it.type_id];
+                    return it2;
+                });
+
+            }
+            return [];
         },
         getYear: function (id, fd) {
             if (id !== undefined) {
@@ -1758,9 +1825,19 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
             temp.year = '';
         }
     }
-    $scope.setRunNumber = function (item) {
-        if (item.id) {
-            Auth.post($scope.apiName + '/setnumber', { id: item.id }).success(function (data) {
+    var _autoIt=null;
+    $scope.setRunNumber = function (item, ev) {
+        _autoIt=item;
+        $scope.atoPopover = null;
+        $scope.xitem = {type_id:item.type_id}
+        $scope.atoPopover = $popover(angular.element(ev.target), { scope: $scope, container: 'body', autoClose: true, trigger: 'manual', placement: 'center', template: "popup.autorun.tpl.html", show: false });
+        $scope.atoPopover.$promise.then($scope.atoPopover.show);
+
+    }
+    $scope.setRunNumberHlr = function (tid) {
+        var item = _autoIt;
+        if (tid && item.id) {
+            Auth.post($scope.apiName + '/setnumber', { id: item.id ,type_id:tid}).success(function (data) {
                 if (data && data.data && data.data['auto_received_num']) {
                     item['auto_received_num'] = data.data['auto_received_num'];
                     if ('date_received3' in data.data) {
@@ -1994,23 +2071,27 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
         if (!angular.isArray(v)) {
             v = [v];
         }
-        var a = Lookups.getTopicByType(editingItem.type_id);
+        var a = Lookups.getTopicByTypeGroup(editingItem.type_id);
         if (a) {
-            $scope.$items = _.map(a, function (it) {
+            $scope.$items = _.chain(a).map(function (it) {
                 var it2 = _.mapObject(it, function (v) {
                     return v;
                 });
                 var s = parseInt(it2.id);
                 it2._checked = (v.indexOf(s) >= 0);
                 return it2;
-            });
+            })
+            .sortBy(function (it) {
+                return it.gname + it.name;
+            })
+            .value();
         } else {
             $scope.$items = [];
         }
-        if ($scope.$items.length > 0) {
-            var it = $scope.$items[0];
-            $scope.groupTitle = $filter('lookup_type')(it.type_id, 'name', 'code');
-        }
+
+        var it = Lookups.getType(editingItem.type_id);
+        $scope.groupTitle = $filter('lookup_group')(it.group_id);
+       
     }
     $scope.clearChecked = function () {
         _.each($scope.$items, function (it) {
@@ -2326,14 +2407,14 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
     $scope.isValid = function (it) {
         var b = false;
         if (it) {
-            b = (it.number_black && (it.type_id > 0) && it.date_sent && it.number_sent && it.date_case && it.plaintiff && it.defendant && it.topic_ids);
+            b = (it.number_black && (it.type_id > 0) && it.date_sent && it.number_sent && it.date_case && it.plaintiff  && it.topic_ids);
         }
         return b;
     }
     $scope.isValid1 = function (it) {
         var b = false;
         if (it) {
-            b = ((it.judge_id > 0) && (it.judge3_id > 0) && (it.imprison_id > 0) && (it.accept_id > 0) && it.date_ap && it.date_sent2 && it.number_sent2);
+            b = ((it.judge_id > 0)   && it.date_ap && it.date_sent2 && it.number_sent2);
         }
         return b;
     }

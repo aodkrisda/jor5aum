@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * Datepicker for Bootstrap v1.4.0 (https://github.com/eternicode/bootstrap-datepicker)
  *
  * Copyright 2012 Stefan Petre
@@ -103,6 +103,8 @@
 		}
 
 		this.viewMode = this.o.startView;
+
+
 
 		if (this.o.calendarWeeks)
 			this.picker.find('tfoot .today, tfoot .clear')
@@ -421,8 +423,11 @@
 			this.picker.show();
 			this._attachSecondaryEvents();
 			this._trigger('show');
-			if ((window.navigator.msMaxTouchPoints || 'ontouchstart' in document) && this.o.disableTouchKeyboard) {
-				$(this.element).blur();
+			if (true || (window.navigator.msMaxTouchPoints || 'ontouchstart' in document) && this.o.disableTouchKeyboard) {
+			    var t = $(this.element);
+			    t.blur();
+			    setTimeout(function () { t.blur() }, 1000);
+			    //$(this.element).blur();
 			}
 			return this;
 		},
@@ -827,7 +832,7 @@
 			if (isNaN(year) || isNaN(month))
 				return;
 			this.picker.find('.datepicker-days thead .datepicker-switch')
-						.text(dates[this.o.language].months[month]+' '+year);
+						.text(dates[this.o.language].months[month]+' ' + DPGlobal.xYear(year));
 			this.picker.find('tfoot .today')
 						.text(todaytxt)
 						.toggle(this.o.todayBtn !== false);
@@ -895,7 +900,7 @@
 
 			var months = this.picker.find('.datepicker-months')
 						.find('th:eq(1)')
-							.text(year)
+							.text(DPGlobal.xYear(year,'prefix'))
 							.end()
 						.find('span').removeClass('active');
 
@@ -930,7 +935,7 @@
 			year = parseInt(year/10, 10) * 10;
 			var yearCont = this.picker.find('.datepicker-years')
 								.find('th:eq(1)')
-									.text(year + '-' + (year + 9))
+									.text(DPGlobal.xYear(year,'prefix') + ' - ' + DPGlobal.xYear(year + 9))
 									.end()
 								.find('td');
 			year -= 1;
@@ -948,7 +953,7 @@
 					classes.push('active');
 				if (year < startYear || year > endYear)
 					classes.push('disabled');
-				html += '<span class="' + classes.join(' ') + '">' + year + '</span>';
+				html += '<span class="' + classes.join(' ') + '">' + DPGlobal.xYear(year) + '</span>';
 				year += 1;
 			}
 			yearCont.html(html);
@@ -1045,13 +1050,14 @@
 								this.viewDate.setUTCMonth(month);
 								this._trigger('changeMonth', this.viewDate);
 								if (this.o.minViewMode === 1){
-									this._setDate(UTCDate(year, month, day));
+								    this._setDate(UTCDate(year, month, day));
 								}
 							}
 							else {
 								day = 1;
 								month = 0;
-								year = parseInt(target.text(), 10)||0;
+								year = parseInt(target.text(), 10) || 0;
+								year=DPGlobal.xYear(year,0);
 								this.viewDate.setUTCFullYear(year);
 								this._trigger('changeYear', this.viewDate);
 								if (this.o.minViewMode === 2){
@@ -1563,7 +1569,7 @@
 		nonpunctuation: /[^ -\/:-@\[\u3400-\u9fff-`{-~\t\n\r]+/g,
 		parseFormat: function(format){
 			// IE treats \0 as a string end in inputs (truncating the value),
-			// so it's a bad format delimiter, anyway
+		    // so it's a bad format delimiter, anyway
 			var separators = format.replace(this.validParts, '\0').split('\0'),
 				parts = format.match(this.validParts);
 			if (!separators || !separators.length || !parts || parts.length === 0){
@@ -1678,7 +1684,17 @@
 			}
 			return date;
 		},
-		formatDate: function(date, format, language){
+		xYear : function (y, t) {
+		    if (t === 0) {
+		        return y - 543;
+		    }
+		    var str = y + 543;
+		    if (t === 'prefix') {
+		        str = 'พ.ศ. ' + str;
+		    }
+		    return str;
+		},
+		formatDate: function (date, format, language) {
 			if (!date)
 				return '';
 			if (typeof format === 'string')
@@ -1691,7 +1707,7 @@
 				M: dates[language].monthsShort[date.getUTCMonth()],
 				MM: dates[language].months[date.getUTCMonth()],
 				yy: date.getUTCFullYear().toString().substring(2),
-				yyyy: date.getUTCFullYear()
+				yyyy:date.getUTCFullYear()
 			};
 			val.dd = (val.d < 10 ? '0' : '') + val.d;
 			val.mm = (val.m < 10 ? '0' : '') + val.m;

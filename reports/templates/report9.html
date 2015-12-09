@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {%if base_url %}
+    <base href="{{base_url}}/">{% endif %}
+    <title>{{report_name}}</title>
+    {{ include('pdf-css.html') }}
+</head>
+<body>
+    {% set year1 -%}พ.ศ. {{date1 | th_date('year')}}{%- endset %}
+    {% set year2 -%}{% if date2 %}พ.ศ. {{date2 | th_date('year')}}{% endif %}{%- endset %}
+    {% if year1==year2%}
+    {% set year1='' %}
+    {% endif %}
+    <div class="container-fluid">
+        <div class="c">
+            <div class="s2 b">สรุปประเภทคดีที่ศาลรายงานมายังสำนักงานอธิบดีผู้พิพากษาภาค 5</div>
+            <div class="s2 b">ประจำเดือน {{date1 | th_date('month')}} {{year1}}{% if date2 and date1!=date2 %} ถึงเดือน {{date2 | th_date('month')}} {{year2}}{% endif %}</div>
+            <div class="s2 b">{% if type_item %}คดี  {{type_item.name}}{% else %}ทุกประเภทคดี{% endif %}</div>
+            <div class="s2 b">{% if court %}{{court.name}}{% else %}ทุกศาล{% endif %}</div>
+        </div>
+
+        <br />
+        <table class="bordered">
+            <thead>
+                <tr>
+                    <th class="c" style="width:2cm">ลำดับที่</th>
+                    <th class="c">ประเภทข้อหา</th>
+                    <th class="c" style="width:20%">จำนวน (เรื่อง)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set index=0 %}
+                {% for it in topicids %}
+                {% set index=index+1 %}
+                {% set tm=getDict(it.topic_id,[]) %}
+                <tr>
+                    <td class="c">{{index}}</td>
+                    <td>{{tm.name}}</td>
+                    <td class="c">{{it.total}}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td>&nbsp;</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

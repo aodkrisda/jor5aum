@@ -1,9 +1,6 @@
 <?php
 
-require_once ('NotORM/lib.php');
 //API INTERFACE
-
-
 
 function get_version(){
   global $api;
@@ -275,6 +272,7 @@ class NGTABLE{
     $this->api=&$api;
     
     //check role
+	$this->api->api_check_user();
     if(is_array($this->roles) && count($this->roles)){
       if (!in_array($this->api->api_get_role(), $this->roles)) {
         $this->api->sendJson(array('error'=>true, 'messages'=>'ขออภัย คุณไม่ได้รับอนุญาติให้เข้าหน้านี้'),400);
@@ -322,7 +320,7 @@ class NGTABLE{
        $rs->limit($_POST['count'],(($_POST['page']-1) * $_POST['count']));
        $n=$rs->count("*");
        $rows=$this->norm->toArray($rs);
-       return array('error'=>false ,'__raw'=>true,'total'=>$n, 'sql'=>(string) $rs, 'meta'=>$this->meta, 'page'=>$_POST['page'],'data'=>&$rows);    
+       return array('error'=>false ,'__raw'=>true,'total'=>$n, /*'sql'=>(string) $rs,*/ 'meta'=>$this->meta, 'page'=>$_POST['page'],'data'=>&$rows);    
   }
   function get(){
       $rs=$this->norm->{$this->tb}()[$_POST[$this->pk]];
@@ -595,15 +593,20 @@ class NGTABLE_ADMIN_CASES  extends NGTABLE{
     global $norm;
     $r=$norm->cases()->where('id',$_POST['id'])->fetch();
     if($r){
+	  $tid=0;
+	  if(isset($_POST['type_id']) && $_POST['type_id']){
+		$tid=intval($_POST['type_id']);
+	  }
       $code='';
       $auto_received_num=$r['auto_received_num'];
       $date_received3=$r['date_received3'];
       if(empty($auto_received_num)){
         $year=intval(date('Y'));
-        $tr=$norm->types()->where('id',$r['type_id'])->fetch();
+		if(!$tid) $tid=$r['type_id'];
+        $tr=$norm->types()->where('id',$tid)->fetch();
         if($tr && $tr['code']){
           $code=trim($tr['code']);
-          $ars=$norm->auto_received_nums()->where('type_id',$r['type_id'])->where('year_val',$year);
+          $ars=$norm->auto_received_nums()->where('type_id',$tid)->where('year_val',$year);
           $nextid=0;
           $ar=$ars->fetch();
           if($ar){
@@ -612,7 +615,7 @@ class NGTABLE_ADMIN_CASES  extends NGTABLE{
             $ar->update();
           }else{
             $nextid=1;
-            $ar=$ars->insert(array('year_val'=>$year, 'type_id'=>$r['type_id'], 'number_val'=>$nextid));
+            $ar=$ars->insert(array('year_val'=>$year, 'type_id'=>$tid, 'number_val'=>$nextid));
           }
           if($ar){
             $auto_received_num=$code . $nextid . '/' . ($year + 543);
@@ -648,11 +651,17 @@ class NGTABLE_ADMIN_CASES  extends NGTABLE{
             }else{
               $nextid=0;
             }
+			$code=str_replace($nextid,'',$tm[0]);
           }else{
             $nextid=0;
           }
           if(($year>0) && ($nextid>0)){
-            $ars=$norm->auto_received_nums()->where('type_id',$r['type_id'])->where('year_val',$year);
+			$tid=$r['type_id'];
+			$c=$norm->types()->where('code',$code)->fetch();
+			if($c){
+				$tid=$c['id'];
+			}
+            $ars=$norm->auto_received_nums()->where('type_id',$tid)->where('year_val',$year);
             $ar=$ars->fetch();
             if($ar){
               if($ar['number_val']==$nextid){
@@ -668,7 +677,7 @@ class NGTABLE_ADMIN_CASES  extends NGTABLE{
           $r->update();
          }
       }
-      return array('auto_received_num'=>$auto_received_num,'date_received3'=>$date_received3);
+      return array('auto_received_num'=>$auto_received_num,'date_received3'=>$date_received3, 'xxxx'=>$code);
     }
     return false;
   }  
@@ -677,7 +686,7 @@ class NGTABLE_ADMIN_CASES  extends NGTABLE{
     global $norm;
     global $api;  
     if($rs){
-	  $atid=$norm->at()->select('id')->where('copyied',1);
+	  $atid=$norm->at()->select('id')->where('checked',1);
       $this->meta['notsent']=$norm->cases()->where('no_case_sent!=?',1)->where('(number_sent4   is null) or (number_sent4 =?)','')->where('(date_sent4 is null) or (date_sent4 =?)','0000-00-00')->count();
       $this->meta['notsent2']=$norm->cases()->where('auto_received_num!=?','')->where('(date_received3 is not null) AND (date_received3!=?)','0000-00-00')->where('number_sent5','')->where('(date_sent5 is null) or (date_sent5=?)','0000-00-00')->where('command_id',$atid)->count();
       

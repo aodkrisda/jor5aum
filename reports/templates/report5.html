@@ -1,12 +1,13 @@
-﻿<html>
+﻿<!DOCTYPE html>
+<html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>รายงาน</title>
-    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap-theme.css">
-    <link rel="stylesheet" type="text/css" href="./report.css">
+    {%if base_url %}
+    <base href="{{base_url}}/">{% endif %}
+    <title>{{report_name}}</title>
+    {{ include('pdf-css.html') }}
 </head>
 <body>
     {% set year1 -%}พ.ศ. {{date1 | th_date('year')}}{%- endset %}
@@ -16,64 +17,66 @@
     {% endif %}
     {% set kadees=0 %}
     <div class="container-fluid">
-        <div class="text-center" >
-            <h4>รายงานข้อมูลการส่งสำนวนและร่างคำพิพากษาของศาลในภาค 5</h4>
-            <h4>เดือน {{date1 | th_date('month')}} {{year1}}{% if date2 and date1!=date2 %} ถึงเดือน {{date2 | th_date('month')}} {{year2}}{% endif %}</h4>
-            <h4>{% if type_item %}คดี  {{type_item.name}}{% else %}ทุกประเภทคดี{% endif %}</h4>
-       </div>
+        <div class="c">
+            <div class="s2 b">รายงานข้อมูลการส่งสำนวนและร่างคำพิพากษาของศาลในภาค 5</div>
+            <div class="s2 b">เดือน {{date1 | th_date('month')}} {{year1}}{% if date2 and date1!=date2 %} ถึงเดือน {{date2 | th_date('month')}} {{year2}}{% endif %}</div>
+            <div class="s2 b">{% if type_item %}คดี  {{type_item.name}}{% else %}ทุกประเภทคดี{% endif %}</div>
+        </div>
         <div style="position:fixed;top:8px;right:8px" class="hidden-print"><a href="javascript:window.print()" title="พิมพ์รายงาน" class="btn btn-default"><span class="glyphicon glyphicon-print"></span></a></div>
 
         {% for group in groups %}
-            <h4>{{group.name}}</h4>
-            {% for court in courts[ group.id] %}
-            <h4 class="normal">{{court.name}}</h4>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th class="text-center">เลขคดีดำ</th>
-                        <th class="text-center">ผู้พิพากษาเจ้าของสำนวน</th>
-                        <th class="text-center">รองอธิบดีผู้พิพากษา</th>
-                        <th class="text-center">ผู้พิพากษาหน้าหน้าศาลประจำภาค5</th>
-                        <th class="text-center">วันที่รับสำนวน</th>
-                        <th class="text-center">วันนัดฟังคำพิพากษา</th>
-                        <th class="text-center">วันที่ส่งคืนสำนวน</th>
-                        <th class="text-center">ส่งสำนวนตามระเบียบ (15 วัน)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% set index=0 %}
-                    {% for it in getDict(court.id,[]) %}
-                    {% set index=index+1 %}
-                    <tr>
-                        <td class="text-center">{{it.number_black}}</td>
-                        <td>{{it.judge_id | user_name}}</td>
-                        <td>{{it.judge2_id | user_name}}</td>
-                        <td>{{it.judge4_id | user_name}}</td>
-                        <td class="text-center">{{it.date_received3 | th_date('short')}}</td>
-                        <td class="text-center">{{it.date_ap | th_date('short')}}</td>
-                        <td class="text-center">{{it.date_sent5 | th_date('short')}}</td>
-                        <td class="text-center">{{it | xdays}}</td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td class="text-center">&nbsp;</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% set kadees=kadees + index %}
-            <h4 class="text-right">จำนวน   <span class="count-kadee">{{index}}</span> คดี</h4>
+        <div class="s1 b">{{group.name}}</div>
+        {% for court in courts[ group.id] %}
+        <div class="b">{{court.name}}</div>
+        <table class="bordered">
+            <thead>
+                <tr>
+                    <th class="c" style="width:10%">เลขคดีดำ</th>
+                    <th style="width:16.66%">ผู้พิพากษาเจ้าของสำนวน</th>
+                    <th style="width:16.66%">รองอธิบดีผู้พิพากษา</th>
+                    <th style="width:16.66%">ผู้พิพากษาหน้าหน้าศาลประจำภาค5</th>
+                    <th class="c" style="width:10%">วันที่รับสำนวน</th>
+                    <th class="c" style="width:10%">วันนัดฟังคำพิพากษา</th>
+                    <th class="c" style="width:10%">วันที่ส่งคืนสำนวน</th>
+                    <th class="c" style="width:6%">ส่งสำนวนตามระเบียบ<br />(15 วัน)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set index=0 %}
+                {% for it in getDict(court.id,[]) %}
+                {% set index=index+1 %}
+                <tr>
+                    <td class="c">{{it.number_black}}</td>
+                    <td class="c">{{it.judge_id | user_name}}</td>
+                    <td class="c">{{it.judge2_id | user_name}}</td>
+                    <td class="c">{{it.judge4_id | user_name}}</td>
+                    <td class="c">{{it.date_received3 | th_date('short')}}</td>
+                    <td class="c">{{it.date_ap | th_date('short')}}</td>
+                    <td class="c">{{it.date_sent5 | th_date('short')}}</td>
+                    <td class="c">{{it | xdays}}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td class="c">&nbsp;</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="c"></td>
+                    <td class="c"></td>
+                    <td class="c"></td>
+                    <td class="c"></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% set kadees=kadees + index %}
+        {% if not user_id %}
+        <div class="b r pt1">จำนวน  &nbsp; {{index}} &nbsp; คดี</div>
+        {% endif %}
         {% endfor %}
-        <hr class="page-break"/>
+        {%if not loop.last %}<br />{% endif %}
         {% endfor %}
-        <h4 class="text-center">จำนวนสำนวนที่ส่งตรวจร่างคำพิพากษา   <span class="count-kadee">{{kadees}}</span> คดี</h4>
+        <div class="s1 b c pt2">จำนวนสำนวนที่ส่งตรวจร่างคำพิพากษา   &nbsp; {{kadees}} &nbsp; คดี</div>
     </div>
 </body>
 </html>

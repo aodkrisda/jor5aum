@@ -93,7 +93,7 @@
                 require: '?ngModel',
                 scope: { xmodel: '@dataModel', startDate: '=', endDate: '=', mode: "@", placeholder: "@", weekDaysOnly: "@" },
 
-                template: '<div class="input-group date"><input  type="text" placeholder="{{placeholder}}" class="form-control date"><span class="input-group-addon" ><i class="glyphicon glyphicon-calendar"></i></span></div>',
+                template: '<div class="input-group date"><input type="text" placeholder="{{placeholder}}" class="form-control date"><span class="input-group-addon" ><i class="glyphicon glyphicon-calendar"></i></span></div>',
                 link: function (scope, element, attr, ngModel) {
                     var _mode = parseInt(scope.mode || 0);
                     var _startMode = 0;
@@ -169,13 +169,16 @@
                                 var dt = new Date(ngModel.$modelValue);
                                 element2.datepicker('setDate', dt);
                                 element2.datepicker('update');
+                               
                                 if (dt) {
                                     textInput.val(thfun(dt, scope.mode));
                                 } else {
                                     textInput.val('');
                                 }
+                                
                             }
                         }
+                        if(textInput) textInput.blur();
                     })
                     .on('changeDate', trotle);
 
@@ -187,11 +190,13 @@
                                     dt = new Date(ngModel.$modelValue);
                                 }
                                 element2.datepicker('setDate', dt);
+                                
                                 if (dt) {
                                     textInput.val(thfun(dt, scope.mode));
                                 } else {
                                     textInput.val('');
                                 }
+                                
                             }
                             if (ngModel.$modelValue) {
                                 ngModel.$render();
@@ -202,18 +207,7 @@
                     textInput.keydown(function (e) {
                        e.preventDefault();
                        e.stopImmediatePropagation();
-                       /*
 
-                        if (moment(ngModel.$modelValue).isValid()) {
-                            var dt = new Date(ngModel.$modelValue);
-                            if (dt) {
-                                textInput.val(thfun(dt, scope.mode));
-                            } else {
-                                textInput.val('');
-                            }
-                            dt = null;
-                        }
-                        */
                     })
 
                     var v = null;

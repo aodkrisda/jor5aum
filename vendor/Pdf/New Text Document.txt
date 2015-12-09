@@ -1,0 +1,9 @@
+As Thai script does not contain spaces between words, mPDF by default analyses Thai script and inserts character &#x200B; (zero-width space) at potential line-breaking opportunities. Most fonts contain a zero-width glyph for this character; the ThSarabun font does not, and so the x200B characters are printing as a missing character (rectangle).
+
+You can disable this by setting:
+$mpdf->useDictionaryLBR = false;   // in your script, or
+$this->useDictionaryLBR = false;   // in config.php
+
+Thai script will then break according to the usual rules of Latin script, i.e. at spaces, or when no more characters fit on the line.
+
+... or use a different font...

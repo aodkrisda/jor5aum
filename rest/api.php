@@ -11,7 +11,9 @@ if(!isset($_SERVER['PATH_INFO'])){
   unset($a);
 }
 }
-require_once(__DIR__.'/NotORM/lib.php');
+
+//auto require
+require 'autoload.php';
 
 
 class REST_API{
@@ -55,6 +57,8 @@ class REST_API{
       @http_response_code($code);
     }
     header('Content-Type: text/json; charset=utf-8');
+
+	$data['aaa']=array($this->auth_user, $this->_user['id']);
     echo json_encode($data,JSON_UNESCAPED_UNICODE);
     exit();
   }
@@ -81,7 +85,7 @@ class REST_API{
   public function api_set_user($data){
     if($data){
       if(!session_id()){
-        session_start();
+        @session_start();
       }
       $_SESSION['user']=$data;
       $_SESSION['id']=session_id();
@@ -95,8 +99,11 @@ class REST_API{
     if($this->_user) return $this->_user;
     @session_start();
     if(isset($_SESSION['user'])){
-        $this->_user=$_SESSION['user'];
-        return $_SESSION['user'];
+		if($_SESSION['user']['id']==$this->auth_user){
+			$this->_user=$_SESSION['user'];
+			return $_SESSION['user'];
+		}
+		$this->_user=null;
     }
     $_SESSION=array();
     session_destroy();
@@ -126,7 +133,7 @@ class REST_API{
     }
     */
   
-    return false;
+    return null;
   }
   
   public function api_get_role(){
@@ -183,6 +190,12 @@ class REST_API{
     if(isset($_SERVER['PATH_INFO'])) $path=preg_replace('/^\/{1,}/','',$_SERVER['PATH_INFO']);
     $path=preg_replace('/\/{1,}$/','',$path);
     
+	$this->auth_user='';
+	$this->auth_pwd='';
+	if(isset($_SERVER['PHP_AUTH_USER'])){
+		$this->auth_user=$_SERVER['PHP_AUTH_USER'];
+		$this->auth_pwd=$_SERVER['PHP_AUTH_PW'];
+	}
 
     if($path){
       $params=explode('/',$path);
@@ -236,7 +249,7 @@ class REST_API{
                     $magic=false;
                   }
               }
-              if($magic && $this->_allow_auto_rest){
+              if(false && $magic && $this->_allow_auto_rest){
                 $handler='magic_restfull';
                 if(function_exists($handler)){
                   array_unshift($params,$fn);
@@ -281,4 +294,3 @@ if($a === $b){
   $api=new REST_API();
   $api->start();
 }
-?>

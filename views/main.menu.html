@@ -1,103 +1,964 @@
 ﻿
-    <nav id="main-navbar" class="navbar yamm navbar-default" role="navigation"  ng-if="$root.getUserId()" bs-navbar>
-        <div class="container-fluid" bs-collapse>
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" bs-collapse-toggle>
-                    <span class="sr-only">Navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">
-                    <h3 style="color:#014F7F;font-size:1.6em;font-weight:bold;padding:0px;margin:0px"><span class="fa fa-university"></span> <span ng-if="isAdmin()">สำนักศาลยุติธรรมประจำภาค5</span><span ng-if="!isAdmin()">{{getUser().name}}</span></h3>
-                </a>
+<script type="text/ng-template" id="custom.logout.popover.html">
+    <div class="popover" style="min-width:320px;">
+        <div class="arrow"></div>
+        <h3 class="popover-title text-center" style="font-size:1.3em"><strong>ยืนยันการออกจากระบบ</strong></h3>
+        <div class="popover-content" style="padding-top:2em;padding-bottom:2em">
+            <div class="row">
+                <div class="col-sm-6">
+                    <button type="button" class="btn btn-block btn-warning" ng-click="logOut(false);$hide()"><span class="glyphicon glyphicon-off"></span> ออกจากระบบ</button>
+                </div>
+                <div class="col-sm-6">
+                    <button type="button" class="btn btn-block btn-info" ng-click="$hide()"><span class="glyphicon glyphicon-remove"></span> ยกเลิก</button>
+                </div>
             </div>
-            <div ng-if="isAdmin()" class="collapse navbar-collapse" bs-collapse-target>
-                <ul class="nav navbar-nav navbar-right" ng-if="$root.getUserId()">
-                    <li data-match-route="admin/cases"><a href="#admin/cases"><span class="glyphicon glyphicon-equalizer"></span> รายงานคดี</a></li>
-                    <li data-match-route="admin/vcases"><a href="#admin/vcases"><span class="glyphicon glyphicon-book"></span> สำนวนและร่าง</a></li>
-                    <li  data-match-route="admin/management/" class="dropdown">
-                        <a href="javascript:void()"  bs-dropdown><span class="glyphicon glyphicon-th-large"></span>  เตรียมข้อมูล</a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <div class="yamm-content">
-                                    <h3 class="text-center page-header" style="margin-top:0.5em;margin-bottom:1em">เลือกเตรียมข้อมูล</h3>
-                                    <div class="row">
-                                        <div class="col-md-6 col-lg-4">
-                                            <a href="#admin/management/users">
-                                                <h1 class="text-center">
-                                                    <span class="glyphicon glyphicon-user"></span>
-                                                </h1>
-                                                <h4 class="text-center text-primary">ผู้ใช้</h4>
-                                            </a>
-                                        </div>
-                                        <div class="col-md-6 col-lg-4">
-                                            <a href="#admin/management/types">
-                                                <h1 class="text-center">
-                                                    <span class="glyphicon glyphicon-briefcase"></span>
-                                                </h1>
-                                                <h4 class="text-center text-primary">ประเภทคดี</h4>
-                                            </a>
-                                        </div>
-                                        <div class="col-md-6 col-lg-4">
-                                            <a href="#admin/management/topics">
-                                                <h1 class="text-center">
-                                                    <span class="glyphicon glyphicon-tasks"></span>
-                                                </h1>
-                                                <h4 class="text-center text-primary">ข้อหา</h4>
-                                            </a>
-                                        </div>
-                                        <div class="col-md-6 col-lg-4">
-                                            <a href="#admin/management/results">
-                                                <h1 class="text-center">
-                                                    <span class="glyphicon glyphicon-check"></span>
-                                                </h1>
-                                                <h4 class="text-center text-primary">ผลการปฏิบัติ</h4>
-                                            </a>
-                                        </div>
-                                        <div class="col-md-6 col-lg-4">
-                                            <a href="#admin/management/ats">
-                                                <h1 class="text-center">
-                                                    <span class="glyphicon glyphicon-share"></span>
-                                                </h1>
-                                                <h4 class="text-center text-primary">คำสั่ง อ.ธ</h4>
-                                            </a>
-                                        </div>
-                                        <div class="col-md-6 col-lg-4">
-                                            <a href="#admin/management/at_results">
-                                                <h1 class="text-center">
-                                                    <span class="glyphicon glyphicon-share"></span>
-                                                </h1>
-                                                <h4 class="text-center text-primary">เหตุผลไม่ตามระเบียบ</h4>
-                                            </a>
-                                        </div>
-                                        <div class="col-md-6 col-lg-4">
-                                            <a href="#admin/management/settings" >
-                                                <h1 class="text-center">
-                                                    <span class="glyphicon glyphicon-cog"></span>
-                                                </h1>
-                                                <h4 class="text-center text-primary">ตั้งค่าระบบ</h4>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="custom.result.popover.html">
+    <div class="popover" style="min-width:350px;max-width:80%">
+        <div class="arrow"></div>
+        <div class="popover-title">
+            <button type="button" title="Close" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+            <h4><i class="fa fa-bars"></i> เพิ่มข้อมูล</h4>
+        </div>
+        <div class="popover-content">
+            <form class="form" style="padding:10px;">
+                <div class="form-group">
+                    <label class="control-label">ผลการปฏิบัติ</label>
+                    <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control" ng-model="itemResult.name">
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success" ng-disabled="!itemResult.name" ng-click="addResult(itemResult)"><span class="glyphicon glyphicon-ok-sign"></span> เพิ่มข้อมูล</button>
+            <button type="button" class="btn btn-warning" ng-click="$hide()"><span class="glyphicon glyphicon-remove-sign"></span> ยกเลิก</button>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="custom.atresult.popover.html">
+    <div class="popover" style="min-width:350px;max-width:80%">
+        <div class="arrow"></div>
+        <div class="popover-title">
+            <button type="button" title="Close" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+            <h4><i class="fa fa-bars"></i> เพิ่มข้อมูล</h4>
+        </div>
+        <div class="popover-content">
+            <form class="form" style="padding:10px;">
+                <div class="form-group">
+                    <label class="control-label">เหตุผลที่ไม่ถูกต้องตามระเบียบ</label>
+                    <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control" ng-model="itemResult.name">
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success" ng-disabled="!itemResult.name" ng-click="addAtResult(itemResult)"><span class="glyphicon glyphicon-ok-sign"></span> เพิ่มข้อมูล</button>
+            <button type="button" class="btn btn-warning" ng-click="$hide()"><span class="glyphicon glyphicon-remove-sign"></span> ยกเลิก</button>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="custom.imprison.popover.html">
+    <div class="popover" style="min-width:350px;max-width:80%">
+        <div class="arrow"></div>
+        <div class="popover-title">
+            <button type="button" title="Close" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+            <h4><i class="fa fa-bars"></i> เพิ่มข้อมูล</h4>
+        </div>
+        <div class="popover-content">
+            <form class="form" style="padding:10px;">
+                <div class="form-group">
+                    <label class="control-label">จำเลยต้องขัง</label>
+                    <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control" ng-model="itemResult.name">
+
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success" ng-disabled="!itemResult.name" ng-click="addImprison(itemResult)"><span class="glyphicon glyphicon-ok-sign"></span> เพิ่มข้อมูล</button>
+            <button type="button" class="btn btn-warning" ng-click="$hide()"><span class="glyphicon glyphicon-remove-sign"></span> ยกเลิก</button>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="custom.accept.popover.html">
+    <div class="popover" style="min-width:350px;max-width:80%">
+        <div class="arrow"></div>
+        <div class="popover-title">
+            <button type="button" title="Close" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+            <h4><i class="fa fa-bars"></i> เพิ่มข้อมูล</h4>
+        </div>
+        <div class="popover-content">
+            <form class="form" style="padding:10px;">
+                <div class="form-group">
+                    <label class="control-label">จำเลยสารภาพ</label>
+                    <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control" ng-model="itemResult.name">
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success" ng-disabled="!itemResult.name" ng-click="addAccept(itemResult)"><span class="glyphicon glyphicon-ok-sign"></span> เพิ่มข้อมูล</button>
+            <button type="button" class="btn btn-warning" ng-click="$hide()"><span class="glyphicon glyphicon-remove-sign"></span> ยกเลิก</button>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="custom.command.popover.html">
+    <div class="popover" style="min-width:350px;max-width:80%">
+        <div class="arrow"></div>
+        <div class="popover-title">
+            <button type="button" title="Close" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+            <h4><i class="fa fa-bars"></i> คำสั่ง อธ.</h4>
+        </div>
+        <div class="popover-content">
+            <form class="form" style="padding:10px;">
+                <div class="form-group">
+                    <label class="control-label">คำสั่ง อธ.</label>
+                    <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control" ng-model="itemResult.name">
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success" ng-disabled="!itemResult.name" ng-click="addCommand(itemResult)"><span class="glyphicon glyphicon-ok-sign"></span> เพิ่มข้อมูล</button>
+            <button type="button" class="btn btn-warning" ng-click="$hide()"><span class="glyphicon glyphicon-remove-sign"></span> ยกเลิก</button>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="custom.judge.popover.html">
+    <div class="popover" style="min-width:350px;max-width:80%">
+        <div class="arrow"></div>
+        <div class="popover-title">
+            <button type="button" title="Close" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+            <h4><i class="fa fa-bars"></i> ผู้พิพากษาผู้ตรวจ</h4>
+        </div>
+        <div class="popover-content">
+            <form class="form" style="padding:10px;">
+                <div class="form-group">
+                    <label class="control-label">ชื่อผู้พิพากษา</label>
+                    <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control" ng-model="itemResult.name">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">ตำแหน่ง</label>
+                    <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control" ng-model="itemResult.position">
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success" ng-disabled="!itemResult.name" ng-click="addJudge(itemResult)"><span class="glyphicon glyphicon-ok-sign"></span> เพิ่มข้อมูล</button>
+            <button type="button" class="btn btn-warning" ng-click="$hide()"><span class="glyphicon glyphicon-remove-sign"></span> ยกเลิก</button>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="custom.confirm.popover.html">
+    <div class="popover" style="min-width:300px">
+        <div class="arrow"></div>
+        <h3 class="popover-title text-center text-danger"><strong>ยืนยันการลบข้อมูล</strong></h3>
+        <div class="popover-content">
+            <p class="text-center">
+                <button type="button" class="btn btn-danger" ng-click="doRemove();$hide()"><span class="glyphicon glyphicon-remove"></span> ลบข้อมูล</button>
+                <button type="button" class="btn btn-primary" ng-click="$hide()"><span class="glyphicon glyphicon-ok"></span> ยกเลิก</button>
+            </p>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="custom.confirm.autonumber.html">
+    <div class="popover" style="min-width:350px">
+        <div class="arrow"></div>
+        <h3 class="popover-title text-center text-danger"><strong>ยืนยันการลบเลขรับสำนวน</strong></h3>
+        <div class="popover-content">
+            <p class="text-center">
+                <button type="button" class="btn btn-danger btn-min" ng-click="clearRunNumber(editingItem);$hide()"><span class="glyphicon glyphicon-remove"></span> ลบ</button>
+                <button type="button" class="btn btn-primary btn-min" ng-click="$hide()"><span class="glyphicon glyphicon-ok"></span> ยกเลิก</button>
+            </p>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="custom.confirm2.popover.html">
+    <div class="popover">
+        <div class="arrow"></div>
+        <h3 class="popover-title">คุณต้องการลบข้อมูลรายการที่เช็คทั้งหมด ใช่หรือไม่</h3>
+        <div class="popover-content">
+            <p class="text-center">
+                <button type="button" class="btn btn-danger" ng-click="doRemoveChecked();$hide()">ลบทั้งหมด</button>
+                <button type="button" class="btn btn-primary" ng-click="$hide()">ยกเลิก</button>
+            </p>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="custom.dropdown.actions.html">
+    <ul tabindex="-1" class="dropdown-menu" role="menu">
+        <li> <a ng-click="selectAll()" href="javascript://void(0)"><span class="glyphicon glyphicon-check"></span> เลือกทั้งหมด</a></li>
+        <li><a ng-click="selectInverse()" href="javascript://void(0)"><span class="glyphicon glyphicon-ok-sign"></span> เลือกกลับกัน</a></li>
+        <li><a ng-click="selectNone()" href="javascript://void(0)"><span class="glyphicon glyphicon-ban-circle"></span> ยกเลิกการเลือกทั้งหมด</a></li>
+        <li ng-if="hasChecked()" class="divider"></li>
+        <li ng-if="hasChecked()"><a ng-click="removeChecked()" href="javascript://void(0)"><span class="glyphicon glyphicon-remove"></span> ลบข้อมูลที่เลือก</a></li>
+    </ul>
+</script>
+
+<script type="text/ng-template" id="custom.pages.html">
+    <div class="ng-cloak ng-table-pager" ng-if="params.data.length">
+        <div ng-if="params.settings().counts.length" class="ng-table-counts btn-group pull-right">
+            <button ng-repeat="count in params.settings().counts" type="button" ng-class="{\'active\':params.count()==count}" ng-click="params.count(count)" class="btn btn-default"> <span ng-bind="count"></span> </button>
+        </div>
+        <ul class="pagination ng-table-pagination">
+            <li ng-class="{\'disabled\': !page.active && !page.current, \'active\': page.current}" ng-repeat="page in pages" ng-switch="page.type"> <a ng-switch-when="prev" ng-click="params.page(page.number)" href="">&laquo;</a> <a ng-switch-when="first" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a> <a ng-switch-when="page" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a> <a ng-switch-when="more" ng-click="params.page(page.number)" href="">&#8230;</a> <a ng-switch-when="last" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a> <a ng-switch-when="next" ng-click="params.page(page.number)" href="">&raquo;</a> </li>
+        </ul>
+    </div>
+</script>
+
+<script type="text/ng-template" id="ng-table/pager.html">
+    <div class="row panel-footer">
+        <div class="col-sm-7">
+            <div ng-if="params.data.length==0  && params.ready"><h2 style="padding:0px;margin:0px;color:#777777"><i class="fa fa-exclamation-triangle fa-lg"></i> <span ng-if="!params.not_found">ไม่พบข้อมูล</span><span ng-if="params.not_found">{{params.not_found}}</span></h2></div>
+            <div ng-table-pager class="ng-cloak" ng-if="params.data.length">
+                <ul class="pagination ng-table-pagination" style="margin:0px" title="ไปหน้าที่">
+                    <li ng-class="{disabled: !page.active && !page.current, active: page.current}" ng-repeat="page in pages" ng-switch="page.type">
+                        <a ng-switch-when="prev" ng-click="params.page(page.number)" href="">&laquo;</a>
+                        <a ng-switch-when="first" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a>
+                        <a ng-switch-when="page" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a>
+                        <a ng-switch-when="more" ng-click="params.page(page.number)" href="">&#8230;</a>
+                        <a ng-switch-when="last" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a>
+                        <a ng-switch-when="next" ng-click="params.page(page.number)" href="">&raquo;</a>
                     </li>
-                    <li><a data-placement="bottom" data-trigger="click" bs-popover data-template="custom.logout.popover.html" data-auto-close="true" href="javascript:void(0)"><span class="glyphicon glyphicon-lock"></span> ออกจากระบบ</a></li>
-                </ul>
-            </div>
-
-
-
-            <div ng-if="!isAdmin()" class="collapse navbar-collapse" bs-collapse-target>
-                <ul class="nav navbar-nav navbar-right" ng-if="$root.getUserId()">
-                    <li data-match-route="court/cases"><a href="#court/cases"><span class="glyphicon glyphicon-equalizer"></span> รายงานคดี</a></li>
-                    <li data-match-route="court/vcases"><a href="#court/vcases"><span class="glyphicon glyphicon-book"></span> สำนวนและร่าง</a></li>
-                    <li data-match-route="court/users"><a href="#court/users"><span class="glyphicon glyphicon-user"></span> ข้อมูลผู้พิพากษา</a></li>
-
-                    <li><a data-placement="bottom" data-trigger="click" bs-popover data-template="custom.logout.popover.html" data-auto-close="true" href="javascript:void(0)"><span class="glyphicon glyphicon-lock"></span> ออกจากระบบ</a></li>
                 </ul>
             </div>
         </div>
-    </nav>
+        <div class="col-sm-5" ng-if="params.hide_limit!==true">
+            <div class="btn-group pull-right" title="จำนวนข้อมูลที่ต้องการให้แสดงในหนึ่งหน้า">
+                <button ng-repeat="it in params.settings().counts track by it" type="button" ng-class="{'active':params.count() == it}" ng-click="params.count(it)" class="btn btn-default"> {{it}}</button>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="custom.checked.html">
+    <span id="checked-actions" class="glyphicon glyphicon-th" data-animation="am-flip-x" bs-dropdown="actions" aria-haspopup="true" aria-expanded="false" data-template="custom.dropdown.actions.html"></span>
+</script>
+
+<script type="text/ng-template" id="custom.cases.search.html">
+    <div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" style="min-width:640px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><span class="fa fa-windows"></span> ค้นหาข้อมูล</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" name="form">
+                        <fieldset>
+                            <div class="form-group">
+                                <!-- Text input-->
+                                <label class="col-md-4 control-label">วันที่ส่ง</label>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <span mode="0" ng-model="searchItem.date1" placeholder="เริ่มตั้งแต่" custom-date-field></span>
+                                        </div>
+
+                                        <div class="col-md-12" style="padding-top:0.5em">
+                                            <span mode="0" ng-model="searchItem.date2" placeholder="ถึงวันที่" custom-date-field></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <!-- Text input-->
+                                <label class="col-md-4 control-label">เลขคดีดำ</label>
+                                <div class="col-md-7">
+                                    <input type="text" name="name" placeholder="" required ng-model="searchItem.number_black" class="form-control input-md">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
+                                <!-- Text input-->
+                                <label class="col-md-4 control-label">โจทก์</label>
+                                <div class="col-md-7">
+                                    <input type="text" name="code" placeholder="" required ng-model="searchItem.plaintiff" class="form-control input-md">
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <!-- Text input-->
+                                <label class="col-md-4 control-label">จำเลย</label>
+                                <div class="col-md-7">
+                                    <input type="text" name="code" placeholder="" required ng-model="searchItem.defendant" class="form-control input-md">
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <!-- Text input-->
+                                <label class="col-md-4 control-label">เรื่อง</label>
+                                <div class="col-md-7">
+                                    <input type="text" name="code" placeholder="" required ng-model="searchItem.title" class="form-control input-md">
+                                </div>
+                            </div>
+                            <div class="form-group" ng-show="isAdmin()">
+                                <!-- Select Basic -->
+                                <label class="col-md-4 control-label">ศาล</label>
+                                <div class="col-md-7">
+                                    <select class="form-control input-md" ng-model="searchItem.user_id" select-value-type="string"
+                                            ng-options="it.id as it.name group by lookup_group(it.group_id) for it in Lookups.getCourt()">
+                                        <option value="">ทุกศาล</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </fieldset>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-min" ng-click="startSearch(searchItem);$hide()"><span class="glyphicon glyphicon-search"></span> ค้นหา</button>
+                    <button type="button" class="btn btn-warning btn-min" ng-click="$hide()"><span class="glyphicon glyphicon-remove"></span> ยกเลิก</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="admin.cases.reports.html">
+    <div class="popover" style="min-width:400px">
+        <div class="arrow"></div>
+        <h3 class="popover-title"><span class="glyphicon glyphicon-share"></span> <strong>สรุปรายงานคดี</strong></h3>
+        <div class="popover-content" style="padding-top:2em;padding-bottom:2em">
+            <a href="#admin/report1" class="btn btn-info btn-block">
+                <span class="glyphicon glyphicon-print"></span> สรุปปริมาณรายงานคดีของศาลในภาค 5
+            </a>
+            <a href="#admin/report2" class="btn btn-info btn-block">
+                <span class="glyphicon glyphicon-print"></span> สรุปรายงานคดีแยกเป็นรายศาล
+            </a>
+            <a href="#admin/report9" class="btn btn-info btn-block">
+                <span class="glyphicon glyphicon-print"></span> สรุปประเภทคดีที่ศาลรายงานมายังสำนักงาน<br/>อธิบดีผู้พิพากษาภาค 5 (เดือน)
+            </a>
+            <a href="#admin/report10" class="btn btn-info btn-block">
+                <span class="glyphicon glyphicon-print"></span> สรุปประเภทคดีที่ศาลรายงานมายังสำนักงาน<br />อธิบดีผู้พิพากษาภาค 5 (ปี)
+            </a>
+            
+        </div>
+</script>
+
+<script type="text/ng-template" id="admin.vcases.reports.html">
+    <div class="popover" style="min-width:400px">
+        <div class="arrow"></div>
+        <h3 class="popover-title"><span class="glyphicon glyphicon-share"></span> <strong>สรุปรายงานคดี</strong></h3>
+        <div class="popover-content" style="padding-top:2em;padding-bottom:2em">
+            <a href="#admin/report4" class="btn btn-info btn-block">
+                <span class="glyphicon glyphicon-print"></span> รายงานการส่งสำนวนเพื่อตรวจร่างคำพิพากษาประจำวัน
+            </a>
+            <a href="#admin/report5" class="btn btn-info btn-block">
+                <span class="glyphicon glyphicon-print"></span> รายงานข้อมูลการส่งสำนวนและร่างคำพิพากษา<br />ของศาลในภาค 5 (ประจำเดือน)
+            </a>
+            <a href="#admin/report6" class="btn btn-info btn-block">
+                <span class="glyphicon glyphicon-print"></span> สรุปการส่งสำนวนและร่างคำพิพากษา<br />ศาลในภาค 5(ประจำเดือน)
+            </a>
+            <a href="#admin/report7" class="btn btn-info btn-block">
+                <span class="glyphicon glyphicon-print"></span> รายงานสำนวนที่ไม่ได้ส่งสำเนาคำพิพากษา
+            </a>
+            <a href="#admin/report8" class="btn btn-info btn-block">
+                <span class="glyphicon glyphicon-print"></span> รายงานคดีที่ไม่ได้ส่งสำนวน
+            </a>
+        </div>
+</script>
+
+<script type="text/ng-template" id="custom.confirm.admin.actions.html">
+    <div class="popover" style="min-width:300px">
+        <div class="arrow"></div>
+        <h3 class="popover-title"><span class="glyphicon glyphicon-share"></span> <strong>เลือกทำรายการ</strong></h3>
+        <div class="popover-content">
+            <p class="text-center">
+                <button type="button" ng-disabled="$it.no_case_sent=='1'" class="btn btn-success btn-block" ng-click="go('admin.cases.form1',$it);$hide()"><div class="text-left"><span class="badge">1</span> รับรายงานคดี</div></button>
+                <button type="button" ng-disabled="!caseAdminForm5($it)" class="btn btn-success btn-block" ng-click="go('admin.cases.form5',$it);$hide()"><div class="text-left"><span class="badge">5</span> รับสำเนาคำพิพากษา</div></button>
+            </p>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="custom.confirm.admin.actions2.html">
+    <div class="popover" style="min-width:300px">
+        <div class="arrow"></div>
+        <h3 class="popover-title"><span class="glyphicon glyphicon-share"></span> <strong>เลือกทำรายการ</strong></h3>
+        <div class="popover-content">
+            <p class="text-center">
+                <button type="button" ng-disabled="vcaseAdminForm($it)<2" class="btn btn-info btn-block" ng-click="go('admin.vcases.form2',$it);$hide()"><div class="text-left"><span class="badge">2</span> รับสำนวนและร่าง</div></button>
+                <button type="button" ng-disabled="vcaseAdminForm($it)<2" class="btn btn-info btn-block" ng-click="go('admin.vcases.form3',$it);$hide()"><div class="text-left"><span class="badge">3</span> จ่ายสำนวนเพื่อตรวจร่างคำพิพากษา</div></button>
+                <button type="button" ng-disabled="vcaseAdminForm($it)<2" class="btn btn-info btn-block" ng-click="go('admin.vcases.form4',$it);$hide()"><div class="text-left"><span class="badge">4</span> ส่งสำนวนและร่างคำพิพากษาคืนศาล</div></button>
+                <button type="button" ng-disabled="!(vcaseAdminForm($it)>0)" class="btn btn-info btn-block" ng-click="go('admin.vcases.form5',$it);$hide()"><div class="text-left"><span class="badge">5</span> รับสำเนาคำพิพากษา</div></button>
+
+                <button type="button" ng-if="($it.number_black && $it.date_received3)" class="btn btn-success btn-block" ng-click="printCover($it);$hide()"><div class="text-left"><span class="glyphicon glyphicon-print"></span> พิมพ์ปกสำนวน</div></button>
+            </p>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="custom.confirm.court.actions.html">
+    <div class="popover">
+        <div class="arrow"></div>
+        <h3 class="popover-title"><span class="glyphicon glyphicon-share"></span> <strong>เลือกทำรายการ</strong></h3>
+        <div class="popover-content">
+            <p class="text-center">
+                <button type="button" ng-disabled="($it.no_case_sent=='1') || (caseCourtForm($it)<3)" class="btn btn-success btn-block" ng-click="go('court.cases.form1',$it);$hide()"><div class="text-left"><span class="badge">1</span> ส่งสำนวนเพื่อตรวจร่าง</div></button>
+                <button type="button" ng-disabled="(caseCourtForm($it)<2)" class="btn btn-success btn-block" ng-click="go('court.cases.form2',$it);$hide()"><div class="text-left"><span class="badge">2</span> ส่งสำเนาคำพิพากษา</div></button>
+                <button type="button" ng-disabled="(caseCourtForm($it)<2)" class="btn btn-success btn-block" ng-click="go('court.cases.form3',$it);$hide()"><div class="text-left"><span class="badge">3</span> Upload คำพิพากษา</div></button>
+                <button type="button" class="btn btn-success btn-block" ng-click="go('court.cases.form4',$it);$hide()"><div class="text-left"><span class="badge">4</span> ระบบติดตาม</div></button>
+            </p>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="custom.confirm.court.actions2.html">
+    <div class="popover">
+        <div class="arrow"></div>
+        <h3 class="popover-title"><span class="glyphicon glyphicon-share"></span> <strong>เลือกทำรายการ</strong></h3>
+        <div class="popover-content">
+            <p class="text-center">
+                <button type="button" ng-disabled="(caseCourtForm($it)==1)" class="btn btn-success btn-block" ng-click="go('court.vcases.form2',$it);$hide()"><div class="text-left"><span class="badge">1</span> ส่งสำเนาคำพิพากษา</div></button>
+                <button type="button" ng-disabled="(caseCourtForm($it)==1)" class="btn btn-success btn-block" ng-click="go('court.vcases.form3',$it);$hide()"><div class="text-left"><span class="badge">3</span> Upload คำพิพากษา</div></button>
+                <button type="button" class="btn btn-success btn-block" ng-click="go('court.vcases.form4',$it);$hide()"><div class="text-left"><span class="badge">4</span> ระบบติดตาม</div></button>
+            </p>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="popup.judges.tpl.html">
+    <div class="popover" style="min-width:600px;max-width:80%;height:370px" ng-controller="JudgesCtrl as jctrl">
+        <div class="arrow"></div>
+        <div class="popover-title">
+            <button type="button" title="Close" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+            <h4>
+                <i class="fa fa-windows"></i>
+                <div class="input-group pull-right" style="width:160px;margin-right:30px">
+                    <input type="text" class="form-control" ng-model="search.name" placeholder="ค้นหา" />
+                    <div ng-if="!search.name" class="input-group-addon btn btn-default" title="ค้นหา"><span class="glyphicon glyphicon-search"></span></div>
+                    <div ng-if="search.name" class="input-group-addon btn btn-default" ng-click="clearSearch()" title="เลิกค้นหา"><span class="glyphicon glyphicon-remove"></span></div>
+                </div>
+                ผู้พิพากษา <span ng-if="groupTitle">- {{groupTitle}}</span>
+            </h4>
+        </div>
+        <div class="popover-content" style="overflow-y:auto;max-height:250px;">
+            <table class="table table-striped table-hover">
+                <tr ng-repeat="it in $items | filter:search">
+                    <td width="30"><input type="checkbox" ng-model="it._checked" /></td>
+                    <td ng-class="{'text-primary':it._checked}">{{it.name}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button type="button" title="Clear" class="btn btn-danger pull-left" ng-click="clearChecked()"><span class="glyphicon glyphicon-repeat"></span> Clear</button>
+            <button type="button" class="btn btn-success btn-min" ng-click="setJudge();$hide()"><span class="glyphicon glyphicon-ok-sign"></span> ตกลง</button>
+            <button type="button" class="btn btn-warning btn-min" ng-click="$hide()"><span class="glyphicon glyphicon-remove-sign"></span> ยกเลิก</button>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="custom.court.form2.html">
+    <div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+
+        <div class="modal-dialog" style="width:95%;">
+            <div class="modal-content">
+                <div class="modal-header" ng-show="title">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><span class="fa fa-windows"></span> <span ng-bind="title"></span> (ไม่ได้จัดส่งรายงานคดี)</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" name="form">
+                        <div class="row">
+                            <div class="form-group col-md-6  has-feedback custom-dropdown">
+                                <!-- Text input-->
+                                <label class="col-md-4 control-label">ศาล</label>
+                                <div class="col-md-7">
+                                    <div custom-dropdown class="form-control input-md" ng-model="editingItem.user_id" data-options="court_options"></div>
+                                    <span class="form-control-feedback"><span class="caret"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <fieldset ng-disabled="!editingItem.user_id">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <!-- Text input-->
+                                    <label class="col-md-4 control-label">วันที่ส่ง</label>
+                                    <div class="col-md-7">
+                                        <span mode="0" ng-model="editingItem.date_sent2" placeholder="ยังไม่มีข้อมูล" custom-date-field></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <!-- Text input-->
+                                    <label class=" col-md-4 control-label">เลขที่หนังสือส่ง</label>
+                                    <div class="col-md-7">
+                                        <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control input-md" ng-model="editingItem.number_sent">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <!-- Text input-->
+                                    <label class="col-md-4 control-label">วันที่รับฟ้อง</label>
+                                    <div class="col-md-7">
+                                        <span mode="0" ng-model="editingItem.date_case" placeholder="ยังไม่มีข้อมูล" custom-date-field></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <!-- Text input-->
+                                    <label class="col-md-4 control-label">ประเภทคดี</label>
+                                    <div class="col-md-7">
+                                        <select ng-change="changeTypeId(editingItem)" title="ไม่สามารถแก้ไขได้ถ้าบันทึกเลขคดีแล้ว (ต้องลบคดีนี้แล้วเพิ่มใหม่เท่านั้น)" ng-disabled="editingItem.id && editingItem.number_black" class="form-control input-md" name="role" ng-model="editingItem.type_id" select-default ng-options="it.id as it.id | lookup_type:'name':'code' group by it.group_id | lookup_group for it  in Lookups.getType()">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <!-- Text input-->
+                                    <label class="col-md-4 control-label">เลขคดีดำ</label>
+                                    <div class="col-md-7">
+                                        <div class="input-group">
+                                            <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control input-md" style="background-color:#ffffff" readonly value="{{editingItem.number_black}}">
+                                            <span title="ป้อนเลขคดี" id="edit-blacknum" ng-click="popupBlackNumber(editingItem)" ng-disabled="!editingItem.type_id" class="btn input-group-addon"><span class="glyphicon glyphicon-pencil"></span> ป้อนเลขคดี</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <!-- Text input-->
+                                    <label class="col-md-4 control-label">โจทก์</label>
+                                    <div class="col-md-7">
+                                        <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control input-md" ng-model="editingItem.plaintiff">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <!-- Text input-->
+                                    <label class="col-md-4 control-label">จำเลย</label>
+                                    <div class="col-md-7">
+                                        <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control input-md" ng-model="editingItem.defendant">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <!-- Text input-->
+                                <label class="col-md-2 control-label">ข้อหาพิมพ์ปก</label>
+                                <div class="col-md-9">
+                                    <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control input-md" ng-model="editingItem.title">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <!-- Text input-->
+                                <label class="col-md-2 control-label">ข้อหาสถิติ</label>
+                                <div class="col-md-9">
+                                    <div class="input-group" ng-controller="TopicsCtrl">
+                                        <div class="form-control" style="height:auto;min-height:50px;border-right:none">
+                                            <custom-choices ng-model="editingItem.topic_ids"></custom-choices>
+                                        </div>
+                                        <div class="input-group-addon" style="vertical-align:top;border-left:none;background-color:transparent">
+                                            <button class="btn btn-circle" ng-disabled="!editingItem.type_id" id="edit-topics" ng-click="popupTopics(editingItem)"><span class="glyphicon glyphicon-pencil"></span></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-6" ng-class="{'has-error':form.fcap.$invalid}">
+                                <!-- Text input-->
+                                <label class="col-md-4 control-label">จำนวนทุนทรัพย์</label>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <input type="text" name="fcap" placeholder="0.00" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/" class="form-control input-md" step="0.01" ng-model="editingItem.capital">
+                                        <span class="input-group-addon">บาท</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+
+                            </div>
+                            <div class="form-group col-md-6 has-feedback custom-dropdown">
+                                <label class="control-label col-md-4">ผู้พิพากษาเจ้าของสำนวน</label>
+                                <div class="col-md-8">
+                                    <div custom-dropdown class="form-control input-md" ng-model="editingItem.judge_id" data-options="judge_court_options" data-params="[editingItem.user_id]"></div>
+                                    <span class="form-control-feedback"><span class="caret"></span></span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6 has-feedback custom-dropdown">
+                                <label class="control-label col-md-4">องค์คณะ</label>
+                                <div class="col-md-8">
+                                    <div custom-dropdown class="form-control input-md" ng-model="editingItem.judge3_id" data-options="judge_court_options" data-params="[editingItem.user_id]"></div>
+                                    <span class="form-control-feedback"><span class="caret"></span></span>
+
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label col-md-4">จำเลยต้องขัง</label>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <select class="form-control input-md" name="role" ng-model="editingItem.imprison_id" select-default ng-options="it.id as it.name for it  in Lookups.getImprison()">
+                                            <option value=""></option>
+                                        </select>
+                                        <span class="input-group-addon btn" id="add-imprison" ng-click="popupImprison()"><span class="glyphicon glyphicon-plus"></span></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label col-md-4">จำเลยสารภาพ</label>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <select class="form-control input-md" name="role" ng-model="editingItem.accept_id" select-default ng-options="it.id as it.name for it  in Lookups.getAccept()">
+                                            <option value=""></option>
+                                        </select>
+                                        <span class="input-group-addon btn" id="add-accept" ng-click="popupAccept()"><span class="glyphicon glyphicon-plus"></span></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label col-md-4">วันที่นัดฟังคำพิพากษา</label>
+                                <div class="col-md-8">
+                                    <span mode="0" ng-model="editingItem.date_ap" placeholder="ยังไม่มีข้อมูล" custom-date-field></span>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+
+                            </div>
+
+                            <div class="form-group">
+                                <!-- Text input-->
+                                <label class="col-md-2 control-label">หมายเหตุ</label>
+                                <div class="col-md-9">
+                                    <textarea type="text" rows="3" placeholder="ยังไม่มีข้อมูล" class="form-control input-md" ng-model="editingItem.note2"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-10 col-md-offset-2">
+                                <div class="help-block">
+                                    <p class="text-info">
+                                        <span class="glyphicon glyphicon-question-sign pull-left"></span>
+                                        <ul>
+                                            <li>ต้องเลือกประเภทคดีก่อนจึงจะสามารถ ป้อนเลขคดี และ ข้อหาหลักได้</li>
+                                            <li>ถ้ามีเลขคดีแล้วประเภทคดีไม่สามารถเปลี่ยนได้ (ต้องลบเลขคดีก่อน)</li>
+                                        </ul>
+                                    </p>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-min" ng-disabled="form.$invalid" ng-click="saveForm(afterSaved)"><span class="fa fa-save"></span> บันทึกข้อมูล</button>
+                    <button type="button" class="btn btn-warning btn-min" ng-click="cancelForm()"><span class="fa fa-close"></span> ยกเลิก</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/ng-template" id="popup.black_number.tpl.html">
+    <div class="popover" style="min-width:350px;max-width:80%">
+        <div class="arrow"></div>
+        <div class="popover-title">
+            <button type="button" title="Close" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+            <h4><i class="fa fa-windows"></i> ป้อนเลขคดี</h4>
+        </div>
+        <div class="popover-content">
+            <form class="xform" style="padding:10px; max-width:480px">
+                <div class="form-group">
+                    <label class="control-label">เลขคดีดำ</label>
+                    <div class="input-group" ng-init="temp.year=getBlkYear(editingItem)">
+                        <span class="input-group-addon">{{editingItem.type_id | lookup_type:'code'}}</span>
+                        <input type="text" maxlength="10" placeholder="เลขคดีเช่น 823" class="form-control" ng-model="temp.number_black">
+                        <span class="input-group-addon">/</span>
+                        <input type="text" maxlength="4" placeholder="ปีเช่น 2558" class="form-control" ng-readonly="temp.year.length==4" ng-model="temp.year" bs-options="year for year in years" bs-typeahead>
+                        <span class="input-group-addon btn btn-danger" title="ลบเลขคดี" style="color:#ffffff" ng-click="clearBlackNumber(temp);">
+                            <span class="glyphicon glyphicon-repeat"></span> ลบเลขคดี
+                        </span>
+
+                    </div>
+
+                    <div class="text-center text-primary" style="margin-top:2em" ng-show="temp.number_black && temp.year">
+                        ตัวอย่างเลขที่ได้:
+                        <h3 class="text-center text-primary">
+                            {{editingItem.type_id | lookup_type:'code'}}{{temp.number_black}}<span ng-show="temp.year">/</span>{{temp.year}}
+                        </h3>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+
+
+            <button type="button" class="btn btn-success btn-min" ng-click="setBlackNumber(temp,$hide);"><span class="glyphicon glyphicon-ok-sign"></span> ตกลง</button>
+            <button type="button" class="btn btn-warning btn-min" ng-click="$hide()"><span class="glyphicon glyphicon-remove-sign"></span> ยกเลิก</button>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="popup.topics.tpl.html">
+    <div class="popover" style="min-width:720px;max-width:80%;height:480px" ng-controller="TopicsCtrl" ng-init="createList(editingItem, 'topic_ids')">
+
+        <div class="arrow"></div>
+        <div class="popover-title">
+            <button type="button" title="Close" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+            <h4>
+                <i class="fa fa-windows"></i>
+
+                ประเภทคดี - {{groupTitle}}
+                <span class="input-group pull-right" style="width:160px;margin-right:30px;padding-top:0px;top:-8px">
+                    <input type="text" class="form-control" ng-model="search.name" placeholder="ค้นหา" />
+                    <div ng-if="!search.name" class="input-group-addon btn btn-default" title="ค้นหา"><span class="glyphicon glyphicon-search"></span></div>
+                    <div ng-if="search.name" class="input-group-addon btn btn-default" ng-click="clearSearch()" title="เลิกค้นหา"><span class="glyphicon glyphicon-remove"></span></div>
+                </span>
+            </h4>
+        </div>
+        <div class="popover-content" style="overflow-y:auto;height:360px;max-height:360px;">
+            <table class="table table-striped table-hover searchtable">
+                <tr ng-repeat="it in $items | filter:search">
+                    <td width="30" ng-class="{'bg-success':it._checked}"><input type="checkbox" ng-model="it._checked" /></td>
+                    <td ng-class="{'bg-success':it._checked}"><strong>{{it.name}}</strong> <span class="pull-right label label-info">{{it.gname}}</span></td>
+                </tr>
+            </table>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" title="ยกเลิกการเลือกทั้งหมด" class="btn btn-danger pull-left" ng-click="clearChecked()"><span class="glyphicon glyphicon-repeat"></span> Clear</button>
+            <button type="button" class="btn btn-success btn-min" ng-click="setTopics();$hide()"><span class="glyphicon glyphicon-ok-sign"></span> ตกลง</button>
+            <button type="button" class="btn btn-warning btn-min" ng-click="$hide()"><span class="glyphicon glyphicon-remove-sign"></span> ยกเลิก</button>
+        </div>
+
+    </div>
+</script>
+<script type="text/ng-template" id="custom-dropdown-pupup.html">
+    <div class="custom-dropdown popover" style="min-width:720px;max-width:80%;height:480px;">
+        <div class="arrow"></div>
+        <div class="popover-title bg-header">
+            <button type="button" title="Close" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+            <h4>
+                <i class="fa fa-windows"></i>
+                {{::title}}
+                <span ng-if="$count()">
+                    <span class="badge" style="background-color:#58B358">
+                        เลือกแล้ว {{$count()}}
+                    </span>
+                </span>
+                <span class="input-group pull-right" style="width:160px;margin-right:30px;padding-top:0px;top:-8px">
+                    <input type="text" class="form-control" ng-model="search.text" placeholder="ค้นหา" ng-model-options="{ debounce: 500 }" />
+                    <div ng-if="!search.text" class="input-group-addon btn btn-default" title="ค้นหา"><span class="glyphicon glyphicon-search"></span></div>
+                    <div ng-if="search.text" class="input-group-addon btn btn-default" ng-click="search.text=''" title="เลิกค้นหา"><span class="glyphicon glyphicon-remove"></span></div>
+                </span>
+            </h4>
+        </div>
+        <div class="popover-content bg-content" style="overflow-y:auto;height:360px;max-height:360px;">
+            <div ng-switch="has($groupField)">
+
+                <ul class="list-group" ng-repeat="($group, $children) in $groupItems" ng-switch-when="true">
+
+                    <li class="list-group-item header">
+                        <span class="badge" ng-bind="$children.length">0</span>
+                        <div ng-switch="has($groupTemplate)">
+                            <span ng-switch-when="true" custom-template="$groupTemplate"></span>
+                            <h4 class="list-group-item-heading text-muted" ng-switch-default>{{$groupFunction($group)}}</h4>
+                        </div>
+
+                    </li>
+
+                    <li class="list-group-item child" ng-repeat="$item in $children" ng-click="select($item)" ng-class="{'active':isSelected($item)}">
+                        <div ng-switch="has($itemTemplate)">
+                            <span ng-switch-when="true" custom-template="$itemTemplate"></span>
+                            <strong ng-switch-default>{{::$labelFunction($item)}} </strong>
+                            <span ng-if="isSelected($item)" class="glyphicon glyphicon-ok pull-right"></span>
+                        </div>
+                    </li>
+
+                </ul>
+
+                <ul class="list-group" ng-switch-default>
+                    <li class="list-group-item child" ng-repeat="$item in $items | filter:search.text" ng-click="select($item)" ng-class="{'active':isSelected($item)}">
+                        <div ng-switch="has($itemTemplate)">
+                            <span ng-switch-when="true" custom-template="$itemTemplate"></span>
+                            <strong ng-switch-default>{{::$labelFunction($item)}}</strong>
+                            <span ng-if="isSelected($item)" class="glyphicon glyphicon-ok pull-right"></span>
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" title="ยกเลิกการเลือกทั้งหมด เพื่อเริ่มเลือกใหม่" ng-disabled="!$count()" class="btn btn-danger pull-left" ng-click="select(null)"><span class="glyphicon glyphicon-repeat"></span> Clear</button>
+            <button type="button" class="btn btn-success btn-min" ng-click="accept();$hide()">
+                <span class="glyphicon glyphicon-ok-sign"></span> ตกลง
+            </button>
+            <button type="button" class="btn btn-warning btn-min" ng-click="$hide()"><span class="glyphicon glyphicon-remove-sign"></span> ยกเลิก</button>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="custom-report-pupup.html">
+    <div class="custom-dropdown popover" style="min-width:100%;height:100%">
+        <div class="arrow"></div>
+        <div class="popover-title bg-header">
+            <button type="button" title="Close" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+            <h4>
+                <i class="fa fa-windows"></i>
+                {{::title}}
+
+            </h4>
+        </div>
+        <div class="popover-content bg-content" style="overflow-y:auto;">
+            <div ng-include="template"></div>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="custom.columns.menu.html">
+    <div class="popover" style="min-width:400px;max-width:95%;height:400px">
+        <div class="arrow"></div>
+        <div class="popover-title">
+            <button type="button" title="Close" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+            <h4>
+                <i class="fa fa-windows"></i>
+                แสดง / ซ่อน คอลัมน์
+            </h4>
+        </div>
+        <div class="popover-content" style="overflow-y:auto;max-height:320px;">
+            <table class="table table-striped table-hover">
+                <tr ng-repeat="it in $columns" ng-if="it.title!=''">
+                    <td width="30"><input type="checkbox" ng-model="it.show" ng-disabled="$last" /></td>
+                    <td ng-class="{'bg-warning':!it.show,'text-muted':$last}"><strong>{{it.title}}</strong></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="popup.autorun.tpl.html">
+    <div class="popover" style="min-width:470px;max-width:80%">
+        <div class="arrow"></div>
+        <div class="popover-title">
+            <button type="button" title="Close" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+            <h4><i class="glyphicon glyphicon-sort-by-alphabet"></i> เลือกอักษรย่อสำหรับรันเลขรับสำนวน</h4>
+        </div>
+        <div class="popover-content" style="height:250px;pading:0px">
+            <style>
+                select.custom {
+                    padding: 5px;
+                    padding-left: 1em;
+                    padding-right: 1em;
+                    width: 100%;
+                    height: 100%;
+                    font-size: 1.3em;
+                }
+
+                    select.custom option {
+                        padding: 3px;
+                    }
+            </style>
+            <select class="custom" size="10" ng-model="xitem.type_id" select-default ng-options="it.id as it.id | lookup_type:'name':'code' group by it.group_id | lookup_group for it  in Lookups.getType()"></select>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success btn-min" ng-disabled="!xitem.type_id" ng-click="setRunNumberHlr(xitem.type_id);$hide()"><span class="glyphicon glyphicon-ok-sign"></span> รันเลขรับสำนวน</button>
+            <button type="button" class="btn btn-warning btn-min" ng-click="$hide()"><span class="glyphicon glyphicon-remove-sign"></span> ยกเลิก</button>
+        </div>
+    </div>
+</script>
+
+
+
+<nav id="main-navbar" class="navbar yamm navbar-default" role="navigation"  ng-if="$root.getUserId()" bs-navbar>
+    <div class="container-fluid" bs-collapse>
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" bs-collapse-toggle>
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">
+                <h3 style="color:#014F7F;font-size:1.6em;font-weight:bold;padding:0px;margin:0px"><span class="fa fa-university"></span> <span ng-if="isAdmin()">สำนักศาลยุติธรรมประจำภาค5</span><span ng-if="!isAdmin()">{{getUser().name}}</span></h3>
+            </a>
+        </div>
+        <div ng-if="isAdmin()" class="collapse navbar-collapse" bs-collapse-target>
+            <ul class="nav navbar-nav navbar-right" ng-if="$root.getUserId()">
+                <li data-match-route="admin/cases"><a href="#admin/cases"><span class="glyphicon glyphicon-equalizer"></span> รายงานคดี</a></li>
+                <li data-match-route="admin/vcases"><a href="#admin/vcases"><span class="glyphicon glyphicon-book"></span> สำนวนและร่าง</a></li>
+                <li  data-match-route="admin/management/" class="dropdown">
+                    <a href="javascript:void(0)"  bs-dropdown><span class="glyphicon glyphicon-th-large"></span>  เตรียมข้อมูล</a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <div class="yamm-content">
+                                <h3 class="text-center page-header" style="margin-top:0.5em;margin-bottom:1em">เลือกเตรียมข้อมูล</h3>
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-4">
+                                        <a href="#admin/management/users">
+                                            <h1 class="text-center">
+                                                <span class="glyphicon glyphicon-user"></span>
+                                            </h1>
+                                            <h4 class="text-center text-primary">ผู้ใช้</h4>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                        <a href="#admin/management/types">
+                                            <h1 class="text-center">
+                                                <span class="glyphicon glyphicon-briefcase"></span>
+                                            </h1>
+                                            <h4 class="text-center text-primary">ประเภทคดี</h4>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                        <a href="#admin/management/topics">
+                                            <h1 class="text-center">
+                                                <span class="glyphicon glyphicon-tasks"></span>
+                                            </h1>
+                                            <h4 class="text-center text-primary">ข้อหา</h4>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                        <a href="#admin/management/results">
+                                            <h1 class="text-center">
+                                                <span class="glyphicon glyphicon-check"></span>
+                                            </h1>
+                                            <h4 class="text-center text-primary">ผลการปฏิบัติ</h4>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                        <a href="#admin/management/ats">
+                                            <h1 class="text-center">
+                                                <span class="glyphicon glyphicon-share"></span>
+                                            </h1>
+                                            <h4 class="text-center text-primary">คำสั่ง อ.ธ</h4>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                        <a href="#admin/management/at_results">
+                                            <h1 class="text-center">
+                                                <span class="glyphicon glyphicon-share"></span>
+                                            </h1>
+                                            <h4 class="text-center text-primary">เหตุผลไม่ตามระเบียบ</h4>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                        <a href="#admin/management/settings" >
+                                            <h1 class="text-center">
+                                                <span class="glyphicon glyphicon-cog"></span>
+                                            </h1>
+                                            <h4 class="text-center text-primary">ตั้งค่าระบบ</h4>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li><a data-placement="bottom" data-trigger="click" bs-popover data-template="custom.logout.popover.html" data-auto-close="true" href="javascript:void(0)"><span class="glyphicon glyphicon-lock"></span> ออกจากระบบ</a></li>
+            </ul>
+        </div>
+
+
+
+        <div ng-if="!isAdmin()" class="collapse navbar-collapse" bs-collapse-target>
+            <ul class="nav navbar-nav navbar-right" ng-if="$root.getUserId()">
+                <li data-match-route="court/cases"><a href="#court/cases"><span class="glyphicon glyphicon-equalizer"></span> รายงานคดี</a></li>
+                <li data-match-route="court/vcases"><a href="#court/vcases"><span class="glyphicon glyphicon-book"></span> สำนวนและร่าง</a></li>
+                <li data-match-route="court/users"><a href="#court/users"><span class="glyphicon glyphicon-user"></span> ข้อมูลผู้พิพากษา</a></li>
+
+                <li><a data-placement="bottom" data-trigger="click" bs-popover data-template="custom.logout.popover.html" data-auto-close="true" href="javascript:void(0)"><span class="glyphicon glyphicon-lock"></span> ออกจากระบบ</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>

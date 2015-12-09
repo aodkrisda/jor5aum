@@ -149,10 +149,14 @@ angular.module('custom.table', [])
 
     $scope.searchOption = null;
     $scope.startSearch = function (option) {
+
         var param={}
         if (_advancedParam) {
-            angular.extend(param, option,_advancedParam);
+            angular.extend(param, _advancedParam);
         }
+       
+        angular.extend(param, option);
+
         $scope.searchOption = {search: param };
         $scope.tableParams.filter($scope.searchOption);
     }
@@ -484,7 +488,7 @@ angular.module('custom.table', [])
 
     $scope.tableParams = new ngTableParams({
         page: 1,            // show first page
-        count: 25,          // count per page
+        count: 10,          // count per page
         sorting: {
             //name: 'asc'     // initial sorting
         }

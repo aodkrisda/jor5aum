@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {%if base_url %}
+    <base href="{{base_url}}/">{% endif %}
+    <title>{{report_name}}</title>
+    {{ include('pdf-css.html') }}
+</head>
+<body>
+    {% set year1 -%}พ.ศ. {{date1 | th_date('year')}}{%- endset %}
+    {% set year2 -%}{% if date2 %}พ.ศ. {{date2 | th_date('year')}}{% endif %}{%- endset %}
+    {% if year1==year2%}
+    {% set year1='' %}
+    {% endif %}
+    <div class="container-fluid">
+        <div class="c">
+            <div class="s2 b">สรุปประเภทคดีที่ศาลรายงานมายังสำนักงานอธิบดีผู้พิพากษาภาค 5</div>
+            <div class="s2 b">ประจำปี {{year1}}</div>
+            <div class="s2 b">{% if type_item %}คดี  {{type_item.name}}{% else %}ทุกประเภทคดี{% endif %}</div>
+            <div class="s2 b">{% if court %}{{court.name}}{% else %}ทุกศาล{% endif %}</div>
+        </div>
+
+        <br />
+        <table class="bordered">
+            <thead>
+                <tr>
+                    <th rowspan="2" class="c" style="width:2cm">ลำดับที่</th>
+                    <th rowspan="2" class="c" style="width:20%">ประเภทข้อหา</th>
+                    <th colspan="12" class="c">จำนวน (เรื่อง)</th>
+                    <th rowspan="2" class="c">รวม</th>
+                </tr>
+                <tr>
+                    <th class="c">ม.ค.</th>
+                    <th class="c">ก.พ.</th>
+                    <th class="c">มี.ค.</th>
+                    <th class="c">เม.ย.</th>
+                    <th class="c">พ.ค.</th>
+                    <th class="c">มิ.ย.</th>
+                    <th class="c">ก.ค.</th>
+                    <th class="c">ส.ค.</th>
+                    <th class="c">ก.ย.</th>
+                    <th class="c">ต.ค.</th>
+                    <th class="c">พ.ย.</th>
+                    <th class="c">ธ.ค.</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set index=0 %}
+                {% for it in topics %}
+                {% set index=index+1 %}
+                {% set tm=getDict(it.topic_id,[]) %}
+                <tr>
+                    <td class="c">{{index}}</td>
+                    <td>{{tm.name}}</td>
+                    {% for idx in 1..12 %}
+                    {% set n=it.months[idx]? it.months[idx]:0 %}
+                    <th class="c">{{ n}}</th>
+                    {% endfor %}
+                    <td class="c b s1">{{it.total}}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td>&nbsp;</td>
+                    <td></td>
+                    <th class="c"></th>
+                    <th class="c"></th>
+                    <th class="c"></th>
+                    <th class="c"></th>
+                    <th class="c"></th>
+                    <th class="c"></th>
+                    <th class="c"></th>
+                    <th class="c"></th>
+                    <th class="c"></th>
+                    <th class="c"></th>
+                    <th class="c"></th>
+                    <th class="c"></th>
+                    <th class="c"></th>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <th colspan="2">รวม</th>
+                    {% set t=0 %}
+                    {% for idx in 1..12 %}
+                    {% set n=totals[idx]? totals[idx]:0 %}
+                    {% set t=t + n %}
+                    <th class="c s1">{{n}}</th>
+                    {% endfor %}
+                    <th class="c s1">{{t}}</th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

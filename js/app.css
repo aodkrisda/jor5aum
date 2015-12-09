@@ -284,3 +284,6 @@ opacity:0.4;
     height:46px;
     top:0px;
 }
+table.table.table-hover thead th{
+    text-align:center;
+}
