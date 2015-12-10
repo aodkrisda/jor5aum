@@ -205,16 +205,16 @@ $this->fontdata = array(
 		'R' => "DBSILBR.ttf",
 		),
 
-	"_garuda" => array(	  //Thai
+	"garuda" => array(	  //Thai
 		'R' => "Garuda.ttf",
 		'B' => "Garuda-Bold.ttf",
 		'I' => "Garuda-Oblique.ttf",
 		'BI' => "Garuda-BoldOblique.ttf",
-		'useOTL' => 0xFF,
+		'useOTL' => 0xFF
 		),
 
 
-	"garuda" => array(	//Thai
+	"THSarabun" => array(	//Thai
 		'R' => "THSarabun.ttf",
 		'B' => "THSarabunBold.ttf",
 		'I' => "THSarabunItalic.ttf",

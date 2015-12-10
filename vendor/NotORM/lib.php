@@ -47,14 +47,18 @@ class NotORM_Structure_Convention2 extends NotORM_Structure_Convention{
     
     function getReferencedTable($name, $table) {
  		    /*
-        if ($name == "author_id") {
-            return "user";
+        if ($name == "type_id") {
+            return "types";
         }
         */
+
         $r=NotORM::getReferencedTable($name, $table);
         if($r) return $r;
+       
         return parent::getReferencedTable($name, $table);
     }
+
+
 }
 
 

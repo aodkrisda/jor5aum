@@ -42,7 +42,6 @@
 	}
 
 	$r=$orm->users()->select('id','name');
-	if($usr) $r->where('id', $usr['id']);
 	$us=$r->toArray();
 	$_USERS=array();
 	foreach($us as $it){

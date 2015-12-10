@@ -42,3 +42,4 @@
 	$cases=$r->toArray();
     $html= $twig->render('report4.html', array('report_name'=>'รายงาน','date1'=>$date1,  'type_id'=>$type_id, 'type_item'=>$atype,  'cases'=>$cases));
 	printPdf($html);
+	//echo $html;

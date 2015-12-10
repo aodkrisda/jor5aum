@@ -127,7 +127,8 @@ $twig->addFunction($func);
 
 function printPdf(&$html, $paper='A4-L'){
 	try{
-		$mpdf=new mPDF('th', $paper, '0', 'garuda');
+		if (!defined("_MPDF_SYSTEM_TTFONTS")) { define("_MPDF_SYSTEM_TTFONTS", 'C:/Windows/Fonts/'); }
+		$mpdf=new mPDF('th', $paper, '0', 'garuda');//'THNiramit'); //'THSarabun'
 		$mpdf->WriteHTML($html);
 		$mpdf->Output();
 	}catch(Exception $e){
