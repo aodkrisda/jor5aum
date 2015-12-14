@@ -37,28 +37,41 @@ abstract class NotORM_Abstract {
 	
 }
 
-
 class NotORM_Structure_Convention2 extends NotORM_Structure_Convention{
 	  function getPrimary($table) {
 		    $r=NotORM::getPrimary($table);
         if($r) return $r;
         return parent::getPrimary($table);
 	  }
-    
+
     function getReferencedTable($name, $table) {
- 		    /*
-        if ($name == "type_id") {
-            return "types";
-        }
-        */
-
-        $r=NotORM::getReferencedTable($name, $table);
-        if($r) return $r;
-       
-        return parent::getReferencedTable($name, $table);
+        $name=NotORM::getInstance()->get_short_name($name);
+        $r=parent::getReferencedTable($name, $table);
+        return $r;
     }
-
-
+    
+	  function getReferencingColumn($name, $table) {
+       $obj=NotORM::getInstance();
+       $stable=$obj->get_short_name($table);
+       $sname=$obj->get_short_name($name);   
+       $key="$sname+$stable";    
+       echo $key;
+       $r=$obj->getReference($key);
+       if($r){
+          return $r;
+       }
+       return parent::getReferencingColumn($name, $table);
+	  }    
+    
+	  function getReferencedColumn($name, $table) {
+      $obj=NotORM::getInstance();
+      $key=$obj->get_short_name($table) .'+'. $obj->get_short_name($name);
+      $r=$obj->getReference($key);
+      if($r){
+        return $r;
+      }
+		  return parent::getReferencedColumn($name, $table);
+	  }
 }
 
 
@@ -114,6 +127,9 @@ class NotORM extends NotORM_Abstract {
   private static $_REFERENCE=array();
 
   public function addPrimary($table, $pk){
+    /*
+    $this->addPrimary('table1','table1_id');
+    */
     if($table){
       $table=$this->get_short_name($table);
       if($pk){
@@ -123,17 +139,33 @@ class NotORM extends NotORM_Abstract {
       }
     }
   }
-  
-  public function addRefence($pk, $table){
+  public function getReference($key){
+    if(isset(self::$_REFERENCE[$key])){
+      return self::$_REFERENCE[$key];
+    }
+    return null;
+  }
+  public function addReference($pk, $table){
+     /*
+     $this->addReference('user_id','user');
+     $this->addReference('user.usergroup_id','usergroups');
+     */
      if($table){
       $table=$this->get_short_name($table);
       if($pk){
-        self::$_REFERENCE[$pk]=$table;
-      }else{
-        unset(self::$_REFERENCE[$pk]);
+        $pks=explode('.',$pk);
+        $n=count($pks);
+        if($n==2){
+          $pk=$pks[0].'+'.$table;
+          self::$_REFERENCE[$pk]=$pks[1];
+        }else{
+          self::$_REFERENCE[$pk]=$table;
+        }
+        unset($pks);
       }
     }
-  }  
+  }
+
   
   public static function getPrimary( $table) {
     if($table){

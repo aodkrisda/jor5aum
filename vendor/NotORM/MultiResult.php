@@ -18,9 +18,10 @@ class NotORM_MultiResult extends NotORM_Result {
 	* @return NotORM_MultiResult fluent interface
 	*/
 	function via($column) {
+		$stable=$this->result->notORM->get_short_name($this->table);
 		$this->column = $column;
-		$this->conditions[0] = "$this->table.$column AND";
-		$this->where[0] = "(" . $this->whereIn("$this->table.$column", array_keys((array) $this->result->rows)) . ")";
+		$this->conditions[0] = "$stable.$column AND";
+		$this->where[0] = "(" . $this->whereIn("$stable.$column", array_keys((array) $this->result->rows)) . ")";
 		return $this;
 	}
 	

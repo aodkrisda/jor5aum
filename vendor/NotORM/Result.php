@@ -68,6 +68,7 @@ class NotORM_Result extends NotORM_Abstract implements Iterator, ArrayAccess, Co
 	}
 	
 	protected function whereString() {
+
 		$return = "";
 		if ($this->group) {
 			$return .= " GROUP BY $this->group";
@@ -84,6 +85,7 @@ class NotORM_Result extends NotORM_Abstract implements Iterator, ArrayAccess, Co
 		if (isset($this->limit) && $this->notORM->driver == "oci") {
 			$where[] = ($where ? " AND " : "") . "(" . ($this->offset ? "rownum > $this->offset AND " : "") . "rownum <= " . ($this->limit + $this->offset) . ")"; //! rownum > doesn't work - requires subselect (see adminer/drivers/oracle.inc.php)
 		}
+
 		if ($where) {
 			$return = " WHERE " . implode($where) . $return;
 		}
@@ -125,14 +127,12 @@ class NotORM_Result extends NotORM_Abstract implements Iterator, ArrayAccess, Co
 
 		preg_match_all('~\\b([a-z_][a-z0-9_.:]*[.:])[a-z_*]~i', $val, $matches);
 		foreach ($matches[1] as $names) {
-		
 			$parent = $this->unPrefixTable;
 			if ($names != "$parent.") { // case-sensitive
 				preg_match_all('~\\b([a-z_][a-z0-9_]*)([.:])~i', $names, $matches, PREG_SET_ORDER);
 				foreach ($matches as $match) {
 					list(, $name, $delimiter) = $match;
-
-										
+									
 					$table = $this->notORM->structure->getReferencedTable($name, $parent);
 					
 					$column = ($delimiter == ':' ? $this->notORM->structure->getPrimary($parent) : $this->notORM->structure->getReferencedColumn($name, $parent));
@@ -172,6 +172,7 @@ class NotORM_Result extends NotORM_Abstract implements Iterator, ArrayAccess, Co
 				$alias=" AS {$this->unPrefixTableQuote} ";
 			}
 		}
+
 		$return .= " FROM $this->tableQuote{$alias}" . implode($join) . $this->whereString();
 		if ($this->union) {
 			$return = ($this->notORM->driver == "sqlite" || $this->notORM->driver == "oci" ? $return : "($return)") . implode($this->union);
@@ -576,6 +577,8 @@ class NotORM_Result extends NotORM_Abstract implements Iterator, ArrayAccess, Co
 	
 	function __call($name, array $args) {
 		$operator = strtoupper($name);
+
+
 		switch ($operator) {
 			case "AND":
 			case "OR":

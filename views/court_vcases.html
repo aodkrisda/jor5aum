@@ -83,8 +83,8 @@
                                         {{it.date_ap | thai_date:'short'}}
                                     </td>
                                     <td data-title="'ส่งตามกำหนด(ก่อน '+BDAYS+' วัน)'" class="text-center">
-                                        <span ng-if="it._days<BDAYS && it.date_ap && it.date_received3">ช้า ({{it._days | math_abs}} วัน)</span>
-                                        <span ng-if="it._days>=BDAYS">ไม่ช้า ({{it._days}} วัน)</span>
+                                        <span ng-if="it._days<=BDAYS && it.date_ap && it.date_received3">ช้า ({{it._days | math_abs}} วัน)</span>
+                                        <span ng-if="it._days>BDAYS">ไม่ช้า ({{it._days}} วัน)</span>
 
                                         <span ng-if="isSelected(it)" title="เลือกทำรายการ" class="row-action pull-right">
                                             <button class="btn btn-success btn-circle btn-xs" data-placement="left" data-trigger="click" bs-popover data-template="custom.confirm.court.actions2.html"

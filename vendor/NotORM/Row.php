@@ -27,23 +27,33 @@ class NotORM_Row extends NotORM_Abstract implements IteratorAggregate, ArrayAcce
 	* @return NotORM_Row or null if the row does not exist
 	*/
 	function __get($name) {
+
 		$column = $this->result->notORM->structure->getReferencedColumn($name, $this->result->table);
+		
 		$referenced = &$this->result->referenced[$name];
+
+
+		
 		if (!isset($referenced)) {
+
 			$keys = array();
 			foreach ($this->result->rows as $row) {
 				if ($row[$column] !== null) {
 					$keys[$row[$column]] = null;
 				}
 			}
+
 			if ($keys) {
 				$table = $this->result->notORM->structure->getReferencedTable($name, $this->result->table);
 				$referenced = new NotORM_Result($table, $this->result->notORM);
-				$referenced->where("$table." . $this->result->notORM->structure->getPrimary($table), array_keys($keys));
+				$stable=$this->result->notORM->get_short_name($table);
+				$referenced->where("$stable." . $this->result->notORM->structure->getPrimary($table), array_keys($keys));
 			} else {
 				$referenced = array();
 			}
 		}
+
+
 		if (!isset($referenced[$this[$column]])) { // referenced row may not exist
 			return null;
 		}
@@ -86,7 +96,8 @@ class NotORM_Row extends NotORM_Abstract implements IteratorAggregate, ArrayAcce
 		$table = $this->result->notORM->structure->getReferencingTable($name, $this->result->table);
 		$column = $this->result->notORM->structure->getReferencingColumn($table, $this->result->table);
 		$return = new NotORM_MultiResult($table, $this->result, $column, $this[$this->result->primary]);
-		$return->where("$table.$column", array_keys((array) $this->result->rows)); // (array) - is null after insert
+		$stable=$this->result->notORM->get_short_name($table);
+		$return->where("$stable.$column", array_keys((array) $this->result->rows)); // (array) - is null after insert
 		if ($args) {
 			call_user_func_array(array($return, 'where'), $args);
 		}

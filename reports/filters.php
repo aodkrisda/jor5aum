@@ -3,7 +3,9 @@ $dir=__DIR__;
 require($dir.'/../rest/autoload.php');
 
 Twig_Autoloader::register();
-$loader = new Twig_Loader_Filesystem($dir.'/templates/');
+$loaderA=new  Twig_Loader_Array(array());
+$loaderB = new Twig_Loader_Filesystem($dir.'/templates/');
+$loader= new Twig_Loader_Chain(array($loaderA, $loaderB));
 $twig = new Twig_Environment($loader, array(
     '__cache' => $dir.'/cache/',
 ));
@@ -89,7 +91,7 @@ $filter = new Twig_SimpleFilter( 'xdays', function ($it) {
 				$rc=date_create($it['date_received3']);
 				$diff=date_diff($ap,$rc);
 				$n = intval($diff->y * 365.25 + $diff->m * 30 + $diff->d);
-				if($n>=15){
+				if($n>15){
 					$str='ไม่ช้า (' . $n . ' วัน)';
 				}else{
 					$str='ช้า (' . abs($n) . ' วัน)';
@@ -135,4 +137,34 @@ function printPdf(&$html, $paper='A4-L'){
 		echo $html;
 	}
 	exit();
+}
+
+function renderDocx($xfile, $data){
+	if(class_exists('ZipArchive')){
+		global $loaderA;
+		global $twig;
+		$_dir=__DIR__.'/tmp';
+		@mkdir($_dir);
+		$ofile=tempnam ($_dir, 'out');
+		$dfile='word/document.xml';
+		if(copy($xfile, $ofile)){
+			$zip = new ZipArchive;
+			if ($zip->open($ofile) === TRUE) {
+				$html=$zip->getFromName($dfile);
+				$loaderA->setTemplate('docx', $html);
+				$html= $twig->render('docx', $data);
+				$zip->addFromString($dfile, $html);
+				$zip->close();
+				$bname=basename($xfile);
+				header('Content-Disposition: attachment; filename="'. $bname . '"');
+				header("Content-Type: application/msword");
+				echo file_get_contents($ofile);
+			}
+			@unlink($ofile);
+			exit();
+		}
+	}else{
+		echo 'require ZipArchive';
+		exit();
+	}
 }

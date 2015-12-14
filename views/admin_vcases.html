@@ -69,9 +69,8 @@
                         <hr />
                     </div>
                     <div ng-table-menu="tableParams"></div>
-                    <table ng-table-resizable ng-table="tableParams" ng-table-init ng-table-init-columns wt-responsive-table ng-init="tableParams.not_found='ไม่ได้ส่งรายงานคดี'" show-filter="false" class="table table-hover table-bordered">
+                    <table ng-table-resizable ng-table="tableParams" ng-table-init ng-table-init-columns wt-responsive-table  ng-init="tableParams.not_found='ไม่ได้ส่งรายงานคดี'" show-filter="false" class="table table-hover table-bordered">
                         <tbody>
-
                             <tr ng-repeat="it in $data"
                                 ng-click="selectRow(it);"
                                 ng-init="it._days=date_diff(it.date_ap, it.date_received3)"
@@ -85,23 +84,24 @@
                                 </td>
                                 <td data-title="'ศาล'" sortable="'user_id'">
                                     {{it.user_id | lookup_court}}
-
                                 </td>
                                 <td data-title="'เลขคดีแดง'" sortable="'number_red'">
                                     {{it.number_red}}
-
                                 </td>
                                 <td data-title="'โจทก์'" sortable="'plaintiff'">
                                     {{it.plaintiff}}
-
                                 </td>
                                 <td data-title="'จำเลย'" sortable="'defendant'">
                                     {{it.defendant}}
-
+                                </td>
+                                <td data-title="'รองอธิบดี'" sortable="'judge2_id'"  hide>
+                                    {{it.judge2_id | lookup_judge}}
+                                </td>
+                                <td data-title="'หน.ภาค'" sortable="'judge4_id'"  hide>
+                                    {{it.judge4_id | lookup_judge}}
                                 </td>
                                 <td data-title="'ข้อหาสถิติ'" sortable="'topic_ids'">
                                     {{it.topic_ids | lookup_topic}}
-
                                 </td>
                                 <td data-title="'วันที่ส่งสำนวน'" sortable="'date_sent2'">
                                     {{it.date_sent2 | thai_date:'short'}}
@@ -109,12 +109,15 @@
                                 <td data-title="'วันที่ภาครับสำนวน'" sortable="'date_received3'">
                                     {{it.date_received3 | thai_date:'short'}}
                                 </td>
+                                <td data-title="'วันที่ภาคส่งสำนวนกลับ'" sortable="'date_sent5'"  hide>
+                                    {{it.date_sent5 | thai_date:'short'}}
+                                </td>
                                 <td data-title="'นัดฟังคำพิพากษา'" sortable="'date_ap'">
                                     {{it.date_ap | thai_date:'short'}}
                                 </td>
                                 <td data-title="'ส่งตามกำหนด(ก่อน '+BDAYS+' วัน)'" class="text-center" >
-                                    <span ng-if="it._days<BDAYS && it.date_ap && it.date_received3">ช้า ({{it._days | math_abs}} วัน)</span>
-                                    <span ng-if="it._days>=BDAYS">ไม่ช้า ({{it._days}}) วัน</span>
+                                    <span ng-if="it._days<=BDAYS && it.date_ap && it.date_received3">ช้า ({{it._days | math_abs}} วัน)</span>
+                                    <span ng-if="it._days>BDAYS">ไม่ช้า ({{it._days}}) วัน</span>
                                     <span ng-if="isSelected(it)" class="row-action">
                                         <button class="btn btn-success btn-circle btn-xs" data-placement="left" data-trigger="click" bs-popover data-template="custom.confirm.admin.actions2.html"
                                                 data-auto-close="true">
