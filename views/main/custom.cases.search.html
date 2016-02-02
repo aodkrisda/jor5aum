@@ -1,0 +1,80 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" style="min-width:640px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><span class="fa fa-windows"></span> ค้นหาข้อมูล</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" name="form">
+                    <fieldset>
+                        <div class="form-group">
+                            <!-- Text input-->
+                            <label class="col-md-4 control-label">วันที่ส่ง</label>
+                            <div class="col-md-7">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span mode="0" ng-model="searchItem.date1" placeholder="เริ่มตั้งแต่" custom-date-field></span>
+                                    </div>
+
+                                    <div class="col-md-12" style="padding-top:0.5em">
+                                        <span mode="0" ng-model="searchItem.date2" placeholder="ถึงวันที่" custom-date-field></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <!-- Text input-->
+                            <label class="col-md-4 control-label">เลขคดีดำ</label>
+                            <div class="col-md-7">
+                                <input type="text" name="name" placeholder="" required ng-model="searchItem.number_black" class="form-control input-md">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+
+                            <!-- Text input-->
+                            <label class="col-md-4 control-label">โจทก์</label>
+                            <div class="col-md-7">
+                                <input type="text" name="code" placeholder="" required ng-model="searchItem.plaintiff" class="form-control input-md">
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            <!-- Text input-->
+                            <label class="col-md-4 control-label">จำเลย</label>
+                            <div class="col-md-7">
+                                <input type="text" name="code" placeholder="" required ng-model="searchItem.defendant" class="form-control input-md">
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            <!-- Text input-->
+                            <label class="col-md-4 control-label">เรื่อง</label>
+                            <div class="col-md-7">
+                                <input type="text" name="code" placeholder="" required ng-model="searchItem.title" class="form-control input-md">
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="isAdmin()">
+                            <!-- Select Basic -->
+                            <label class="col-md-4 control-label">ศาล</label>
+                            <div class="col-md-7">
+                                <select class="form-control input-md" ng-model="searchItem.user_id" select-value-type="string"
+                                        ng-options="it.id as it.name group by lookup_group(it.group_id) for it in Lookups.getCourt()">
+                                    <option value="">ทุกศาล</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-min" ng-click="startSearch(searchItem);$hide()"><span class="glyphicon glyphicon-search"></span> ค้นหา</button>
+                <button type="button" class="btn btn-warning btn-min" ng-click="$hide()"><span class="glyphicon glyphicon-remove"></span> ยกเลิก</button>
+            </div>
+        </div>
+    </div>
+</div>

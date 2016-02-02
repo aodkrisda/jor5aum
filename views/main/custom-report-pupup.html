@@ -1,0 +1,14 @@
+<div class="custom-dropdown popover" style="min-width:100%;height:100%">
+    <div class="arrow"></div>
+    <div class="popover-title bg-header">
+        <button type="button" title="Close" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+        <h4>
+            <i class="fa fa-windows"></i>
+            {{::title}}
+
+        </h4>
+    </div>
+    <div class="popover-content bg-content" style="overflow-y:auto;">
+        <div ng-include="template"></div>
+    </div>
+</div>

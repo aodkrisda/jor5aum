@@ -1,0 +1,325 @@
+﻿<style>
+	table tr td{
+		vertical-align:middle;
+	}
+</style>
+
+    <script type="text/ng-template" id="custom.court.aform1.html">
+        <div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" style="width:95%;">
+                <div class="modal-content">
+                    <div class="modal-header" ng-show="title">
+
+                        <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title"><span class="fa fa-windows"></span> <span ng-bind="title"></span>/ร่างคำสั่ง</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" name="form"> 
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+
+                                        <!-- Text input-->
+                                        <label class="col-md-4 control-label text-required">วันที่ส่ง</label>
+                                        <div class="col-md-7">
+                                            <span mode="0" ng-model="editingItem.date_sent_a" placeholder="ยังไม่มีข้อมูล" custom-date-field></span>
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group col-md-6">
+                                        <!-- Text input-->
+                                        <label class=" col-md-4 control-label text-required">เลขที่หนังสือส่ง</label>
+                                        <div class="col-md-7">
+                                            <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control input-md" ng-model="editingItem.number_sent_a">
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+
+                                        <!-- Text input-->
+                                        <label class="col-md-4 control-label text-required">วันที่รับฟ้อง</label>
+                                        <div class="col-md-7">
+                                            <span mode="0" ng-model="editingItem.date_case" placeholder="ยังไม่มีข้อมูล" custom-date-field></span>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <style>
+                                    .bnl {
+                                        border-left: none;
+                                    }
+
+                                    .bnr {
+                                        border-right: none;
+                                    }
+                                </style>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <!-- Text input-->
+                                        <label class="col-md-4 control-label text-required">ประเภทคดี</label>
+                                        <div class="col-md-7">
+                                            <select ng-change="changeTypeId(editingItem)" title="ไม่สามารถแก้ไขได้ถ้าบันทึกเลขคดีแล้ว (ต้องลบคดีนี้แล้วเพิ่มใหม่เท่านั้น)" ng-disabled="editingItem.id && editingItem.number_black" class="form-control input-md" name="role" ng-model="editingItem.type_id" select-default ng-options="it.id as it.id | lookup_type:'name':'code' group by it.group_id | lookup_group for it  in Lookups.getType()">
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+
+                                        <!-- Text input-->
+                                        <label class="col-md-4 control-label text-required">เลขคดีดำ</label>
+                                        <div class="col-md-7">
+                                            <div class="input-group">
+                                                <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control input-md" style="background-color:#ffffff" readonly value="{{editingItem.number_black}}">
+                                                <span  title="ป้อนเลขคดี" id="edit-blacknum" ng-click="popupBlackNumber(editingItem)" ng-disabled="!editingItem.type_id" class="btn input-group-addon"><span class="glyphicon glyphicon-pencil"></span> ป้อนเลขคดี</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <fieldset ng-disabled="!((editingItem.type_id>0) && editingItem.number_black)">
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+
+                                        <!-- Text input-->
+                                        <label class="col-md-4 control-label text-required">โจทก์หรือผู้ร้อง</label>
+                                        <div class="col-md-7">
+                                            <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control input-md" ng-model="editingItem.plaintiff">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+
+                                        <!-- Text input-->
+                                        <label class="col-md-4 control-label">จำเลย</label>
+                                        <div class="col-md-7">
+                                            <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control input-md" ng-model="editingItem.defendant">
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+
+                                    <!-- Text input-->
+                                    <label class="col-md-2 control-label">ข้อหาพิมพ์ปก</label>
+                                    <div class="col-md-9">
+                                        <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control input-md" ng-model="editingItem.title">
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+
+                                    <!-- Text input-->
+                                    <label class="col-md-2 control-label text-required">ข้อหาสถิติ</label>
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <div class="form-control" style="height:auto;min-height:50px;border-right:none">
+                                                <custom-choices ng-required ng-model="editingItem.topic_ids"></custom-choices>
+                                            </div>
+                                            <div class="input-group-addon" style="vertical-align:top;border-left:none;background-color:transparent">
+                                                <button class="btn btn-circle" ng-disabled="!editingItem.type_id" id="edit-topics" ng-click="popupTopics(editingItem)"><span class="glyphicon glyphicon-pencil"></span></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6" ng-class="{'has-error':form.fcap.$invalid}">
+                                    <!-- Text input-->
+                                    <label class="col-md-4 control-label">จำนวนทุนทรัพย์</label>
+                                    <div class="col-md-7">
+                                        <div class="input-group">
+                                            <input type="text" name="fcap" placeholder="0.00" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/" class="form-control input-md" step="0.01" ng-model="editingItem.capital">
+                                            <span class="input-group-addon">บาท</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-4">ผู้พิพากษาเจ้าของสำนวน</label>
+                                    <div class="col-md-7">
+                                        <div custom-dropdown class="form-control input-md" ng-model="editingItem.judge_id_a" data-options="judge_court_options"></div>
+                                        <span class="form-control-feedback"><span class="caret"></span></span>
+                                    </div>
+                                </div>                                
+                                <div class="row clearfix">
+
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-4">สำนวนพ่วง</label>
+                                    <div class="col-md-7">
+                                         <div class="input-group">
+                                             <div class="input-group-addon" style="xbackground-color:#fefefe"><input disabled type="checkbox" ng-model="editingItem.link_checked" ng-true-value="'1'" ng-false-value="'0'"/></div>
+                                             <input type="text" ng-disabled="editingItem.link_checked!='1'" class="form-control" ng-model="editingItem.link_ids" placeholder="ไม่มีสำนวนพ่วง" />
+                                         </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-4">สำนวนรวม</label>
+                                    <div class="col-md-7">
+                                        <div class="input-group">
+                                            <div class="input-group-addon" style="xbackground-color:#fefefe"><input disabled type="checkbox" ng-model="editingItem.add_checked" ng-true-value="'1'" ng-false-value="'0'"/></div>
+                                            <p type="text" ng-disabled="editingItem.add_checked!='1'" class="form-control" placeholder="ไม่มีสำนวนรวม">
+                                                <span  class="label label-mr label-black" ng-repeat="key in editingItem.add_ids |split">{{key}}</span>
+                                                <span ng-if="!editingItem.add_ids" class="text-muted">ไม่มีสำนวนรวม</span>
+                                            </p>
+                                            <div class="input-group-addon" title="เลือกคดี" ng-controller="MergeCaseCtrl" ng-click="ifcall(editingItem.add_checked=='1',open,'views/custom.select_cases_panel.html',editingItem)"><span class="glyphicon glyphicon-th-list"></span></div>
+                                        </div>
+                                    </div>
+                                </div>                          
+                                <div class="form-group">
+                                    <!-- Text input-->
+                                    <label class="col-md-2 control-label">หมายเหตุ</label>
+                                    <div class="col-md-9">
+                                        <textarea type="text" rows="3" placeholder="ยังไม่มีข้อมูล" class="form-control input-md" ng-model="editingItem.note1_a"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-10 col-md-offset-2">
+                                    <div class="help-block">
+
+                                        <p class="text-info">
+                                            <span class="glyphicon glyphicon-question-sign pull-left"></span>
+                                            <ul>
+                                                <li ng-hide="isValid(editingItem)" class="text-warning">* ข้อมูลที่บังคับให้ต้องป้อนก่อน จึงจะสามารถบันทึกข้อมูลได้</li>
+                                                <li>ต้องเลือกประเภทคดีก่อนจึงจะสามารถ ป้อนเลขคดี และ ข้อหาหลักได้</li>
+                                                <li>ถ้ามีเลขคดีแล้วประเภทคดีไม่สามารถเปลี่ยนได้ (ต้องลบเลขคดีก่อน)</li>
+                                            </ul>
+                                        </p>
+                                    </div>
+                                </div>
+                            </fieldset> 
+
+                        </form>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" ng-disabled="(!isValidA(editingItem)) || form.$invalid" class="btn btn-primary btn-min" ng-click="saveForm()"><span class="fa fa-save"></span> บันทึกข้อมูล</button>
+                        <button type="button" class="btn btn-warning btn-min" ng-click="cancelForm()"><span class="fa fa-close"></span> ยกเลิก</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+
+
+
+
+    <div ng-controller="CourtReportCtrl as xctrl">
+
+        <div ui-view></div>
+
+
+        <div ng-hide="!(urlEq('/court/acases') || urlEq('/court/acases/notify') || urlEq('/court/acases/notify2'))">
+            <div class="panel panel-default" ng-controller="CustomTableCtrl  as cmt" ng-init="$parent.cmt=cmt;setAPI('court_cases','custom.court.aform1.html',{search:'searchText', court:'searchCourt', month:'searchMonth', year:'searchYear',_view:'_view()'},{court:true, month:true,year:true})">
+                <div class="panel-heading">
+                    <div class="text-right pull-right" style="position:relative;top:-0.25em">
+                        
+                        <span ng-hide="urlEq('/court/cases/notify')" >
+                            <button class="btn btn-success" ng-show="isSearchMode()" ng-click="setFilter()">
+                                <span class="glyphicon glyphicon-arrow-left"></span> ออกจากโหมดการค้นหา
+                            </button>
+                            <button class="btn btn-info" ng-click="advancedSearch('custom.cases.search.html',{_view:'acases'})">
+                                <span class="glyphicon glyphicon-search"></span><span class="hidden-sm hidden-xs"> ค้นหา</span>
+                            </button>
+                            <button ng-click="newItem({date_sent:'',no_case_sent:2})" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span><span class="hidden-sm hidden-xs"> เพิ่มร่างคำสั่ง</span></button>
+                            <button ng-click="ifcall(($it.no_case_sent=='2'),editItem)" ng-show="($it.no_case_sent=='2') && hasSelected()" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span><span class="hidden-sm hidden-xs"> แก้ไขร่างคำสั่ง</span></button>
+                            <button data-placement="bottom" data-trigger="click" bs-popover data-template="custom.confirm.popover.html"
+                                    ng-click="removeItem()" ng-show="($it.no_case_sent=='2') && hasSelected()" class="btn btn-danger" data-auto-close="true">
+                                <span class="glyphicon glyphicon-remove"></span><span class="hidden-sm hidden-xs"> ลบร่างคำสั่ง</span>
+                            </button>
+                            <button ng-click="refresh()" class="btn btn-success"><span class="glyphicon glyphicon-refresh"></span><span class="hidden-sm hidden-xs"> โหลดข้อมูล</span></button>
+                        </span>
+                    </div>
+                    <h2 style="padding:0px;margin:0px;"><span class="fa fa-windows"></span> รายงาน/ร่างคำสั่ง ({{tableParams.total()}})</h2>
+
+                </div>
+
+                <div class="panel-body" style="padding-bottom:0px;">
+
+                    <div loading-container="tableParams.settings().$loading">
+                        <div class="row" ng-show="!(isSearchMode() || urlEq('/court/cases/notify'))">
+                            <div class="col-md-4 col-md-offset-1">
+                                <div class="input-group">
+                                    <div class="input-group-addon  adon-label">ศาล</div>
+                                    <input type="text" ng-init="searchCourt=getUser().id" class="form-control" value="{{getUser().name}}" ng-readonly="true" style="background-color:#ffffff">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon  adon-label">เดือน</div>
+                                    <select class="form-control" ng-model="searchMonth" ng-change="setMonthId(searchMonth);setFilter()" select-value-type="string" ng-options="it.id as it.name for it in Lookups.getMonth()"></select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon  adon-label">พ.ศ</div>
+                                    <select class="form-control" ng-model="searchYear" ng-change="setFilter()" select-value-type="string" ng-options="it.id as it.name for it in Lookups.getYear()"></select>
+                                    <div class="input-group-addon btn btn-default" ng-click="setFilter(true)" title="เริ่มค้นหา"><span class="glyphicon glyphicon-refresh"></span></div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <hr />
+                        <div ng-table-menu="tableParams"></div>
+                        <table ng-table-resizable ng-table="tableParams" show-filter="false" class="table table-hover table-bordered" ng-table-init ng-table-init-columns wt-responsive-table>
+                            <tbody>
+
+                                <tr ng-repeat="it in $data"
+                                    ng-click="selectRow(it);"
+                                    ng-dblclick="ifcall(($it.no_case_sent=='2'),editItem)"
+                                    ng-class="{'active': isSelected(it),'text-blue': isValidDate(it.date_sent)}">
+                                    <td width="30" class="text-right text-muted"><span title="#{{it.id}}">{{startIdx + $index + 1}}.</span></td>
+                                    <td data-title="'เลขรับร่างคำสั่ง(ภาค)'" sortable="'auto_received_num2'" hide">
+                                        {{::it.auto_received_num2}}
+                                    </td>
+                                    <td data-title="'เลขคดีดำ'" sortable="'number_black'">
+                                        {{::it.number_black}}
+                                    </td>
+
+                                    <td data-title="'โจทก์'" sortable="'plaintiff'">
+                                        {{::it.plaintiff}}
+
+                                    </td>
+                                    <td data-title="'จำเลย'" sortable="'defendant'">
+                                        {{::it.defendant}}
+
+                                    </td>
+                                    <td data-title="'ข้อหาพิมพ์ปก'" sortable="'topic_ids'">
+                                        {{::it.topic_ids | lookup_topic}}
+
+                                    </td>
+                                    <td data-title="'ผลการส่งรายงานดดี'" sortable="'command_id'">
+                                        {{::it.command_id | lookup_at }}
+
+                                    </td>
+                                    <td data-title="'ผลการปฏิบัติ(ภาค)'" sortable="'result'">
+                                        {{::it.result | lookup_result}}
+
+                                    </td>
+
+                                    <td data-title="'วันที่ภาครับ'" class="text-center" >
+                                       {{::it.date_received3 | thai_date:'short'}}                            
+                                        <span ng-if="isSelected(it)" title="เลือกทำรายการ" class="row-action">
+                                            <button class="btn btn-success btn-circle btn-xs" data-placement="left" data-trigger="click" bs-popover data-template="custom.confirm.court.actions3.html"
+                                                    data-auto-close="true">
+                                                <span class="glyphicon glyphicon-edit"></span>
+                                            </button>
+                                        </span>
+                                  
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+

@@ -15,8 +15,9 @@
     <div ng-hide="!(urlEq('/admin/cases') || urlEq('/admin/cases/notify'))">
         <div class="panel panel-default" ng-controller="CustomTableCtrl as cmt" ng-init="$parent.cmt=cmt;setAPI('admin_cases','custom.admin.form1.html',{search:'searchText', court:'searchCourt', month:'searchMonth', year:'searchYear',_view:'_view()'},{court:true, month:true,year:true,_view:false})">
             <div class="panel-heading">
-                <div class="text-right pull-right" style="position:relative;top:-0.6em">
-                    <span class="btn btn-notify" ng-click="notify()" style="padding-right:3em"><img height="32" src="images/notify3.png" title="ยังไม่ได้จัดส่งผลรายงานคดี" /><span class="badge badge-notify">{{TableMeta.notsent || 0}}</span></span>
+                <div class="text-right pull-right" style="position:relative;top:-0.25em">
+                    <span class="btn btn-notify btn-info" style="margin-right:4em" ng-click="notify()">ยังไม่ได้จัดส่งผลรายงานคดี<span class="notify">{{TableMeta.notsent || 0}}</span></span>
+
                     <span ng-hide="urlEq('/admin/cases/notify')">
                         <button class="btn btn-success" ng-show="isSearchMode()" ng-click="setFilter()">
                             <span class="glyphicon glyphicon-arrow-left"></span> ออกจากโหมดการค้นหา

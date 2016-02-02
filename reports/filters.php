@@ -35,7 +35,7 @@ $filter = new Twig_SimpleFilter( 'th_date', function ( $dtstr ,$format='',$inc=0
 				return sprintf('%s',$yy);
 			break;
 			case 'short':
-				return sprintf("%s %s %s", $dd, $smonths[$mm-1] ,$yy); 
+				return sprintf("%s %s %s", $dd, $smonths[$mm-1] ,$yy-2500); 
 			break;
 	
 		}
@@ -43,8 +43,28 @@ $filter = new Twig_SimpleFilter( 'th_date', function ( $dtstr ,$format='',$inc=0
     }
     return '';
 });
-
 $twig->addFilter($filter);
+
+$filter = new Twig_SimpleFilter( 'topic_names', function ( $ids) {
+	global $_TOPICS;
+	$names=[];
+	if($ids && isset($_TOPICS)){
+		try{
+			$xids=json_decode($ids);
+			if($xids){
+				if(! is_array($xids)) $xids=array($xids);
+				foreach($xids as $id){
+					if(isset($_TOPICS[$id])){
+						$names[]=$_TOPICS[$id]['name'];
+					}
+				}
+			}
+		}catch(Exception $e){}
+	}
+	return implode(', ', $names);
+});
+$twig->addFilter($filter);
+
 $filter = new Twig_SimpleFilter( 'user_group', function ( $id) {
 	global $_GROUPS;
 	if(isset($_GROUPS)){
@@ -91,7 +111,7 @@ $filter = new Twig_SimpleFilter( 'xdays', function ($it) {
 				$rc=date_create($it['date_received3']);
 				$diff=date_diff($ap,$rc);
 				$n = intval($diff->y * 365.25 + $diff->m * 30 + $diff->d);
-				if($n>15){
+				if($n>=15){
 					$str='ไม่ช้า (' . $n . ' วัน)';
 				}else{
 					$str='ช้า (' . abs($n) . ' วัน)';
@@ -115,12 +135,31 @@ $func=new Twig_SimpleFunction('getDict', function($key, $def=null){
 );
 $twig->addFunction($func);
 
+$func=new Twig_SimpleFunction('dateDiff', function($a,$b){
+	$n='';
+	if($a && $b){
+		try{
+		$ap=date_create($a);
+		$rc=date_create($b);
+		$diff=date_diff($ap,$rc);
+		$n = intval($diff->y * 365.25 + $diff->m * 30 + $diff->d) + 1 . ' วัน';
+		} catch (Exception $e){}
+	}
+	return $n;
+}
+);
+$twig->addFunction($func);
+
 $func=new Twig_SimpleFunction('percentOf', function($a,$b){
 	$str='-';
 	if($b!=0){
-		$n=ceil(($a/$b) * 10000)/100;
-		$str=$n;
-
+		$n=round(($a/$b) * 10000)/100;
+		$n2=floor($n);
+		if($n==$n2){
+			$str=sprintf('%d',$n);
+		}else{
+			$str=sprintf('%0.2f',$n);
+		}
 	}
 	return $str;
 }

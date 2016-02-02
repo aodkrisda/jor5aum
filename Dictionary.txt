@@ -1,5 +1,7 @@
 ADD NEW FIELDS
 ===============
+
+
 ALTER TABLE `info_users` ADD `check_out` INT DEFAULT 0;
 ALTER TABLE `info_cases` ADD `judge4_id` INT DEFAULT 0;
 ALTER TABLE `info_cases` ADD `topic_ids` VARCHAR(255) DEFAULT '';
@@ -26,6 +28,25 @@ ALTER TABLE `info_cases` ADD `at_correct` INt NULL DEFAULT 1;
 ALTER TABLE `info_cases` ADD `at_result_id` INT NULL DEFAULT 0;
 ALTER TABLE `info_cases` ADD `capital` DECIMAL(10,2) NULL DEFAULT 0;
 
+
+ALTER TABLE `info_cases` ADD `date_sent_a` DATE;
+ALTER TABLE `info_cases` ADD `number_sent_a`  TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '';
+ALTER TABLE `info_cases` ADD `note1_a` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '';
+  ALTER TABLE `info_cases` ADD `auto_received_num2` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '';
+
+ALTER TABLE `info_cases` ADD `judge_id_a` INT NULL DEFAULT 0;
+ALTER TABLE `info_cases` ADD `date_received3_a` DATE;
+ALTER TABLE `info_cases` ADD `judge2_id_a` INT NULL DEFAULT 0;
+ALTER TABLE `info_cases` ADD `date_at_received1_a` DATE;
+ALTER TABLE `info_cases` ADD `judge4_id_a` INT NULL DEFAULT 0;
+ALTER TABLE `info_cases` ADD `date_at_received2_a` DATE;
+
+ALTER TABLE `info_cases` ADD `judge_checkout1_id_a` INT NULL DEFAULT 0;
+ALTER TABLE `info_cases` ADD `judge_checkout2_id_a` INT NULL DEFAULT 0;
+ALTER TABLE `info_cases` ADD `date_sent5_a` DATE;
+ALTER TABLE `info_cases` ADD `form4_note_a` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '';
+ALTER TABLE `info_cases` ADD `number_sent5_a` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '';
+ALTER TABLE `info_cases` ADD `number_received3_a` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '';
 
 --field types:
 --NUMBER()
@@ -212,6 +233,41 @@ position=ตำแหน่ง
 parent_id=FK(USERS); ศาล
 active=1 สามารถเข้าใช้งานได้
 check_out= 1 ย้ายออกแล้ว
+
+
+******************
+
+
+
+---RUN SQL เพิ่มฟิลด์ & table
+------------------------
+
+
+ALTER TABLE `info_cases` ADD `return_checked` int(11) NOT NULL DEFAULT '0';
+ALTER TABLE `info_cases` ADD `return2_checked` int(11) NOT NULL DEFAULT '0';
+ALTER TABLE `info_cases` ADD `link_checked` int(11) NOT NULL DEFAULT '0';
+ALTER TABLE `info_cases` ADD `link_ids` text CHARACTER SET utf8 NULL DEFAULT '';
+ALTER TABLE `info_cases` ADD `add_checked` int(11) NOT NULL DEFAULT '0';
+ALTER TABLE `info_cases` ADD `add_ids` text CHARACTER SET utf8 NOT NULL;
+
+CREATE TABLE IF NOT EXISTS `info_return_cases` (
+  `id` int(11) NOT NULL,
+  `case_id` int(11) NOT NULL,
+  `number_return` text CHARACTER SET utf8,
+  `date_return` date DEFAULT NULL,
+  `note_return` text CHARACTER SET utf8,
+  `number_sent` text CHARACTER SET utf8,
+  `date_sent` date DEFAULT NULL,
+  `note_sent` text CHARACTER SET utf8,
+  `number_received` text CHARACTER SET utf8,
+  `date_received` date DEFAULT NULL,
+  `note_received` text CHARACTER SET utf8
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+ALTER TABLE `info_return_cases` ADD PRIMARY KEY (`id`);
+ALTER TABLE `info_return_cases` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+
 
 
 

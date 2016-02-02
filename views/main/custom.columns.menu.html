@@ -1,0 +1,18 @@
+<div class="popover" style="min-width:400px;max-width:95%;height:400px">
+    <div class="arrow"></div>
+    <div class="popover-title">
+        <button type="button" title="Close" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+        <h4>
+            <i class="fa fa-windows"></i>
+            แสดง / ซ่อน คอลัมน์
+        </h4>
+    </div>
+    <div class="popover-content" style="overflow-y:auto;max-height:320px;">
+        <table class="table table-striped table-hover">
+            <tr ng-repeat="it in $columns" ng-if="it.title!=''">
+                <td width="30"><input type="checkbox" ng-model="it.show" ng-disabled="$last" /></td>
+                <td ng-class="{'bg-warning':!it.show,'text-muted':$last}"><strong>{{it.title}}</strong></td>
+            </tr>
+        </table>
+    </div>
+</div>

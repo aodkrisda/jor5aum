@@ -82,8 +82,14 @@ angular.module('custom.table', [])
         $scope.searchText = '';
         $scope.setFilter();
     }
-
+    $scope.clearSearch = function () {
+        if ($scope.searchText) {
+            $scope.searchText = '';
+            $scope.setFilter();
+        }
+    }
     $scope._lastFilters = {};
+
 
     $scope.setFilter = function (refresh) {
 
@@ -91,8 +97,10 @@ angular.module('custom.table', [])
             if ($scope.searchOption) $scope.searchOption = null;
             var s = {};
             _.each($scope.customFilters, function (v, k) {
-            	var kv=$scope.$eval(v);
-
+                var kv = v;
+                if (angular.isString(v)) {
+                    kv = $scope.$eval(v);
+                }
                 if ((kv!=null) && (kv !== '')) {
                     s[k] = kv;
                 }
@@ -101,7 +109,7 @@ angular.module('custom.table', [])
 
             if (b) {
     
-            	
+               
                 if ($scope.searchText != undefined) {
                     if ($scope.lastSearchText != $scope.searchText) {
                         $scope.lastSearchText = $scope.searchText;
@@ -528,7 +536,8 @@ angular.module('custom.table', [])
                 var keys = {};
                 var sel = null;
 
-                var n = data.data.length;
+                var n = 0;
+                if(data.data) n=data.data.length;
                 var b=false;
                 for (var i = 0; i < n; i++) {
                     var it = data.data[i];

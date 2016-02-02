@@ -193,3 +193,7 @@ END;
     }
 
 }
+
+$d=new Docx_reader ();
+$d->setFile('test.docx');
+echo $d->to_html();

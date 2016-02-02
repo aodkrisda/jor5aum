@@ -136,7 +136,9 @@ form.readonly.form div.form-control.readonly  {
 .text-red{
     color:red !important;
 }
-
+.text-blue{
+    color:#0D4C83 !important;
+}
 		
 /* line 7, ../ios-toggle.scss */
 .ios-toggle {
@@ -271,19 +273,32 @@ opacity:0.4;
 .custom-dropdown[disabled] span.badge.choice{
     color:#777777;
 }
-.badge.badge-notify{
-    position:relative;background-color:#ff7e00 !important;
-    top:-1em;left:-1.2em;font-size:1.2em;
-}
+
+
 .btn.btn-notify{
-    padding:0px !important;
-    margin:0px !important;
-}
-.btn.btn-notify img{
+    display:inline-block;
     position:relative;
-    height:46px;
-    top:0px;
+    margin-right:1.5em;
+    height:2.5em;
 }
+.btn.btn-notify .notify{
+    display:inline-block;
+    padding-left:3px;
+    padding-right:3px;
+    min-width:2em;
+    border-radius:32px 32px;
+    color:white !important;
+    color:white !important;
+    background-color:#ff7e00 !important;
+    font-size:1.2em;
+    font-weight:bold;
+    position:absolute;
+    right:-1em;
+    top:-1em;
+}
+
 table.table.table-hover thead th{
     text-align:center;
 }
+.label-mr{margin-right:4px !important}
+.label-black{color:#000000 !important; background-color:#efefef !important; font-size:0.95em !important; white-space:normal !important}

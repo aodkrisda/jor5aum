@@ -547,7 +547,7 @@
                 },
                 defaultFilterOptions = {
                     filterComparator: undefined, // look for a substring match in case insensitive way
-                    filterDelay: 500,
+                    filterDelay: 100,
                     filterDelayThreshold: 10000, // size of data array that will trigger the filterDelay being applied
                     filterFilterName: undefined, // when defined overrides ngTableDefaultGetDataProvider.filterFilterName
                     filterFn: undefined, // when defined overrides the filter function that ngTableDefaultGetData uses
@@ -1064,7 +1064,7 @@
                     pData = runInterceptorPipeline(runGetData);
                 }
 
-                log('ngTable: reload data');
+                console.log('ngTable: reload data');
 
                 var oldData = self.data;
                 return pData.then(function(data) {
@@ -1093,16 +1093,25 @@
             };
             
             var timer2=0;
-            var $timeout=null;
+            var $timeout = null;
+            var $window = null;
+            var self = this;
+            function _test() {
+                self.__reload();
+            }
             this.reload=function(){
-                var self=this;
-                function _test(){
-                    self.__reload();
-                }
-                if(!$timeout) $timeout=angular.injector(['ng']).get('$timeout');
+                if (!$timeout) $timeout = angular.injector(['ng']).get('$timeout');
+                if (!$window) $window = angular.injector(['ng']).get('$window');
 
-               $timeout.cancel(timer2);
-                timer2=$timeout(_test, 100);         
+                if (!self.__detest) {
+                    self.__detest = $window._.debounce(function () {
+                        self.__reload();
+                      }, 250, false)
+                }
+                self.__detest();
+              // $timeout.cancel(timer2);
+              // timer2 = $timeout(_test, 300);
+               
             }
 
             /**

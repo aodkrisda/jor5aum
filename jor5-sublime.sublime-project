@@ -1,0 +1,30 @@
+{
+	"folders":
+	[
+		{
+			"file_exclude_patterns":
+			[
+				"*.zip"
+			],
+			"folder_exclude_patterns":
+			[
+				"awesome",
+				"bootstrap",
+				"images",
+				"tool",
+				"vendor",
+				"yamm"
+			],
+			"path": "."
+		},
+		{
+			"path": "E:\\WWW\\sudarut\\Examples\\frontend-workflows-with-grunt-and-angularjs-master"
+		},
+		{
+			"path": "E:\\WWW\\php-live\\livechat"
+		},
+		{
+			"path": "E:\\ttt"
+		}
+	]
+}

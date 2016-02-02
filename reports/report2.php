@@ -62,6 +62,7 @@
 	$uchecked=$orm->at()->select('id')->where('checked!=1',1);
 
 	$r=$orm->cases()->where('no_case_sent!=?',1);
+	
 	$atype=array();
 	$court=array();
 	if($user_id>0){
@@ -71,6 +72,7 @@
 			$court=$t->toArray();
 		}
 	}
+
 	if($type_id>0){
 		$r->where('type_id',$type_id);
 		$t=$orm->types()->where('id',$type_id)->fetch();
@@ -82,7 +84,7 @@
 	if($dt2){
 		$r->where('date_received<?',$dt2['end']);
 	}else{
-		$r->where('date_received3<?',$dt1['end']);
+		$r->where('date_received<?',$dt1['end']);
 	}
 
 	$tm=$r->push();

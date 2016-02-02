@@ -1,14 +1,26 @@
-﻿<!DOCTYPE html>
+﻿<?php
+function url($f){
+	$v=filemtime(__DIR__.'/'. $f);
+	if($v){
+		$v='?v='.$v;
+	}else{
+		$v='';
+	}
+	return $f . $v;
+}
+
+?><!DOCTYPE html>
 <html ng-app="App">
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>สำนักศาลยุติธรรมประจำภาค ๕</title>
+		<link rel="stylesheet" type="text/css" href="awesome/css/font-awesome.min.css">
 	</head>
 
 	<body id="body">
-		<div ng-if="!API_URL" style="position:absolute;text-align:center;top:40%;width:100%;font-size:1.8em;">กำลังโหลดข้อมูล<br/>โปรดรอสักครู่..</div>
+		<div ng-if="!API_URL" style="position:absolute;text-align:center;top:40%;width:100%;font-size:1.2em;"><i class="fa fa-spinner fa-spin fa-4x"></i><br/>กำลังโหลดข้อมูล<br/>โปรดรอสักครู่..</div>
 		<div ng-include="'views/main.menu.html'"></div>
 		<div id="main-content" class="container-fluid">
 			<div id="alert-messages" class="hidden-print" style="z-index:10000"></div>
@@ -20,7 +32,7 @@
 	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-theme.css">
 	<link rel="stylesheet" type="text/css" href="yamm/yamm.css">
-	<link rel="stylesheet" type="text/css" href="awesome/css/font-awesome.min.css">
+
 	<link rel="stylesheet" type="text/css" href="js/ng-table/ng-table.min.css">
 	<link rel="stylesheet" href="js/res-table/angular-responsive-tables.css">
 	<link rel="stylesheet" href="js/res-table/jquery.resizableColumns.css">
@@ -47,11 +59,14 @@
 	<script src="js/res-table/angular-responsive-tables.js"></script> 
 	<script src="js/res-table/jquery.resizableColumns.js"></script>  
 	<script src="js/angular-strap/angular-strap.min.js"></script>
+
 	<script src="js/angular-strap/angular-strap.tpl.min.js"></script>
 	<script src="js/slider/js/bootstrap-slider.js"></script>
-	<script src="js/custom.table.js"></script>
+	<script src="<?php echo url('js/custom.table.js')?>"></script>
 	<script src="js/lib/ng-flow-standalone.min.js"></script>
-	<script src="js/lazyload.js"></script>
-	<script src="js/app.js"></script>
+	<script src="<?php echo url('js/lazyload.js')?>"></script>
 	<script src="js/md5.min.js"></script>
+	<script src="<?php echo url('js/app.js')?>"></script>
+	<script src="<?php echo url('js/templates.js')?>"></script>
+	
 </html>

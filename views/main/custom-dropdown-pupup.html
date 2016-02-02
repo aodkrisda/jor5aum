@@ -1,0 +1,63 @@
+<div class="custom-dropdown popover" style="min-width:720px;max-width:80%;height:480px;">
+    <div class="arrow"></div>
+    <div class="popover-title bg-header">
+        <button type="button" title="Close" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+        <h4>
+            <i class="fa fa-windows"></i>
+            {{::title}}
+            <span ng-if="$count()">
+                <span class="badge" style="background-color:#58B358">
+                    เลือกแล้ว {{$count()}}
+                </span>
+            </span>
+            <span class="input-group pull-right" style="width:160px;margin-right:30px;padding-top:0px;top:-8px">
+                <input type="text" class="form-control" ng-model="search.text" placeholder="ค้นหา" ng-model-options="{ debounce: 500 }" />
+                <div ng-if="!search.text" class="input-group-addon btn btn-default" title="ค้นหา"><span class="glyphicon glyphicon-search"></span></div>
+                <div ng-if="search.text" class="input-group-addon btn btn-default" ng-click="search.text=''" title="เลิกค้นหา"><span class="glyphicon glyphicon-remove"></span></div>
+            </span>
+        </h4>
+    </div>
+    <div class="popover-content bg-content" style="overflow-y:auto;height:360px;max-height:360px;">
+        <div ng-switch="has($groupField)">
+
+            <ul class="list-group" ng-repeat="($group, $children) in $groupItems" ng-switch-when="true">
+
+                <li class="list-group-item header">
+                    <span class="badge" ng-bind="$children.length">0</span>
+                    <div ng-switch="has($groupTemplate)">
+                        <span ng-switch-when="true" custom-template="$groupTemplate"></span>
+                        <h4 class="list-group-item-heading text-muted" ng-switch-default>{{$groupFunction($group)}}</h4>
+                    </div>
+
+                </li>
+
+                <li class="list-group-item child" ng-repeat="$item in $children" ng-click="select($item)" ng-class="{'active':isSelected($item)}">
+                    <div ng-switch="has($itemTemplate)">
+                        <span ng-switch-when="true" custom-template="$itemTemplate"></span>
+                        <strong ng-switch-default>{{::$labelFunction($item)}} </strong>
+                        <span ng-if="isSelected($item)" class="glyphicon glyphicon-ok pull-right"></span>
+                    </div>
+                </li>
+
+            </ul>
+
+            <ul class="list-group" ng-switch-default>
+                <li class="list-group-item child" ng-repeat="$item in $items | filter:search.text" ng-click="select($item)" ng-class="{'active':isSelected($item)}">
+                    <div ng-switch="has($itemTemplate)">
+                        <span ng-switch-when="true" custom-template="$itemTemplate"></span>
+                        <strong ng-switch-default>{{::$labelFunction($item)}}</strong>
+                        <span ng-if="isSelected($item)" class="glyphicon glyphicon-ok pull-right"></span>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" title="ยกเลิกการเลือกทั้งหมด เพื่อเริ่มเลือกใหม่" ng-disabled="!$count()" class="btn btn-danger pull-left" ng-click="select(null)"><span class="glyphicon glyphicon-repeat"></span> Clear</button>
+        <button type="button" class="btn btn-success btn-min" ng-click="accept();$hide()">
+            <span class="glyphicon glyphicon-ok-sign"></span> ตกลง
+        </button>
+        <button type="button" class="btn btn-warning btn-min" ng-click="$hide()"><span class="glyphicon glyphicon-remove-sign"></span> ยกเลิก</button>
+    </div>
+</div>

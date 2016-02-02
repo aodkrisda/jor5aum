@@ -248,8 +248,6 @@ function post_savecaseex(){
 
 
 
-
-
 /* NG-TABLE */
 
 class NGTABLE{
@@ -316,11 +314,17 @@ class NGTABLE{
           $rs->order($k . ' '  .$v);
         }
        }
-       
-       $rs->limit($_POST['count'],(($_POST['page']-1) * $_POST['count']));
+	   $xpage=0;
+	   $xcount=0;
+       if(isset($_POST['count']) && isset($_POST['page'])){
+	    $xpage=$_POST['page'];
+		$xcount=$_POST['count'];
+		$rs->limit($_POST['count'],(($_POST['page']-1) * $_POST['count']));
+	   }
+
        $n=$rs->count("*");
        $rows=$this->norm->toArray($rs);
-       return array('error'=>false ,'__raw'=>true,'total'=>$n, /*'sql'=>(string) $rs,*/ 'meta'=>$this->meta, 'page'=>$_POST['page'],'data'=>&$rows);    
+       return array('error'=>false ,'__raw'=>true,'total'=>$n, 'sql'=>(string) $rs, 'meta'=>$this->meta, 'page'=>$xpage,'data'=>&$rows);    
   }
   function get(){
       $rs=$this->norm->{$this->tb}()[$_POST[$this->pk]];
@@ -446,7 +450,10 @@ class NGTABLE_USERS extends NGTABLE{
         $id=$_POST[$this->pk];
         $row=$this->norm->users()->where($this->pk, $id)->where('check_out',1)->fetch();
         if($row){
-          $row->update(array('check_out'=>0));
+          $it=array('check_out'=>0);
+          $usr=$this->api->api_get_user();
+          if($usr) $it['parent_id']=$usr['id'];
+          $row->update($it);
           return true;
         }
       }
@@ -568,6 +575,75 @@ class NGTABLE_AT_RESULTS  extends NGTABLE{
     $this->uniques['name']='เหตุผลซ้ำ กรูณาเปลี่ยนใหม่';
   }  
 }
+
+class NGTABLE_ADMIN_RETURN_CASES  extends NGTABLE{
+	function __construct($table='return_cases', $pk='id') {
+	parent::__construct($table, $pk);
+	}
+	function buildFilter(&$rs, $data){
+		global $norm;
+		global $api;  
+		if($rs){
+			if(isset($_POST['case_id'])){ 
+				$rs->where('case_id',$_POST['case_id']);
+			}else{
+			$rs->where('case_id<?',0);
+			}
+		}
+	}
+
+	function post_additems(){
+		global $norm;
+		if(isset($_POST['items']) && isset($_POST['case_id']) && is_array($_POST['items'])){
+			$norm->transaction='BEGIN';
+			
+			$ids=array();
+			foreach($_POST['items'] as $it){
+				if(isset($it['id'])){
+					$ids[]=$it['id'];
+				}
+			}
+			
+			$norm->return_cases()->where('case_id',$_POST['case_id'])->where('NOT id',$ids)->delete();
+
+			$r=$norm->return_cases()->where('case_id',$_POST['case_id']);
+			foreach($_POST['items'] as $it){
+				if(isset($it['id'])){
+					$r2=$r[$it['id']];
+					if($r2){
+						$r2->update($it);
+					}
+				}else{
+					$r->insert($it);
+				}
+			}
+			
+			$norm->transaction='COMMIT';
+
+			return true;
+		}
+	}
+	function post_updateitems(){
+		global $norm;
+		if(isset($_POST['items']) && isset($_POST['case_id']) && is_array($_POST['items'])){
+			$norm->transaction='BEGIN';
+			$r=$norm->return_cases()->where('case_id',$_POST['case_id']);
+			foreach($_POST['items'] as $it){
+				if(isset($it['id'])){
+					$r2=$r[$it['id']];
+					if($r2){
+						$r2->update($it);
+					}
+				}
+			}
+			
+			$norm->transaction='COMMIT';
+
+			return true;
+		}
+	}
+}
+
 class NGTABLE_ADMIN_CASES  extends NGTABLE{
   function __construct($table='cases', $pk='id') {
     parent::__construct($table, $pk);
@@ -630,8 +706,51 @@ class NGTABLE_ADMIN_CASES  extends NGTABLE{
     }
    return false;
   }
+
+  function post_setnumber2(){
+    global $norm;
+    $r=$norm->cases()->where('id',$_POST['id'])->fetch();
+    if($r){
+    $tid=0;
+    if(isset($_POST['type_id']) && $_POST['type_id']){
+    $tid=intval($_POST['type_id']);
+    }
+      $code='';
+      $auto_received_num2=$r['auto_received_num2'];
+      $date_received3_a=$r['date_received3_a'];
+      if(empty($auto_received_num2)){
+        $year=intval(date('Y'));
+    if(!$tid) $tid=$r['type_id'];
+        $tr=$norm->types()->where('id',$tid)->fetch();
+        if($tr && $tr['code']){
+          $code=trim($tr['code']);
+          $ars=$norm->auto_received_nums2()->where('type_id',$tid)->where('year_val',$year);
+          $nextid=0;
+          $ar=$ars->fetch();
+          if($ar){
+            $nextid=intval($ar['number_val']) + 1;
+            $ar['number_val']= $nextid;
+            $ar->update();
+          }else{
+            $nextid=1;
+            $ar=$ars->insert(array('year_val'=>$year, 'type_id'=>$tid, 'number_val'=>$nextid));
+          }
+          if($ar){
+            $auto_received_num2=$code . $nextid . '/' . ($year + 543);
+            $r['auto_received_num2']=$auto_received_num2;
+            $r['date_received3_a']=date('Y-m-d');
+            $r->update();
+            $date_received3_a=$r['date_received3_a'];
+          }
+        }
+      }
+      return array('auto_received_num2'=>$auto_received_num2,'date_received3_a'=>$date_received3_a);
+    }
+   return false;
+  }
   function post_clearnumber(){
     global $norm;
+	$ret=false;
     $r=$norm->cases()->where('id',$_POST['id'])->fetch();
     if($r){
       $code='';
@@ -672,25 +791,115 @@ class NGTABLE_ADMIN_CASES  extends NGTABLE{
           }
           $auto_received_num='';
           $date_received3=null;
+
           $r['auto_received_num']=$auto_received_num;
           $r['date_received3']=$date_received3;
+
+          $r['number_received3']='';
+          $r['command_id']=0;
+          $r['at_correct']=1;
+          $r['form2_note']='';
+          $r['result']=0;
+          $r['add_checked']=0;
+          $r['link_checked']=0;
+          $r['add_ids']='';
+          $r['link_ids']='';
+
           $r->update();
+		  $norm->return_cases()->where('case_id',$r['id'])->delete();
+		  $ret=$r->toArray();
          }
       }
-      return array('auto_received_num'=>$auto_received_num,'date_received3'=>$date_received3, 'xxxx'=>$code);
+      return $ret;//array('auto_received_num'=>$auto_received_num,'date_received3'=>$date_received3);
     }
     return false;
   }  
-  
+
+ function post_clearnumber2(){
+    global $norm;
+  $ret=false;
+    $r=$norm->cases()->where('id',$_POST['id'])->fetch();
+    if($r){
+      $code='';
+      $auto_received_num2=$r['auto_received_num2'];
+      $date_received3_a=$r['date_received3_a'];
+      if(!empty($auto_received_num2)){
+        $year=0;
+        $tr=$norm->types()->where('id',$r['type_id'])->fetch();
+        if($tr && $tr['code']){
+          $code=trim($tr['code']);
+          $tm=explode('/',  $auto_received_num2);
+          if(count($tm)>1){
+            $year=intval($tm[1])-543;
+            $nextid=$tm[0];
+            if(preg_match("|\d+|", $nextid, $m)){
+              $nextid=intval($m[0]);
+            }else{
+              $nextid=0;
+            }
+      $code=str_replace($nextid,'',$tm[0]);
+          }else{
+            $nextid=0;
+          }
+          if(($year>0) && ($nextid>0)){
+      $tid=$r['type_id'];
+      $c=$norm->types()->where('code',$code)->fetch();
+      if($c){
+        $tid=$c['id'];
+      }
+            $ars=$norm->auto_received_nums2()->where('type_id',$tid)->where('year_val',$year);
+            $ar=$ars->fetch();
+            if($ar){
+              if($ar['number_val']==$nextid){
+                $ar['number_val']=max(0,$nextid-1);
+                $ar->update();
+              }
+            }
+          }
+          $auto_received_num2='';
+          $date_received3_a=null;
+
+          $r['auto_received_num2']=$auto_received_num2;
+          $r['date_received3_a']=$date_received3_a;
+          $r['number_received3_a']='';
+          $r['judge2_id_a']=0;
+          $r['judge4_id_a']=0;
+          $r['date_at_received1_a']='';
+          $r['date_at_received2_a']='';
+          $r['result']=0;
+          $r['form3_note']='';
+          $r->update();
+          $norm->return_cases()->where('case_id',$r['id'])->delete();
+          $ret=$r->toArray();
+         }
+      }
+      return $ret;//array('auto_received_num'=>$auto_received_num,'date_received3'=>$date_received3);
+    }
+    return false;
+  }  
+
   function buildFilter(&$rs, $data){
     global $norm;
     global $api;  
     if($rs){
+	  if(isset($data['_view'])){ 
+		if($data['_view']==='merge'){
+			if(isset($data['search'])) $rs->where('number_black LIKE ?','%' . $data['search']. '%');
+			if(isset($data['_court'])) 	$rs->where('user_id', $data['_court']);
+			return;
+		}
+	  }
+
 	  $atid=$norm->at()->select('id')->where('checked',1);
       $this->meta['notsent']=$norm->cases()->where('no_case_sent!=?',1)->where('(number_sent4   is null) or (number_sent4 =?)','')->where('(date_sent4 is null) or (date_sent4 =?)','0000-00-00')->count();
       $this->meta['notsent2']=$norm->cases()->where('auto_received_num!=?','')->where('(date_received3 is not null) AND (date_received3!=?)','0000-00-00')->where('number_sent5','')->where('(date_sent5 is null) or (date_sent5=?)','0000-00-00')->where('command_id',$atid)->count();
-      
+      $tm=$norm->cases()->where('return_checked',1)->where('return2_checked',1);
+      $tm2=$norm->return_cases()->where('number_return=? or number_return is null','')->where('date_return is null')->where('number_sent!=?','')
+        ->where('date_sent is not null')->where('(number_received=? or number_received is null or date_received is null)','')->where('case_id',$tm)->select('distinct case_id');
+	$this->meta['notsent3']=$tm2->count('distinct case_id');
+
       if(isset($data['_view'])){ 
+
         if($data['_view']==='notify'){
           $rs->where('no_case_sent!=?',1)->where('(number_sent4   is null) or (number_sent4 =?)','')->where('(date_sent4 is null) or (date_sent4 =?)','0000-00-00');
           $rs->order('date_sent desc, id desc');
@@ -700,27 +909,67 @@ class NGTABLE_ADMIN_CASES  extends NGTABLE{
           $rs->where('auto_received_num!=?','')->where('(date_received3 is not null) AND (date_received3!=?)','0000-00-00')->where('number_sent5','')->where('(date_sent5 is null) or (date_sent5=?)','0000-00-00')->where('command_id',$atid);
           $rs->order('date_sent desc, id desc');
           return;
-        }        
+        }  
+        if($data['_view']==='notify3'){
+          $rs->where('id',$tm2);
+          $rs->order('date_sent desc, id desc');
+          return;
+        }   		      
       }
     }
 
     if($rs && $data){
+	  $code='';
+	  if(isset($data['type_id'])){
+		$tm=$norm->types()->where('id',$data['type_id'])->fetch();
+		if($tm){
+			$code=$tm['code'];
+			if($code){
+				$rs->where('(auto_received_num LIKE ?)', $code . '%');
+			}
+		}
+		unset($data['type_id']);
+	  }
+
       if(isset($data['search']) && is_array($data['search'])){
 		    $p=$data['search'];
 			$q='';
 			$qs=array();
-		    if(isset($p['date1']) && $p['date1']){
-			    $dt=$this->getDateRange($p['date1']);
-			    if($q) $q.=' AND ';
-			    $q.='(date_sent>=?)';
-				 $qs[]=$dt['date'];
-		    }
-		    if(isset($p['date2']) && $p['date2']){
-			    $dt=$this->getDateRange($p['date2']);
-				if($q) $q.=' AND ';
-			    $q.='(date_sent<=?)';
-				$qs[]=$dt['date'];
-		    }
+              if(isset($p['_view']) && $p['_view']==='acases'){
+
+                  if(isset($p['date1']) && $p['date1']){
+                    $dt=$this->getDateRange($p['date1']);
+                    if($q) $q.=' AND ';
+                    $q.='(date_sent_a>=?)';
+                   $qs[]=$dt['date'];
+                  }
+                  if(isset($p['date2']) && $p['date2']){
+                    $dt=$this->getDateRange($p['date2']);
+                  if($q) $q.=' AND ';
+                    $q.='(date_sent_a<=?)';
+                  $qs[]=$dt['date'];
+                  }         
+                   if($q) $q.=' AND ';
+                  $q.=' (no_case_sent=?) ';
+                  $qs[]=2;                     
+              }else{
+
+                  if(isset($p['date1']) && $p['date1']){
+                    $dt=$this->getDateRange($p['date1']);
+                    if($q) $q.=' AND ';
+                    $q.='(date_sent>=?)';
+                   $qs[]=$dt['date'];
+                  }
+                  if(isset($p['date2']) && $p['date2']){
+                    $dt=$this->getDateRange($p['date2']);
+                  if($q) $q.=' AND ';
+                    $q.='(date_sent<=?)';
+                  $qs[]=$dt['date'];
+                  }
+        
+              }
+
+
 		    if(isset($p['user_id']) && $p['user_id']){
 				if($q) $q.=' AND ';
 			    $q.='(user_id=?)';
@@ -747,7 +996,12 @@ class NGTABLE_ADMIN_CASES  extends NGTABLE{
  
 	    }else if(isset($data['month']) && isset($data['year']) && $data['month'] && $data['year']){
           $dt=$this->getDateRange($data['year'].'-'. $data['month'] . '-1');
-          $rs->where('date_sent>=? AND date_sent<?',$dt['begin'],$dt['end']);
+          if(isset($data['_view']) && $data['_view']==='acases'){
+             $rs->where('date_sent_a>=? AND date_sent_a<?',$dt['begin'],$dt['end']);
+          }else{
+            $rs->where('date_sent>=? AND date_sent<?',$dt['begin'],$dt['end']);
+          }
+         
           if(isset($data['court'])){
             $rs->where('user_id', $data['court']);
           }
@@ -762,7 +1016,27 @@ class NGTABLE_ADMIN_CASES  extends NGTABLE{
 			$rs->where('type_id',$data['type_id']); 
 		}
 
-		$rs->order('date_sent desc, id desc');
+		//$rs->order('date_sent desc, id desc');
+		$adc='asc';
+		if(isset($_POST['sorting'])){
+			if(isset($_POST['sorting']['date_ap'])){
+				$adc=$_POST['sorting']['date_ap'];
+				unset($_POST['sorting']);
+			}
+		}
+
+          if(isset($data['_view']) && $data['_view']==='acases'){
+            $rs->where('(no_case_sent=?)', 2);
+          }else{
+          	if(!isset($data['search']) ){
+          		$rs->where('(no_case_sent!=?)', 2);
+          	}
+          }
+		$rs->select('')->select('*');
+		$rs->select('TIMESTAMPDIFF(DAY,date_ap,CURDATE()) as _adays');
+		$rs->select('IF(TIMESTAMPDIFF(DAY,date_ap,CURDATE())<0,1,0) as _bdays');
+		$rs->order("_bdays $adc, _adays $adc");
+
   }
 }
 
@@ -825,7 +1099,13 @@ class NGTABLE_COURT_CASES  extends NGTABLE{
 
       $this->meta['notsent']=$norm->cases()->where('user_id', $usr['id'])->where('command_id',$checked)->where('(auto_received_num is null) or (auto_received_num=?)','')->where('(date_received3 is null) or (date_received3=?)','0000-00-00')->count();
       $this->meta['notsent2']=$norm->cases()->where('user_id', $usr['id'])->where('(date_received4  is null) or (number_received4  is null) or (date_received4 =?) or (number_received4=?)','','')->where('command_id',$atid)->count();
-	  
+     
+      $tm=$norm->cases()->where('user_id', $usr['id'])->where('return_checked',1)->where('auto_received_num!=?','')->where('date_sent5 is not NULL')->where('number_sent5!=?','');
+      $n=count($tm);
+      $tm2=$norm->return_cases()->where('number_return=? or number_return is null','')->where('date_return is null')->where('(number_sent!=? or date_sent is not null)','')->where('case_id', $tm)->select('distinct case_id');
+	$this->meta['notsent3']=$n - $tm2->count();
+
+
 
       if(isset($data['_view'])){ 
         if($data['_view']==='notify'){
@@ -838,25 +1118,51 @@ class NGTABLE_COURT_CASES  extends NGTABLE{
           $rs->order('date_sent desc, id desc');
           return;
         }
+        if($data['_view']==='notify3'){
+          $rs->where('user_id', $usr['id'])->where('id', $tm)->where('NOT id',$tm2);
+          $rs->order('date_sent desc, id desc');
+          return;
+        }    
       }
       
       
       if($data && isset($data['search']) && is_array($data['search'])){
-		    $p=$data['search'];
-        $q='';
-        $qs=array();
+		$p=$data['search'];
+           $q='';
+          $qs=array();
+          if(isset($p['_view']) && $p['_view']==='acases'){
+
+              if(isset($p['date1']) && $p['date1']){
+                $dt=$this->getDateRange($p['date1']);
+                if($q) $q.=' AND ';
+                $q.='(date_sent_a>=?)';
+                           $qs[]=$dt['date'];
+              }
+              if(isset($p['date2']) && $p['date2']){
+                $dt=$this->getDateRange($p['date2']);
+                          if($q) $q.=' AND ';
+                $q.='(date_sent_a<=?)';
+                           $qs[]=$dt['date'];
+              }
+             if($q) $q.=' AND ';
+            $q.=' (no_case_sent=?) ';
+            $qs[]=2;
+          }else{
+
 		    if(isset($p['date1']) && $p['date1']){
 			    $dt=$this->getDateRange($p['date1']);
 			    if($q) $q.=' AND ';
 			    $q.='(date_sent>=?)';
-          $qs[]=$dt['date'];
+                     $qs[]=$dt['date'];
 		    }
 		    if(isset($p['date2']) && $p['date2']){
 			    $dt=$this->getDateRange($p['date2']);
-          if($q) $q.=' AND ';
+                    if($q) $q.=' AND ';
 			    $q.='(date_sent<=?)';
-          $qs[]=$dt['date'];
+                     $qs[]=$dt['date'];
 		    }
+
+            }
         
 			$fds=array('number_black', 'defendant', 'plaintiff', 'title');
 			foreach($fds as $fd){
@@ -877,24 +1183,40 @@ class NGTABLE_COURT_CASES  extends NGTABLE{
 			  $rs->where($q, $qs);
 			}
       
-	    }else if(isset($data['month']) && isset($data['year']) && $data['month'] && $data['year']){
+	}else if(isset($data['month']) && isset($data['year']) && $data['month'] && $data['year']){
           $dt=$this->getDateRange($data['year'].'-'. $data['month'] . '-1');
-          $rs->where('date_sent>=? AND date_sent<?',$dt['begin'],$dt['end']);
-
+          if(isset($data['_view']) && $data['_view']==='acases'){
+            $rs->where('date_sent_a>=? AND date_sent_a<?',$dt['begin'],$dt['end']);
+          }else{
+            $rs->where('date_sent>=? AND date_sent<?',$dt['begin'],$dt['end']);
+          }
       }
-		if(isset($data['_view']) && ($data['_view'])){
-			$rs->where('date_received3 IS  NOT NULL')->where('command_id',$atid);
-		}    
+ 
       if($usr['id']){
         $rs->where('user_id', $usr['id']);
       }      
+
+      if(isset($data['_view']) && ($data['_view']===true)){
+          $rs->where('date_received3 IS  NOT NULL')->where('command_id',$atid);
+      }         
       if(isset($data['date_received']) && ($data['date_received'])){
         $rs->where('date_received3',$data['date_received']);
       }  
       if(isset($data['type_id']) && $data['type_id']){
           $rs->where('type_id',$data['type_id']); 
       }      
-      $rs->order('date_sent desc, id desc');
+
+
+      if(isset($data['_view']) && $data['_view']==='acases'){
+          $rs->where('(no_case_sent=?)',2);
+          $rs->order('date_sent_a desc, id desc');
+      }else{
+      	if(!isset($data['search'])){
+      		  $rs->where('(no_case_sent!=?)',2);
+      	}
+        $rs->order('date_sent desc, id desc');
+      }  
+
     }
   }
 }
@@ -956,5 +1278,9 @@ function post_admin_cases($action=''){
 }
 function post_court_cases($action=''){
   $cls=new NGTABLE_COURT_CASES();
+  return $cls->process($action);
+}
+function post_return_cases($action=''){
+  $cls=new NGTABLE_ADMIN_RETURN_CASES();
   return $cls->process($action);
 }

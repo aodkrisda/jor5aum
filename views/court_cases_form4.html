@@ -62,7 +62,56 @@
                     </div>
                 </div>
             </div>
-
+               <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">สำนวนพ่วง</label>
+                    <div class="col-md-8">
+                         <div class="input-group">
+                             <div class="input-group-addon"  style="background-color:#F9DADA"><input type="checkbox" ng-model="editingItem.link_checked" ng-true-value="'1'" ng-false-value="'0'"  disabled/></div>
+                             <input type="text" readonly  class="form-control" ng-model="editingItem.link_ids" placeholder="ไม่มีสำนวนพ่วง" />
+                         </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">สำนวนรวม</label>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <div class="input-group-addon" style="background-color:#F9DADA"><input type="checkbox" ng-model="editingItem.add_checked" ng-true-value="'1'" ng-false-value="'0'" disabled/></div>
+                            <p type="text" class="form-control" style="background-color:#F9DADA">
+                                <span  class="label label-mr label-black" ng-repeat="key in editingItem.add_ids |split">{{key}}</span>
+                                <span ng-if="!editingItem.add_ids" class="text-muted">ไม่มีสำนวนรวม</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>      
+           <div class="row">
+                <legend style="padding-top:2em" class="text-center text-info">ร่างคำสั่ง</legend>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">วันที่ภาครับ </label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.date_received3_a | thai_date}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">เลขที่รับ</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.number_received3_a}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">ภาคส่งคืนร่างคำสั่ง</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.date_sent5_a   | thai_date}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">เลขที่คำสั่ง</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.number_sent5_a }}">
+                    </div>
+                </div>
+            </div>                
             <div class="row">
                 <legend style="padding-top:2em" class="text-center text-info">ส่งรายงานคดี</legend>
             </div>

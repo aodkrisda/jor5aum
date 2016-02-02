@@ -578,6 +578,7 @@
             var split = placement.split('-');
 
             var sp = 16;
+          
             switch (placement) {
                 case 'center':
                     return {
@@ -610,6 +611,7 @@
                     }
                     break;
             }
+             
 
           switch (split[0]) {
               
@@ -642,15 +644,18 @@
             break;
             }
 
-           var diff=wh-(offset.top + actualHeight)
-           var diff2 = ww - (offset.left + actualWidth);
-           if ((diff < 0) || (diff2<0)){
-               return {
-                   left: Math.max(0, (ww - actualWidth) / 2),
-                   top: Math.max(0, (wh - actualHeight) / 2 + ws ),
-                   center:true
-                }
-           }
+          if (placement.indexOf('center') >= 0) {
+              var diff = wh - (offset.top + actualHeight)
+              var diff2 = ww - (offset.left + actualWidth);
+              if ((diff < 0) || (diff2 < 0)) {
+                  return {
+                      left: Math.max(0, (ww - actualWidth) / 2),
+                      top: Math.max(0, (wh - actualHeight) / 2 + ws),
+                      center: true
+                  }
+              }
+          }
+
           if (!split[1]) {
             return offset;
           }

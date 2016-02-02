@@ -57,8 +57,6 @@ class REST_API{
       @http_response_code($code);
     }
     header('Content-Type: text/json; charset=utf-8');
-
-	$data['aaa']=array($this->auth_user, $this->_user['id']);
     echo json_encode($data,JSON_UNESCAPED_UNICODE);
     exit();
   }

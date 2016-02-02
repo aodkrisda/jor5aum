@@ -5,16 +5,16 @@
 </style>
 
 
-
-
-<div ng-controller="AdminReportCtrl" data-prefix="a2">
+<div ng-controller="AdminReportCtrl as xctrl" data-prefix="a2">
     <div ui-view></div>
-    <div  ng-hide="!(urlEq('/admin/vcases') || urlEq('/admin/vcases/notify'))">
+    <div  ng-hide="!(urlEq('/admin/vcases') || urlEq('/admin/vcases/notify') || urlEq('/admin/vcases/notify2'))">
         <div class="panel panel-default" ng-controller="CustomTableCtrl as cmt" ng-init="$parent.cmt=cmt;setAPI('admin_cases','custom.admin.form1.html',{date_received:'searchDate',_view:'_view()',type_id:'searchType'})">
             <div class="panel-heading">
 
-                <span class="text-right pull-right" style="position:relative;top:-0.6em">
-                    <span class="btn btn-notify" ng-click="notify2()" style="padding-right:3em"><img height="32" src="images/notify4.png" title="สำนวนยังไม่ได้ส่งคืนศาล" /><span class="badge badge-notify">{{TableMeta.notsent2 || 0}}</span></span>
+                <span class="text-right pull-right" style="position:relative;top:-0.25em">
+                    <span class="btn btn-notify btn-danger" ng-click="notify3()">สำนวนค้างส่ง (ทบทวนร่างฯ)<span class="notify">{{TableMeta.notsent3 || 0}}</span></span>
+                    <span class="btn btn-notify btn-success" ng-click="notify2()" style="margin-right:4em">สำนวนยังไม่ได้ส่งคืนศาล<span class="notify">{{TableMeta.notsent2 || 0}}</span></span>
+                    
                     <span ng-hide="urlEq('/admin/vcases/notify')">
                         <button class="btn btn-success" ng-show="isSearchMode()" ng-click="setFilter()">
                             <span class="glyphicon glyphicon-arrow-left"></span> ออกจากโหมดการค้นหา
@@ -40,13 +40,6 @@
                         <span class="glyphicon glyphicon-print"></span> พิมพ์รายงานสำนวน
                     </button>
                 </span>
-                <!--
-        <button ng-click="ifcall(($it.no_case_sent!='1'),editItem('custom.court.form2.html'))" ng-show="($it.no_case_sent=='1') && hasSelected()" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span><span class="hidden-sm hidden-xs"> แก้ไขคดี (ไม่ได้ส่งรายงานคดี)</span></button>
-        <button data-placement="bottom" data-trigger="click" bs-popover data-template="custom.confirm.popover.html"
-                ng-click="removeItem()" ng-show="($it.no_case_sent=='1') && hasSelected()" class="btn btn-danger" data-auto-close="true">
-            <span class="glyphicon glyphicon-remove"></span><span class="hidden-sm hidden-xs"> ลบคดี (ไม่ได้ส่งรายงานคดี)</span>
-        </button>
-        -->
 
 
             <h2 style="padding:0px;margin:0px;"><span class="fa fa-windows"></span> ส่งสำนวน ({{tableParams.total()}})</h2>
@@ -60,7 +53,7 @@
                             <div class="input-group-addon"><strong>ประเภทคดี</strong></div>
                             <select class="form-control" style="min-width:450px" ng-model="searchType" ng-change="setTypeId(searchType);setFilter()" select-value-type="string" ng-options="it.id as it.id | lookup_type:'name':'code'  for it in Lookups.getType()"><option value="">ทั้งหมด</option></select>
                             <div class="input-group-addon"><strong>วันที่ภาครับสำนวนคำพิพากษา</strong></div>
-                            <span mode="0" ng-model="searchDate" ng-change="setDateId(searchDate);setFilter()" placeholder="แสดงคดีที่รับสำนวนวันที่่" custom-date-field></span>
+                            <div mode="0" ng-model="searchDate" ng-change="setDateId(searchDate);setFilter()" placeholder="แสดงคดีที่รับสำนวนวันที่่" custom-date-field></div>
 
                             <!--
                             <div class="input-group-addon btn btn-default" ng-click="setFilter(true)" title="เริ่มค้นหา"><span class="glyphicon glyphicon-refresh"></span></div>
@@ -115,9 +108,18 @@
                                 <td data-title="'นัดฟังคำพิพากษา'" sortable="'date_ap'">
                                     {{it.date_ap | thai_date:'short'}}
                                 </td>
+                                <td data-title="'วันที่ อธ.จ่าย/หน.ภาครับสนำนวน'" sortable="'date_at_received1'" hide>
+                                    {{it.date_at_received1 | thai_date:'short'}}
+                                </td>
+                                <td data-title="'วันที่รอง อธ.รับสำนวน'" sortable="'date_at_received2'" hide>
+                                    {{it.date_at_received2 | thai_date:'short'}}
+                                </td>
+                                <td data-title="'ผลการปฏิบัติ'" sortable="'result'" hide>
+                                    {{it.result | lookup_result}}
+                                </td>
                                 <td data-title="'ส่งตามกำหนด(ก่อน '+BDAYS+' วัน)'" class="text-center" >
-                                    <span ng-if="it._days<=BDAYS && it.date_ap && it.date_received3">ช้า ({{it._days | math_abs}} วัน)</span>
-                                    <span ng-if="it._days>BDAYS">ไม่ช้า ({{it._days}}) วัน</span>
+                                    <span ng-if="it._days<BDAYS && it.date_ap && it.date_received3">ช้า ({{it._days | math_abs}} วัน)</span>
+                                    <span ng-if="it._days>=BDAYS">ไม่ช้า ({{it._days}}) วัน</span>
                                     <span ng-if="isSelected(it)" class="row-action">
                                         <button class="btn btn-success btn-circle btn-xs" data-placement="left" data-trigger="click" bs-popover data-template="custom.confirm.admin.actions2.html"
                                                 data-auto-close="true">

@@ -111,4 +111,4 @@
 	}
 	$_DICT=$cases;
     $html= $twig->render('report6.html', array('report_name'=>'รายงาน','date1'=>$date1,  'date2'=>$date2,  'groups'=>$groups, 'courts'=>$courts));
-	printPdf($html);
+	printPdf($html,'A4-P');

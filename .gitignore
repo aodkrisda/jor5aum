@@ -3,6 +3,6 @@
 *.rar
 *.exe
 *- Copy.*
-./document/*.*
-./chunk/*.*
-./vendor/*.*
+./document
+./chunk
+./vendor

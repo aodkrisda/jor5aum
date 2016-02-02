@@ -1,0 +1,20 @@
+<div class="popover" style="min-width:350px;max-width:80%">
+    <div class="arrow"></div>
+    <div class="popover-title">
+        <button type="button" title="Close" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+        <h4><i class="fa fa-bars"></i> เพิ่มข้อมูล</h4>
+    </div>
+    <div class="popover-content">
+        <form class="form" style="padding:10px;">
+            <div class="form-group">
+                <label class="control-label">จำเลยต้องขัง</label>
+                <input type="text" placeholder="ยังไม่มีข้อมูล" class="form-control" ng-model="itemResult.name">
+
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" ng-disabled="!itemResult.name" ng-click="addImprison(itemResult)"><span class="glyphicon glyphicon-ok-sign"></span> เพิ่มข้อมูล</button>
+        <button type="button" class="btn btn-warning" ng-click="$hide()"><span class="glyphicon glyphicon-remove-sign"></span> ยกเลิก</button>
+    </div>
+</div>

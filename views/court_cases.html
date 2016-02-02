@@ -11,12 +11,16 @@
                     <div class="modal-header" ng-show="title">
 
                         <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title"><span class="fa fa-windows"></span> <span ng-bind="title"></span></h4>
+
+                        <h4 class="modal-title"><span class="fa fa-windows"></span>
+                        <span ng-switch="editingItem.no_case_sent==2">
+                            <span ng-switch-when="true">ส่งรายงานคดี (ร่างคำสั่ง)</span>
+                            <span ng-switch-default><span ng-bind="title"></span>/รายงานคดี</span>
+                        </span>
+                        </h4>
                     </div>
                     <div class="modal-body">
-
                         <form class="form-horizontal" name="form">
-                            
                                 <div class="row">
                                     <div class="form-group col-md-6">
 
@@ -131,7 +135,7 @@
                                 <div class="form-group col-md-6" ng-class="{'has-error':form.fcap.$invalid}">
                                     <!-- Text input-->
                                     <label class="col-md-4 control-label">จำนวนทุนทรัพย์</label>
-                                    <div class="col-md-8">
+                                    <div class="col-md-7">
                                         <div class="input-group">
                                             <input type="text" name="fcap" placeholder="0.00" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/" class="form-control input-md" step="0.01" ng-model="editingItem.capital">
                                             <span class="input-group-addon">บาท</span>
@@ -141,6 +145,28 @@
                                 <div class="row clearfix">
 
                                 </div>
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-4">สำนวนพ่วง</label>
+                                    <div class="col-md-7">
+                                         <div class="input-group">
+                                             <div class="input-group-addon" style="xbackground-color:#fefefe"><input disabled type="checkbox" ng-model="editingItem.link_checked" ng-true-value="'1'" ng-false-value="'0'"/></div>
+                                             <input type="text" ng-disabled="editingItem.link_checked!='1'" class="form-control" ng-model="editingItem.link_ids" placeholder="ไม่มีสำนวนพ่วง" />
+                                         </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-4">สำนวนรวม</label>
+                                    <div class="col-md-7">
+                                        <div class="input-group">
+                                            <div class="input-group-addon" style="xbackground-color:#fefefe"><input disabled type="checkbox" ng-model="editingItem.add_checked" ng-true-value="'1'" ng-false-value="'0'"/></div>
+                                            <p type="text" ng-disabled="editingItem.add_checked!='1'" class="form-control" placeholder="ไม่มีสำนวนรวม">
+                                                <span  class="label label-mr label-black" ng-repeat="key in editingItem.add_ids |split">{{key}}</span>
+                                                <span ng-if="!editingItem.add_ids" class="text-muted">ไม่มีสำนวนรวม</span>
+                                            </p>
+                                            <div class="input-group-addon" title="เลือกคดี" ng-controller="MergeCaseCtrl" ng-click="ifcall(editingItem.add_checked=='1',open,'views/custom.select_cases_panel.html',editingItem)"><span class="glyphicon glyphicon-th-list"></span></div>
+                                        </div>
+                                    </div>
+                                </div>                          
                                 <div class="form-group">
                                     <!-- Text input-->
                                     <label class="col-md-2 control-label">หมายเหตุ</label>
@@ -180,17 +206,18 @@
 
 
 
-    <div ng-controller="CourtReportCtrl">
+    <div ng-controller="CourtReportCtrl as xctrl">
 
         <div ui-view></div>
 
 
-        <div ng-hide="!(urlEq('/court/cases') || urlEq('/court/cases/notify'))">
+        <div ng-hide="!(urlEq('/court/cases') || urlEq('/court/cases/notify') || urlEq('/court/cases/notify2'))">
             <div class="panel panel-default" ng-controller="CustomTableCtrl  as cmt" ng-init="$parent.cmt=cmt;setAPI('court_cases','custom.court.form1.html',{search:'searchText', court:'searchCourt', month:'searchMonth', year:'searchYear',_view:'_view()'},{court:true, month:true,year:true})">
                 <div class="panel-heading">
-                    <div class="text-right pull-right" style="position:relative;top:-0.6em">
-                        <span class="btn btn-notify" ng-click="notify()"><img   src="images/notify2.png" title="สำนวนไม่ได้จัดส่ง" /><span class="badge badge-notify">{{TableMeta.notsent || 0}}</span></span>
-                        <span class="btn btn-notify" ng-click="notify2()" style="padding-right:3em"><img src="images/notify1.png" title="สำเนาคำพิพากษาไม่ได้จัดส่ง" /><span  class="badge badge-notify">{{TableMeta.notsent2 || 0}}</span></span>
+                    <div class="text-right pull-right" style="position:relative;top:-0.25em">
+                        <span class="btn btn-notify btn-info" ng-click="notify()" >สำนวนไม่ได้จัดส่ง<span class="notify">{{TableMeta.notsent || 0}}</span></span>
+                        <span class="btn btn-notify btn-success" ng-click="notify2()" style="margin-right:4em">สำเนาคำพิพากษาไม่ได้จัดส่ง<span class="notify">{{TableMeta.notsent2 || 0}}</span></span>
+                        
                         <span ng-hide="urlEq('/court/cases/notify')" >
                             <button class="btn btn-success" ng-show="isSearchMode()" ng-click="setFilter()">
                                 <span class="glyphicon glyphicon-arrow-left"></span> ออกจากโหมดการค้นหา
@@ -199,7 +226,10 @@
                                 <span class="glyphicon glyphicon-search"></span><span class="hidden-sm hidden-xs"> ค้นหา</span>
                             </button>
                             <button ng-click="newItem({date_sent:today()})" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span><span class="hidden-sm hidden-xs"> เพิ่มคดี</span></button>
-                            <button ng-click="ifcall(($it.no_case_sent!='1'),editItem)" ng-show="($it.no_case_sent!='1') && hasSelected()" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span><span class="hidden-sm hidden-xs"> แก้ไขคดี</span></button>
+                            <button ng-click="ifcall(($it.no_case_sent!='1'),editItem)" ng-show="($it.no_case_sent!='1') && hasSelected()" class="btn btn-warning" ng-switch on="$it.no_case_sent==2">
+                            <span ng-switch-when="true"><span class="glyphicon glyphicon-star-empty"></span><span class="hidden-sm hidden-xs"> ส่งรายงานคดี</span></span>
+                            <span ng-switch-default><span class="glyphicon glyphicon-pencil"></span><span class="hidden-sm hidden-xs"> แก้ไขคดี</span></span>                            
+                            </button>
                             <button data-placement="bottom" data-trigger="click" bs-popover data-template="custom.confirm.popover.html"
                                     ng-click="removeItem()" ng-show="($it.no_case_sent!='1') && hasSelected()" class="btn btn-danger" data-auto-close="true">
                                 <span class="glyphicon glyphicon-remove"></span><span class="hidden-sm hidden-xs"> ลบคดี</span>
@@ -244,33 +274,33 @@
                                 <tr ng-repeat="it in $data"
                                     ng-click="selectRow(it);"
                                     ng-dblclick="ifcall(($it.no_case_sent!='1'),editItem)"
-                                    ng-class="{'active': isSelected(it),'text-red':it.no_case_sent=='1'}">
+                                    ng-class="{'active': isSelected(it),'text-red':it.no_case_sent=='1', 'text-info':it.no_case_sent==2, 'text-blue': isTextBlue(it)}">
                                     <td width="30" class="text-right text-muted"><span title="#{{it.id}}">{{startIdx + $index + 1}}.</span></td>
                                     <td data-title="'เลขรับสำนวนของภาค'" sortable="'auto_received_num'" hide">
-                                        {{it.auto_received_num}}
+                                        {{::it.auto_received_num}}
                                     </td>
                                     <td data-title="'เลขคดีดำ'" sortable="'number_black'">
-                                        {{it.number_black}}
+                                        {{::it.number_black}}
                                     </td>
 
                                     <td data-title="'โจทก์'" sortable="'plaintiff'">
-                                        {{it.plaintiff}}
+                                        {{::it.plaintiff}}
 
                                     </td>
                                     <td data-title="'จำเลย'" sortable="'defendant'">
-                                        {{it.defendant}}
+                                        {{::it.defendant}}
 
                                     </td>
                                     <td data-title="'ข้อหาพิมพ์ปก'" sortable="'topic_ids'">
-                                        {{it.topic_ids | lookup_topic}}
+                                        {{::it.topic_ids | lookup_topic}}
 
                                     </td>
                                     <td data-title="'ผลการส่งรายงานดดี'" sortable="'command_id'">
-                                        {{it.command_id | lookup_at }}
+                                        {{::it.command_id | lookup_at }}
 
                                     </td>
                                     <td data-title="'ผลการปฏิบัติ(ภาค)'" sortable="'result'">
-                                        {{it.result | lookup_result}}
+                                        {{::it.result | lookup_result}}
 
                                     </td>
                                     <td data-title="'ส่งสำนวน'" class="text-center" ng-switch="caseReceived(it)">

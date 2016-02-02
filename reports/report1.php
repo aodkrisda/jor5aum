@@ -70,7 +70,7 @@
 	if($dt2){
 		$r->where('date_received<?',$dt2['end']);
 	}else{
-		$r->where('date_received3<?',$dt1['end']);
+		$r->where('date_received<?',$dt1['end']);
 	}
 
 	$tm=$orm->groups()->select('id')->where('name','ความแพ่ง');
@@ -164,5 +164,5 @@
 	$_DICT=$cases;
 
     $html= $twig->render('report1.html', array('report_name'=>'รายงาน','date1'=>$date1,  'date2'=>$date2, 'type_id'=>$type_id, 'type_item'=>$atype, 'groups'=>$groups, 'courts'=>$courts));
-	//printPdf($html);
-	echo $html;
+	printPdf($html);
+	

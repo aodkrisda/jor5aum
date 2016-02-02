@@ -1,0 +1,246 @@
+﻿
+
+
+<div class="panel panel-default">
+    <div class="panel-heading" style="padding-bottom:0px;">
+        <h2 class="text-center" style="margin-top:0px">ส่งสำนวนและร่างคำสั่งคืน {{editingItem.user_id | lookup_court}}</h2>
+    </div>
+
+    <div class="panel-body" style="padding-bottom:0px;">
+
+        <form class="form form-horizontal readonly" name="form" style="padding-top:25px;padding-bottom:50px;">
+            <fieldset>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">เลขดำ</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.number_black}}">
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">เลขแดง</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.number_red}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">โจทก์</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.plaintiff}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">จำเลย</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.defendant}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">ประเภทคดี</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.type_id | lookup_type:'name':true}} - {{editingItem.type_id | lookup_type}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">ข้อหาพิมพ์ปก</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.title}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">วันที่รับฟ้อง</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.date_case | thai_date}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">ข้อหาสถิติ</label>
+                    <div class="col-md-8">
+                        <custom-readonly-topics ng-model="editingItem.topic_ids"></custom-readonly-topics>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">วันที่ศาลส่งร่างคำสั่ง</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.date_sent_a | thai_date}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">เลขที่ส่งร่างคำสั่งของศาล</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.number_sent_a}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">ชื่อผู้พิพากษาเจ้าของสำนวน</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.judge_id_a  | lookup_judge}}">
+                    </div>
+                </div>
+
+                <div class="row clearfix"></div>
+                <hr />
+                <div ng-if="editingItem.auto_received_num2">
+                    <div class="col-md-4 col-md-offset-4">
+                        <h3>เลขรับสำนวน <span class="glyphicon glyphicon-paperclip"></span> {{editingItem.auto_received_num2}}</h3>
+                    </div>
+                    <div class="row clearfix"></div>
+                    <hr />
+
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">สำนวนพ่วง</label>
+                    <div class="col-md-8">
+                         <div class="input-group">
+                             <div class="input-group-addon"  style="background-color:#F9DADA"><input type="checkbox" ng-model="editingItem.link_checked" ng-true-value="'1'" ng-false-value="'0'"  disabled/></div>
+                             <input type="text" readonly  class="form-control" ng-model="editingItem.link_ids" placeholder="ไม่มีสำนวนพ่วง" />
+                         </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">สำนวนรวม</label>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <div class="input-group-addon" style="background-color:#F9DADA"><input type="checkbox" ng-model="editingItem.add_checked" ng-true-value="'1'" ng-false-value="'0'" disabled/></div>
+                            <p type="text" class="form-control" style="background-color:#F9DADA">
+                                <span  class="label label-mr label-black" ng-repeat="key in editingItem.add_ids |split">{{key}}</span>
+                                <span ng-if="!editingItem.add_ids" class="text-muted">ไม่มีสำนวนรวม</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>      
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">วันที่ภาครับร่างคำสั่ง</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control input-md" value="{{editingItem.date_received3_a | thai_date}}">
+                    </div>
+                </div>
+                <div class="form-group col-md-6  has-feedback custom-dropdown">
+                    <label class="control-label col-md-4">ผู้ตรวจ 1 สั่งออก</label>
+                    <div class="col-md-8">
+                        <div custom-dropdown class="form-control input-md" ng-model="editingItem.judge_checkout1_id_a" data-options="judge_jor5_options"></div>
+                        <span class="form-control-feedback"><span class="caret"></span></span>
+
+                    </div>
+                </div>
+                <div class="row clearfix">
+
+                </div>
+                <div class="form-group col-md-6  has-feedback custom-dropdown">
+                    <label class="control-label col-md-4">อธ./รอง อธ./พ.อาวุโส</label>
+                    <div class="col-md-8">
+
+                        <div custom-dropdown class="form-control input-md" ng-model="editingItem.judge2_id_a" data-options="judge_jor5_options"></div>
+                        <span class="form-control-feedback"><span class="caret"></span></span>
+
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6  has-feedback custom-dropdown">
+                    <label class="control-label col-md-4">สั่งออกแทน</label>
+                    <div class="col-md-8">
+                        <div custom-dropdown class="form-control input-md" ng-model="editingItem.judge_checkout2_id_a" data-options="judge_jor5_options"></div>
+                        <span class="form-control-feedback"><span class="caret"></span></span>
+
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="form-group col-md-6 has-feedback custom-dropdown">
+                    <label class="control-label col-md-4">หน.ศาลฯประจำภาค</label>
+                    <div class="col-md-8">
+
+                        <div custom-dropdown class="form-control input-md" ng-model="editingItem.judge4_id_a" data-options="judge_jor5_options"></div>
+                        <span class="form-control-feedback"><span class="caret"></span></span>
+
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">วันที่ภาคส่งสำนวนกลับ</label>
+                    <div class="col-md-8">
+                        <span mode="0" ng-model="editingItem.date_sent5_a" placeholder="ยังไม่มีข้อมูล" custom-date-field></span>
+                    </div>
+                </div>
+                <div class="form-group col-md-6  has-feedback custom-dropdown">
+                    <label class="control-label col-md-4">ผลการปฏิบัติ</label>
+                    <div class="col-md-8">
+                        <div custom-dropdown class="form-control input-md" ng-model="editingItem.result" data-options="result_options"></div>
+                        <span class="form-control-feedback"><span class="caret"></span></span>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label class="control-label col-md-4">เลขที่ส่งสำนวนกลับของภาค</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control input-md" ng-model="editingItem.number_sent5_a">
+                    </div>
+                </div>
+                <div class="col-md-12" style="margin-top:2em">
+                    <label class="control-label col-md-2" style="padding-right:3em">หมายเหตุ</label>
+                    <div class="col-md-9">
+                        <textarea class="form-control" rows="3" ng-model="editingItem.form4_note_a"></textarea>
+                    </div>
+                </div>
+
+                <div class="col-md-8 col-md-offset-2" ng-controller="AdminForm4Ctrl as f4ctrl" ng-init="xctrl.f4=f4ctrl;load(editingItem.id)">
+                    <div class="row clearfix"></div>
+                    <hr />
+                    <div>
+                        <span ios-toggle ng-model="editingItem.return_checked" ng-true-value="'1'" ng-false-value="'0'"></span>
+                        <h4 style="display:inline;padding-left:1em"><strong>ส่งสำนวนคืนเพื่อทบทวนร่างคำพิพากษา</strong></h4>
+                        <!--
+                        <button ng-if="editingItem.return_checked=='1'" ng-click="addItem()" class="btn btn-primary pull-right">
+                            <span class="glyphicon glyphicon-plus"></span> ส่งสำนวนคืน
+                        </button>
+                            -->
+                    </div>
+                    <div ng-if="editingItem.return_checked=='1'" style="margin-top:1em;">
+
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ครั้งที่</th>
+                                    <th>เลขที่ส่ง</th>
+                                    <th>วันที่ส่ง</th>
+                                    <th colspan="2">หมายเหตุ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="it in items">
+                                    <td width="80" class="text-center"><strong>{{$index+1}}</strong></td>
+                                    <td width="25%"><input type="text" ng-model="it['number_return']" class="form-control" placeholder="ยังไม่มีข้อมูล" /></td>
+                                    <td width="25%"><span mode="0" ng-model="it['date_return']" placeholder="ยังไม่มีข้อมูล" custom-date-field></span></td>
+                                    <td><input class="form-control" ng-model="it['note_return']" /></td>
+                                    <td style="width:1em" class="text-danger"><span class="btn" ng-click="setRemoveItem(it)" title="ลบรายการส่งสำนวนคืนนี้ออก" data-placement="left" data-trigger="click" bs-popover data-template="custom.confirm.popover.html" data-auto-close="true"><span class="glyphicon glyphicon-remove"></span></span></td>
+                                </tr>
+                                <tr ng-if="!items.length">
+                                    <td colspan="5">
+                                        <h3 class="text-muted text-center">ยังไม่มีรายการส่งสำนวนคืน</h3>
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-success btn-block" ng-click="saveForm(editingItem,2,xctrl.f4)"><span class="fa fa-save"></span> บันทึกข้อมูล</button>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-warning btn-block" ng-click="goBack()"><span class="fa fa-close"></span> ยกเลิก</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
