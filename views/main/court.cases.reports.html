@@ -2,15 +2,15 @@
     <div class="arrow"></div>
     <h3 class="popover-title"><span class="glyphicon glyphicon-share"></span> <strong>พิมพ์รายงาน</strong></h3>
     <div class="popover-content" style="padding-top:2em;padding-bottom:2em">
-        <a href="#court/reports/report1" class="btn btn-info btn-block">
+        <button ng-click="$hide();setReport('views/court_print_report1.html')"  class="btn btn-info btn-block">
             <span class="glyphicon glyphicon-print"></span> รายงานการจัดส่งคดี 
-        </a>
-        <a href="#court/reports/report3" class="btn btn-info btn-block">
+        </button>
+        <button ng-click="$hide();setReport('views/court_print_report3.html')"  class="btn btn-info btn-block">
             <span class="glyphicon glyphicon-print"></span> รายงานคดีค้างส่งสำนวน
-        </a>                 
-        <a href="#court/reports/report4" class="btn btn-info btn-block">
+        </button>                 
+        <button ng-click="$hide();setReport('views/court_print_report4.html')"  class="btn btn-info btn-block">
             <span class="glyphicon glyphicon-print"></span> รายงานคดีค้างส่งสำเนาคำพิพากษา
-        </a>
+        </button>
 
     </div>
 </div>

@@ -4,13 +4,14 @@
             <ul class="nav navbar-nav navbar-right" ng-if="$root.getUserId()">
                 <li data-match-route="admin/menu"><a href="#admin/menu"><img   title="เมนูหลก"  class="btn-home" src="images/home.png"/></a></li>                    
             </ul>
-           <div style="position:relative; top:25px;text-align:right;color:#555555;padding-right:110px">[ {{getUser().name}} ]</div>
+           <!--
+           <div style="position:relative; top:25px;text-align:left;color:#555555;padding-left:435px;font-weight:bold">[ {{getUser().name}} ]</div>-->
         </div>
         <div ng-if="!isAdmin()" >
             <ul class="nav navbar-nav navbar-right" ng-if="$root.getUserId()">
                 <li data-match-route="court/menu"><a href="#court/menu"><img  title="เมนูหลก" class="btn-home" src="images/home.png"/></a></li>     
             </ul>
-            <div style="position:relative; top:25px;text-align:right;color:#555555;padding-right:110px">[ {{getUser().name}} ]</div>
+           <div style="position:relative; top:25px;text-align:left;color:#555555;padding-left:435px;font-weight:bold">[ {{getUser().name}} ]</div>
         </div>
     </div>
 </div>

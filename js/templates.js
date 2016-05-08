@@ -4311,15 +4311,10 @@ angular.module('App').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('views/admin_print_report1.html',
     "<div class=\"row\" ng-controller=\"PrintReportCtrl\">\n" +
-    "\t<div class=\"col-md-6 col-md-offset-3\">\n" +
-    "\t\t<div class=\"panel panel-default\">\n" +
-    "\t\t  <div class=\"panel-heading\">\n" +
     "\t\t    \t<h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\n" +
     "\t\t    \t<h4 class=\"text-info\">สรุปรายงานคดีของศาลในเขตอำนาจอธิบดีผู้พิพากษาภาค 5</h4>\n" +
-    "\t\t  </div>\n" +
-    "\t\t  <div class=\"panel-body\">\n" +
-    "\t\t  \t<div class=\"row\">\n" +
-    "\t\t  \t<div class=\"col-md-8 col-md-offset-2\">\n" +
+    "<br>\n" +
+    "\n" +
     "\t\t  \t<form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/report1.php\" target=\"_blank\">\n" +
     "\t\t  \t<input type=\"hidden\" name=\"date1\" value=\"{{options.date_from}}\">\n" +
     "\t\t  \t<input type=\"hidden\" name=\"date2\" value=\"{{options.date_to}}\">\n" +
@@ -4349,35 +4344,18 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "            \t\t<button class=\"btn btn-primary btn-block\" ng-disabled=\"!options.date_from\"><span class=\"glyphicon glyphicon-print\"></span> สร้างรายงาน</button>\n" +
     " \t\t\t\t</div>\n" +
     " \t\t\t</form>\n" +
-    " \t\t\t</div>\n" +
-    " \t\t\t</div>\n" +
-    "\t\t  </div>\n" +
-    "\t\t</div>\n" +
-    "\t<div>\n" +
-    "<div>"
+    "</div>"
   );
 
 
   $templateCache.put('views/admin_print_report10.html',
     "<div class=\"row\" ng-controller=\"PrintReportCtrl\">\r" +
     "\n" +
-    "\t<div class=\"col-md-6 col-md-offset-3\">\r" +
-    "\n" +
-    "\t\t<div class=\"panel panel-default\">\r" +
-    "\n" +
-    "\t\t  <div class=\"panel-heading\">\r" +
-    "\n" +
     "\t\t    \t<h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\r" +
     "\n" +
     "\t\t    \t<h4 class=\"text-info\">บัญชีรายละเอียดสำนวนที่ไม่ได้ส่งสำเนาคำพิพากษาให้สำนักงานอธิบดีผู้พิพากษาภาค 5</h4>\r" +
     "\n" +
-    "\t\t  </div>\r" +
-    "\n" +
-    "\t\t  <div class=\"panel-body\">\r" +
-    "\n" +
-    "\t\t  \t<div class=\"row\">\r" +
-    "\n" +
-    "\t\t  \t<div class=\"col-md-8 col-md-offset-2\">\r" +
+    "<br>\r" +
     "\n" +
     "              <form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/report10.php\" target=\"_blank\">\r" +
     "\n" +
@@ -4433,31 +4411,15 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "              </form>\r" +
     "\n" +
-    " \t\t\t</div>\r" +
-    "\n" +
-    " \t\t\t</div>\r" +
-    "\n" +
-    "\t\t  </div>\r" +
-    "\n" +
-    "\t\t</div>\r" +
-    "\n" +
-    "\t<div>\r" +
-    "\n" +
-    "<div>"
+    "</div>"
   );
 
 
   $templateCache.put('views/admin_print_report11.html',
     "<div class=\"row\" ng-controller=\"PrintReportCtrl\">\n" +
-    "\t<div class=\"col-md-6 col-md-offset-3\">\n" +
-    "\t\t<div class=\"panel panel-default\">\n" +
-    "\t\t  <div class=\"panel-heading\">\n" +
     "\t\t    \t<h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\n" +
     "\t\t    \t<h4 class=\"text-info\">รายงานระยะเวลาการตรวจสำนวนและร่างคำพิพากษา</h4>\n" +
-    "\t\t  </div>\n" +
-    "\t\t  <div class=\"panel-body\">\n" +
-    "\t\t  \t<div class=\"row\">\n" +
-    "\t\t  \t<div class=\"col-md-8 col-md-offset-2\">\n" +
+    "<br>\n" +
     "\t\t  \t<form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/report11.php\" target=\"_blank\">\n" +
     "\t\t  \t<input type=\"hidden\" name=\"date1\" value=\"{{options.date_from}}\">\n" +
     "\t\t  \t<input type=\"hidden\" name=\"date2\" value=\"{{options.date_to}}\">\n" +
@@ -4480,26 +4442,15 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "            \t\t<button class=\"btn btn-primary btn-block\" ng-disabled=\"!options.date_from\"><span class=\"glyphicon glyphicon-print\"></span> สร้างรายงาน</button>\n" +
     " \t\t\t\t</div>\n" +
     " \t\t\t</form>\n" +
-    " \t\t\t</div>\n" +
-    " \t\t\t</div>\n" +
-    "\t\t  </div>\n" +
-    "\t\t</div>\n" +
-    "\t<div>\n" +
-    "<div>"
+    "</div>"
   );
 
 
   $templateCache.put('views/admin_print_report12.html',
     "<div class=\"row\" ng-controller=\"PrintReportCtrl\">\n" +
-    "\t<div class=\"col-md-6 col-md-offset-3\">\n" +
-    "\t\t<div class=\"panel panel-default\">\n" +
-    "\t\t  <div class=\"panel-heading\">\n" +
     "\t\t    \t<h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\n" +
     "\t\t    \t<h4 class=\"text-info\">รายงานระยะเวลาการตรวจสำนวนและร่างคำพิพากษา</h4>\n" +
-    "\t\t  </div>\n" +
-    "\t\t  <div class=\"panel-body\">\n" +
-    "\t\t  \t<div class=\"row\">\n" +
-    "\t\t  \t<div class=\"col-md-8 col-md-offset-2\">\n" +
+    "<br>\n" +
     "\t\t  \t<form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/report12.php\" target=\"_blank\">\n" +
     "\t\t  \t<input type=\"hidden\" name=\"date1\" value=\"{{options.date_from}}\">\n" +
     "\t\t  \t<input type=\"hidden\" name=\"date2\" value=\"{{options.date_to}}\">\n" +
@@ -4522,26 +4473,16 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "            \t\t<button class=\"btn btn-primary btn-block\" ng-disabled=\"!options.date_from\"><span class=\"glyphicon glyphicon-print\"></span> สร้างรายงาน</button>\n" +
     " \t\t\t\t</div>\n" +
     " \t\t\t</form>\n" +
-    " \t\t\t</div>\n" +
-    " \t\t\t</div>\n" +
-    "\t\t  </div>\n" +
-    "\t\t</div>\n" +
-    "\t<div>\n" +
-    "<div>"
+    "</div>"
   );
 
 
   $templateCache.put('views/admin_print_report13.html',
     "<div class=\"row\" ng-controller=\"PrintReportCtrl\">\n" +
-    "\t<div class=\"col-md-6 col-md-offset-3\">\n" +
-    "\t\t<div class=\"panel panel-default\">\n" +
-    "\t\t\t  <div class=\"panel-heading\">\n" +
     "\t\t\t    \t<h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\n" +
     "\t\t\t    \t<h4 class=\"text-info\">รายงานระยะเวลาการตรวจสำนวนและร่างคำพิพากษา (รอง อธ.)</h4>\n" +
-    "\t\t\t  </div>\n" +
-    "\t\t  \t<div class=\"panel-body\">\n" +
-    "\t\t\t  \t<div class=\"row\">\n" +
-    "\t\t\t  \t<div class=\"col-md-8 col-md-offset-2\">\n" +
+    "<br>\n" +
+    "\n" +
     "\t\t\t  \t\t<form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/report13.php\" target=\"_blank\">\n" +
     "\t\t\t  \t\t\t<input type=\"hidden\" name=\"date1\" value=\"{{options.date_from}}\">\n" +
     "\t\t\t  \t\t\t<input type=\"hidden\" name=\"date2\" value=\"{{options.date_to}}\">\n" +
@@ -4572,26 +4513,16 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\t\t\t            \t\t\t<button class=\"btn btn-primary btn-block\" ng-disabled=\"!(options.judge_id && options.date_from)\"><span class=\"glyphicon glyphicon-print\"></span> สร้างรายงาน</button>\n" +
     "\t\t\t \t\t\t</div>\n" +
     " \t\t\t\t\t</form>\n" +
-    " \t\t\t\t</div>\n" +
-    " \t\t\t\t</div>\n" +
-    " \t\t\t</div>\n" +
-    "\t\t</div>\n" +
-    "\t<div>\n" +
-    "<div>"
+    "</div>"
   );
 
 
   $templateCache.put('views/admin_print_report14.html',
     "<div class=\"row\" ng-controller=\"PrintReportCtrl\">\n" +
-    "\t<div class=\"col-md-6 col-md-offset-3\">\n" +
-    "\t\t<div class=\"panel panel-default\">\n" +
-    "\t\t\t  <div class=\"panel-heading\">\n" +
+    "\n" +
     "\t\t\t    \t<h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\n" +
     "\t\t\t    \t<h4 class=\"text-info\">รายงานระยะเวลาการตรวจสำนวนและร่างคำพิพากษา (หัวหน้าภาค)</h4>\n" +
-    "\t\t\t  </div>\n" +
-    "\t\t  \t<div class=\"panel-body\">\n" +
-    "\t\t\t  \t<div class=\"row\">\n" +
-    "\t\t\t  \t<div class=\"col-md-8 col-md-offset-2\">\n" +
+    "<br>\n" +
     "\t\t\t  \t\t<form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/report14.php\" target=\"_blank\">\n" +
     "\t\t\t  \t\t\t<input type=\"hidden\" name=\"date1\" value=\"{{options.date_from}}\">\n" +
     "\t\t\t  \t\t\t<input type=\"hidden\" name=\"date2\" value=\"{{options.date_to}}\">\n" +
@@ -4622,26 +4553,17 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\t\t\t            \t\t\t<button class=\"btn btn-primary btn-block\" ng-disabled=\"!(options.judge_id && options.date_from)\"><span class=\"glyphicon glyphicon-print\"></span> สร้างรายงาน</button>\n" +
     "\t\t\t \t\t\t</div>\n" +
     " \t\t\t\t\t</form>\n" +
-    " \t\t\t\t</div>\n" +
-    " \t\t\t\t</div>\n" +
-    " \t\t\t</div>\n" +
-    "\t\t</div>\n" +
-    "\t<div>\n" +
+    "\n" +
     "<div>"
   );
 
 
   $templateCache.put('views/admin_print_report15.html',
     "<div class=\"row\" ng-controller=\"PrintReportCtrl\">\n" +
-    "\t<div class=\"col-md-6 col-md-offset-3\">\n" +
-    "\t\t<div class=\"panel panel-default\">\n" +
-    "\t\t\t  <div class=\"panel-heading\">\n" +
+    "\n" +
     "\t\t\t    \t<h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\n" +
     "\t\t\t    \t<h4 class=\"text-info\">บัญชีรายงานการตรวจสำนวนและสั่งออกร่างคำพิพากษา</h4>\n" +
-    "\t\t\t  </div>\n" +
-    "\t\t  \t<div class=\"panel-body\">\n" +
-    "\t\t\t  \t<div class=\"row\">\n" +
-    "\t\t\t  \t<div class=\"col-md-8 col-md-offset-2\">\n" +
+    "<br>\n" +
     "\t\t\t  \t\t<form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/report15.php\" target=\"_blank\">\n" +
     "\t\t\t  \t\t\t<input type=\"hidden\" name=\"date1\" value=\"{{options.date_from}}\">\n" +
     "\t\t\t  \t\t\t<input type=\"hidden\" name=\"date2\" value=\"{{options.date_to}}\">\n" +
@@ -4664,26 +4586,17 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\t\t\t            \t\t\t<button class=\"btn btn-primary btn-block\" ng-disabled=\"!(options.date_from)\"><span class=\"glyphicon glyphicon-print\"></span> สร้างรายงาน</button>\n" +
     "\t\t\t \t\t\t</div>\n" +
     " \t\t\t\t\t</form>\n" +
-    " \t\t\t\t</div>\n" +
-    " \t\t\t\t</div>\n" +
-    " \t\t\t</div>\n" +
-    "\t\t</div>\n" +
-    "\t<div>\n" +
+    "\n" +
     "<div>"
   );
 
 
   $templateCache.put('views/admin_print_report2.html',
     "<div class=\"row\" ng-controller=\"PrintReportCtrl\">\n" +
-    "\t<div class=\"col-md-6 col-md-offset-3\">\n" +
-    "\t\t<div class=\"panel panel-default\">\n" +
-    "\t\t  <div class=\"panel-heading\">\n" +
+    "\n" +
     "\t\t    \t<h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\n" +
     "\t\t    \t<h4 class=\"text-info\">แบบแสดงจำนวนรายงานคดีที่จัดส่งสำนักงานอธิบดีผู้พิพากษาภาค 5</h4>\n" +
-    "\t\t  </div>\n" +
-    "\t\t  <div class=\"panel-body\">\n" +
-    "\t\t  \t<div class=\"row\">\n" +
-    "\t\t  \t<div class=\"col-md-8 col-md-offset-2\">\n" +
+    "<br>\n" +
     "\t\t  \t<form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/report2.php\" target=\"_blank\">\n" +
     "\t\t  \t<input type=\"hidden\" name=\"date1\" value=\"{{options.date_from}}\">\n" +
     "\t\t  \t<input type=\"hidden\" name=\"date2\" value=\"{{options.date_to}}\">\n" +
@@ -4718,11 +4631,7 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "            \t\t<button class=\"btn btn-primary btn-block\" ng-disabled=\"!(options.date_from && options.user_id)\"><span class=\"glyphicon glyphicon-print\"></span> สร้างรายงาน</button>\n" +
     " \t\t\t\t</div>\n" +
     " \t\t\t</form>\n" +
-    " \t\t\t</div>\n" +
-    " \t\t\t</div>\n" +
-    "\t\t  </div>\n" +
-    "\t\t</div>\n" +
-    "\t<div>\n" +
+    "\n" +
     "<div>"
   );
 
@@ -4730,23 +4639,13 @@ angular.module('App').run(['$templateCache', function($templateCache) {
   $templateCache.put('views/admin_print_report4.html',
     "<div class=\"row\" ng-controller=\"PrintReportCtrl\" ng-init=\"options.date_from=today()\">\r" +
     "\n" +
-    "\t<div class=\"col-md-6 col-md-offset-3\">\r" +
-    "\n" +
-    "\t\t<div class=\"panel panel-default\">\r" +
-    "\n" +
-    "\t\t  <div class=\"panel-heading\">\r" +
+    "\r" +
     "\n" +
     "\t\t    \t<h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\r" +
     "\n" +
     "\t\t    \t<h4 class=\"text-info\">รายงานข้อมูลการจัดส่งสำนวนเพื่อตรวจร่างคำพิพากษาของศาลในภาค5</h4>\r" +
     "\n" +
-    "\t\t  </div>\r" +
-    "\n" +
-    "\t\t  <div class=\"panel-body\">\r" +
-    "\n" +
-    "\t\t  \t<div class=\"row\">\r" +
-    "\n" +
-    "\t\t  \t<div class=\"col-md-8 col-md-offset-2\">\r" +
+    "<br>\r" +
     "\n" +
     "\t\t  \t<form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/report4.php\" target=\"_blank\">\r" +
     "\n" +
@@ -4790,15 +4689,7 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     " \t\t\t</form>\r" +
     "\n" +
-    " \t\t\t</div>\r" +
-    "\n" +
-    " \t\t\t</div>\r" +
-    "\n" +
-    "\t\t  </div>\r" +
-    "\n" +
-    "\t\t</div>\r" +
-    "\n" +
-    "\t<div>\r" +
+    "\r" +
     "\n" +
     "<div>"
   );
@@ -4807,23 +4698,13 @@ angular.module('App').run(['$templateCache', function($templateCache) {
   $templateCache.put('views/admin_print_report5.html',
     "<div class=\"row\" ng-controller=\"PrintReportCtrl\">\r" +
     "\n" +
-    "\t<div class=\"col-md-6 col-md-offset-3\">\r" +
-    "\n" +
-    "\t\t<div class=\"panel panel-default\">\r" +
-    "\n" +
-    "\t\t  <div class=\"panel-heading\">\r" +
+    "\r" +
     "\n" +
     "\t\t    \t<h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\r" +
     "\n" +
     "\t\t    \t<h4 class=\"text-info\">รายงานข้อมูลการจัดส่งสำนวนเพื่อตรวจร่างคำพิพากษาของศาลในภาค5</h4>\r" +
     "\n" +
-    "\t\t  </div>\r" +
-    "\n" +
-    "\t\t  <div class=\"panel-body\">\r" +
-    "\n" +
-    "\t\t  \t<div class=\"row\">\r" +
-    "\n" +
-    "\t\t  \t<div class=\"col-md-8 col-md-offset-2\">\r" +
+    "<br>\r" +
     "\n" +
     "\t\t  \t<form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/report5.php\" target=\"_blank\">\r" +
     "\n" +
@@ -4895,15 +4776,7 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     " \t\t\t</form>\r" +
     "\n" +
-    " \t\t\t</div>\r" +
-    "\n" +
-    " \t\t\t</div>\r" +
-    "\n" +
-    "\t\t  </div>\r" +
-    "\n" +
-    "\t\t</div>\r" +
-    "\n" +
-    "\t<div>\r" +
+    "\r" +
     "\n" +
     "<div>"
   );
@@ -4911,15 +4784,10 @@ angular.module('App').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('views/admin_print_report6.html',
     "<div class=\"row\" ng-controller=\"PrintReportCtrl\">\n" +
-    "\t<div class=\"col-md-6 col-md-offset-3\">\n" +
-    "\t\t<div class=\"panel panel-default\">\n" +
-    "\t\t  <div class=\"panel-heading\">\n" +
+    "\n" +
     "\t\t    \t<h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\n" +
     "\t\t    \t<h4 class=\"text-info\">รายงานข้อมูลการจัดส่งสำนวนเพื่อตรวจร่างคำพิพากษาของศาลในภาค5</h4>\n" +
-    "\t\t  </div>\n" +
-    "\t\t  <div class=\"panel-body\">\n" +
-    "\t\t  \t<div class=\"row\">\n" +
-    "\t\t  \t<div class=\"col-md-8 col-md-offset-2\">\n" +
+    "<br>\n" +
     "\t\t  \t<form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/report6.php\" target=\"_blank\">\n" +
     "\t\t  \t<input type=\"hidden\" name=\"date1\" value=\"{{options.date_from}}\">\n" +
     "\t\t  \t<input type=\"hidden\" name=\"type_id\" value=\"{{options.type_id}}\">\n" +
@@ -4942,11 +4810,7 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "            \t\t<button class=\"btn btn-primary btn-block\" ng-disabled=\"!options.date_from\"><span class=\"glyphicon glyphicon-print\"></span> สร้างรายงาน</button>\n" +
     " \t\t\t\t</div>\n" +
     " \t\t\t</form>\n" +
-    " \t\t\t</div>\n" +
-    " \t\t\t</div>\n" +
-    "\t\t  </div>\n" +
-    "\t\t</div>\n" +
-    "\t<div>\n" +
+    "\n" +
     "<div>"
   );
 
@@ -4954,23 +4818,13 @@ angular.module('App').run(['$templateCache', function($templateCache) {
   $templateCache.put('views/admin_print_report7.html',
     "<div class=\"row\" ng-controller=\"PrintReportCtrl\">\r" +
     "\n" +
-    "\t<div class=\"col-md-6 col-md-offset-3\">\r" +
-    "\n" +
-    "\t\t<div class=\"panel panel-default\">\r" +
-    "\n" +
-    "\t\t  <div class=\"panel-heading\">\r" +
+    "\r" +
     "\n" +
     "\t\t    \t<h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\r" +
     "\n" +
     "\t\t    \t<h4 class=\"text-info\">รายงานข้อมูลการจัดส่งสำนวนเพื่อตรวจร่างคำพิพากษาของศาลในภาค5</h4>\r" +
     "\n" +
-    "\t\t  </div>\r" +
-    "\n" +
-    "\t\t  <div class=\"panel-body\">\r" +
-    "\n" +
-    "\t\t  \t<div class=\"row\">\r" +
-    "\n" +
-    "\t\t  \t<div class=\"col-md-8 col-md-offset-2\">\r" +
+    "<br>\r" +
     "\n" +
     "              <form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/report7.php\" target=\"_blank\">\r" +
     "\n" +
@@ -5022,15 +4876,7 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "              </form>\r" +
     "\n" +
-    " \t\t\t</div>\r" +
-    "\n" +
-    " \t\t\t</div>\r" +
-    "\n" +
-    "\t\t  </div>\r" +
-    "\n" +
-    "\t\t</div>\r" +
-    "\n" +
-    "\t<div>\r" +
+    "\r" +
     "\n" +
     "<div>"
   );
@@ -5039,23 +4885,13 @@ angular.module('App').run(['$templateCache', function($templateCache) {
   $templateCache.put('views/admin_print_report8.html',
     "<div class=\"row\" ng-controller=\"PrintReportCtrl\">\r" +
     "\n" +
-    "\t<div class=\"col-md-6 col-md-offset-3\">\r" +
-    "\n" +
-    "\t\t<div class=\"panel panel-default\">\r" +
-    "\n" +
-    "\t\t  <div class=\"panel-heading\">\r" +
+    "\r" +
     "\n" +
     "\t\t    \t<h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\r" +
     "\n" +
     "\t\t    \t<h4 class=\"text-info\">บัญชีรายละเอียดสำนวนที่ไม่ได้ส่งสำเนาคำพิพากษาให้สำนักงานอธิบดีผู้พิพากษาภาค 5</h4>\r" +
     "\n" +
-    "\t\t  </div>\r" +
-    "\n" +
-    "\t\t  <div class=\"panel-body\">\r" +
-    "\n" +
-    "\t\t  \t<div class=\"row\">\r" +
-    "\n" +
-    "\t\t  \t<div class=\"col-md-8 col-md-offset-2\">\r" +
+    "<br>\r" +
     "\n" +
     "              <form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/report8.php\" target=\"_blank\">\r" +
     "\n" +
@@ -5107,15 +4943,7 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "              </form>\r" +
     "\n" +
-    " \t\t\t</div>\r" +
-    "\n" +
-    " \t\t\t</div>\r" +
-    "\n" +
-    "\t\t  </div>\r" +
-    "\n" +
-    "\t\t</div>\r" +
-    "\n" +
-    "\t<div>\r" +
+    "\r" +
     "\n" +
     "<div>"
   );
@@ -5124,23 +4952,13 @@ angular.module('App').run(['$templateCache', function($templateCache) {
   $templateCache.put('views/admin_print_report9.html',
     "<div class=\"row\" ng-controller=\"PrintReportCtrl\">\r" +
     "\n" +
-    "\t<div class=\"col-md-6 col-md-offset-3\">\r" +
-    "\n" +
-    "\t\t<div class=\"panel panel-default\">\r" +
-    "\n" +
-    "\t\t  <div class=\"panel-heading\">\r" +
+    "\r" +
     "\n" +
     "\t\t    \t<h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\r" +
     "\n" +
     "\t\t    \t<h4 class=\"text-info\">บัญชีรายละเอียดสำนวนที่ไม่ได้ส่งสำเนาคำพิพากษาให้สำนักงานอธิบดีผู้พิพากษาภาค 5</h4>\r" +
     "\n" +
-    "\t\t  </div>\r" +
-    "\n" +
-    "\t\t  <div class=\"panel-body\">\r" +
-    "\n" +
-    "\t\t  \t<div class=\"row\">\r" +
-    "\n" +
-    "\t\t  \t<div class=\"col-md-8 col-md-offset-2\">\r" +
+    "<br>\r" +
     "\n" +
     "              <form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/report9.php\" target=\"_blank\">\r" +
     "\n" +
@@ -5196,15 +5014,7 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "              </form>\r" +
     "\n" +
-    " \t\t\t</div>\r" +
-    "\n" +
-    " \t\t\t</div>\r" +
-    "\n" +
-    "\t\t  </div>\r" +
-    "\n" +
-    "\t\t</div>\r" +
-    "\n" +
-    "\t<div>\r" +
+    "\r" +
     "\n" +
     "<div>"
   );
@@ -9990,23 +9800,11 @@ angular.module('App').run(['$templateCache', function($templateCache) {
   $templateCache.put('views/court_print_report1.html',
     "<div class=\"row\" ng-controller=\"PrintReportCtrl\" ng-init=\"options.date_from=today()\">\r" +
     "\n" +
-    "\t<div class=\"col-md-6 col-md-offset-3\">\r" +
-    "\n" +
-    "\t\t<div class=\"panel panel-default\">\r" +
-    "\n" +
-    "\t\t  <div class=\"panel-heading\">\r" +
-    "\n" +
     "\t\t    \t<h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\r" +
     "\n" +
     "\t\t    \t<h4 class=\"text-info\">รายงานการจัดส่งคดี ไปยังสำนักงานอธิบดีผู้พิพากษาภาค5</h4>\r" +
     "\n" +
-    "\t\t  </div>\r" +
-    "\n" +
-    "\t\t  <div class=\"panel-body\">\r" +
-    "\n" +
-    "\t\t  \t<div class=\"row\">\r" +
-    "\n" +
-    "\t\t  \t<div class=\"col-md-8 col-md-offset-2\">\r" +
+    "<br>\r" +
     "\n" +
     "\t\t  \t<form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/court_report1.php\" target=\"_blank\">\r" +
     "\n" +
@@ -10060,52 +9858,22 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     " \t\t\t</form>\r" +
     "\n" +
-    " \t\t\t</div>\r" +
-    "\n" +
-    " \t\t\t</div>\r" +
-    "\n" +
-    "\t\t  </div>\r" +
-    "\n" +
-    "\t\t</div>\r" +
-    "\n" +
-    "\t<div>\r" +
-    "\n" +
-    "<div>"
+    "      </div>"
   );
 
 
   $templateCache.put('views/court_print_report2.html',
-    "<div class=\"modal fade\" tabindex=\"-1\" role=\"dialog\">\r" +
-    "\n" +
-    "  <div class=\"modal-dialog\">\r" +
-    "\n" +
-    "    <div class=\"modal-content col-md-12\">\r" +
-    "\n" +
-    "\r" +
-    "\n" +
     "<div class=\"row\" ng-controller=\"PrintReportCtrl\" ng-init=\"options.date_from=today()\">\r" +
     "\n" +
-    "\t<div class=\"col-md-6 col-md-offset-3\">\r" +
+    "          <h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\r" +
     "\n" +
-    "\t\t<div class=\"panel panel-default\">\r" +
+    "          <h4 class=\"text-info\">รายงานการจัดส่งสำนวนเพื่อตรวจร่างคำพิพากษา ไปยังสำนักงานอธิบดีผู้พิพากษาภาค5</h4>\r" +
     "\n" +
-    "\t\t  <div class=\"panel-heading\">\r" +
+    "        <br>\r" +
     "\n" +
-    "\t\t    \t<h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\r" +
+    "        <form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/court_report2.php\" target=\"_blank\">\r" +
     "\n" +
-    "\t\t    \t<h4 class=\"text-info\">รายงานการจัดส่งสำนวนเพื่อตรวจร่างคำพิพากษา ไปยังสำนักงานอธิบดีผู้พิพากษาภาค5</h4>\r" +
-    "\n" +
-    "\t\t  </div>\r" +
-    "\n" +
-    "\t\t  <div class=\"panel-body\">\r" +
-    "\n" +
-    "\t\t  \t<div class=\"row\">\r" +
-    "\n" +
-    "\t\t  \t<div class=\"col-md-8 col-md-offset-2\">\r" +
-    "\n" +
-    "\t\t  \t<form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/court_report2.php\" target=\"_blank\">\r" +
-    "\n" +
-    "\t\t  \t<input type=\"hidden\" name=\"date1\" value=\"{{options.date_from}}\">\r" +
+    "        <input type=\"hidden\" name=\"date1\" value=\"{{options.date_from}}\">\r" +
     "\n" +
     "               <input type=\"hidden\" name=\"date2\" value=\"{{options.date_to}}\">\r" +
     "\n" +
@@ -10121,9 +9889,9 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "                  </select>\r" +
     "\n" +
-    "              </div>\t  \r" +
+    "              </div>    \r" +
     "\n" +
-    "        \t\t<label>ประจำเดือน</label>\r" +
+    "            <label>ประจำเดือน</label>\r" +
     "\n" +
     "            <div class=\"row\">\r" +
     "\n" +
@@ -10147,60 +9915,30 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "               \r" +
     "\n" +
-    "            \t<hr>\r" +
+    "              <hr>\r" +
     "\n" +
-    "            \t<div class=\"col-md-6 col-md-offset-3\">\r" +
+    "              <div class=\"col-md-6 col-md-offset-3\">\r" +
     "\n" +
-    "            \t\t<button class=\"btn btn-primary btn-block\" ng-disabled=\"!options.date_from\"><span class=\"glyphicon glyphicon-print\"></span> สร้างรายงาน</button>\r" +
+    "                <button class=\"btn btn-primary btn-block\" ng-disabled=\"!options.date_from\"><span class=\"glyphicon glyphicon-print\"></span> สร้างรายงาน</button>\r" +
     "\n" +
-    " \t\t\t\t</div>\r" +
+    "        </div>\r" +
     "\n" +
-    " \t\t\t</form>\r" +
-    "\n" +
-    " \t\t\t</div>\r" +
-    "\n" +
-    " \t\t\t</div>\r" +
-    "\n" +
-    "\t\t  </div>\r" +
-    "\n" +
-    "\t\t</div>\r" +
-    "\n" +
-    "\t<div>\r" +
-    "\n" +
-    "<div>\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "</div>\r" +
-    "\n" +
-    "</div>\r" +
+    "      </form>\r" +
     "\n" +
     "</div>"
   );
 
 
   $templateCache.put('views/court_print_report3.html',
-    "<div class=\"row\" ng-controller=\"PrintReportCtrl\" ng-init=\"options.date_from=today()\">\r" +
-    "\n" +
-    "  <div class=\"col-md-6 col-md-offset-3\">\r" +
-    "\n" +
-    "    <div class=\"panel panel-default\">\r" +
-    "\n" +
-    "      <div class=\"panel-heading\">\r" +
+    "<div class=\"row\" ng-controller=\"PrintReportCtrl\"  ng-init=\"options.date_from=today()\">\r" +
     "\n" +
     "          <h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\r" +
     "\n" +
     "          <h4 class=\"text-info\">รายงานคดีค้างส่งสำนวน (ยังไม่ได้ส่งสำนวนให้ภาคตรวจ)</h4>\r" +
     "\n" +
-    "      </div>\r" +
+    "<br>\r" +
     "\n" +
-    "      <div class=\"panel-body\">\r" +
-    "\n" +
-    "        <div class=\"row\">\r" +
-    "\n" +
-    "        <div class=\"col-md-8 col-md-offset-2\">\r" +
+    "\r" +
     "\n" +
     "        <form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/court_report3.php\" target=\"_blank\">\r" +
     "\n" +
@@ -10262,42 +10000,20 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "      \r" +
     "\n" +
-    "      </form>\r" +
-    "\n" +
-    "      </div>\r" +
-    "\n" +
-    "      </div>\r" +
-    "\n" +
-    "      </div>\r" +
-    "\n" +
-    "    </div>\r" +
-    "\n" +
-    "  <div>\r" +
-    "\n" +
-    "<div>"
+    "</div>"
   );
 
 
   $templateCache.put('views/court_print_report4.html',
     "<div class=\"row\" ng-controller=\"PrintReportCtrl\" ng-init=\"options.date_from=today()\">\r" +
     "\n" +
-    "  <div class=\"col-md-6 col-md-offset-3\">\r" +
-    "\n" +
-    "    <div class=\"panel panel-default\">\r" +
-    "\n" +
-    "      <div class=\"panel-heading\">\r" +
-    "\n" +
     "          <h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\r" +
     "\n" +
     "          <h4 class=\"text-info\">รายงานคดีค้างส่งสำนำคำพิพากษา ให้สำนักงานอธิบดีผู้พิพากษาภาค 5</h4>\r" +
     "\n" +
-    "      </div>\r" +
+    "<br>\r" +
     "\n" +
-    "      <div class=\"panel-body\">\r" +
-    "\n" +
-    "        <div class=\"row\">\r" +
-    "\n" +
-    "        <div class=\"col-md-8 col-md-offset-2\">\r" +
+    "\r" +
     "\n" +
     "        <form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/court_report4.php\" target=\"_blank\">\r" +
     "\n" +
@@ -10357,17 +10073,7 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "      </form>\r" +
     "\n" +
-    "      </div>\r" +
-    "\n" +
-    "      </div>\r" +
-    "\n" +
-    "      </div>\r" +
-    "\n" +
-    "    </div>\r" +
-    "\n" +
-    "  <div>\r" +
-    "\n" +
-    "<div>"
+    "</div>"
   );
 
 
@@ -11136,11 +10842,17 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "                        </span>\r" +
     "\n" +
-    "                                                    <a class=\"btn btn-info\" ng-click=\"printReport('views/court_print_report2.html')\" xhref=\"#/court/reports/report2\">\r" +
+    "                                                    <button ng-click=\"setReport('views/court_print_report2.html')\"  class=\"btn btn-info\" >\r" +
     "\n" +
     "                                <span class=\"glyphicon glyphicon-print\"></span><span class=\"hidden-sm hidden-xs\"> พิมพ์รายงาน</span>\r" +
     "\n" +
-    "                            </a>\r" +
+    "                            </button>\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "\r" +
     "\n" +
     "                    </div>\r" +
     "\n" +
@@ -11538,7 +11250,9 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "            </ul>\r" +
     "\n" +
-    "           <div style=\"position:relative; top:25px;text-align:right;color:#555555;padding-right:110px\">[ {{getUser().name}} ]</div>\r" +
+    "           <!--\r" +
+    "\n" +
+    "           <div style=\"position:relative; top:25px;text-align:left;color:#555555;padding-left:435px;font-weight:bold\">[ {{getUser().name}} ]</div>-->\r" +
     "\n" +
     "        </div>\r" +
     "\n" +
@@ -11550,7 +11264,7 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "            </ul>\r" +
     "\n" +
-    "            <div style=\"position:relative; top:25px;text-align:right;color:#555555;padding-right:110px\">[ {{getUser().name}} ]</div>\r" +
+    "           <div style=\"position:relative; top:25px;text-align:left;color:#555555;padding-left:435px;font-weight:bold\">[ {{getUser().name}} ]</div>\r" +
     "\n" +
     "        </div>\r" +
     "\n" +
@@ -11562,6 +11276,39 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "\r" +
     "\n"
+  );
+
+
+  $templateCache.put('views/print_reports.html',
+    "<div class=\"modal\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">\r" +
+    "\n" +
+    "            <div class=\"modal-dialog\" style=\"min-width:780px;\">\r" +
+    "\n" +
+    "                <div class=\"modal-content\">\r" +
+    "\n" +
+    "                    <div class=\"modal-header\" style=\"height:4em\">\r" +
+    "\n" +
+    "                        <h4 class=\"modal-title\" style=\"float:left\">\r" +
+    "\n" +
+    "                        <span title=\"{{$root.report_tpl}}\" class=\"glyphicon glyphicon-print\"></span> <span> พิมพ์รายงาน</span>\r" +
+    "\n" +
+    "                        </h4>                    \r" +
+    "\n" +
+    "                        <button type=\"button\" class=\"close\" aria-label=\"Close\" ng-click=\"$hide()\"><span aria-hidden=\"true\">&times;</span></button>\r" +
+    "\n" +
+    "                    </div>\r" +
+    "\n" +
+    "                    <div class=\"modal-body\" style=\"padding:3em;text-align:left;padding-top:1em\">\r" +
+    "\n" +
+    "                         <div ng-include=\"$root.report_tpl\" scope=\"\" onload=\"\"></div>\r" +
+    "\n" +
+    "                    </div>\r" +
+    "\n" +
+    "                </div>\r" +
+    "\n" +
+    "            </div>\r" +
+    "\n" +
+    "</div>"
   );
 
 
@@ -12256,29 +12003,29 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "    <div class=\"popover-content\" style=\"padding-top:2em;padding-bottom:2em\">\r" +
     "\n" +
-    "        <a href=\"#admin/reports/report1\" class=\"btn btn-info btn-block\">\r" +
+    "        <button ng-click=\"$hide();setReport('views/admin_print_report1.html')\"   class=\"btn btn-info btn-block\">\r" +
     "\n" +
     "            <span class=\"glyphicon glyphicon-print\"></span> สรุปปริมาณรายงานคดีของศาลในภาค 5\r" +
     "\n" +
-    "        </a>\r" +
+    "        </button>\r" +
     "\n" +
-    "        <a href=\"#admin/reports/report2\" class=\"btn btn-info btn-block\">\r" +
+    "        <button ng-click=\"$hide();setReport('views/admin_print_report2.html')\"   class=\"btn btn-info btn-block\">\r" +
     "\n" +
     "            <span class=\"glyphicon glyphicon-print\"></span> สรุปรายงานคดีแยกเป็นรายศาล\r" +
     "\n" +
-    "        </a>\r" +
+    "        </button>\r" +
     "\n" +
-    "        <a href=\"#admin/reports/report9\" class=\"btn btn-info btn-block\">\r" +
+    "        <button ng-click=\"$hide();setReport('views/admin_print_report9.html')\"  class=\"btn btn-info btn-block\">\r" +
     "\n" +
     "            <span class=\"glyphicon glyphicon-print\"></span> สรุปประเภทคดีที่ศาลรายงานมายังสำนักงาน<br />อธิบดีผู้พิพากษาภาค 5 (เดือน)\r" +
     "\n" +
-    "        </a>\r" +
+    "        </button>\r" +
     "\n" +
-    "        <a href=\"#admin/reports/report10\" class=\"btn btn-info btn-block\">\r" +
+    "        <button ng-click=\"$hide();setReport('views/admin_print_report10.html')\"  class=\"btn btn-info btn-block\">\r" +
     "\n" +
     "            <span class=\"glyphicon glyphicon-print\"></span> สรุปประเภทคดีที่ศาลรายงานมายังสำนักงาน<br />อธิบดีผู้พิพากษาภาค 5 (ปี)\r" +
     "\n" +
-    "        </a>\r" +
+    "        </button>\r" +
     "\n" +
     "    </div>\r" +
     "\n" +
@@ -12295,61 +12042,61 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "    <div class=\"popover-content\" style=\"padding-top:2em;padding-bottom:2em\">\r" +
     "\n" +
-    "        <a href=\"#admin/reports/report4\" class=\"btn btn-info btn-block\">\r" +
+    "        <button ng-click=\"$hide();setReport('views/admin_print_report4.html')\"  class=\"btn btn-info btn-block\">\r" +
     "\n" +
     "            <span class=\"glyphicon glyphicon-print\"></span> รายงานการส่งสำนวนเพื่อตรวจร่างคำพิพากษาประจำวัน\r" +
     "\n" +
-    "        </a>\r" +
+    "        </button>\r" +
     "\n" +
-    "        <a href=\"#admin/reports/report5\" class=\"btn btn-info btn-block\">\r" +
+    "        <button ng-click=\"$hide();setReport('views/admin_print_report5.html')\"  class=\"btn btn-info btn-block\">\r" +
     "\n" +
     "            <span class=\"glyphicon glyphicon-print\"></span> รายงานข้อมูลการส่งสำนวนและร่างคำพิพากษา<br />ของศาลในภาค 5 (ประจำเดือน)\r" +
     "\n" +
-    "        </a>\r" +
+    "        </button>\r" +
     "\n" +
-    "        <a href=\"#admin/reports/report6\" class=\"btn btn-info btn-block\">\r" +
+    "        <button ng-click=\"$hide();setReport('views/admin_print_report6.html')\"  class=\"btn btn-info btn-block\">\r" +
     "\n" +
     "            <span class=\"glyphicon glyphicon-print\"></span> สรุปการส่งสำนวนและร่างคำพิพากษา<br />ศาลในภาค 5(ประจำเดือน)\r" +
     "\n" +
-    "        </a>\r" +
+    "        </button>\r" +
     "\n" +
-    "        <a href=\"#admin/reports/report7\" class=\"btn btn-info btn-block\">\r" +
+    "        <button ng-click=\"$hide();setReport('views/admin_print_report7.html')\" class=\"btn btn-info btn-block\">\r" +
     "\n" +
     "            <span class=\"glyphicon glyphicon-print\"></span> รายงานสำนวนที่ไม่ได้ส่งสำเนาคำพิพากษา\r" +
     "\n" +
-    "        </a>\r" +
+    "        </button>\r" +
     "\n" +
-    "        <a href=\"#admin/reports/report8\" class=\"btn btn-info btn-block\">\r" +
+    "        <button ng-click=\"$hide();setReport('views/admin_print_report8.html')\"  class=\"btn btn-info btn-block\">\r" +
     "\n" +
     "            <span class=\"glyphicon glyphicon-print\"></span> รายงานคดีที่ไม่ได้ส่งสำนวน\r" +
     "\n" +
-    "        </a>\r" +
+    "        </button>\r" +
     "\n" +
     "        <hr/>\r" +
     "\n" +
-    "        <a href=\"#admin/reports/report11\" class=\"btn btn-info btn-block\">\r" +
+    "        <button ng-click=\"$hide();setReport('views/admin_print_report11.html')\"  class=\"btn btn-info btn-block\">\r" +
     "\n" +
     "            <span class=\"glyphicon glyphicon-print\"></span> รายงานระยะเวลาการตรวจสำนวนและร่างคำพิพากษา\r" +
     "\n" +
-    "        </a>        \r" +
+    "        </button>        \r" +
     "\n" +
-    "        <a href=\"#admin/reports/report12\" class=\"btn btn-info btn-block\">\r" +
+    "        <button ng-click=\"$hide();setReport('views/admin_print_report12.html')\" class=\"btn btn-info btn-block\">\r" +
     "\n" +
     "            <span class=\"glyphicon glyphicon-print\"></span> สำนวนคดีส่งตรวจที่ไม่เป็นไปตามระเบียบ\r" +
     "\n" +
-    "        </a> \r" +
+    "        </button> \r" +
     "\n" +
-    "        <a href=\"#admin/reports/report13\" class=\"btn btn-info btn-block\">\r" +
+    "        <button ng-click=\"$hide();setReport('views/admin_print_report13.html')\"  class=\"btn btn-info btn-block\">\r" +
     "\n" +
     "            <span class=\"glyphicon glyphicon-print\"></span> รายงานระยะเวลาการตรวจสำนวนและร่าง (รอง อธ.)\r" +
     "\n" +
-    "        </a> \r" +
+    "        </button> \r" +
     "\n" +
-    "        <a href=\"#admin/reports/report14\" class=\"btn btn-info btn-block\">\r" +
+    "        <button ng-click=\"$hide();setReport('views/admin_print_report14.html')\"  class=\"btn btn-info btn-block\">\r" +
     "\n" +
     "            <span class=\"glyphicon glyphicon-print\"></span> รายงานระยะเวลาการตรวจสำนวนและร่าง (หัวหน้าภาค)\r" +
     "\n" +
-    "        </a>                                       \r" +
+    "        </button>                                       \r" +
     "\n" +
     "    </div>\r" +
     "\n" +
@@ -12366,23 +12113,23 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "    <div class=\"popover-content\" style=\"padding-top:2em;padding-bottom:2em\">\r" +
     "\n" +
-    "        <a href=\"#court/reports/report1\" class=\"btn btn-info btn-block\">\r" +
+    "        <button ng-click=\"$hide();setReport('views/court_print_report1.html')\"  class=\"btn btn-info btn-block\">\r" +
     "\n" +
     "            <span class=\"glyphicon glyphicon-print\"></span> รายงานการจัดส่งคดี \r" +
     "\n" +
-    "        </a>\r" +
+    "        </button>\r" +
     "\n" +
-    "        <a href=\"#court/reports/report3\" class=\"btn btn-info btn-block\">\r" +
+    "        <button ng-click=\"$hide();setReport('views/court_print_report3.html')\"  class=\"btn btn-info btn-block\">\r" +
     "\n" +
     "            <span class=\"glyphicon glyphicon-print\"></span> รายงานคดีค้างส่งสำนวน\r" +
     "\n" +
-    "        </a>                 \r" +
+    "        </button>                 \r" +
     "\n" +
-    "        <a href=\"#court/reports/report4\" class=\"btn btn-info btn-block\">\r" +
+    "        <button ng-click=\"$hide();setReport('views/court_print_report4.html')\"  class=\"btn btn-info btn-block\">\r" +
     "\n" +
     "            <span class=\"glyphicon glyphicon-print\"></span> รายงานคดีค้างส่งสำเนาคำพิพากษา\r" +
     "\n" +
-    "        </a>\r" +
+    "        </button>\r" +
     "\n" +
     "\r" +
     "\n" +

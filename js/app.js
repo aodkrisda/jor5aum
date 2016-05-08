@@ -28,7 +28,7 @@ angular.module('App', ['lazyLoadJs', 'wt.responsive', 'ui.router', 'angular-load
 }])
 
 
-.run(['$rootScope', '$state', '$stateParams', 'Auth', '$filter', '$alert', 'store', 'Lookups', 'API_URL', 'moment', 'BDAYS','_', '$popover','$window',function ($rootScope, $state, $stateParams, Auth, $filter, $alert, store, Lookups, API_URL, moment, BDAYS,_,$popover,$window) {
+.run(['$rootScope', '$state', '$stateParams', 'Auth', '$filter', '$alert', 'store', 'Lookups', 'API_URL', 'moment', 'BDAYS','_', '$popover','$window','$modal', function ($rootScope, $state, $stateParams, Auth, $filter, $alert, store, Lookups, API_URL, moment, BDAYS,_,$popover,$window, $modal) {
     angular.getChanges = function getChanges(item, old, pk) {
         if (pk && item && old && old[pk] && old[pk] == item[pk]) {
             var fds = {};
@@ -412,19 +412,20 @@ $rootScope.judge_headjor5_options = {
         }
     }
 
-    var _printwd=null;
-    $rootScope.closeReport=function(){
-          if(_printwd!=null){
-                _printwd.$promise.then(_printwd.hide);
-                _printwd=null;
-           }
-    }    
-    $rootScope.printReport=function(template){
-               $rootScope.closeReport();
-                _printwd = $popover(angular.element('body'), { scope: $rootScope, container: 'body', autoClose: true, trigger: 'manual', placement: 'center', template: template, show: false });
-                _printwd.$promise.then(_printwd.show);
+ $rootScope.report_tpl=null;
+ var _rptdl=null;
+    $rootScope.setReport=function(str){
+      
+        if (!_rptdl) {
+            _rptdl= $modal( { container: 'body', autoClose: true, placement: 'auto', trigger: 'manual', template: "views/print_reports.html", show: true });
+        }
+        $rootScope.report_tpl=str;
+         _rptdl.$promise.then( _rptdl.show);
     }
 
+    $rootScope.getReport=function(){
+           return $rootScope.report_tpl;
+    }
 }])
 .config(['$stateProvider', '$urlRouterProvider', '$httpProvider', '$controllerProvider', 'storeProvider','flowFactoryProvider',
 function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider, storeProvider, flowFactoryProvider) {

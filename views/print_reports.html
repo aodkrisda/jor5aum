@@ -1,0 +1,15 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" style="min-width:780px;">
+                <div class="modal-content">
+                    <div class="modal-header" style="height:4em">
+                        <h4 class="modal-title" style="float:left">
+                        <span title="{{$root.report_tpl}}" class="glyphicon glyphicon-print"></span> <span> พิมพ์รายงาน</span>
+                        </h4>                    
+                        <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body" style="padding:3em;text-align:left;padding-top:1em">
+                         <div ng-include="$root.report_tpl" scope="" onload=""></div>
+                    </div>
+                </div>
+            </div>
+</div>
