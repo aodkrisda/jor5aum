@@ -25,6 +25,12 @@
 		},
 		{
 			"path": "E:\\ttt"
+		},
+		{
+			"path": "E:\\DEV\\security\\rip"
+		},
+		{
+			"path": "E:\\GOPATH\\src\\github.com\\beego\\beeweb\\views"
 		}
 	]
 }

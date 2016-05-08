@@ -42,8 +42,17 @@
 				$d['_type_id_name']=preg_replace('/^ความ/','',$r3['name']);
 			}
 		}
+
 		$d['report_name']='พิมพ์ปกสำนวน';
-		$html=$twig->render('report3.html', $d);
+
+		$tpl_fi='report3.html';
+
+		//if($d['no_case_sent']==2){
+		if(isset($_POST['is_draft'])){
+			$d['is_draft']=($_POST['is_draft']=='true')?true:false;
+			$tpl_fi='report3-draft.html';
+		}
+		$html=$twig->render($tpl_fi, $d);
 		$mpdf=new mPDF('th', 'A4-P', '0', 'garuda');
 		$mpdf->SetImportUse(); 
 		$pagecount = $mpdf->SetSourceFile('templates/cover.pdf');

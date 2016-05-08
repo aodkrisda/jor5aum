@@ -1,0 +1,42 @@
+<div class="row" ng-controller="PrintReportCtrl" ng-init="options.date_from=today()">
+	<div class="col-md-6 col-md-offset-3">
+		<div class="panel panel-default">
+		  <div class="panel-heading">
+		    	<h2 class="text-primary"><span class="glyphicon glyphicon-cog"></span> ตั้งค่ารายงาน</h2>
+		    	<h4 class="text-info">รายงานการจัดส่งคดี ไปยังสำนักงานอธิบดีผู้พิพากษาภาค5</h4>
+		  </div>
+		  <div class="panel-body">
+		  	<div class="row">
+		  	<div class="col-md-8 col-md-offset-2">
+		  	<form cutom-form name="frm_report" method="post" action="reports/court_report1.php" target="_blank">
+		  	<input type="hidden" name="date1" value="{{options.date_from}}">
+                <input type="hidden" name="date2" value="{{options.date_to}}">
+              <input type="hidden" name="type_id" value="{{options.type_id}}">
+              <div class="form-group">
+                  <label class="control-label">ประเภทคดี</label>
+                  <select class="form-control" ng-model="options.type_id" select-value-type="string" ng-options="it.id as it.id |lookup_type:'name':'code' group by toGroupName(it.group_id) for it in Lookups.getType() ">
+                      <option value="">-- ทุกประเภทคดี --</option>
+                  </select>
+              </div>	  
+        		<label>ประจำเดือน</label>
+        		<div class="row">
+        			<div class="col-md-12">
+                    	<span mode="1"  ng-model="options.date_from"  placeholder="เดือน" custom-date-field></span>
+                    </div>
+                </div>
+                     <br/>
+        <div class="row">
+                    <div class="col-md-12">
+                      <span mode="1"  ng-model="options.date_to"  placeholder="ถึงเดือน" custom-date-field></span>
+                    </div>
+            	<hr>
+            	<div class="col-md-6 col-md-offset-3">
+            		<button class="btn btn-primary btn-block" ng-disabled="!options.date_from"><span class="glyphicon glyphicon-print"></span> สร้างรายงาน</button>
+ 				</div>
+ 			</form>
+ 			</div>
+ 			</div>
+		  </div>
+		</div>
+	<div>
+<div>

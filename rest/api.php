@@ -187,7 +187,7 @@ class REST_API{
     $path=''; 
     if(isset($_SERVER['PATH_INFO'])) $path=preg_replace('/^\/{1,}/','',$_SERVER['PATH_INFO']);
     $path=preg_replace('/\/{1,}$/','',$path);
-    
+
 	$this->auth_user='';
 	$this->auth_pwd='';
 	if(isset($_SERVER['PHP_AUTH_USER'])){
@@ -203,7 +203,7 @@ class REST_API{
         $api_file=$api_dir . 'main.php';
         
 
-  
+
         if(is_file($api_file)){
           $method=strtolower($_SERVER['REQUEST_METHOD']);
           $this->_method=$method;
@@ -213,7 +213,11 @@ class REST_API{
           }  
           
           require_once($api_file);
-
+          if(isset($_SERVER['HTTP_CONTENT_TYPE'])){
+            if(!isset($_SERVER['CONTENT_TYPE'])){
+                $_SERVER['CONTENT_TYPE']=$_SERVER['HTTP_CONTENT_TYPE'];
+            }
+          }
           if(isset($_SERVER['CONTENT_TYPE']) && strpos(strtolower($_SERVER['CONTENT_TYPE']), 'application/json')!==false){
             try{
              $json = file_get_contents('php://input');

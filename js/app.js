@@ -139,6 +139,20 @@ angular.module('App', ['lazyLoadJs', 'wt.responsive', 'ui.router', 'angular-load
             $state.go('login');
         })
     }
+    $rootScope.goMenu=function(){
+      if(Auth.getUserId()){
+          var s='court.menu'
+          if(Auth.isAdmin()){
+            s='admin.menu';
+          }
+          if(s) $state.go(s);
+      }else{
+         $state.go('login');
+      }
+    }
+    $rootScope.goTo=function(s){
+       if(s)$state.go(s);
+    }
     $rootScope.caseAdminForm5 = function (it) {
         if (it) {
             if (it.command_id) {
@@ -280,11 +294,71 @@ angular.module('App', ['lazyLoadJs', 'wt.responsive', 'ui.router', 'angular-load
         },
         labelFunction: function (it) {
             if (it) {
-                return $filter('lookup_judge')(it['id'] || 0);
+                return $filter('lookup_judge')(it['id'] || 0) ;
             }
             return '';
-        }
+        },
+        descFunction: function (it) {
+            if (it) {
+                return $filter('lookup_judge')(it['id'] || 0,'position') ;
+            }
+            return '';
+        },        
+        itemTemplate:'<span><strong>{{::$labelFunction($item)}}</strong><br/><small>{{::options.descFunction($item)}}</small></span>'       
     }
+
+    $rootScope.judge_atjor5_options = {
+        dataField: 'id',
+        labelField: 'name',
+        groupField: '',
+        multiple: false,
+        title: 'เลือกรองอธิบดีผู้พิพากษาภาค',
+        getData: function () {
+            return _.filter(Lookups.getJudge2(), function(it){
+              var str=$filter('lookup_judge')(it['id'] || 0,'position') || '';
+              return ((str.indexOf('รองอธิบดี')>=0) || (str.indexOf('อธิบดีผู้พิพากษา')>=0)  || (str.indexOf('ผู้พิพากษาอาวุโส')>=0) ) && (str.indexOf('ผู้พิพากษาหัวหน้าศาล') <0) ;
+          });
+        },
+        labelFunction: function (it) {
+            if (it) {
+                return $filter('lookup_judge')(it['id'] || 0) ;
+            }
+            return '';
+        },
+        descFunction: function (it) {
+            if (it) {
+                return $filter('lookup_judge')(it['id'] || 0,'position') ;
+            }
+            return '';
+        },        
+        itemTemplate:'<span><strong>{{::$labelFunction($item)}}</strong><br/><small>{{::options.descFunction($item)}}</small></span>'       
+    }    
+$rootScope.judge_headjor5_options = {
+        dataField: 'id',
+        labelField: 'name',
+        groupField: '',
+        multiple: false,
+        title: 'เลือกหัวหน้าภาค',
+        getData: function () {
+            return _.filter(Lookups.getJudge2(), function(it){
+              var str=$filter('lookup_judge')(it['id'] || 0,'position') || '';
+              return str.indexOf('ผู้พิพากษาหัวหน้าศาล')>=0;
+          });
+        },
+        labelFunction: function (it) {
+            if (it) {
+                return $filter('lookup_judge')(it['id'] || 0) ;
+            }
+            return '';
+        },
+        descFunction: function (it) {
+            if (it) {
+                return $filter('lookup_judge')(it['id'] || 0,'position') ;
+            }
+            return '';
+        },        
+        itemTemplate:'<span><strong>{{::$labelFunction($item)}}</strong><br/><small>{{::options.descFunction($item)}}</small></span>'       
+    }       
     $rootScope.judge_court_options = {
         dataField: 'id',
         labelField: 'name',
@@ -337,6 +411,20 @@ angular.module('App', ['lazyLoadJs', 'wt.responsive', 'ui.router', 'angular-load
             return '';
         }
     }
+
+    var _printwd=null;
+    $rootScope.closeReport=function(){
+          if(_printwd!=null){
+                _printwd.$promise.then(_printwd.hide);
+                _printwd=null;
+           }
+    }    
+    $rootScope.printReport=function(template){
+               $rootScope.closeReport();
+                _printwd = $popover(angular.element('body'), { scope: $rootScope, container: 'body', autoClose: true, trigger: 'manual', placement: 'center', template: template, show: false });
+                _printwd.$promise.then(_printwd.show);
+    }
+
 }])
 .config(['$stateProvider', '$urlRouterProvider', '$httpProvider', '$controllerProvider', 'storeProvider','flowFactoryProvider',
 function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider, storeProvider, flowFactoryProvider) {
@@ -370,6 +458,15 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
           url: "/admin",
           abstract: true,
           templateUrl:'views/admin.html'
+      })
+      .state("admin.menu", {
+          url: "/menu",
+          roles:['admin'],          
+          views:{
+              '': {
+                  templateUrl: 'views/admin_menu.html'
+              }
+          }
       })
       .state("admin.cases", {
           url: "/cases",
@@ -538,7 +635,22 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
               }
           }
       })
-      .state("admin.report1", {
+       .state("admin.reports", {
+          // Use a url of "/" to set a state as the "index".
+          url: "/reports",
+          abstract: true,
+           templateUrl: 'views/admin_reports.html'
+      })
+       .state("admin.reports.menu", {
+          url: "/menu",
+          roles: ['admin'],
+          views: {
+              '': {
+                  templateUrl: 'views/admin_reports_menu.html'
+              }
+          }
+      })
+      .state("admin.reports.report1", {
           url: "/report1",
           roles: ['admin'],
           onEnter:['Lookups',function(Lookups){
@@ -550,7 +662,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
               }
           }
       })
-      .state("admin.report2", {
+      .state("admin.reports.report2", {
           url: "/report2",
           roles: ['admin'],
           onEnter:['Lookups',function(Lookups){
@@ -562,7 +674,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
               }
           }
       })
-      .state("admin.report4", {
+      .state("admin.reports.report4", {
           url: "/report4",
           roles: ['admin'],
           onEnter: ['Lookups', function (Lookups) {
@@ -574,7 +686,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
               }
           }
       })
-      .state("admin.report5", {
+      .state("admin.reports.report5", {
           url: "/report5",
           roles: ['admin'],
           onEnter: ['Lookups', function (Lookups) {
@@ -586,7 +698,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
               }
           }
       })
-      .state("admin.report6", {
+      .state("admin.reports.report6", {
           url: "/report6",
           roles: ['admin'],
           onEnter: ['Lookups', function (Lookups) {
@@ -598,7 +710,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
               }
           }
       })
-      .state("admin.report7", {
+      .state("admin.reports.report7", {
           url: "/report7",
           roles: ['admin'],
           onEnter: ['Lookups', function (Lookups) {
@@ -610,7 +722,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
               }
           }
       })
-      .state("admin.report8", {
+      .state("admin.reports.report8", {
           url: "/report8",
           roles: ['admin'],
           onEnter: ['Lookups', function (Lookups) {
@@ -622,7 +734,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
               }
           }
       })
-      .state("admin.report9", {
+      .state("admin.reports.report9", {
           url: "/report9",
           roles: ['admin'],
           onEnter: ['Lookups', function (Lookups) {
@@ -634,7 +746,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
               }
           }
       })
-      .state("admin.report10", {
+      .state("admin.reports.report10", {
           url: "/report10",
           roles: ['admin'],
           onEnter: ['Lookups', function (Lookups) {
@@ -646,7 +758,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
               }
           }
       })
-      .state("admin.report11", {
+      .state("admin.reports.report11", {
           url: "/report11",
           roles: ['admin'],
           onEnter: ['Lookups', function (Lookups) {
@@ -658,21 +770,58 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
               }
           }
       })      
-      .state("admin.users", {
-          url: "/users",
+    .state("admin.reports.report12", {
+          url: "/report12",
           roles: ['admin'],
-          views:{
+          onEnter: ['Lookups', function (Lookups) {
+              Lookups.load();
+          }],
+          views: {
               '': {
-                  templateUrl: 'views/admin_users.html'
-              }}
-      })
-      .state("admin.management", {
+                  templateUrl: 'views/admin_print_report12.html'
+              }
+          }
+      })            
+    .state("admin.reports.report13", {
+          url: "/report13",
+          roles: ['admin'],
+          onEnter: ['Lookups', function (Lookups) {
+              Lookups.load();
+          }],
+          views: {
+              '': {
+                  templateUrl: 'views/admin_print_report13.html'
+              }
+          }
+      })      
+    .state("admin.reports.report14", {
+          url: "/report14",
+          roles: ['admin'],
+          onEnter: ['Lookups', function (Lookups) {
+              Lookups.load();
+          }],
+          views: {
+              '': {
+                  templateUrl: 'views/admin_print_report14.html'
+              }
+          }
+      })                  
+      .state("admin.manages", {
           // Use a url of "/" to set a state as the "index".
-          url: "/management",
+          url: "/manages",
           abstract: true,
-          templateUrl: 'views/admin_management.html'
+          templateUrl: 'views/admin_manages.html'
       })
-      .state("admin.management.users", {
+      .state("admin.manages.menu", {
+          url: "/menu",
+          roles: ['admin'],
+          views: {
+              '': {
+                  templateUrl: 'views/admin_manages_menu.html'
+              }
+          }
+      })      
+      .state("admin.manages.users", {
           url: "/users",
           roles: ['admin'],
           views: {
@@ -681,14 +830,14 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
               }
           }
       })
-      .state("admin.management.types", {
+      .state("admin.manages.types", {
           url: "/types",
           views:{
               '': {
                   templateUrl: 'views/admin_types.html'
               }}
       })
-      .state("admin.management.topics", {
+      .state("admin.manages.topics", {
           url: "/topics",
           roles: ['admin'],
           views: {
@@ -697,7 +846,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
               }
           }
       })
-      .state("admin.management.results", {
+      .state("admin.manages.results", {
           url: "/results",
           roles: ['admin'],
           views: {
@@ -706,7 +855,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
               }
           }
       })
-      .state("admin.management.ats", {
+      .state("admin.manages.ats", {
           url: "/ats",
           roles: ['admin'],
           views: {
@@ -715,7 +864,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
               }
           }
       })
-      .state("admin.management.at_results", {
+      .state("admin.manages.at_results", {
           url: "/at_results",
           roles: ['admin'],
           views: {
@@ -724,7 +873,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
               }
           }
       })
-      .state("admin.management.settings", {
+      .state("admin.manages.settings", {
           url: "/settings",
           roles: ['admin'],
           views: {
@@ -739,6 +888,30 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
           abstract: true,
           templateUrl: 'views/court.html'
       })
+       .state("court.manages", {
+          // Use a url of "/" to set a state as the "index".
+          url: "/manages",
+          abstract: true,
+          templateUrl: 'views/court_manages.html'
+      })
+      .state("court.manages.menu", {
+          url: "/menu",
+          roles: ['court'],
+          views: {
+              '': {
+                  templateUrl: 'views/court_manages_menu.html'
+              }
+          }
+      })    
+      .state("court.menu", {
+          url: "/menu",
+          roles: ['court'],
+          views: {
+              '': {
+                  templateUrl: 'views/court_menu.html'
+              }
+          }
+      })      
       .state("court.acases", {
           url: "/acases",
           roles: ['court'],
@@ -766,7 +939,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
 
       })
 
-      .state("court.cases.form1", {
+      .state("court.vcases.form1", {
           url: "/form1",
           roles: ['court'],
           views: {
@@ -838,7 +1011,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
               }
           }
       })
-      .state("court.users", {
+      .state("court.manages.users", {
           url: "/users",
           roles: ['court'],
           views: {
@@ -847,7 +1020,69 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
               }
           }
       })
-
+       .state("court.reports", {
+          // Use a url of "/" to set a state as the "index".
+          url: "/reports",
+          abstract: true,
+           templateUrl: 'views/court_reports.html'
+      })
+      .state("court.reports.report1", {
+          url: "/report1",
+          roles: ['court'],
+          onEnter: ['Lookups', function (Lookups) {
+              Lookups.load();
+          }],
+          views: {
+              '': {
+                  templateUrl: 'views/court_print_report1.html'
+              }
+          }
+      })    
+      .state("court.reports.report2", {
+          url: "/report2",
+          roles: ['court'],
+          onEnter: ['Lookups', function (Lookups) {
+              Lookups.load();
+          }],
+          views: {
+              '': {
+                  templateUrl: 'views/court_print_report2.html'
+              }
+          }
+      })       
+      .state("court.reports.report3", {
+          url: "/report3",
+          roles: ['court'],
+          onEnter: ['Lookups', function (Lookups) {
+              Lookups.load();
+          }],
+          views: {
+              '': {
+                  templateUrl: 'views/court_print_report3.html'
+              }
+          }
+      })     
+       .state("court.reports.report4", {
+          url: "/report4",
+          roles: ['court'],
+          onEnter: ['Lookups', function (Lookups) {
+              Lookups.load();
+          }],
+          views: {
+              '': {
+                  templateUrl: 'views/court_print_report4.html'
+              }
+          }
+      })     
+       .state("court.reports.menu", {
+          url: "/menu",
+          roles: ['court'],
+          views: {
+              '': {
+                  templateUrl: 'views/court_reports_menu.html'
+              }
+          }
+      })
       .state("login", {
 
           // Use a url of "/" to set a state as the "index".
@@ -1011,6 +1246,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
             return $http.post(apiUrl + url, data);
         }
     }
+
 }])
 
 
@@ -1487,9 +1723,9 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
                 Lookups.load().success(function () {
                     cfpLoadingBar.complete();
                     if ($rootScope.isAdmin()) {
-                        $state.go('admin.cases');
+                        $state.go('admin.menu');
                     }else{
-                        $state.go('court.cases');
+                        $state.go('court.menu');
                     }
                 });
             }).error(function (result) {
@@ -1766,6 +2002,22 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
             _postform.submit();
         }
     }
+    $scope.printCover2 = function (it) {
+        if (!_postform) {
+            _postform = angular.element('#_postform_');
+        }
+        if (_postform.length) {
+            _postform.empty();
+            var fd = angular.element('<input type="hidden" name="case_id"/>');
+            fd.val(it['id']);
+            _postform.append(fd);
+            fd = angular.element('<input type="hidden" name="is_draft"/>');
+            fd.val('true');
+            _postform.append(fd);
+
+            _postform.submit();
+        }
+    }    
     $scope.opt = {
         dataField: 'id',
         labelField: 'name',
@@ -2671,7 +2923,7 @@ function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider
             var template = 'custom-dropdown-pupup.html';
             this.open = function ($event) {
                 if (!popup) {
-                    popup = $popover(angular.element($element), { scope: $scope, container: 'body', autoClose: true, trigger: 'manual', placement: 'auto', template: template, show: false });
+                    popup = $popover(angular.element($element), { scope: $scope, container: 'body', autoClose: true, trigger: 'manual', placement: 'center', template: template, show: false });
                 }
                 popup.$promise.then(popup.show);
             }

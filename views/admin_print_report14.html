@@ -1,0 +1,46 @@
+<div class="row" ng-controller="PrintReportCtrl">
+	<div class="col-md-6 col-md-offset-3">
+		<div class="panel panel-default">
+			  <div class="panel-heading">
+			    	<h2 class="text-primary"><span class="glyphicon glyphicon-cog"></span> ตั้งค่ารายงาน</h2>
+			    	<h4 class="text-info">รายงานระยะเวลาการตรวจสำนวนและร่างคำพิพากษา (หัวหน้าภาค)</h4>
+			  </div>
+		  	<div class="panel-body">
+			  	<div class="row">
+			  	<div class="col-md-8 col-md-offset-2">
+			  		<form cutom-form name="frm_report" method="post" action="reports/report14.php" target="_blank">
+			  			<input type="hidden" name="date1" value="{{options.date_from}}">
+			  			<input type="hidden" name="date2" value="{{options.date_to}}">
+			  			<input type="hidden" name="judge_id" value="{{options.judge_id}}">
+
+			  			<label>ผู้พิพากษาเจ้าของสำนวน (ภาค)</label>
+			                   		<div class="row">
+					            	<div class="col-md-12">
+					                       	<div custom-dropdown class="form-control input-md" ng-model="options.judge_id" data-options="judge_headjor5_options"></div>
+					                       	<span class="form-control-feedback"><span class="caret" style="margin-right:2em"></span></span>
+					           		</div>
+				           		</div>
+
+				        		<label>เดือนที่รับสำนวน</label>
+				        		<div class="row">
+				        			<div class="col-md-12">
+				                    			<span mode="1"  ng-model="options.date_from"  placeholder="เริ่มตั้งแต่เดือน" custom-date-field></span>
+				                   		 </div>
+				                	</div>
+			           			<br>
+						<div class="row">
+					                    <div class="col-md-12">
+					                    	<span mode="1"  ng-model="options.date_to"  placeholder="ถึงเดือน" custom-date-field></span>
+					                    </div>
+				            	</div>
+			            		<hr>
+			            		<div class="col-md-6 col-md-offset-3">
+			            			<button class="btn btn-primary btn-block" ng-disabled="!(options.judge_id && options.date_from)"><span class="glyphicon glyphicon-print"></span> สร้างรายงาน</button>
+			 			</div>
+ 					</form>
+ 				</div>
+ 				</div>
+ 			</div>
+		</div>
+	<div>
+<div>

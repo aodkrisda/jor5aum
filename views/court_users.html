@@ -69,7 +69,7 @@
 
 <script type="text/ng-template" id="custom.move.users.html">
     <div class="modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog"  aria-hidden="true"   style="min-width:80%;" ng-controller="CustomTableCtrl as ctb" ng-init="tableParams.hide_limit=true;_view='moveuser';tableParams.count(10);setAPI('users','',{search:'searchText',_view:'_view'})">
+        <div class="modal-dialog"  aria-hidden="true"   style="min-width:80%;" ng-controller="CustomTableCtrl as ctb" ng-init="tableParams.hide_limit=true;_view='moveuser';tableParams.count(10);setAPI('cusers','',{search:'searchText',_view:'_view'})">
             <div class="modal-content">
                 <div class="modal-header">
 
@@ -89,7 +89,7 @@
                         <tbody>
                             <tr ng-repeat="it in $data"
                                 ng-click="selectRow(it);"
-                                ng-class="{'active': isSelected(it)}">
+                                ng-class="{'active': isSelected(it), 'text-checkout': it.check_out==1}">
                                 <td width="30" class="text-right text-muted">{{startIdx + $index + 1}}.</td>
 
                                 <td data-title="'ชื่อผู้พิพากษา'" sortable="'name'">
@@ -106,7 +106,8 @@
                         </tbody>
                     </table>
                     <div class="help-block" style="margin-top:1em">
-                        <p class="text-info"><span class="glyphicon glyphicon-question-sign"></span> คุณสามารถย้ายผู้พิพากษาเข้าได้ เฉพาะผู้พิพากษาที่ได้ย้ายออกจากศาลเดิมแล้วเท่านั้น</p>
+                        <p class="text-info"><span class="glyphicon glyphicon-question-sign"></span> ถ้าต้องการย้ายผู้พิพากษาที่ยังไม่ได้ย้ายออกจากศาลเดิม ให้ค้นหาชื่อ แล้วย้ายผู้พิพากษาที่เลือกเข้า
+                        </p>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -120,7 +121,7 @@
 <div class="container-fluid">
 
     <p>
-        <div class="panel panel-default" ng-controller="CustomTableCtrl as uctb" ng-init="searchCourt='';searchRole='';setAPI('users','custom.form.court.users.html',{search:'searchText', parent_id:getUser().id})">
+        <div class="panel panel-default" ng-controller="CustomTableCtrl as uctb" ng-init="searchCourt='';searchRole='';setAPI('cusers','custom.form.court.users.html',{search:'searchText', parent_id:getUser().id})">
             <div class="panel-heading">
                 <div class="text-left pull-left">
                     <h2 style="padding:0px;margin:0px;"><span class="fa fa-windows"></span> ผู้พิพากษา ({{tableParams.total()}})</h2>

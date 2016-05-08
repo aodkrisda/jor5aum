@@ -1,4 +1,31 @@
 ﻿<?php
+/*
+$whitelist_ips=array('::1'); //localhost
+//$whitelist_ips[]='192.168.0.xxx';
+
+//auto add ips
+for ($i=2; $i<=253; $i++) {
+	$whitelist_ips[]=sprintf('10.35.0.%d', $i);
+}
+
+// Filter Client IP Address
+if(! in_array(clientIP(), $whitelist_ips)){
+	header("HTTP/1.0 404 Not Found");
+	exit();
+}
+*/
+
+function clientIP(){
+	$ip='';
+	if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+	    $ip = $_SERVER['HTTP_CLIENT_IP'];
+	} elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+	    $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+	} else {
+	    $ip = $_SERVER['REMOTE_ADDR'];
+	}
+	return $ip;	
+}
 function url($f){
 	$v=filemtime(__DIR__.'/'. $f);
 	if($v){
@@ -21,8 +48,15 @@ function url($f){
 
 	<body id="body">
 		<div ng-if="!API_URL" style="position:absolute;text-align:center;top:40%;width:100%;font-size:1.2em;"><i class="fa fa-spinner fa-spin fa-4x"></i><br/>กำลังโหลดข้อมูล<br/>โปรดรอสักครู่..</div>
-		<div ng-include="'views/main.menu.html'"></div>
-		<div id="main-content" class="container-fluid">
+		
+		<div class="container-fluid main-navbar" >
+		     <div class="main-navbar-mouse" ng-if="urlEq('/admin/menu') || urlEq('/court/menu')  || urlEq('/login')"></div>
+		    <div class="main-navbar-body">
+		    <div ng-include="'views/main.menu.html'"></div>
+		    </div>
+
+		</div>
+		<div id="main-content" class="container-fluid" >
 			<div id="alert-messages" class="hidden-print" style="z-index:10000"></div>
 			<div ui-view></div>
 		</div>

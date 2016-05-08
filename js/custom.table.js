@@ -256,12 +256,16 @@ angular.module('custom.table', [])
                 
                 if (data.data && data.data[$scope.pkField]) {
                     if (act == 'add') {
+                       if(!angular.isArray($scope.tableParams.data)){
+                            $scope.tableParams.data=[];
+                       }
                         $scope.tableParams.data.unshift(data.data); 
                         var n= parseInt($scope.tableParams.total());
                         $scope.tableParams.total(n+1);                        
                         if(!_close){
                         	$scope.editingItem = data.data;
-                        };                        
+                        };     
+       
                     } else {
                         var i = -1;
                         var n = $scope.tableParams.data.length;

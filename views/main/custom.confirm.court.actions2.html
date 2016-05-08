@@ -3,7 +3,8 @@
     <h3 class="popover-title"><span class="glyphicon glyphicon-share"></span> <strong>เลือกทำรายการ</strong></h3>
     <div class="popover-content">
         <p class="text-center">
-            <button type="button" ng-disabled="(caseCourtForm($it)==1)" class="btn btn-success btn-block" ng-click="go('court.vcases.form2',$it);$hide()"><div class="text-left"><span class="badge">1</span> ส่งสำเนาคำพิพากษา</div></button>
+            <button type="button" ng-disabled="($it.no_case_sent=='1' && $it.return_checked!='1') || (caseCourtForm($it)<3)" class="btn btn-success btn-block" ng-click="go('court.vcases.form1',$it);$hide()"><div class="text-left"><span class="badge">1</span> ส่งสำนวนเพื่อตรวจร่าง</div></button>        
+            <button type="button" ng-disabled="(caseCourtForm($it)==1)" class="btn btn-success btn-block" ng-click="go('court.vcases.form2',$it);$hide()"><div class="text-left"><span class="badge">2</span> ส่งสำเนาคำพิพากษา</div></button>
             <button type="button" ng-disabled="(caseCourtForm($it)==1)" class="btn btn-success btn-block" ng-click="go('court.vcases.form3',$it);$hide()"><div class="text-left"><span class="badge">3</span> Upload คำพิพากษา</div></button>
             <button type="button" class="btn btn-success btn-block" ng-click="go('court.vcases.form4',$it);$hide()"><div class="text-left"><span class="badge">4</span> ระบบติดตาม</div></button>
         </p>

@@ -1,0 +1,76 @@
+<style>
+.bg2{
+	margin-top:-60px;
+	display: block;
+	position:relative;
+	background-image: url('images/bg.png');
+	background-repeat:no-repeat;
+	background-position:  center;
+	width: 600px;
+	height:322px;
+}
+
+.bg2-btn{
+	display: block;
+	position: absolute;
+	cursor:pointer;
+	opacity:1;
+	background-repeat:no-repeat;
+	background-position:  center;
+	background-size: cover;
+	width: 120px !important;
+	height: 120px !important;
+}
+.bg2-btn1{
+	background-image: url('images/menu1.png');
+	left:-90px;  top:180px;
+}
+.bg2-btn2{
+	background-image: url('images/menu2.png');
+	left:80px;  bottom:-50px;
+}
+.bg2-btn3{
+	background-image: url('images/menu3.png');
+	left:250px;  bottom:-100px;
+}
+
+.bg2-btn4{
+	background-image: url('images/exit.png');
+	right:-110px;  top:180px;
+}
+.bg2-btn5{
+	background-image: url('images/menu5.png');
+	right:60px;  bottom:-50px;
+}
+
+.bg2-btn1:hover, .bg2-btn2:hover, .bg2-btn3:hover, .bg2-btn4:hover, .bg2-btn5:hover{
+	opacity:1 !important;
+	filter: saturate(200%);
+	-webkit-filter: saturate(200%);
+	-mos-filter: saturate(200%);
+	-ms-filter: saturate(200%);
+	-o: saturate(200%);
+	transform: scale(1.5,1.5);
+	-webkit-transform: scale(1.5,1.5);
+	-mos-transform: scale(1.5,1.5);
+	-ms-transform: scale(1.5,1.5);
+	-o-transform: scale(1.5,1.5);
+}
+
+</style>
+<!--
+<h2 class="page-header text-center" style="border-bottom:none">
+    ระบบสารสนเทศการรายงานคดีและติดตามสำนวนที่ส่งตรวจร่างคำพิพากษา<br />
+    <small>{{getUser().name}}</small>
+</h2>
+-->
+<div  class="bg2 center-block">
+
+	<div class="bg2-btn bg2-btn1" ng-click="goTo('court.acases')"></div>
+	<div class="bg2-btn bg2-btn2" ng-click="goTo('court.cases')"></div>
+	<div class="bg2-btn bg2-btn3" ng-click="goTo('court.vcases')"></div>
+	<div class="bg2-btn bg2-btn4" data-placement="left" data-trigger="click" bs-popover data-template="custom.logout.popover.html" data-auto-close="true"></div>
+	<div class="bg2-btn bg2-btn5" ng-click="goTo('court.manages.menu')"></div>
+
+</div>
+

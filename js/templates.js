@@ -2952,7 +2952,7 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "                <div class=\"form-group col-md-6 has-feedback custom-dropdown\">\r" +
     "\n" +
-    "                    <label class=\"control-label col-md-4\">รองอธิบดีฯผู้ตรวจ</label>\r" +
+    "                    <label class=\"control-label col-md-4\">อธ./รอง อธ./พ.อาวุโส </label>\r" +
     "\n" +
     "                    <div class=\"col-md-8\">\r" +
     "\n" +
@@ -3402,13 +3402,9 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "                    <div class=\"col-md-8\">\r" +
     "\n" +
-    "\r" +
-    "\n" +
-    "                        <div custom-dropdown class=\"form-control input-md\" ng-model=\"editingItem.judge4_id\" data-options=\"judge_jor5_options\"></div>\r" +
+    "                        <div custom-dropdown class=\"form-control input-md\" ng-model=\"editingItem.judge2_id\" data-options=\"judge_jor5_options\"></div>\r" +
     "\n" +
     "                        <span class=\"form-control-feedback\"><span class=\"caret\"></span></span>\r" +
-    "\n" +
-    "\r" +
     "\n" +
     "                    </div>\r" +
     "\n" +
@@ -3425,6 +3421,10 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "                        <div custom-dropdown class=\"form-control input-md\" ng-model=\"editingItem.judge_checkout2_id\" data-options=\"judge_jor5_options\"></div>\r" +
     "\n" +
     "                        <span class=\"form-control-feedback\"><span class=\"caret\"></span></span>\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "\r" +
     "\n" +
     "\r" +
     "\n" +
@@ -3446,7 +3446,7 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "\r" +
     "\n" +
-    "                        <div custom-dropdown class=\"form-control input-md\" ng-model=\"editingItem.judge2_id\" data-options=\"judge_jor5_options\"></div>\r" +
+    "                        <div custom-dropdown class=\"form-control input-md\" ng-model=\"editingItem.judge4_id\" data-options=\"judge_jor5_options\"></div>\r" +
     "\n" +
     "                        <span class=\"form-control-feedback\"><span class=\"caret\"></span></span>\r" +
     "\n" +
@@ -3467,6 +3467,8 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "                    </div>\r" +
     "\n" +
     "                </div>\r" +
+    "\n" +
+    "                     <div class=\"clearfix\"></div>\r" +
     "\n" +
     "                <div class=\"form-group col-md-6  has-feedback custom-dropdown\">\r" +
     "\n" +
@@ -3880,7 +3882,7 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "                <div class=\"form-group col-md-6 has-feedback custom-dropdown\">\r" +
     "\n" +
-    "                    <label class=\"control-label col-md-4\">ชื่อผู้พิพากษาผู้ตรวจ</label>\r" +
+    "                    <label class=\"control-label col-md-4\">ผู้ตรวจ(อธ./รอง อธ./พ.อาวุโส)</label>\r" +
     "\n" +
     "                    <div class=\"col-md-8\">\r" +
     "\n" +
@@ -3918,7 +3920,7 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "                <div class=\"form-group col-md-6  has-feedback custom-dropdown\">\r" +
     "\n" +
-    "                    <label class=\"control-label col-md-4\">ชื่อผู้พิพากษาผู้ตรวจ2</label>\r" +
+    "                    <label class=\"control-label col-md-4\">ผู้ตรวจ(หน.ภาค)</label>\r" +
     "\n" +
     "                    <div class=\"col-md-8\">\r" +
     "\n" +
@@ -4003,8 +4005,304 @@ angular.module('App').run(['$templateCache', function($templateCache) {
   );
 
 
-  $templateCache.put('views/admin_management.html',
+  $templateCache.put('views/admin_manages.html',
     "<div ui-view></div>\r" +
+    "\n" +
+    "\r" +
+    "\n"
+  );
+
+
+  $templateCache.put('views/admin_manages_menu.html',
+    "<h1 class=\"page-header text-center\">\r" +
+    "\n" +
+    "เตรียมข้อมูล\r" +
+    "\n" +
+    "</h1>\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "<div class=\"row\">\r" +
+    "\n" +
+    "      <div class=\"col-md-4 col-lg-3\">\r" +
+    "\n" +
+    "            <a href=\"#admin/manages/users\">\r" +
+    "\n" +
+    "                <h1 class=\"text-center\">\r" +
+    "\n" +
+    "                    <span class=\"glyphicon glyphicon-user\"></span>\r" +
+    "\n" +
+    "                </h1>\r" +
+    "\n" +
+    "                <h4 class=\"text-center text-primary\">ผู้ใช้</h4>\r" +
+    "\n" +
+    "            </a>\r" +
+    "\n" +
+    "      </div>\r" +
+    "\n" +
+    "      <div class=\"col-md-4 col-lg-3\">\r" +
+    "\n" +
+    "            <a href=\"#admin/manages/types\">\r" +
+    "\n" +
+    "                <h1 class=\"text-center\">\r" +
+    "\n" +
+    "                    <span class=\"glyphicon glyphicon-briefcase\"></span>\r" +
+    "\n" +
+    "                </h1>\r" +
+    "\n" +
+    "                <h4 class=\"text-center text-primary\">ประเภทคดี</h4>\r" +
+    "\n" +
+    "            </a>\r" +
+    "\n" +
+    "       </div>\r" +
+    "\n" +
+    "       <div class=\"col-md-4 col-lg-3\">\r" +
+    "\n" +
+    "            <a href=\"#admin/manages/topics\">\r" +
+    "\n" +
+    "                <h1 class=\"text-center\">\r" +
+    "\n" +
+    "                    <span class=\"glyphicon glyphicon-tasks\"></span>\r" +
+    "\n" +
+    "                </h1>\r" +
+    "\n" +
+    "                <h4 class=\"text-center text-primary\">ข้อหา</h4>\r" +
+    "\n" +
+    "            </a>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "        <div class=\"col-md-4 col-lg-3\">\r" +
+    "\n" +
+    "            <a href=\"#admin/manages/results\">\r" +
+    "\n" +
+    "                <h1 class=\"text-center\">\r" +
+    "\n" +
+    "                    <span class=\"glyphicon glyphicon-check\"></span>\r" +
+    "\n" +
+    "                </h1>\r" +
+    "\n" +
+    "                <h4 class=\"text-center text-primary\">ผลการปฏิบัติ</h4>\r" +
+    "\n" +
+    "            </a>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "        <div class=\"col-md-4 col-lg-3\">\r" +
+    "\n" +
+    "            <a href=\"#admin/manages/ats\">\r" +
+    "\n" +
+    "                <h1 class=\"text-center\">\r" +
+    "\n" +
+    "                    <span class=\"glyphicon glyphicon-share\"></span>\r" +
+    "\n" +
+    "                </h1>\r" +
+    "\n" +
+    "                <h4 class=\"text-center text-primary\">คำสั่ง อ.ธ</h4>\r" +
+    "\n" +
+    "            </a>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "        <div class=\"col-md-4 col-lg-3\">\r" +
+    "\n" +
+    "            <a href=\"#admin/manages/at_results\">\r" +
+    "\n" +
+    "                <h1 class=\"text-center\">\r" +
+    "\n" +
+    "                    <span class=\"glyphicon glyphicon-share\"></span>\r" +
+    "\n" +
+    "                </h1>\r" +
+    "\n" +
+    "                <h4 class=\"text-center text-primary\">เหตุผลไม่ตามระเบียบ</h4>\r" +
+    "\n" +
+    "            </a>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "        <div class=\"col-md-4 col-lg-3\">\r" +
+    "\n" +
+    "            <a href=\"#admin/manages/settings\">\r" +
+    "\n" +
+    "                <h1 class=\"text-center\">\t\r" +
+    "\n" +
+    "                    <span class=\"glyphicon glyphicon-cog\"></span>\r" +
+    "\n" +
+    "                </h1>\r" +
+    "\n" +
+    "                <h4 class=\"text-center text-primary\">ตั้งค่าระบบ</h4>\r" +
+    "\n" +
+    "            </a>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "        <div class=\"col-md-4 col-lg-3\">\r" +
+    "\n" +
+    "            <a href=\"#admin/menu\">\r" +
+    "\n" +
+    "                <h1 class=\"text-center\">\t\r" +
+    "\n" +
+    "                    <span class=\"glyphicon glyphicon-th-large\"></span>\r" +
+    "\n" +
+    "                </h1>\r" +
+    "\n" +
+    "                <h4 class=\"text-center text-primary\">เมนูหลัก</h4>\r" +
+    "\n" +
+    "            </a>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "</div>\r" +
+    "\n" +
+    "\r" +
+    "\n"
+  );
+
+
+  $templateCache.put('views/admin_menu.html',
+    "<style>\r" +
+    "\n" +
+    ".bg1{\r" +
+    "\n" +
+    "\tmargin-top:-60px;\r" +
+    "\n" +
+    "\tdisplay: block;\r" +
+    "\n" +
+    "\tposition:relative;\r" +
+    "\n" +
+    "\tbackground-image: url('images/bg.png');\r" +
+    "\n" +
+    "\tbackground-repeat:no-repeat;\r" +
+    "\n" +
+    "\tbackground-position:  center;\r" +
+    "\n" +
+    "\twidth: 600px;\r" +
+    "\n" +
+    "\theight:322px;\r" +
+    "\n" +
+    "}\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    ".bg1-btn{\r" +
+    "\n" +
+    "\tdisplay: block;\r" +
+    "\n" +
+    "\tposition: absolute;\r" +
+    "\n" +
+    "\tcursor:pointer;\r" +
+    "\n" +
+    "\topacity:1;\r" +
+    "\n" +
+    "\tbackground-repeat:no-repeat;\r" +
+    "\n" +
+    "\tbackground-position:  center;\r" +
+    "\n" +
+    "\tbackground-size: cover;\r" +
+    "\n" +
+    "\twidth: 120px !important;\r" +
+    "\n" +
+    "\theight: 120px !important;\r" +
+    "\n" +
+    "}\r" +
+    "\n" +
+    ".bg1-btn1{\r" +
+    "\n" +
+    "\tbackground-image: url('images/menu1.png');\r" +
+    "\n" +
+    "\tleft:-90px;  top:180px;\r" +
+    "\n" +
+    "}\r" +
+    "\n" +
+    ".bg1-btn2{\r" +
+    "\n" +
+    "\tbackground-image: url('images/menu2.png');\r" +
+    "\n" +
+    "\tleft:80px;  bottom:-50px;\r" +
+    "\n" +
+    "}\r" +
+    "\n" +
+    ".bg1-btn3{\r" +
+    "\n" +
+    "\tbackground-image: url('images/menu3.png');\r" +
+    "\n" +
+    "\tleft:250px;  bottom:-100px;\r" +
+    "\n" +
+    "}\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    ".bg1-btn4{\r" +
+    "\n" +
+    "\tbackground-image: url('images/exit.png');\r" +
+    "\n" +
+    "\tright:-110px;  top:180px;\r" +
+    "\n" +
+    "}\r" +
+    "\n" +
+    ".bg1-btn5{\r" +
+    "\n" +
+    "\tbackground-image: url('images/menu5.png');\r" +
+    "\n" +
+    "\tright:60px;  bottom:-50px;\r" +
+    "\n" +
+    "}\r" +
+    "\n" +
+    ".bg1-btn1:hover, .bg1-btn2:hover, .bg1-btn3:hover, .bg1-btn4:hover, .bg1-btn5:hover{\r" +
+    "\n" +
+    "\topacity:1 !important;\r" +
+    "\n" +
+    "\tfilter: saturate(200%);\r" +
+    "\n" +
+    "\t-webkit-filter: saturate(200%);\r" +
+    "\n" +
+    "\t-mos-filter: saturate(200%);\r" +
+    "\n" +
+    "\t-ms-filter: saturate(200%);\r" +
+    "\n" +
+    "\t-o: saturate(200%);\r" +
+    "\n" +
+    "\ttransform: scale(1.5,1.5);\r" +
+    "\n" +
+    "\t-webkit-transform: scale(1.5,1.5);\r" +
+    "\n" +
+    "\t-mos-transform: scale(1.5,1.5);\r" +
+    "\n" +
+    "\t-ms-transform: scale(1.5,1.5);\r" +
+    "\n" +
+    "\t-o-transform: scale(1.5,1.5);\r" +
+    "\n" +
+    "}\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "</style>\r" +
+    "\n" +
+    "<!--\r" +
+    "\n" +
+    "<h2 class=\"page-header text-center\" style=\"border-bottom:none\">\r" +
+    "\n" +
+    "    ระบบสารสนเทศการรายงานคดีและติดตามสำนวนที่ส่งตรวจร่างคำพิพากษา<br />\r" +
+    "\n" +
+    "    <small>สำนักงานอธิบดีผู้พิพากษาภาค 5</small>\r" +
+    "\n" +
+    "</h2>\r" +
+    "\n" +
+    "-->\r" +
+    "\n" +
+    "<div  class=\"bg1 center-block\">\r" +
+    "\n" +
+    "\t<div class=\"bg1-btn bg1-btn1\" ng-click=\"goTo('admin.acases')\"></div>\r" +
+    "\n" +
+    "\t<div class=\"bg1-btn bg1-btn2\" ng-click=\"goTo('admin.cases')\"></div>\r" +
+    "\n" +
+    "\t<div class=\"bg1-btn bg1-btn3\" ng-click=\"goTo('admin.vcases')\"></div>\r" +
+    "\n" +
+    "\t<div class=\"bg1-btn bg1-btn4\" data-placement=\"left\" data-trigger=\"click\" bs-popover data-template=\"custom.logout.popover.html\" data-auto-close=\"true\"></div>\r" +
+    "\n" +
+    "\t<div class=\"bg1-btn bg1-btn5\" ng-click=\"goTo('admin.manages.menu')\"></div>\r" +
+    "\n" +
+    "</div>\r" +
     "\n" +
     "\r" +
     "\n"
@@ -4185,6 +4483,190 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     " \t\t\t</div>\n" +
     " \t\t\t</div>\n" +
     "\t\t  </div>\n" +
+    "\t\t</div>\n" +
+    "\t<div>\n" +
+    "<div>"
+  );
+
+
+  $templateCache.put('views/admin_print_report12.html',
+    "<div class=\"row\" ng-controller=\"PrintReportCtrl\">\n" +
+    "\t<div class=\"col-md-6 col-md-offset-3\">\n" +
+    "\t\t<div class=\"panel panel-default\">\n" +
+    "\t\t  <div class=\"panel-heading\">\n" +
+    "\t\t    \t<h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\n" +
+    "\t\t    \t<h4 class=\"text-info\">รายงานระยะเวลาการตรวจสำนวนและร่างคำพิพากษา</h4>\n" +
+    "\t\t  </div>\n" +
+    "\t\t  <div class=\"panel-body\">\n" +
+    "\t\t  \t<div class=\"row\">\n" +
+    "\t\t  \t<div class=\"col-md-8 col-md-offset-2\">\n" +
+    "\t\t  \t<form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/report12.php\" target=\"_blank\">\n" +
+    "\t\t  \t<input type=\"hidden\" name=\"date1\" value=\"{{options.date_from}}\">\n" +
+    "\t\t  \t<input type=\"hidden\" name=\"date2\" value=\"{{options.date_to}}\">\n" +
+    "      \t                  \t\t  \n" +
+    "        \t\t<label>ภาครับหนังสือ</label>\n" +
+    "        \t\t<div class=\"row\">\n" +
+    "        \t\t\t<div class=\"col-md-12\">\n" +
+    "                    \t<span mode=\"1\"  ng-model=\"options.date_from\"  placeholder=\"เริ่มตั้งแต่เดือน\" custom-date-field></span>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                <br>\n" +
+    "\t\t\t\t<div class=\"row\">\n" +
+    "                    <div class=\"col-md-12\">\n" +
+    "                    \t<span mode=\"1\"  ng-model=\"options.date_to\"  placeholder=\"ถึงเดือน\" custom-date-field></span>\n" +
+    "                    </div>\n" +
+    "                    \n" +
+    "            \t</div>\n" +
+    "            \t<hr>\n" +
+    "            \t<div class=\"col-md-6 col-md-offset-3\">\n" +
+    "            \t\t<button class=\"btn btn-primary btn-block\" ng-disabled=\"!options.date_from\"><span class=\"glyphicon glyphicon-print\"></span> สร้างรายงาน</button>\n" +
+    " \t\t\t\t</div>\n" +
+    " \t\t\t</form>\n" +
+    " \t\t\t</div>\n" +
+    " \t\t\t</div>\n" +
+    "\t\t  </div>\n" +
+    "\t\t</div>\n" +
+    "\t<div>\n" +
+    "<div>"
+  );
+
+
+  $templateCache.put('views/admin_print_report13.html',
+    "<div class=\"row\" ng-controller=\"PrintReportCtrl\">\n" +
+    "\t<div class=\"col-md-6 col-md-offset-3\">\n" +
+    "\t\t<div class=\"panel panel-default\">\n" +
+    "\t\t\t  <div class=\"panel-heading\">\n" +
+    "\t\t\t    \t<h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\n" +
+    "\t\t\t    \t<h4 class=\"text-info\">รายงานระยะเวลาการตรวจสำนวนและร่างคำพิพากษา (รอง อธ.)</h4>\n" +
+    "\t\t\t  </div>\n" +
+    "\t\t  \t<div class=\"panel-body\">\n" +
+    "\t\t\t  \t<div class=\"row\">\n" +
+    "\t\t\t  \t<div class=\"col-md-8 col-md-offset-2\">\n" +
+    "\t\t\t  \t\t<form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/report13.php\" target=\"_blank\">\n" +
+    "\t\t\t  \t\t\t<input type=\"hidden\" name=\"date1\" value=\"{{options.date_from}}\">\n" +
+    "\t\t\t  \t\t\t<input type=\"hidden\" name=\"date2\" value=\"{{options.date_to}}\">\n" +
+    "\t\t\t  \t\t\t<input type=\"hidden\" name=\"judge_id\" value=\"{{options.judge_id}}\">\n" +
+    "\n" +
+    "\t\t\t  \t\t\t<label>ผู้พิพากษาเจ้าของสำนวน (ภาค)</label>\n" +
+    "\t\t\t                   \t\t<div class=\"row\">\n" +
+    "\t\t\t\t\t            \t<div class=\"col-md-12\">\n" +
+    "\t\t\t\t\t                       \t<div custom-dropdown class=\"form-control input-md\" ng-model=\"options.judge_id\" data-options=\"judge_atjor5_options\"></div>\n" +
+    "\t\t\t\t\t                       \t<span class=\"form-control-feedback\"><span class=\"caret\" style=\"margin-right:2em\"></span></span>\n" +
+    "\t\t\t\t\t           \t\t</div>\n" +
+    "\t\t\t\t           \t\t</div>\n" +
+    "\n" +
+    "\t\t\t\t        \t\t<label>เดือนที่รับสำนวน</label>\n" +
+    "\t\t\t\t        \t\t<div class=\"row\">\n" +
+    "\t\t\t\t        \t\t\t<div class=\"col-md-12\">\n" +
+    "\t\t\t\t                    \t\t\t<span mode=\"1\"  ng-model=\"options.date_from\"  placeholder=\"เริ่มตั้งแต่เดือน\" custom-date-field></span>\n" +
+    "\t\t\t\t                   \t\t </div>\n" +
+    "\t\t\t\t                \t</div>\n" +
+    "\t\t\t           \t\t\t<br>\n" +
+    "\t\t\t\t\t\t<div class=\"row\">\n" +
+    "\t\t\t\t\t                    <div class=\"col-md-12\">\n" +
+    "\t\t\t\t\t                    \t<span mode=\"1\"  ng-model=\"options.date_to\"  placeholder=\"ถึงเดือน\" custom-date-field></span>\n" +
+    "\t\t\t\t\t                    </div>\n" +
+    "\t\t\t\t            \t</div>\n" +
+    "\t\t\t            \t\t<hr>\n" +
+    "\t\t\t            \t\t<div class=\"col-md-6 col-md-offset-3\">\n" +
+    "\t\t\t            \t\t\t<button class=\"btn btn-primary btn-block\" ng-disabled=\"!(options.judge_id && options.date_from)\"><span class=\"glyphicon glyphicon-print\"></span> สร้างรายงาน</button>\n" +
+    "\t\t\t \t\t\t</div>\n" +
+    " \t\t\t\t\t</form>\n" +
+    " \t\t\t\t</div>\n" +
+    " \t\t\t\t</div>\n" +
+    " \t\t\t</div>\n" +
+    "\t\t</div>\n" +
+    "\t<div>\n" +
+    "<div>"
+  );
+
+
+  $templateCache.put('views/admin_print_report14.html',
+    "<div class=\"row\" ng-controller=\"PrintReportCtrl\">\n" +
+    "\t<div class=\"col-md-6 col-md-offset-3\">\n" +
+    "\t\t<div class=\"panel panel-default\">\n" +
+    "\t\t\t  <div class=\"panel-heading\">\n" +
+    "\t\t\t    \t<h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\n" +
+    "\t\t\t    \t<h4 class=\"text-info\">รายงานระยะเวลาการตรวจสำนวนและร่างคำพิพากษา (หัวหน้าภาค)</h4>\n" +
+    "\t\t\t  </div>\n" +
+    "\t\t  \t<div class=\"panel-body\">\n" +
+    "\t\t\t  \t<div class=\"row\">\n" +
+    "\t\t\t  \t<div class=\"col-md-8 col-md-offset-2\">\n" +
+    "\t\t\t  \t\t<form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/report14.php\" target=\"_blank\">\n" +
+    "\t\t\t  \t\t\t<input type=\"hidden\" name=\"date1\" value=\"{{options.date_from}}\">\n" +
+    "\t\t\t  \t\t\t<input type=\"hidden\" name=\"date2\" value=\"{{options.date_to}}\">\n" +
+    "\t\t\t  \t\t\t<input type=\"hidden\" name=\"judge_id\" value=\"{{options.judge_id}}\">\n" +
+    "\n" +
+    "\t\t\t  \t\t\t<label>ผู้พิพากษาเจ้าของสำนวน (ภาค)</label>\n" +
+    "\t\t\t                   \t\t<div class=\"row\">\n" +
+    "\t\t\t\t\t            \t<div class=\"col-md-12\">\n" +
+    "\t\t\t\t\t                       \t<div custom-dropdown class=\"form-control input-md\" ng-model=\"options.judge_id\" data-options=\"judge_headjor5_options\"></div>\n" +
+    "\t\t\t\t\t                       \t<span class=\"form-control-feedback\"><span class=\"caret\" style=\"margin-right:2em\"></span></span>\n" +
+    "\t\t\t\t\t           \t\t</div>\n" +
+    "\t\t\t\t           \t\t</div>\n" +
+    "\n" +
+    "\t\t\t\t        \t\t<label>เดือนที่รับสำนวน</label>\n" +
+    "\t\t\t\t        \t\t<div class=\"row\">\n" +
+    "\t\t\t\t        \t\t\t<div class=\"col-md-12\">\n" +
+    "\t\t\t\t                    \t\t\t<span mode=\"1\"  ng-model=\"options.date_from\"  placeholder=\"เริ่มตั้งแต่เดือน\" custom-date-field></span>\n" +
+    "\t\t\t\t                   \t\t </div>\n" +
+    "\t\t\t\t                \t</div>\n" +
+    "\t\t\t           \t\t\t<br>\n" +
+    "\t\t\t\t\t\t<div class=\"row\">\n" +
+    "\t\t\t\t\t                    <div class=\"col-md-12\">\n" +
+    "\t\t\t\t\t                    \t<span mode=\"1\"  ng-model=\"options.date_to\"  placeholder=\"ถึงเดือน\" custom-date-field></span>\n" +
+    "\t\t\t\t\t                    </div>\n" +
+    "\t\t\t\t            \t</div>\n" +
+    "\t\t\t            \t\t<hr>\n" +
+    "\t\t\t            \t\t<div class=\"col-md-6 col-md-offset-3\">\n" +
+    "\t\t\t            \t\t\t<button class=\"btn btn-primary btn-block\" ng-disabled=\"!(options.judge_id && options.date_from)\"><span class=\"glyphicon glyphicon-print\"></span> สร้างรายงาน</button>\n" +
+    "\t\t\t \t\t\t</div>\n" +
+    " \t\t\t\t\t</form>\n" +
+    " \t\t\t\t</div>\n" +
+    " \t\t\t\t</div>\n" +
+    " \t\t\t</div>\n" +
+    "\t\t</div>\n" +
+    "\t<div>\n" +
+    "<div>"
+  );
+
+
+  $templateCache.put('views/admin_print_report15.html',
+    "<div class=\"row\" ng-controller=\"PrintReportCtrl\">\n" +
+    "\t<div class=\"col-md-6 col-md-offset-3\">\n" +
+    "\t\t<div class=\"panel panel-default\">\n" +
+    "\t\t\t  <div class=\"panel-heading\">\n" +
+    "\t\t\t    \t<h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\n" +
+    "\t\t\t    \t<h4 class=\"text-info\">บัญชีรายงานการตรวจสำนวนและสั่งออกร่างคำพิพากษา</h4>\n" +
+    "\t\t\t  </div>\n" +
+    "\t\t  \t<div class=\"panel-body\">\n" +
+    "\t\t\t  \t<div class=\"row\">\n" +
+    "\t\t\t  \t<div class=\"col-md-8 col-md-offset-2\">\n" +
+    "\t\t\t  \t\t<form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/report15.php\" target=\"_blank\">\n" +
+    "\t\t\t  \t\t\t<input type=\"hidden\" name=\"date1\" value=\"{{options.date_from}}\">\n" +
+    "\t\t\t  \t\t\t<input type=\"hidden\" name=\"date2\" value=\"{{options.date_to}}\">\n" +
+    "\n" +
+    "\n" +
+    "\t\t\t\t        \t\t<label>ประจำเดือน</label>\n" +
+    "\t\t\t\t        \t\t<div class=\"row\">\n" +
+    "\t\t\t\t        \t\t\t<div class=\"col-md-12\">\n" +
+    "\t\t\t\t                    \t\t\t<span mode=\"1\"  ng-model=\"options.date_from\"  placeholder=\"เริ่มตั้งแต่เดือน\" custom-date-field></span>\n" +
+    "\t\t\t\t                   \t\t </div>\n" +
+    "\t\t\t\t                \t</div>\n" +
+    "\t\t\t           \t\t\t<br>\n" +
+    "\t\t\t\t\t\t<div class=\"row\">\n" +
+    "\t\t\t\t\t                    <div class=\"col-md-12\">\n" +
+    "\t\t\t\t\t                    \t<span mode=\"1\"  ng-model=\"options.date_to\"  placeholder=\"ถึงเดือน\" custom-date-field></span>\n" +
+    "\t\t\t\t\t                    </div>\n" +
+    "\t\t\t\t            \t</div>\n" +
+    "\t\t\t            \t\t<hr>\n" +
+    "\t\t\t            \t\t<div class=\"col-md-6 col-md-offset-3\">\n" +
+    "\t\t\t            \t\t\t<button class=\"btn btn-primary btn-block\" ng-disabled=\"!(options.date_from)\"><span class=\"glyphicon glyphicon-print\"></span> สร้างรายงาน</button>\n" +
+    "\t\t\t \t\t\t</div>\n" +
+    " \t\t\t\t\t</form>\n" +
+    " \t\t\t\t</div>\n" +
+    " \t\t\t\t</div>\n" +
+    " \t\t\t</div>\n" +
     "\t\t</div>\n" +
     "\t<div>\n" +
     "<div>"
@@ -4728,388 +5210,158 @@ angular.module('App').run(['$templateCache', function($templateCache) {
   );
 
 
-  $templateCache.put('views/admin_report.html',
-    "<style>\r" +
-    "\n" +
-    "\ttable tr td{\r" +
-    "\n" +
-    "\t\tvertical-align:middle;\r" +
-    "\n" +
-    "\t}\r" +
-    "\n" +
-    "</style>\r" +
-    "\n" +
-    "<script type=\"text/ng-template\" id=\"custom.admin.search.html\">\r" +
-    "\n" +
-    "    <div class=\"modal\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">\r" +
-    "\n" +
-    "        <div class=\"modal-dialog\">\r" +
-    "\n" +
-    "            <div class=\"modal-content\">\r" +
-    "\n" +
-    "                <div class=\"modal-header\" >\r" +
-    "\n" +
-    "                    <button type=\"button\" class=\"close\" aria-label=\"Close\" ng-click=\"$hide()\"><span aria-hidden=\"true\">&times;</span></button>\r" +
-    "\n" +
-    "                    <h4 class=\"modal-title\">ค้นหาข้อมูล</h4>\r" +
-    "\n" +
-    "                </div>\r" +
-    "\n" +
-    "                <div class=\"modal-body\">\r" +
-    "\n" +
-    "                    <form class=\"form-horizontal\" name=\"form\">\r" +
-    "\n" +
-    "                        <fieldset>\r" +
-    "\n" +
-    "                            <div class=\"form-group\">\r" +
-    "\n" +
-    "                                <!-- Text input-->\r" +
-    "\n" +
-    "                                <label class=\"col-md-4 control-label\">วันที่ส่ง</label>\r" +
-    "\n" +
-    "                                <div class=\"col-md-7\">\r" +
-    "\n" +
-    "                                    <div class=\"input-group\">\r" +
-    "\n" +
-    "                                        <input type=\"text\" name=\"name\" placeholder=\"\" required ng-model=\"searchItem.date1\" class=\"form-control input-md\" bs-datepicker data-date-format=\"yyyy-MM-dd\" data-date-type=\"string\">\r" +
-    "\n" +
-    "                                        <div class=\"input-group-addon  adon-label\">ถึง</div>\r" +
-    "\n" +
-    "                                        <input type=\"text\" name=\"name\" placeholder=\"\" required ng-model=\"searchItem.date2\" class=\"form-control input-md\" bs-datepicker data-date-format=\"yyyy-MM-dd\" data-date-type=\"string\">\r" +
-    "\n" +
-    "                                    </div>\r" +
-    "\n" +
-    "                                </div>\r" +
-    "\n" +
-    "                            </div>\r" +
-    "\n" +
-    "                            <div class=\"form-group\">\r" +
-    "\n" +
-    "                                <!-- Text input-->\r" +
-    "\n" +
-    "                                <label class=\"col-md-4 control-label\">เลขคดีดำ</label>\r" +
-    "\n" +
-    "                                <div class=\"col-md-7\">\r" +
-    "\n" +
-    "                                    <input type=\"text\" name=\"name\" placeholder=\"\" required ng-model=\"searchItem.number_black\" class=\"form-control input-md\">\r" +
-    "\n" +
-    "                                </div>\r" +
-    "\n" +
-    "                            </div>\r" +
+  $templateCache.put('views/admin_reports.html',
+    "<div ui-view></div>\r" +
     "\n" +
     "\r" +
+    "\n"
+  );
+
+
+  $templateCache.put('views/admin_reports_menu.html',
+    "<h1 class=\"page-header text-center\">\r" +
     "\n" +
-    "                            <div class=\"form-group\">\r" +
+    "รายงาน\r" +
     "\n" +
-    "\r" +
-    "\n" +
-    "                                <!-- Text input-->\r" +
-    "\n" +
-    "                                <label class=\"col-md-4 control-label\">โจทก์</label>\r" +
-    "\n" +
-    "                                <div class=\"col-md-7\">\r" +
-    "\n" +
-    "                                    <input type=\"text\" name=\"code\" placeholder=\"\" required ng-model=\"searchItem.plaintiff\" class=\"form-control input-md\">\r" +
-    "\n" +
-    "                                </div>\r" +
-    "\n" +
-    "                            </div>\r" +
-    "\n" +
-    "                            <div class=\"form-group\">\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "                                <!-- Text input-->\r" +
-    "\n" +
-    "                                <label class=\"col-md-4 control-label\">จำเลย</label>\r" +
-    "\n" +
-    "                                <div class=\"col-md-7\">\r" +
-    "\n" +
-    "                                    <input type=\"text\" name=\"code\" placeholder=\"\" required ng-model=\"searchItem.defendant\" class=\"form-control input-md\">\r" +
-    "\n" +
-    "                                </div>\r" +
-    "\n" +
-    "                            </div>\r" +
-    "\n" +
-    "                            <div class=\"form-group\">\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "                                <!-- Text input-->\r" +
-    "\n" +
-    "                                <label class=\"col-md-4 control-label\">เรื่อง</label>\r" +
-    "\n" +
-    "                                <div class=\"col-md-7\">\r" +
-    "\n" +
-    "                                    <input type=\"text\" name=\"code\" placeholder=\"\" required ng-model=\"searchItem.title\" class=\"form-control input-md\">\r" +
-    "\n" +
-    "                                </div>\r" +
-    "\n" +
-    "                            </div>\r" +
-    "\n" +
-    "                            <div class=\"form-group\">\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "                                <!-- Select Basic -->\r" +
-    "\n" +
-    "                                <label class=\"col-md-4 control-label\">ศาล</label>\r" +
-    "\n" +
-    "                                <div class=\"col-md-7\">\r" +
-    "\n" +
-    "                                    <select class=\"form-control input-md\" name=\"role\" ng-model=\"searchItem.user_id\" select-value-type=\"string\"\r" +
-    "\n" +
-    "                                            ng-options=\"it.id as it.name group by lookup_group(it.group_id) for it in Lookups.getCourt() \">\r" +
-    "\n" +
-    "                                        <option value=\"\">ทุกศาล</option>\r" +
-    "\n" +
-    "                                    </select>\r" +
-    "\n" +
-    "                                </div>\r" +
-    "\n" +
-    "                            </div>\r" +
+    "</h1>\r" +
     "\n" +
     "\r" +
     "\n" +
     "\r" +
     "\n" +
-    "                        </fieldset>\r" +
+    "<div class=\"row\">\r" +
     "\n" +
-    "                    </form>\r" +
+    "      <div class=\"col-md-6 col-lg-4\">\r" +
     "\n" +
-    "\r" +
+    "            <a href=\"#admin/reports/report4\">\r" +
     "\n" +
-    "                </div>\r" +
+    "                <h1 class=\"text-center\">\r" +
     "\n" +
-    "                <div class=\"modal-footer\">\r" +
+    "                    <span class=\"glyphicon glyphicon-print\"></span>\r" +
     "\n" +
-    "                    <button type=\"button\" class=\"btn btn-primary\" ng-click=\"startSearch(searchItem);$hide()\">ค้นหา</button>\r" +
+    "                </h1>\r" +
     "\n" +
-    "                    <button type=\"button\" class=\"btn btn-warning\" ng-click=\"$hide()\">ยกเลิก</button>\r" +
+    "                <h4 class=\"text-center text-primary\">รายงานการส่งสำนวนเพื่อตรวจร่างคำพิพากษาประจำวัน</h4>\r" +
     "\n" +
-    "                </div>\r" +
+    "            </a>\r" +
     "\n" +
-    "            </div>\r" +
+    "      </div>\r" +
+    "\n" +
+    "      <div class=\"col-md-6 col-lg-4\">\r" +
+    "\n" +
+    "            <a href=\"#admin/reports/report5\">\r" +
+    "\n" +
+    "                <h1 class=\"text-center\">\r" +
+    "\n" +
+    "                    <span class=\"glyphicon glyphicon-print\"></span>\r" +
+    "\n" +
+    "                </h1>\r" +
+    "\n" +
+    "                <h4 class=\"text-center text-primary\">รายงานข้อมูลการส่งสำนวนและร่างคำพิพากษา<br>ของศาลในภาค 5 (ประจำเดือน)</h4>\r" +
+    "\n" +
+    "            </a>\r" +
+    "\n" +
+    "      </div>\r" +
+    "\n" +
+    "      <div class=\"col-md-6 col-lg-4\">\r" +
+    "\n" +
+    "            <a href=\"#admin/reports/report6\">\r" +
+    "\n" +
+    "                <h1 class=\"text-center\">\r" +
+    "\n" +
+    "                    <span class=\"glyphicon glyphicon-print\"></span>\r" +
+    "\n" +
+    "                </h1>\r" +
+    "\n" +
+    "                <h4 class=\"text-center text-primary\">สรุปการส่งสำนวนและร่างคำพิพากษา<br>ศาลในภาค 5(ประจำเดือน)</h4>\r" +
+    "\n" +
+    "            </a>\r" +
+    "\n" +
+    "      </div>\r" +
+    "\n" +
+    "      <div class=\"col-md-6 col-lg-4\">\r" +
+    "\n" +
+    "            <a href=\"#admin/reports/report7\">\r" +
+    "\n" +
+    "                <h1 class=\"text-center\">\r" +
+    "\n" +
+    "                    <span class=\"glyphicon glyphicon-print\"></span>\r" +
+    "\n" +
+    "                </h1>\r" +
+    "\n" +
+    "                <h4 class=\"text-center text-primary\">รายงานสำนวนที่ไม่ได้ส่งสำเนาคำพิพากษา</h4>\r" +
+    "\n" +
+    "            </a>\r" +
+    "\n" +
+    "      </div>      \r" +
+    "\n" +
+    "      <div class=\"col-md-6 col-lg-4\">\r" +
+    "\n" +
+    "            <a href=\"#admin/reports/report8\">\r" +
+    "\n" +
+    "                <h1 class=\"text-center\">\r" +
+    "\n" +
+    "                    <span class=\"glyphicon glyphicon-print\"></span>\r" +
+    "\n" +
+    "                </h1>\r" +
+    "\n" +
+    "                <h4 class=\"text-center text-primary\">รายงานคดีที่ไม่ได้ส่งสำนวน</h4>\r" +
+    "\n" +
+    "            </a>\r" +
+    "\n" +
+    "      </div>           \r" +
+    "\n" +
+    "      <div class=\"col-md-6 col-lg-4\">\r" +
+    "\n" +
+    "            <a href=\"#admin/reports/report11\">\r" +
+    "\n" +
+    "                <h1 class=\"text-center\">\r" +
+    "\n" +
+    "                    <span class=\"glyphicon glyphicon-print\"></span>\r" +
+    "\n" +
+    "                </h1>\r" +
+    "\n" +
+    "                <h4 class=\"text-center text-primary\">รายงานระยะเวลาการตรวจสำนวนและร่างคำพิพากษา</h4>\r" +
+    "\n" +
+    "            </a>\r" +
+    "\n" +
+    "      </div>           \r" +
+    "\n" +
+    "      <div class=\"col-md-6 col-lg-4\">\r" +
+    "\n" +
+    "            <a href=\"#admin/reports/report12\">\r" +
+    "\n" +
+    "                <h1 class=\"text-center\">\r" +
+    "\n" +
+    "                    <span class=\"glyphicon glyphicon-print\"></span>\r" +
+    "\n" +
+    "                </h1>\r" +
+    "\n" +
+    "                <h4 class=\"text-center text-primary\">สำนวนคดีส่งตรวจที่ไม่เป็นไปตามระเบียบว่าด้วยการตรวจสำนวนและรายงานคดี\r" +
+    "\n" +
+    "</h4>\r" +
+    "\n" +
+    "            </a>\r" +
+    "\n" +
+    "      </div>           \r" +
+    "\n" +
+    "        <div class=\"col-md-6 col-lg-4\">\r" +
+    "\n" +
+    "            <a href=\"#admin/menu\">\r" +
+    "\n" +
+    "                <h1 class=\"text-center\">\t\r" +
+    "\n" +
+    "                    <span class=\"glyphicon glyphicon-th-large\"></span>\r" +
+    "\n" +
+    "                </h1>\r" +
+    "\n" +
+    "                <h4 class=\"text-center text-primary\">เมนูหลัก</h4>\r" +
+    "\n" +
+    "            </a>\r" +
     "\n" +
     "        </div>\r" +
-    "\n" +
-    "    </div>\r" +
-    "\n" +
-    "</script>\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "<script type=\"text/ng-template\" id=\"custom.confirm.admin.report.html\">\r" +
-    "\n" +
-    "    <div class=\"popover\">\r" +
-    "\n" +
-    "        <div class=\"arrow\"></div>\r" +
-    "\n" +
-    "        <h3 class=\"popover-title\">เลือกรายการที่คุณต้องการ</h3>\r" +
-    "\n" +
-    "        <div class=\"popover-content\">\r" +
-    "\n" +
-    "            <p class=\"text-center\">\r" +
-    "\n" +
-    "                <button type=\"button\" class=\"btn btn-primary btn-block\" ng-click=\"go('admin.report.form1',$it);$hide()\"><div class=\"text-left\"><span class=\"badge\">1</span> รับรายงานคดี</div></button>\r" +
-    "\n" +
-    "                <button type=\"button\" class=\"btn btn-primary btn-block\" ng-click=\"go('admin.report.form2',$it);$hide()\"><div class=\"text-left\"><span class=\"badge\">2</span> รับสำนวน</div></button>\r" +
-    "\n" +
-    "                <button type=\"button\" class=\"btn btn-primary btn-block\" ng-click=\"go('admin.report.form3',$it);$hide()\"><div class=\"text-left\"><span class=\"badge\">3</span> รับสำเนาคำพิพากษา</div></button>\r" +
-    "\n" +
-    "            </p>\r" +
-    "\n" +
-    "        </div>\r" +
-    "\n" +
-    "    </div>\r" +
-    "\n" +
-    "</script>\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "<div ng-controller=\"AdminReportCtrl\">\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "    <div ui-view></div>\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "    <div ng-hide=\"!urlEq('/admin/report')\">\r" +
-    "\n" +
-    "        <div class=\"panel panel-default\" ng-controller=\"CustomTableCtrl\" ng-init=\"setAPI('admin_cases','custom.admin.form1.html',{search:'searchText', court:'searchCourt', month:'searchMonth', year:'searchYear'},{court:true, month:true,year:true})\">\r" +
-    "\n" +
-    "            <div class=\"panel-heading\">\r" +
-    "\n" +
-    "                <div class=\"text-right pull-right\">\r" +
-    "\n" +
-    "                    <button class=\"btn btn-success\" ng-show=\"isSearchMode()\" ng-click=\"setFilter()\">\r" +
-    "\n" +
-    "                        <span class=\"glyphicon glyphicon-arrow-left\"></span> ออกจากโหมดการค้นหา\r" +
-    "\n" +
-    "                    </button>\r" +
-    "\n" +
-    "                    <button class=\"btn btn-default\" ng-click=\"advancedSearch()\">\r" +
-    "\n" +
-    "                        <span class=\"glyphicon glyphicon-search\"></span> ค้นหา\r" +
-    "\n" +
-    "                    </button>\r" +
-    "\n" +
-    "                    <button data-placement=\"bottom-right\" data-trigger=\"click\" bs-popover data-template=\"custom.confirm.admin.report.html\"\r" +
-    "\n" +
-    "                            ng-show=\"hasSelected()\" class=\"btn btn-primary\" data-auto-close=\"true\">\r" +
-    "\n" +
-    "                        <span class=\"glyphicon glyphicon-pencil\"></span> รับคดี\r" +
-    "\n" +
-    "                    </button>\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "                </div>\r" +
-    "\n" +
-    "                <h2 style=\"padding:0px;margin:0px;\"><span class=\"glyphicon glyphicon-th-list\"></span> รายงานคดี ({{tableParams.total()}})</h2>\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "            </div>\r" +
-    "\n" +
-    "            \r" +
-    "\n" +
-    "            <div class=\"panel-body\" style=\"padding-bottom:0px;\">\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "                <div loading-container=\"tableParams.settings().$loading\">\r" +
-    "\n" +
-    "                    <div ng-show=\"!isSearchMode()\">\r" +
-    "\n" +
-    "                        <div class=\"input-group col-md-10 col-md-offset-1\">\r" +
-    "\n" +
-    "                            <div class=\"input-group-addon  adon-label\">ศาล</div>\r" +
-    "\n" +
-    "                            <select class=\"form-control\" ng-model=\"searchCourt\" ng-change=\"setFilter()\" select-value-type=\"string\" ng-options=\"it.id as it.name for it in Lookups.getCourt()\"></select>\r" +
-    "\n" +
-    "                            <div class=\"input-group-addon  adon-label\">เดือน</div>\r" +
-    "\n" +
-    "                            <select class=\"form-control\" ng-model=\"searchMonth\" ng-change=\"setFilter()\" select-value-type=\"string\" ng-options=\"it.id as it.name for it in Lookups.getMonth()\"></select>\r" +
-    "\n" +
-    "                            <div class=\"input-group-addon  adon-label\">พ.ศ</div>\r" +
-    "\n" +
-    "                            <select class=\"form-control\" ng-model=\"searchYear\" ng-change=\"setFilter()\" select-value-type=\"string\" ng-options=\"it.id as it.name for it in Lookups.getYear()\"></select>\r" +
-    "\n" +
-    "                            <div class=\"input-group-addon btn btn-default\" ng-click=\"setFilter(true)\" title=\"เริ่มค้นหา\"><span class=\"glyphicon glyphicon-refresh\"></span></div>\r" +
-    "\n" +
-    "                        </div>\r" +
-    "\n" +
-    "                        <hr />\r" +
-    "\n" +
-    "                    </div>\r" +
-    "\n" +
-    "                    <table ng-table=\"tableParams\" show-filter=\"false\" class=\"table table-hover table-bordered\" template-pagination=\"custom.pages.html\">\r" +
-    "\n" +
-    "                        <tbody>\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "                            <tr ng-repeat=\"it in $data\"\r" +
-    "\n" +
-    "                                ng-click=\"selectRow(it);\"\r" +
-    "\n" +
-    "                                ng-class=\"{'active': isSelected(it)}\">\r" +
-    "\n" +
-    "                                <td width=\"30\" class=\"text-right text-muted\">{{startIdx + $index + 1}}.</td>\r" +
-    "\n" +
-    "                                <td width=\"30\" header=\"'custom.checked.html'\">\r" +
-    "\n" +
-    "                                    <input type=\"checkbox\" ng-model=\"checkboxes.items[it[pkField]]\" />\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "                                </td>\r" +
-    "\n" +
-    "                                <td data-title=\"'เลขคดีดำ'\" sortable=\"'number_black'\">\r" +
-    "\n" +
-    "                                    {{it.number_black}}\r" +
-    "\n" +
-    "                                </td>\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "                                <td data-title=\"'เลขคดีแดง'\" sortable=\"'number_red'\">\r" +
-    "\n" +
-    "                                    {{it.number_red}}\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "                                </td>\r" +
-    "\n" +
-    "                                <td data-title=\"'โจทก์'\" sortable=\"'plaintiff'\">\r" +
-    "\n" +
-    "                                    {{it.plaintiff}}\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "                                </td>\r" +
-    "\n" +
-    "                                <td data-title=\"'จำเลย'\" sortable=\"'defendant'\">\r" +
-    "\n" +
-    "                                    {{it.defendant}}\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "                                </td>\r" +
-    "\n" +
-    "                                <td data-title=\"'ข้อหา'\" sortable=\"'title'\">\r" +
-    "\n" +
-    "                                    {{it.title}}\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "                                </td>\r" +
-    "\n" +
-    "                                <td data-title=\"'วันที่ส่งสำนวน'\" sortable=\"'date_sent'\">\r" +
-    "\n" +
-    "                                    {{it.date_sent}}\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "                                </td>\r" +
-    "\n" +
-    "                                <td data-title=\"'ไฟล์ร่าง/คำพิพากษา'\">\r" +
-    "\n" +
-    "                                    {{it.file1}} {{it.file2}}\r" +
-    "\n" +
-    "                                    <span ng-if=\"isSelected(it)\" class=\"pull-right\"><button class=\"btn btn-warning btn-circle\"><span class=\"fa fa-pencil\"></span></button></span>\r" +
-    "\n" +
-    "                                </td>\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "                            </tr>\r" +
-    "\n" +
-    "                        </tbody>\r" +
-    "\n" +
-    "                    </table>\r" +
-    "\n" +
-    "                </div>\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "            </div>\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "        </div>\r" +
-    "\n" +
-    "    </div>\r" +
     "\n" +
     "</div>\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "\r" +
     "\n" +
     "\r" +
     "\n"
@@ -6842,9 +7094,9 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "                                    <div class=\"col-md-7\">\r" +
     "\n" +
-    "                                        <div custom-dropdown class=\"form-control input-md\" ng-model=\"editingItem.judge_id_a\" data-options=\"judge_court_options\"></div>\r" +
+    "                                        <div custom-dropdown class=\"form-control input-md\"  ng-model=\"editingItem.judge_id_a\" data-options=\"judge_court_options\"></div>\r" +
     "\n" +
-    "                                        <span class=\"form-control-feedback\"><span class=\"caret\"></span></span>\r" +
+    "                                        <span class=\"form-control-feedback\"><span class=\"caret\" style=\"margin-right:2em\"></span></span>\r" +
     "\n" +
     "                                    </div>\r" +
     "\n" +
@@ -7668,6 +7920,10 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "                            </button>\r" +
     "\n" +
+    "\r" +
+    "\n" +
+    "\r" +
+    "\n" +
     "                            <button ng-click=\"newItem({date_sent:today()})\" class=\"btn btn-primary\"><span class=\"glyphicon glyphicon-plus\"></span><span class=\"hidden-sm hidden-xs\"> เพิ่มคดี</span></button>\r" +
     "\n" +
     "                            <button ng-click=\"ifcall(($it.no_case_sent!='1'),editItem)\" ng-show=\"($it.no_case_sent!='1') && hasSelected()\" class=\"btn btn-warning\" ng-switch on=\"$it.no_case_sent==2\">\r" +
@@ -7686,7 +7942,13 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "                            </button>\r" +
     "\n" +
-    "                            <button ng-click=\"refresh()\" class=\"btn btn-success\"><span class=\"glyphicon glyphicon-refresh\"></span><span class=\"hidden-sm hidden-xs\"> โหลดข้อมูล</span></button>\r" +
+    "\r" +
+    "\n" +
+    "                            <button class=\"btn btn-info\"  class=\"btn btn-success\" data-placement=\"left\" data-trigger=\"click\" bs-popover data-template=\"court.cases.reports.html\" data-auto-close=\"true\">\r" +
+    "\n" +
+    "                                <span class=\"glyphicon glyphicon-print\"></span><span class=\"hidden-sm hidden-xs\"> พิมพ์รายงาน</span>\r" +
+    "\n" +
+    "                            </button>\r" +
     "\n" +
     "                        </span>\r" +
     "\n" +
@@ -9398,7 +9660,7 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "                <div class=\"form-group col-md-6\">\r" +
     "\n" +
-    "                    <label class=\"control-label col-md-4\">ผู้พิพากษาผู้ตรวจ 1</label>\r" +
+    "                    <label class=\"control-label col-md-4\">ผู้ตรวจ(อธ./รอง อธ./พ.อาวุโส)</label>\r" +
     "\n" +
     "                    <div class=\"col-md-8\">\r" +
     "\n" +
@@ -9412,7 +9674,7 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "                <div class=\"form-group col-md-6\">\r" +
     "\n" +
-    "                    <label class=\"control-label col-md-4\">ผู้พิพากษาผู้ตรวจ 2</label>\r" +
+    "                    <label class=\"control-label col-md-4\">ผู้ตรวจ(หน.ภาค)</label>\r" +
     "\n" +
     "                    <div class=\"col-md-8\">\r" +
     "\n" +
@@ -9508,6 +9770,604 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "\r" +
     "\n"
+  );
+
+
+  $templateCache.put('views/court_manages.html',
+    "<div ui-view></div>\r" +
+    "\n" +
+    "\r" +
+    "\n"
+  );
+
+
+  $templateCache.put('views/court_manages_menu.html',
+    "<h1 class=\"page-header text-center\">\r" +
+    "\n" +
+    "เตรียมข้อมูล\r" +
+    "\n" +
+    "</h1>\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "<div class=\"row\">\r" +
+    "\n" +
+    "      <div class=\"col-md-4 col-lg-3\">\r" +
+    "\n" +
+    "            <a href=\"#court/manages/users\">\r" +
+    "\n" +
+    "                <h1 class=\"text-center\">\r" +
+    "\n" +
+    "                    <span class=\"glyphicon glyphicon-user\"></span>\r" +
+    "\n" +
+    "                </h1>\r" +
+    "\n" +
+    "                <h4 class=\"text-center text-primary\">ผู้ใช้</h4>\r" +
+    "\n" +
+    "            </a>\r" +
+    "\n" +
+    "      </div>\r" +
+    "\n" +
+    "        <div class=\"col-md-4 col-lg-3\">\r" +
+    "\n" +
+    "            <a href=\"#court/menu\">\r" +
+    "\n" +
+    "                <h1 class=\"text-center\">\t\r" +
+    "\n" +
+    "                    <span class=\"glyphicon glyphicon-th-large\"></span>\r" +
+    "\n" +
+    "                </h1>\r" +
+    "\n" +
+    "                <h4 class=\"text-center text-primary\">เมนูหลัก</h4>\r" +
+    "\n" +
+    "            </a>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "</div>\r" +
+    "\n" +
+    "\r" +
+    "\n"
+  );
+
+
+  $templateCache.put('views/court_menu.html',
+    "<style>\r" +
+    "\n" +
+    ".bg2{\r" +
+    "\n" +
+    "\tmargin-top:-60px;\r" +
+    "\n" +
+    "\tdisplay: block;\r" +
+    "\n" +
+    "\tposition:relative;\r" +
+    "\n" +
+    "\tbackground-image: url('images/bg.png');\r" +
+    "\n" +
+    "\tbackground-repeat:no-repeat;\r" +
+    "\n" +
+    "\tbackground-position:  center;\r" +
+    "\n" +
+    "\twidth: 600px;\r" +
+    "\n" +
+    "\theight:322px;\r" +
+    "\n" +
+    "}\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    ".bg2-btn{\r" +
+    "\n" +
+    "\tdisplay: block;\r" +
+    "\n" +
+    "\tposition: absolute;\r" +
+    "\n" +
+    "\tcursor:pointer;\r" +
+    "\n" +
+    "\topacity:1;\r" +
+    "\n" +
+    "\tbackground-repeat:no-repeat;\r" +
+    "\n" +
+    "\tbackground-position:  center;\r" +
+    "\n" +
+    "\tbackground-size: cover;\r" +
+    "\n" +
+    "\twidth: 120px !important;\r" +
+    "\n" +
+    "\theight: 120px !important;\r" +
+    "\n" +
+    "}\r" +
+    "\n" +
+    ".bg2-btn1{\r" +
+    "\n" +
+    "\tbackground-image: url('images/menu1.png');\r" +
+    "\n" +
+    "\tleft:-90px;  top:180px;\r" +
+    "\n" +
+    "}\r" +
+    "\n" +
+    ".bg2-btn2{\r" +
+    "\n" +
+    "\tbackground-image: url('images/menu2.png');\r" +
+    "\n" +
+    "\tleft:80px;  bottom:-50px;\r" +
+    "\n" +
+    "}\r" +
+    "\n" +
+    ".bg2-btn3{\r" +
+    "\n" +
+    "\tbackground-image: url('images/menu3.png');\r" +
+    "\n" +
+    "\tleft:250px;  bottom:-100px;\r" +
+    "\n" +
+    "}\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    ".bg2-btn4{\r" +
+    "\n" +
+    "\tbackground-image: url('images/exit.png');\r" +
+    "\n" +
+    "\tright:-110px;  top:180px;\r" +
+    "\n" +
+    "}\r" +
+    "\n" +
+    ".bg2-btn5{\r" +
+    "\n" +
+    "\tbackground-image: url('images/menu5.png');\r" +
+    "\n" +
+    "\tright:60px;  bottom:-50px;\r" +
+    "\n" +
+    "}\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    ".bg2-btn1:hover, .bg2-btn2:hover, .bg2-btn3:hover, .bg2-btn4:hover, .bg2-btn5:hover{\r" +
+    "\n" +
+    "\topacity:1 !important;\r" +
+    "\n" +
+    "\tfilter: saturate(200%);\r" +
+    "\n" +
+    "\t-webkit-filter: saturate(200%);\r" +
+    "\n" +
+    "\t-mos-filter: saturate(200%);\r" +
+    "\n" +
+    "\t-ms-filter: saturate(200%);\r" +
+    "\n" +
+    "\t-o: saturate(200%);\r" +
+    "\n" +
+    "\ttransform: scale(1.5,1.5);\r" +
+    "\n" +
+    "\t-webkit-transform: scale(1.5,1.5);\r" +
+    "\n" +
+    "\t-mos-transform: scale(1.5,1.5);\r" +
+    "\n" +
+    "\t-ms-transform: scale(1.5,1.5);\r" +
+    "\n" +
+    "\t-o-transform: scale(1.5,1.5);\r" +
+    "\n" +
+    "}\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "</style>\r" +
+    "\n" +
+    "<!--\r" +
+    "\n" +
+    "<h2 class=\"page-header text-center\" style=\"border-bottom:none\">\r" +
+    "\n" +
+    "    ระบบสารสนเทศการรายงานคดีและติดตามสำนวนที่ส่งตรวจร่างคำพิพากษา<br />\r" +
+    "\n" +
+    "    <small>{{getUser().name}}</small>\r" +
+    "\n" +
+    "</h2>\r" +
+    "\n" +
+    "-->\r" +
+    "\n" +
+    "<div  class=\"bg2 center-block\">\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "\t<div class=\"bg2-btn bg2-btn1\" ng-click=\"goTo('court.acases')\"></div>\r" +
+    "\n" +
+    "\t<div class=\"bg2-btn bg2-btn2\" ng-click=\"goTo('court.cases')\"></div>\r" +
+    "\n" +
+    "\t<div class=\"bg2-btn bg2-btn3\" ng-click=\"goTo('court.vcases')\"></div>\r" +
+    "\n" +
+    "\t<div class=\"bg2-btn bg2-btn4\" data-placement=\"left\" data-trigger=\"click\" bs-popover data-template=\"custom.logout.popover.html\" data-auto-close=\"true\"></div>\r" +
+    "\n" +
+    "\t<div class=\"bg2-btn bg2-btn5\" ng-click=\"goTo('court.manages.menu')\"></div>\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "</div>\r" +
+    "\n" +
+    "\r" +
+    "\n"
+  );
+
+
+  $templateCache.put('views/court_print_report1.html',
+    "<div class=\"row\" ng-controller=\"PrintReportCtrl\" ng-init=\"options.date_from=today()\">\r" +
+    "\n" +
+    "\t<div class=\"col-md-6 col-md-offset-3\">\r" +
+    "\n" +
+    "\t\t<div class=\"panel panel-default\">\r" +
+    "\n" +
+    "\t\t  <div class=\"panel-heading\">\r" +
+    "\n" +
+    "\t\t    \t<h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\r" +
+    "\n" +
+    "\t\t    \t<h4 class=\"text-info\">รายงานการจัดส่งคดี ไปยังสำนักงานอธิบดีผู้พิพากษาภาค5</h4>\r" +
+    "\n" +
+    "\t\t  </div>\r" +
+    "\n" +
+    "\t\t  <div class=\"panel-body\">\r" +
+    "\n" +
+    "\t\t  \t<div class=\"row\">\r" +
+    "\n" +
+    "\t\t  \t<div class=\"col-md-8 col-md-offset-2\">\r" +
+    "\n" +
+    "\t\t  \t<form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/court_report1.php\" target=\"_blank\">\r" +
+    "\n" +
+    "\t\t  \t<input type=\"hidden\" name=\"date1\" value=\"{{options.date_from}}\">\r" +
+    "\n" +
+    "                <input type=\"hidden\" name=\"date2\" value=\"{{options.date_to}}\">\r" +
+    "\n" +
+    "              <input type=\"hidden\" name=\"type_id\" value=\"{{options.type_id}}\">\r" +
+    "\n" +
+    "              <div class=\"form-group\">\r" +
+    "\n" +
+    "                  <label class=\"control-label\">ประเภทคดี</label>\r" +
+    "\n" +
+    "                  <select class=\"form-control\" ng-model=\"options.type_id\" select-value-type=\"string\" ng-options=\"it.id as it.id |lookup_type:'name':'code' group by toGroupName(it.group_id) for it in Lookups.getType() \">\r" +
+    "\n" +
+    "                      <option value=\"\">-- ทุกประเภทคดี --</option>\r" +
+    "\n" +
+    "                  </select>\r" +
+    "\n" +
+    "              </div>\t  \r" +
+    "\n" +
+    "        \t\t<label>ประจำเดือน</label>\r" +
+    "\n" +
+    "        \t\t<div class=\"row\">\r" +
+    "\n" +
+    "        \t\t\t<div class=\"col-md-12\">\r" +
+    "\n" +
+    "                    \t<span mode=\"1\"  ng-model=\"options.date_from\"  placeholder=\"เดือน\" custom-date-field></span>\r" +
+    "\n" +
+    "                    </div>\r" +
+    "\n" +
+    "                </div>\r" +
+    "\n" +
+    "                     <br/>\r" +
+    "\n" +
+    "        <div class=\"row\">\r" +
+    "\n" +
+    "                    <div class=\"col-md-12\">\r" +
+    "\n" +
+    "                      <span mode=\"1\"  ng-model=\"options.date_to\"  placeholder=\"ถึงเดือน\" custom-date-field></span>\r" +
+    "\n" +
+    "                    </div>\r" +
+    "\n" +
+    "            \t<hr>\r" +
+    "\n" +
+    "            \t<div class=\"col-md-6 col-md-offset-3\">\r" +
+    "\n" +
+    "            \t\t<button class=\"btn btn-primary btn-block\" ng-disabled=\"!options.date_from\"><span class=\"glyphicon glyphicon-print\"></span> สร้างรายงาน</button>\r" +
+    "\n" +
+    " \t\t\t\t</div>\r" +
+    "\n" +
+    " \t\t\t</form>\r" +
+    "\n" +
+    " \t\t\t</div>\r" +
+    "\n" +
+    " \t\t\t</div>\r" +
+    "\n" +
+    "\t\t  </div>\r" +
+    "\n" +
+    "\t\t</div>\r" +
+    "\n" +
+    "\t<div>\r" +
+    "\n" +
+    "<div>"
+  );
+
+
+  $templateCache.put('views/court_print_report2.html',
+    "<div class=\"modal fade\" tabindex=\"-1\" role=\"dialog\">\r" +
+    "\n" +
+    "  <div class=\"modal-dialog\">\r" +
+    "\n" +
+    "    <div class=\"modal-content col-md-12\">\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "<div class=\"row\" ng-controller=\"PrintReportCtrl\" ng-init=\"options.date_from=today()\">\r" +
+    "\n" +
+    "\t<div class=\"col-md-6 col-md-offset-3\">\r" +
+    "\n" +
+    "\t\t<div class=\"panel panel-default\">\r" +
+    "\n" +
+    "\t\t  <div class=\"panel-heading\">\r" +
+    "\n" +
+    "\t\t    \t<h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\r" +
+    "\n" +
+    "\t\t    \t<h4 class=\"text-info\">รายงานการจัดส่งสำนวนเพื่อตรวจร่างคำพิพากษา ไปยังสำนักงานอธิบดีผู้พิพากษาภาค5</h4>\r" +
+    "\n" +
+    "\t\t  </div>\r" +
+    "\n" +
+    "\t\t  <div class=\"panel-body\">\r" +
+    "\n" +
+    "\t\t  \t<div class=\"row\">\r" +
+    "\n" +
+    "\t\t  \t<div class=\"col-md-8 col-md-offset-2\">\r" +
+    "\n" +
+    "\t\t  \t<form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/court_report2.php\" target=\"_blank\">\r" +
+    "\n" +
+    "\t\t  \t<input type=\"hidden\" name=\"date1\" value=\"{{options.date_from}}\">\r" +
+    "\n" +
+    "               <input type=\"hidden\" name=\"date2\" value=\"{{options.date_to}}\">\r" +
+    "\n" +
+    "              <input type=\"hidden\" name=\"type_id\" value=\"{{options.type_id}}\">\r" +
+    "\n" +
+    "              <div class=\"form-group\">\r" +
+    "\n" +
+    "                  <label class=\"control-label\">ประเภทคดี</label>\r" +
+    "\n" +
+    "                  <select class=\"form-control\" ng-model=\"options.type_id\" select-value-type=\"string\" ng-options=\"it.id as it.id |lookup_type:'name':'code' group by toGroupName(it.group_id) for it in Lookups.getType() \">\r" +
+    "\n" +
+    "                      <option value=\"\">-- ทุกประเภทคดี --</option>\r" +
+    "\n" +
+    "                  </select>\r" +
+    "\n" +
+    "              </div>\t  \r" +
+    "\n" +
+    "        \t\t<label>ประจำเดือน</label>\r" +
+    "\n" +
+    "            <div class=\"row\">\r" +
+    "\n" +
+    "              <div class=\"col-md-12\">\r" +
+    "\n" +
+    "                      <span mode=\"1\"  ng-model=\"options.date_from\"  placeholder=\"เดือน\" custom-date-field></span>\r" +
+    "\n" +
+    "                    </div>\r" +
+    "\n" +
+    "                </div>\r" +
+    "\n" +
+    "                <br/>\r" +
+    "\n" +
+    "        <div class=\"row\">\r" +
+    "\n" +
+    "                    <div class=\"col-md-12\">\r" +
+    "\n" +
+    "                      <span mode=\"1\"  ng-model=\"options.date_to\"  placeholder=\"ถึงเดือน\" custom-date-field></span>\r" +
+    "\n" +
+    "                    </div>\r" +
+    "\n" +
+    "               \r" +
+    "\n" +
+    "            \t<hr>\r" +
+    "\n" +
+    "            \t<div class=\"col-md-6 col-md-offset-3\">\r" +
+    "\n" +
+    "            \t\t<button class=\"btn btn-primary btn-block\" ng-disabled=\"!options.date_from\"><span class=\"glyphicon glyphicon-print\"></span> สร้างรายงาน</button>\r" +
+    "\n" +
+    " \t\t\t\t</div>\r" +
+    "\n" +
+    " \t\t\t</form>\r" +
+    "\n" +
+    " \t\t\t</div>\r" +
+    "\n" +
+    " \t\t\t</div>\r" +
+    "\n" +
+    "\t\t  </div>\r" +
+    "\n" +
+    "\t\t</div>\r" +
+    "\n" +
+    "\t<div>\r" +
+    "\n" +
+    "<div>\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "</div>\r" +
+    "\n" +
+    "</div>\r" +
+    "\n" +
+    "</div>"
+  );
+
+
+  $templateCache.put('views/court_print_report3.html',
+    "<div class=\"row\" ng-controller=\"PrintReportCtrl\" ng-init=\"options.date_from=today()\">\r" +
+    "\n" +
+    "  <div class=\"col-md-6 col-md-offset-3\">\r" +
+    "\n" +
+    "    <div class=\"panel panel-default\">\r" +
+    "\n" +
+    "      <div class=\"panel-heading\">\r" +
+    "\n" +
+    "          <h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\r" +
+    "\n" +
+    "          <h4 class=\"text-info\">รายงานคดีค้างส่งสำนวน (ยังไม่ได้ส่งสำนวนให้ภาคตรวจ)</h4>\r" +
+    "\n" +
+    "      </div>\r" +
+    "\n" +
+    "      <div class=\"panel-body\">\r" +
+    "\n" +
+    "        <div class=\"row\">\r" +
+    "\n" +
+    "        <div class=\"col-md-8 col-md-offset-2\">\r" +
+    "\n" +
+    "        <form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/court_report3.php\" target=\"_blank\">\r" +
+    "\n" +
+    "              <input type=\"hidden\" name=\"date1\" value=\"{{options.date_from}}\">\r" +
+    "\n" +
+    "                <input type=\"hidden\" name=\"date2\" value=\"{{options.date_to}}\">\r" +
+    "\n" +
+    "              <input type=\"hidden\" name=\"type_id\" value=\"{{options.type_id}}\">\r" +
+    "\n" +
+    "              <div class=\"form-group\">\r" +
+    "\n" +
+    "                  <label class=\"control-label\">ประเภทคดี</label>\r" +
+    "\n" +
+    "                  <select class=\"form-control\" ng-model=\"options.type_id\" select-value-type=\"string\" ng-options=\"it.id as it.id |lookup_type:'name':'code' group by toGroupName(it.group_id) for it in Lookups.getType() \">\r" +
+    "\n" +
+    "                      <option value=\"\">-- ทุกประเภทคดี --</option>\r" +
+    "\n" +
+    "                  </select>\r" +
+    "\n" +
+    "              </div>    \r" +
+    "\n" +
+    "             \r" +
+    "\n" +
+    "          \r" +
+    "\n" +
+    "            <div class=\"row\">\r" +
+    "\n" +
+    "             <!--\r" +
+    "\n" +
+    "               <label>ประจำเดือน</label>\r" +
+    "\n" +
+    "              <div class=\"col-md-12\">\r" +
+    "\n" +
+    "                      <span mode=\"1\"  ng-model=\"options.date_from\"  placeholder=\"เดือน\" custom-date-field></span>\r" +
+    "\n" +
+    "                    </div>\r" +
+    "\n" +
+    "                </div>\r" +
+    "\n" +
+    "                     <br/>\r" +
+    "\n" +
+    "              <div class=\"row\">\r" +
+    "\n" +
+    "                    <div class=\"col-md-12\">\r" +
+    "\n" +
+    "                      <span mode=\"1\"  ng-model=\"options.date_to\"  placeholder=\"ถึงเดือน\" custom-date-field></span>\r" +
+    "\n" +
+    "                </div>\r" +
+    "\n" +
+    "                      -->\r" +
+    "\n" +
+    "              <hr>\r" +
+    "\n" +
+    "              <div class=\"col-md-6 col-md-offset-3\">\r" +
+    "\n" +
+    "                <button class=\"btn btn-primary btn-block\"><span class=\"glyphicon glyphicon-print\"></span> สร้างรายงาน</button>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "      \r" +
+    "\n" +
+    "      </form>\r" +
+    "\n" +
+    "      </div>\r" +
+    "\n" +
+    "      </div>\r" +
+    "\n" +
+    "      </div>\r" +
+    "\n" +
+    "    </div>\r" +
+    "\n" +
+    "  <div>\r" +
+    "\n" +
+    "<div>"
+  );
+
+
+  $templateCache.put('views/court_print_report4.html',
+    "<div class=\"row\" ng-controller=\"PrintReportCtrl\" ng-init=\"options.date_from=today()\">\r" +
+    "\n" +
+    "  <div class=\"col-md-6 col-md-offset-3\">\r" +
+    "\n" +
+    "    <div class=\"panel panel-default\">\r" +
+    "\n" +
+    "      <div class=\"panel-heading\">\r" +
+    "\n" +
+    "          <h2 class=\"text-primary\"><span class=\"glyphicon glyphicon-cog\"></span> ตั้งค่ารายงาน</h2>\r" +
+    "\n" +
+    "          <h4 class=\"text-info\">รายงานคดีค้างส่งสำนำคำพิพากษา ให้สำนักงานอธิบดีผู้พิพากษาภาค 5</h4>\r" +
+    "\n" +
+    "      </div>\r" +
+    "\n" +
+    "      <div class=\"panel-body\">\r" +
+    "\n" +
+    "        <div class=\"row\">\r" +
+    "\n" +
+    "        <div class=\"col-md-8 col-md-offset-2\">\r" +
+    "\n" +
+    "        <form cutom-form name=\"frm_report\" method=\"post\" action=\"reports/court_report4.php\" target=\"_blank\">\r" +
+    "\n" +
+    "        <input type=\"hidden\" name=\"date1\" value=\"{{options.date_from}}\">\r" +
+    "\n" +
+    "                <input type=\"hidden\" name=\"date2\" value=\"{{options.date_to}}\">\r" +
+    "\n" +
+    "              <input type=\"hidden\" name=\"type_id\" value=\"{{options.type_id}}\">\r" +
+    "\n" +
+    "              <div class=\"form-group\">\r" +
+    "\n" +
+    "                  <label class=\"control-label\">ประเภทคดี</label>\r" +
+    "\n" +
+    "                  <select class=\"form-control\" ng-model=\"options.type_id\" select-value-type=\"string\" ng-options=\"it.id as it.id |lookup_type:'name':'code' group by toGroupName(it.group_id) for it in Lookups.getType() \">\r" +
+    "\n" +
+    "                      <option value=\"\">-- ทุกประเภทคดี --</option>\r" +
+    "\n" +
+    "                  </select>\r" +
+    "\n" +
+    "              </div>    \r" +
+    "\n" +
+    "           \r" +
+    "\n" +
+    "            <div class=\"row\">\r" +
+    "\n" +
+    "            <!--\r" +
+    "\n" +
+    "             <label>ประจำเดือน</label>\r" +
+    "\n" +
+    "              <div class=\"col-md-12\">\r" +
+    "\n" +
+    "                      <span mode=\"1\"  ng-model=\"options.date_from\"  placeholder=\"เดือน\" custom-date-field></span>\r" +
+    "\n" +
+    "                    </div>\r" +
+    "\n" +
+    "                </div>\r" +
+    "\n" +
+    "                     <br/>\r" +
+    "\n" +
+    "        <div class=\"row\">\r" +
+    "\n" +
+    "                    <div class=\"col-md-12\">\r" +
+    "\n" +
+    "                      <span mode=\"1\"  ng-model=\"options.date_to\"  placeholder=\"ถึงเดือน\" custom-date-field></span>\r" +
+    "\n" +
+    "                    </div>\r" +
+    "\n" +
+    "                    -->\r" +
+    "\n" +
+    "              <hr>\r" +
+    "\n" +
+    "              <div class=\"col-md-6 col-md-offset-3\">\r" +
+    "\n" +
+    "                <button class=\"btn btn-primary btn-block\" ><span class=\"glyphicon glyphicon-print\"></span> สร้างรายงาน</button>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "      </form>\r" +
+    "\n" +
+    "      </div>\r" +
+    "\n" +
+    "      </div>\r" +
+    "\n" +
+    "      </div>\r" +
+    "\n" +
+    "    </div>\r" +
+    "\n" +
+    "  <div>\r" +
+    "\n" +
+    "<div>"
   );
 
 
@@ -9727,6 +10587,116 @@ angular.module('App').run(['$templateCache', function($templateCache) {
   );
 
 
+  $templateCache.put('views/court_reports.html',
+    "<div ui-view></div>\r" +
+    "\n" +
+    "\r" +
+    "\n"
+  );
+
+
+  $templateCache.put('views/court_reports_menu.html',
+    "<h1 class=\"page-header text-center\">\r" +
+    "\n" +
+    "รายงาน\r" +
+    "\n" +
+    "</h1>\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "<div class=\"row\">\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "      <div class=\"col-md-6 col-lg-4\">\r" +
+    "\n" +
+    "            <a href=\"#court/reports/report1\">\r" +
+    "\n" +
+    "                <h1 class=\"text-center\">\r" +
+    "\n" +
+    "                    <span class=\"glyphicon glyphicon-print\"></span>\r" +
+    "\n" +
+    "                </h1>\r" +
+    "\n" +
+    "                <h4 class=\"text-center text-primary\">รายงานการจัดส่งคดี</h4>\r" +
+    "\n" +
+    "            </a>\r" +
+    "\n" +
+    "      </div>\r" +
+    "\n" +
+    "      <div class=\"col-md-6 col-lg-4\">\r" +
+    "\n" +
+    "            <a href=\"#court/reports/report3\">\r" +
+    "\n" +
+    "                <h1 class=\"text-center\">\r" +
+    "\n" +
+    "                    <span class=\"glyphicon glyphicon-print\"></span>\r" +
+    "\n" +
+    "                </h1>\r" +
+    "\n" +
+    "                <h4 class=\"text-center text-primary\">รายงานคดีค้างส่งสำนวน</h4>\r" +
+    "\n" +
+    "            </a>\r" +
+    "\n" +
+    "      </div>\r" +
+    "\n" +
+    "      <div class=\"col-md-6 col-lg-4\">\r" +
+    "\n" +
+    "            <a href=\"#court/reports/report4\">\r" +
+    "\n" +
+    "                <h1 class=\"text-center\">\r" +
+    "\n" +
+    "                    <span class=\"glyphicon glyphicon-print\"></span>\r" +
+    "\n" +
+    "                </h1>\r" +
+    "\n" +
+    "                <h4 class=\"text-center text-primary\">รายงานคดีค้างส่งสำเราคำพิพากษา</h4>\r" +
+    "\n" +
+    "            </a>\r" +
+    "\n" +
+    "      </div>      \r" +
+    "\n" +
+    "      <div class=\"col-md-6 col-lg-4\">\r" +
+    "\n" +
+    "            <a href=\"#court/reports/report2\">\r" +
+    "\n" +
+    "                <h1 class=\"text-center\">\r" +
+    "\n" +
+    "                    <span class=\"glyphicon glyphicon-print\"></span>\r" +
+    "\n" +
+    "                </h1>\r" +
+    "\n" +
+    "                <h4 class=\"text-center text-primary\">รายงานการจัดส่งสำนวนเพื่อตรวจร่างคำพิพากษา</h4>\r" +
+    "\n" +
+    "            </a>\r" +
+    "\n" +
+    "      </div>            \r" +
+    "\n" +
+    "        <div class=\"col-md-6 col-lg-4\">\r" +
+    "\n" +
+    "            <a href=\"#court/menu\">\r" +
+    "\n" +
+    "                <h1 class=\"text-center\">\t\r" +
+    "\n" +
+    "                    <span class=\"glyphicon glyphicon-th-large\"></span>\r" +
+    "\n" +
+    "                </h1>\r" +
+    "\n" +
+    "                <h4 class=\"text-center text-primary\">เมนูหลัก</h4>\r" +
+    "\n" +
+    "            </a>\r" +
+    "\n" +
+    "        </div>\r" +
+    "\n" +
+    "</div>\r" +
+    "\n" +
+    "\r" +
+    "\n"
+  );
+
+
   $templateCache.put('views/court_users.html',
     "\r" +
     "\n" +
@@ -9870,7 +10840,7 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "    <div class=\"modal\" tabindex=\"-1\" role=\"dialog\">\r" +
     "\n" +
-    "        <div class=\"modal-dialog\"  aria-hidden=\"true\"   style=\"min-width:80%;\" ng-controller=\"CustomTableCtrl as ctb\" ng-init=\"tableParams.hide_limit=true;_view='moveuser';tableParams.count(10);setAPI('users','',{search:'searchText',_view:'_view'})\">\r" +
+    "        <div class=\"modal-dialog\"  aria-hidden=\"true\"   style=\"min-width:80%;\" ng-controller=\"CustomTableCtrl as ctb\" ng-init=\"tableParams.hide_limit=true;_view='moveuser';tableParams.count(10);setAPI('cusers','',{search:'searchText',_view:'_view'})\">\r" +
     "\n" +
     "            <div class=\"modal-content\">\r" +
     "\n" +
@@ -9910,7 +10880,7 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "                                ng-click=\"selectRow(it);\"\r" +
     "\n" +
-    "                                ng-class=\"{'active': isSelected(it)}\">\r" +
+    "                                ng-class=\"{'active': isSelected(it), 'text-checkout': it.check_out==1}\">\r" +
     "\n" +
     "                                <td width=\"30\" class=\"text-right text-muted\">{{startIdx + $index + 1}}.</td>\r" +
     "\n" +
@@ -9944,7 +10914,9 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "                    <div class=\"help-block\" style=\"margin-top:1em\">\r" +
     "\n" +
-    "                        <p class=\"text-info\"><span class=\"glyphicon glyphicon-question-sign\"></span> คุณสามารถย้ายผู้พิพากษาเข้าได้ เฉพาะผู้พิพากษาที่ได้ย้ายออกจากศาลเดิมแล้วเท่านั้น</p>\r" +
+    "                        <p class=\"text-info\"><span class=\"glyphicon glyphicon-question-sign\"></span> ถ้าต้องการย้ายผู้พิพากษาที่ยังไม่ได้ย้ายออกจากศาลเดิม ให้ค้นหาชื่อ แล้วย้ายผู้พิพากษาที่เลือกเข้า\r" +
+    "\n" +
+    "                        </p>\r" +
     "\n" +
     "                    </div>\r" +
     "\n" +
@@ -9972,7 +10944,7 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "    <p>\r" +
     "\n" +
-    "        <div class=\"panel panel-default\" ng-controller=\"CustomTableCtrl as uctb\" ng-init=\"searchCourt='';searchRole='';setAPI('users','custom.form.court.users.html',{search:'searchText', parent_id:getUser().id})\">\r" +
+    "        <div class=\"panel panel-default\" ng-controller=\"CustomTableCtrl as uctb\" ng-init=\"searchCourt='';searchRole='';setAPI('cusers','custom.form.court.users.html',{search:'searchText', parent_id:getUser().id})\">\r" +
     "\n" +
     "            <div class=\"panel-heading\">\r" +
     "\n" +
@@ -10163,6 +11135,12 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "                            </button>\r" +
     "\n" +
     "                        </span>\r" +
+    "\n" +
+    "                                                    <a class=\"btn btn-info\" ng-click=\"printReport('views/court_print_report2.html')\" xhref=\"#/court/reports/report2\">\r" +
+    "\n" +
+    "                                <span class=\"glyphicon glyphicon-print\"></span><span class=\"hidden-sm hidden-xs\"> พิมพ์รายงาน</span>\r" +
+    "\n" +
+    "                            </a>\r" +
     "\n" +
     "                    </div>\r" +
     "\n" +
@@ -10473,23 +11451,15 @@ angular.module('App').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('views/login.html',
-    "<h2 class=\"page-header text-center\" style=\"border-bottom:none\">\r" +
-    "\n" +
-    "    ระบบสารสนเทศการรายงานคดีและติดตามสำนวนที่ส่งตรวจร่างคำพิพากษา<br />\r" +
-    "\n" +
-    "    <small>สำนักงานอธิบดีผู้พิพากษาภาค 5</small>\r" +
-    "\n" +
-    "</h2>\r" +
-    "\n" +
-    "<div clss=\"row\">\r" +
+    "<div clss=\"row\"  style=\"z-index:-3\">\r" +
     "\n" +
     "    <div class=\"col-md-offset-3 col-md-6\">\r" +
     "\n" +
-    "        <div class=\"list-group panel\">\r" +
+    "        <div class=\"list-group panel\" style=\"background-color:rgba(0,0,0,0)\">\r" +
     "\n" +
-    "            <div class=\"list-group-item panel-heading\">\r" +
+    "            <div class=\"xlist-group-item xpanel-heading\" style=\"text-align:right;background-color:rgba(0,0,0,0)\">\r" +
     "\n" +
-    "                <h4 class=\"text-center\"><i class=\"fa fa-user fa-3x\"></i><br />ล็อกอินเข้าเข้าใช้งาน</h4>\r" +
+    "                <img src=\"images/login.png\"/>\r" +
     "\n" +
     "            </div>\r" +
     "\n" +
@@ -10556,213 +11526,37 @@ angular.module('App').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('views/main.menu.html',
-    "<nav id=\"main-navbar\" class=\"navbar yamm navbar-default\" role=\"navigation\"  ng-if=\"$root.getUserId()\" bs-navbar>\r" +
+    "\r" +
     "\n" +
-    "    <div class=\"container-fluid\" bs-collapse>\r" +
+    "<div ng-if=\"$root.getUserId() && !urlEq('/admin/menu') && !urlEq('/court/menu')  && !urlEq('/login')\" style=\"padding-right:1.5em;padding-top:70px\">\r" +
     "\n" +
-    "        <div class=\"navbar-header\">\r" +
-    "\n" +
-    "            <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#navbar\" aria-expanded=\"false\" aria-controls=\"navbar\" bs-collapse-toggle>\r" +
-    "\n" +
-    "                <span class=\"sr-only\">Navigation</span>\r" +
-    "\n" +
-    "                <span class=\"icon-bar\"></span>\r" +
-    "\n" +
-    "                <span class=\"icon-bar\"></span>\r" +
-    "\n" +
-    "                <span class=\"icon-bar\"></span>\r" +
-    "\n" +
-    "            </button>\r" +
-    "\n" +
-    "            <a class=\"navbar-brand\" href=\"#\">\r" +
-    "\n" +
-    "                <h3 style=\"color:#014F7F;font-size:1.6em;font-weight:bold;padding:0px;margin:0px\"><span class=\"fa fa-university\"></span> <span ng-if=\"isAdmin()\">สำนักศาลยุติธรรมประจำภาค5</span><span ng-if=\"!isAdmin()\">{{getUser().name}}</span></h3>\r" +
-    "\n" +
-    "            </a>\r" +
-    "\n" +
-    "        </div>\r" +
-    "\n" +
-    "        <div ng-if=\"isAdmin()\" class=\"collapse navbar-collapse\" bs-collapse-target>\r" +
+    "        <div ng-if=\"isAdmin()\" >\r" +
     "\n" +
     "            <ul class=\"nav navbar-nav navbar-right\" ng-if=\"$root.getUserId()\">\r" +
     "\n" +
-    "                <li data-match-route=\"admin/acases\"><a href=\"#admin/acases\"><span class=\"glyphicon glyphicon-th-large\"></span> รายงาน/ร่างคำสั่ง</a></li>                    \r" +
-    "\n" +
-    "                <li data-match-route=\"admin/cases\"><a href=\"#admin/cases\"><span class=\"glyphicon glyphicon-equalizer\"></span> รายงานคดี</a></li>\r" +
-    "\n" +
-    "                <li data-match-route=\"admin/vcases\"><a href=\"#admin/vcases\"><span class=\"glyphicon glyphicon-book\"></span> สำนวนและร่าง</a></li>\r" +
-    "\n" +
-    "                <li  data-match-route=\"admin/management/\" class=\"dropdown\">\r" +
-    "\n" +
-    "                    <a href=\"javascript:void(0)\"  bs-dropdown><span class=\"glyphicon glyphicon-th-large\"></span>  เตรียมข้อมูล</a>\r" +
-    "\n" +
-    "                   <ul class=\"dropdown-menu\">\r" +
-    "\n" +
-    "                        <li>\r" +
-    "\n" +
-    "                            <div class=\"yamm-content\">\r" +
-    "\n" +
-    "                                <h3 class=\"text-center page-header\" style=\"margin-top:0.5em;margin-bottom:1em\">เลือกเตรียมข้อมูล</h3>\r" +
-    "\n" +
-    "                                <div class=\"row\">\r" +
-    "\n" +
-    "                                    <div class=\"col-md-6\">\r" +
-    "\n" +
-    "                                        <a href=\"#admin/management/users\">\r" +
-    "\n" +
-    "                                            <h1 class=\"text-center\">\r" +
-    "\n" +
-    "                                                <span class=\"glyphicon glyphicon-user\"></span>\r" +
-    "\n" +
-    "                                            </h1>\r" +
-    "\n" +
-    "                                            <h4 class=\"text-center text-primary\">ผู้ใช้</h4>\r" +
-    "\n" +
-    "                                        </a>\r" +
-    "\n" +
-    "                                    </div>\r" +
-    "\n" +
-    "                                    <div class=\"col-md-6\">\r" +
-    "\n" +
-    "                                        <a href=\"#admin/management/types\">\r" +
-    "\n" +
-    "                                            <h1 class=\"text-center\">\r" +
-    "\n" +
-    "                                                <span class=\"glyphicon glyphicon-briefcase\"></span>\r" +
-    "\n" +
-    "                                            </h1>\r" +
-    "\n" +
-    "                                            <h4 class=\"text-center text-primary\">ประเภทคดี</h4>\r" +
-    "\n" +
-    "                                        </a>\r" +
-    "\n" +
-    "                                    </div>\r" +
-    "\n" +
-    "                                    <div class=\"col-md-6\">\r" +
-    "\n" +
-    "                                        <a href=\"#admin/management/topics\">\r" +
-    "\n" +
-    "                                            <h1 class=\"text-center\">\r" +
-    "\n" +
-    "                                                <span class=\"glyphicon glyphicon-tasks\"></span>\r" +
-    "\n" +
-    "                                            </h1>\r" +
-    "\n" +
-    "                                            <h4 class=\"text-center text-primary\">ข้อหา</h4>\r" +
-    "\n" +
-    "                                        </a>\r" +
-    "\n" +
-    "                                    </div>\r" +
-    "\n" +
-    "                                    <div class=\"col-md-6\">\r" +
-    "\n" +
-    "                                        <a href=\"#admin/management/results\">\r" +
-    "\n" +
-    "                                            <h1 class=\"text-center\">\r" +
-    "\n" +
-    "                                                <span class=\"glyphicon glyphicon-check\"></span>\r" +
-    "\n" +
-    "                                            </h1>\r" +
-    "\n" +
-    "                                            <h4 class=\"text-center text-primary\">ผลการปฏิบัติ</h4>\r" +
-    "\n" +
-    "                                        </a>\r" +
-    "\n" +
-    "                                    </div>\r" +
-    "\n" +
-    "                                    <div class=\"col-md-6\">\r" +
-    "\n" +
-    "                                        <a href=\"#admin/management/ats\">\r" +
-    "\n" +
-    "                                            <h1 class=\"text-center\">\r" +
-    "\n" +
-    "                                                <span class=\"glyphicon glyphicon-share\"></span>\r" +
-    "\n" +
-    "                                            </h1>\r" +
-    "\n" +
-    "                                            <h4 class=\"text-center text-primary\">คำสั่ง อ.ธ</h4>\r" +
-    "\n" +
-    "                                        </a>\r" +
-    "\n" +
-    "                                    </div>\r" +
-    "\n" +
-    "                                    <div class=\"col-md-6\">\r" +
-    "\n" +
-    "                                        <a href=\"#admin/management/at_results\">\r" +
-    "\n" +
-    "                                            <h1 class=\"text-center\">\r" +
-    "\n" +
-    "                                                <span class=\"glyphicon glyphicon-share\"></span>\r" +
-    "\n" +
-    "                                            </h1>\r" +
-    "\n" +
-    "                                            <h4 class=\"text-center text-primary\">เหตุผลไม่ตามระเบียบ</h4>\r" +
-    "\n" +
-    "                                        </a>\r" +
-    "\n" +
-    "                                    </div>\r" +
-    "\n" +
-    "                                    <div class=\"col-md-6\">\r" +
-    "\n" +
-    "                                        <a href=\"#admin/management/settings\">\r" +
-    "\n" +
-    "                                            <h1 class=\"text-center\">\r" +
-    "\n" +
-    "                                                <span class=\"glyphicon glyphicon-cog\"></span>\r" +
-    "\n" +
-    "                                            </h1>\r" +
-    "\n" +
-    "                                            <h4 class=\"text-center text-primary\">ตั้งค่าระบบ</h4>\r" +
-    "\n" +
-    "                                        </a>\r" +
-    "\n" +
-    "                                    </div>\r" +
-    "\n" +
-    "                                </div>\r" +
-    "\n" +
-    "                            </div>\r" +
-    "\n" +
-    "                        </li>\r" +
-    "\n" +
-    "                    </ul>\r" +
-    "\n" +
-    "                </li>\r" +
-    "\n" +
-    "                <li><a data-placement=\"bottom\" data-trigger=\"click\" bs-popover data-template=\"custom.logout.popover.html\" data-auto-close=\"true\" href=\"javascript:void(0)\"><span class=\"glyphicon glyphicon-lock\"></span> ออกจากระบบ</a></li>\r" +
+    "                <li data-match-route=\"admin/menu\"><a href=\"#admin/menu\"><img   title=\"เมนูหลก\"  class=\"btn-home\" src=\"images/home.png\"/></a></li>                    \r" +
     "\n" +
     "            </ul>\r" +
+    "\n" +
+    "           <div style=\"position:relative; top:25px;text-align:right;color:#555555;padding-right:110px\">[ {{getUser().name}} ]</div>\r" +
     "\n" +
     "        </div>\r" +
     "\n" +
-    "\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "        <div ng-if=\"!isAdmin()\" class=\"collapse navbar-collapse\" bs-collapse-target>\r" +
+    "        <div ng-if=\"!isAdmin()\" >\r" +
     "\n" +
     "            <ul class=\"nav navbar-nav navbar-right\" ng-if=\"$root.getUserId()\">\r" +
     "\n" +
-    "                <li data-match-route=\"court/acases\"><a href=\"#court/acases\"><span class=\"glyphicon glyphicon-th-large\"></span> รายงาน/ร่างคำสั่ง</a></li>            \r" +
-    "\n" +
-    "                <li data-match-route=\"court/cases\"><a href=\"#court/cases\"><span class=\"glyphicon glyphicon-equalizer\"></span> รายงานคดี</a></li>\r" +
-    "\n" +
-    "                <li data-match-route=\"court/vcases\"><a href=\"#court/vcases\"><span class=\"glyphicon glyphicon-book\"></span> สำนวนและร่าง</a></li>\r" +
-    "\n" +
-    "                <li data-match-route=\"court/users\"><a href=\"#court/users\"><span class=\"glyphicon glyphicon-user\"></span> ข้อมูลผู้พิพากษา</a></li>\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "                <li><a data-placement=\"bottom\" data-trigger=\"click\" bs-popover data-template=\"custom.logout.popover.html\" data-auto-close=\"true\" href=\"javascript:void(0)\"><span class=\"glyphicon glyphicon-lock\"></span> ออกจากระบบ</a></li>\r" +
+    "                <li data-match-route=\"court/menu\"><a href=\"#court/menu\"><img  title=\"เมนูหลก\" class=\"btn-home\" src=\"images/home.png\"/></a></li>     \r" +
     "\n" +
     "            </ul>\r" +
+    "\n" +
+    "            <div style=\"position:relative; top:25px;text-align:right;color:#555555;padding-right:110px\">[ {{getUser().name}} ]</div>\r" +
     "\n" +
     "        </div>\r" +
     "\n" +
     "    </div>\r" +
     "\n" +
-    "</nav>\r" +
+    "</div>\r" +
     "\n" +
     "\r" +
     "\n" +
@@ -11462,25 +12256,25 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "    <div class=\"popover-content\" style=\"padding-top:2em;padding-bottom:2em\">\r" +
     "\n" +
-    "        <a href=\"#admin/report1\" class=\"btn btn-info btn-block\">\r" +
+    "        <a href=\"#admin/reports/report1\" class=\"btn btn-info btn-block\">\r" +
     "\n" +
     "            <span class=\"glyphicon glyphicon-print\"></span> สรุปปริมาณรายงานคดีของศาลในภาค 5\r" +
     "\n" +
     "        </a>\r" +
     "\n" +
-    "        <a href=\"#admin/report2\" class=\"btn btn-info btn-block\">\r" +
+    "        <a href=\"#admin/reports/report2\" class=\"btn btn-info btn-block\">\r" +
     "\n" +
     "            <span class=\"glyphicon glyphicon-print\"></span> สรุปรายงานคดีแยกเป็นรายศาล\r" +
     "\n" +
     "        </a>\r" +
     "\n" +
-    "        <a href=\"#admin/report9\" class=\"btn btn-info btn-block\">\r" +
+    "        <a href=\"#admin/reports/report9\" class=\"btn btn-info btn-block\">\r" +
     "\n" +
     "            <span class=\"glyphicon glyphicon-print\"></span> สรุปประเภทคดีที่ศาลรายงานมายังสำนักงาน<br />อธิบดีผู้พิพากษาภาค 5 (เดือน)\r" +
     "\n" +
     "        </a>\r" +
     "\n" +
-    "        <a href=\"#admin/report10\" class=\"btn btn-info btn-block\">\r" +
+    "        <a href=\"#admin/reports/report10\" class=\"btn btn-info btn-block\">\r" +
     "\n" +
     "            <span class=\"glyphicon glyphicon-print\"></span> สรุปประเภทคดีที่ศาลรายงานมายังสำนักงาน<br />อธิบดีผู้พิพากษาภาค 5 (ปี)\r" +
     "\n" +
@@ -11501,31 +12295,31 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "    <div class=\"popover-content\" style=\"padding-top:2em;padding-bottom:2em\">\r" +
     "\n" +
-    "        <a href=\"#admin/report4\" class=\"btn btn-info btn-block\">\r" +
+    "        <a href=\"#admin/reports/report4\" class=\"btn btn-info btn-block\">\r" +
     "\n" +
     "            <span class=\"glyphicon glyphicon-print\"></span> รายงานการส่งสำนวนเพื่อตรวจร่างคำพิพากษาประจำวัน\r" +
     "\n" +
     "        </a>\r" +
     "\n" +
-    "        <a href=\"#admin/report5\" class=\"btn btn-info btn-block\">\r" +
+    "        <a href=\"#admin/reports/report5\" class=\"btn btn-info btn-block\">\r" +
     "\n" +
     "            <span class=\"glyphicon glyphicon-print\"></span> รายงานข้อมูลการส่งสำนวนและร่างคำพิพากษา<br />ของศาลในภาค 5 (ประจำเดือน)\r" +
     "\n" +
     "        </a>\r" +
     "\n" +
-    "        <a href=\"#admin/report6\" class=\"btn btn-info btn-block\">\r" +
+    "        <a href=\"#admin/reports/report6\" class=\"btn btn-info btn-block\">\r" +
     "\n" +
     "            <span class=\"glyphicon glyphicon-print\"></span> สรุปการส่งสำนวนและร่างคำพิพากษา<br />ศาลในภาค 5(ประจำเดือน)\r" +
     "\n" +
     "        </a>\r" +
     "\n" +
-    "        <a href=\"#admin/report7\" class=\"btn btn-info btn-block\">\r" +
+    "        <a href=\"#admin/reports/report7\" class=\"btn btn-info btn-block\">\r" +
     "\n" +
     "            <span class=\"glyphicon glyphicon-print\"></span> รายงานสำนวนที่ไม่ได้ส่งสำเนาคำพิพากษา\r" +
     "\n" +
     "        </a>\r" +
     "\n" +
-    "        <a href=\"#admin/report8\" class=\"btn btn-info btn-block\">\r" +
+    "        <a href=\"#admin/reports/report8\" class=\"btn btn-info btn-block\">\r" +
     "\n" +
     "            <span class=\"glyphicon glyphicon-print\"></span> รายงานคดีที่ไม่ได้ส่งสำนวน\r" +
     "\n" +
@@ -11533,11 +12327,64 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "        <hr/>\r" +
     "\n" +
-    "        <a href=\"#admin/report11\" class=\"btn btn-info btn-block\">\r" +
+    "        <a href=\"#admin/reports/report11\" class=\"btn btn-info btn-block\">\r" +
     "\n" +
     "            <span class=\"glyphicon glyphicon-print\"></span> รายงานระยะเวลาการตรวจสำนวนและร่างคำพิพากษา\r" +
     "\n" +
     "        </a>        \r" +
+    "\n" +
+    "        <a href=\"#admin/reports/report12\" class=\"btn btn-info btn-block\">\r" +
+    "\n" +
+    "            <span class=\"glyphicon glyphicon-print\"></span> สำนวนคดีส่งตรวจที่ไม่เป็นไปตามระเบียบ\r" +
+    "\n" +
+    "        </a> \r" +
+    "\n" +
+    "        <a href=\"#admin/reports/report13\" class=\"btn btn-info btn-block\">\r" +
+    "\n" +
+    "            <span class=\"glyphicon glyphicon-print\"></span> รายงานระยะเวลาการตรวจสำนวนและร่าง (รอง อธ.)\r" +
+    "\n" +
+    "        </a> \r" +
+    "\n" +
+    "        <a href=\"#admin/reports/report14\" class=\"btn btn-info btn-block\">\r" +
+    "\n" +
+    "            <span class=\"glyphicon glyphicon-print\"></span> รายงานระยะเวลาการตรวจสำนวนและร่าง (หัวหน้าภาค)\r" +
+    "\n" +
+    "        </a>                                       \r" +
+    "\n" +
+    "    </div>\r" +
+    "\n" +
+    "</div>"
+  );
+
+
+  $templateCache.put('court.cases.reports.html',
+    "<div class=\"popover\" style=\"min-width:400px\">\r" +
+    "\n" +
+    "    <div class=\"arrow\"></div>\r" +
+    "\n" +
+    "    <h3 class=\"popover-title\"><span class=\"glyphicon glyphicon-share\"></span> <strong>พิมพ์รายงาน</strong></h3>\r" +
+    "\n" +
+    "    <div class=\"popover-content\" style=\"padding-top:2em;padding-bottom:2em\">\r" +
+    "\n" +
+    "        <a href=\"#court/reports/report1\" class=\"btn btn-info btn-block\">\r" +
+    "\n" +
+    "            <span class=\"glyphicon glyphicon-print\"></span> รายงานการจัดส่งคดี \r" +
+    "\n" +
+    "        </a>\r" +
+    "\n" +
+    "        <a href=\"#court/reports/report3\" class=\"btn btn-info btn-block\">\r" +
+    "\n" +
+    "            <span class=\"glyphicon glyphicon-print\"></span> รายงานคดีค้างส่งสำนวน\r" +
+    "\n" +
+    "        </a>                 \r" +
+    "\n" +
+    "        <a href=\"#court/reports/report4\" class=\"btn btn-info btn-block\">\r" +
+    "\n" +
+    "            <span class=\"glyphicon glyphicon-print\"></span> รายงานคดีค้างส่งสำเนาคำพิพากษา\r" +
+    "\n" +
+    "        </a>\r" +
+    "\n" +
+    "\r" +
     "\n" +
     "    </div>\r" +
     "\n" +
@@ -12101,9 +12948,11 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "        <p class=\"text-center\">\r" +
     "\n" +
-    "            <button type=\"button\" ng-disabled=\"!($it.date_sent_a  && $it.number_sent_a)\" class=\"btn btn-success btn-block\" ng-click=\"go('admin.acases.form1',$it);$hide()\"><div class=\"text-left\"><span class=\"badge\">1</span> รับร่างคำสั่ง</div></button>\r" +
+    "            <button type=\"button\" zzng-disabled=\"!($it.date_sent_a  && $it.number_sent_a)\" class=\"btn btn-success btn-block\" ng-click=\"go('admin.acases.form1',$it);$hide()\"><div class=\"text-left\"><span class=\"badge\">1</span> รับร่างคำสั่ง</div></button>\r" +
     "\n" +
-    "            <button type=\"button\" ng-disabled=\"!($it.date_sent_a && $it.number_sent_a)\" class=\"btn btn-success btn-block\" ng-click=\"go('admin.acases.form2',$it);$hide()\"><div class=\"text-left\"><span class=\"badge\">2</span> ส่งสำนวนและร่างคำสั่งคืน</div></button>\r" +
+    "            <button type=\"button\" zzng-disabled=\"!($it.date_sent_a && $it.number_sent_a)\" class=\"btn btn-success btn-block\" ng-click=\"go('admin.acases.form2',$it);$hide()\"><div class=\"text-left\"><span class=\"badge\">2</span> ส่งสำนวนและร่างคำสั่งคืน</div></button>\r" +
+    "\n" +
+    "                        <button type=\"button\" ng-if=\"(true || $it.number_black && $it.date_received3)\" class=\"btn btn-success btn-block\" ng-click=\"printCover2($it);$hide()\"><div class=\"text-left\"><span class=\"glyphicon glyphicon-print\"></span> พิมพ์ปกสำนวน</div></button>\r" +
     "\n" +
     "        </p>\r" +
     "\n" +
@@ -12172,13 +13021,11 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <button type=\"button\" ng-show=\"($it.no_case_sent=='2' )\" class=\"btn btn-warning btn-block\" ng-click=\"editItem();$hide()\"><div class=\"text-left\"><span class=\"badge\"><span class=\"glyphicon glyphicon-star-empty\"></span></span> ส่งรายงานคดี</div></button>        \r" +
     "\n" +
-    "            <button type=\"button\" ng-disabled=\"($it.no_case_sent=='1' && $it.return_checked!='1') || (caseCourtForm($it)<3)\" class=\"btn btn-success btn-block\" ng-click=\"go('court.cases.form1',$it);$hide()\"><div class=\"text-left\"><span class=\"badge\">1</span> ส่งสำนวนเพื่อตรวจร่าง</div></button>\r" +
+    "            <button type=\"button\" ng-disabled=\"(caseCourtForm($it)<2)\" class=\"btn btn-success btn-block\" ng-click=\"go('court.cases.form2',$it);$hide()\"><div class=\"text-left\"><span class=\"badge\">1</span> ส่งสำเนาคำพิพากษา</div></button>\r" +
     "\n" +
-    "            <button type=\"button\" ng-disabled=\"(caseCourtForm($it)<2)\" class=\"btn btn-success btn-block\" ng-click=\"go('court.cases.form2',$it);$hide()\"><div class=\"text-left\"><span class=\"badge\">2</span> ส่งสำเนาคำพิพากษา</div></button>\r" +
+    "            <button type=\"button\" ng-disabled=\"(caseCourtForm($it)<2)\" class=\"btn btn-success btn-block\" ng-click=\"go('court.cases.form3',$it);$hide()\"><div class=\"text-left\"><span class=\"badge\">2</span> Upload คำพิพากษา</div></button>\r" +
     "\n" +
-    "            <button type=\"button\" ng-disabled=\"(caseCourtForm($it)<2)\" class=\"btn btn-success btn-block\" ng-click=\"go('court.cases.form3',$it);$hide()\"><div class=\"text-left\"><span class=\"badge\">3</span> Upload คำพิพากษา</div></button>\r" +
-    "\n" +
-    "            <button type=\"button\" class=\"btn btn-success btn-block\" ng-click=\"go('court.cases.form4',$it);$hide()\"><div class=\"text-left\"><span class=\"badge\">4</span> ระบบติดตาม</div></button>\r" +
+    "            <button type=\"button\" class=\"btn btn-success btn-block\" ng-click=\"go('court.cases.form4',$it);$hide()\"><div class=\"text-left\"><span class=\"badge\">3</span> ระบบติดตาม</div></button>\r" +
     "\n" +
     "        </p>\r" +
     "\n" +
@@ -12199,7 +13046,9 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "        <p class=\"text-center\">\r" +
     "\n" +
-    "            <button type=\"button\" ng-disabled=\"(caseCourtForm($it)==1)\" class=\"btn btn-success btn-block\" ng-click=\"go('court.vcases.form2',$it);$hide()\"><div class=\"text-left\"><span class=\"badge\">1</span> ส่งสำเนาคำพิพากษา</div></button>\r" +
+    "            <button type=\"button\" ng-disabled=\"($it.no_case_sent=='1' && $it.return_checked!='1') || (caseCourtForm($it)<3)\" class=\"btn btn-success btn-block\" ng-click=\"go('court.vcases.form1',$it);$hide()\"><div class=\"text-left\"><span class=\"badge\">1</span> ส่งสำนวนเพื่อตรวจร่าง</div></button>        \r" +
+    "\n" +
+    "            <button type=\"button\" ng-disabled=\"(caseCourtForm($it)==1)\" class=\"btn btn-success btn-block\" ng-click=\"go('court.vcases.form2',$it);$hide()\"><div class=\"text-left\"><span class=\"badge\">2</span> ส่งสำเนาคำพิพากษา</div></button>\r" +
     "\n" +
     "            <button type=\"button\" ng-disabled=\"(caseCourtForm($it)==1)\" class=\"btn btn-success btn-block\" ng-click=\"go('court.vcases.form3',$it);$hide()\"><div class=\"text-left\"><span class=\"badge\">3</span> Upload คำพิพากษา</div></button>\r" +
     "\n" +

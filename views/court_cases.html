@@ -225,6 +225,8 @@
                             <button class="btn btn-info" ng-click="advancedSearch('custom.cases.search.html')">
                                 <span class="glyphicon glyphicon-search"></span><span class="hidden-sm hidden-xs"> ค้นหา</span>
                             </button>
+
+
                             <button ng-click="newItem({date_sent:today()})" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span><span class="hidden-sm hidden-xs"> เพิ่มคดี</span></button>
                             <button ng-click="ifcall(($it.no_case_sent!='1'),editItem)" ng-show="($it.no_case_sent!='1') && hasSelected()" class="btn btn-warning" ng-switch on="$it.no_case_sent==2">
                             <span ng-switch-when="true"><span class="glyphicon glyphicon-star-empty"></span><span class="hidden-sm hidden-xs"> ส่งรายงานคดี</span></span>
@@ -234,7 +236,10 @@
                                     ng-click="removeItem()" ng-show="($it.no_case_sent!='1') && hasSelected()" class="btn btn-danger" data-auto-close="true">
                                 <span class="glyphicon glyphicon-remove"></span><span class="hidden-sm hidden-xs"> ลบคดี</span>
                             </button>
-                            <button ng-click="refresh()" class="btn btn-success"><span class="glyphicon glyphicon-refresh"></span><span class="hidden-sm hidden-xs"> โหลดข้อมูล</span></button>
+
+                            <button class="btn btn-info"  class="btn btn-success" data-placement="left" data-trigger="click" bs-popover data-template="court.cases.reports.html" data-auto-close="true">
+                                <span class="glyphicon glyphicon-print"></span><span class="hidden-sm hidden-xs"> พิมพ์รายงาน</span>
+                            </button>
                         </span>
                     </div>
                     <h2 style="padding:0px;margin:0px;"><span class="fa fa-windows"></span> รายงานคดี ({{tableParams.total()}})</h2>

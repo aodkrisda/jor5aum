@@ -1,4 +1,10 @@
 <?php
+@session_start();
+if( ! (isset($_SESSION['user'])  && isset($_SESSION['user']['id']))) {
+	echo "ไม่สามารถแสดงรายงานได้ เพราะต้อง login ก่อน";
+	exit();
+}
+
 $dir=__DIR__;
 require($dir.'/../rest/autoload.php');
 
@@ -21,7 +27,7 @@ $filter = new Twig_SimpleFilter( 'th_date', function ( $dtstr ,$format='',$inc=0
 		$mm=intval(date('m',$dt));
 		$yy=intval($d=date('Y',$dt)) + 543;
 		$months=explode(',','มกราคม,กุมภาพันธ์,มีนาคม,เมษายน,พฤษภาคม,มิถุนายน,กรกฏาคม,สิงหาคม,กันยายน,ตุลาคม,พฤศจิกายน,ธันวาคม');
-		$smonths=explode(',','ม.ค,ก.พ,มี.ค,เม.ย,พ.ค,มิ.ย,ก.ค,ส.ค,ก.ย,ต.ค,พ.ย,ธ.ค');
+		$smonths=explode(',','ม.ค.,ก.พ.,มี.ค.,เม.ย.,พ.ค.,มิ.ย.,ก.ค.,ส.ค.,ก.ย.,ต.ค.,พ.ย.,ธ.ค.');
 		switch(strtolower($format)){
 			case 'date':
 			return sprintf('%s',$dd);	
@@ -76,12 +82,22 @@ $filter = new Twig_SimpleFilter( 'user_group', function ( $id) {
 });
 $twig->addFilter($filter);
 
-$twig->addFilter($filter);
 $filter = new Twig_SimpleFilter( 'user_name', function ( $id) {
 	global $_USERS;
 	if(isset($_USERS)){
 		if(isset($_USERS[$id])){
 			return $_USERS[$id];
+		}
+	}
+	return '';
+});
+$twig->addFilter($filter);
+
+$filter = new Twig_SimpleFilter( 'at_result_name', function ( $id) {
+	global $_AT_RESULTS;
+	if(isset($_AT_RESULTS)){
+		if(isset($_AT_RESULTS[$id])){
+			return $_AT_RESULTS[$id]['name'];
 		}
 	}
 	return '';
@@ -123,11 +139,18 @@ $filter = new Twig_SimpleFilter( 'xdays', function ($it) {
 	return $str;
 });
 $twig->addFilter($filter);
-$func=new Twig_SimpleFunction('getDict', function($key, $def=null){
+$func=new Twig_SimpleFunction('getDict', function($key, $def=null, $col=null){
 	global $_DICT;
+
 	if(isset($_DICT) && is_array($_DICT)){
-		if(isset($_DICT[$key])){
-			return $_DICT[$key];
+		if($col){
+			if(isset($_DICT[$col]) && isset($_DICT[$col][$key])){
+				return $_DICT[$col][$key];
+			}
+		}else{
+			if(isset($_DICT[$key])){
+				return $_DICT[$key];
+			}
 		}
 	}
 	return $def;

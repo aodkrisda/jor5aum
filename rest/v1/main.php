@@ -146,7 +146,7 @@ function post_getlookups(){
    $imprisons=$norm->toArray($norm->imprisons()->limit(2000));
    $accepts=$norm->toArray($norm->accepts()->limit(2000));
    $atresults=$norm->toArray($norm->at_results()->limit(2000));
-   $judges=$norm->toArray($norm->users()->select('id,name,admin,parent_id')->where('admin > ?',1)->order('name')->limit(2000));
+   $judges=$norm->toArray($norm->users()->select('id,name,position,admin,parent_id')->where('admin > ?',1)->order('name')->limit(2000));
    $roles=array(
         array('id'=> '0', 'name'=> 'ศาล'),
         array('id'=> '1', 'name'=> 'แอดมิน' ),
@@ -1124,8 +1124,7 @@ class NGTABLE_COURT_CASES  extends NGTABLE{
           return;
         }    
       }
-      
-      
+            
       if($data && isset($data['search']) && is_array($data['search'])){
 		$p=$data['search'];
            $q='';
@@ -1222,11 +1221,70 @@ class NGTABLE_COURT_CASES  extends NGTABLE{
 }
 
 
+class NGTABLE_CUSERS extends NGTABLE{
+  function __construct($table='users', $pk='id') {
+    $this->required[]='name';
+    $this->uniques['account']='ชื่อผู้ใช้ซ้ำ กรุณาเปลี่ยนใหม่';
+    $this->uniques['name']="ฃื่อผู้พิพากษาซ้ำ (ซ้ำกับศาลอื่น)";
+    //$this->roles[]='admin';
+    parent::__construct($table, $pk);
+  }
+   function post_checkin_user(){
+      if(isset($_POST[$this->pk])){
+        $id=$_POST[$this->pk];
+        $rs=$this->norm->users()->where($this->pk, $id);
+        if(!isset($_POST['confirm'])){
+          $rs->where('check_out',1);
+        }
+        $row=$rs->fetch();
+        if($row){
+          $it=array('check_out'=>0);
+          $usr=$this->api->api_get_user();
+          if($usr) $it['parent_id']=$usr['id'];
+          $row->update($it);
+          return true;
+        }
+      }
+      return false; 
+  }
+  function buildFilter(&$rs, $fs){
+    if($rs){
+      if($fs){
+        if(isset($fs['search'])){
+          $rs->where('name LIKE ?','%' . $fs['search']. '%');
+        }
+        if(isset($fs['_view']) && $fs['_view']=='moveuser'){
+          $rs->where('admin',2);
+          if( ! isset($fs['search']) ){
+            $rs->where('(check_out=1) OR (parent_id=0)');
+          }
+        }else{
+          if(isset($fs['admin'])){
+            $rs=$rs->where('admin', $fs['admin']);
+          }
+          if(isset($fs['parent_id'])){
+            $rs=$rs->where('parent_id', $fs['parent_id']);
+          }
+          $me=$this->api->api_get_user();
+          if($me && ($me['admin'] != 1)){
+            $rs=$rs->where('parent_id',$me['id']);
+          }           
+        }
+      }
+       
+     
+    }
+  }   
+}
+
 function post_users($action=''){
   $cls=new NGTABLE_USERS();
   return $cls->process($action);
 }
-
+function post_cusers($action=''){
+  $cls=new NGTABLE_CUSERS();
+  return $cls->process($action);
+}
 function post_judges($action=''){
   if($action=='add'){
     if(!isset($_POST['parent_id'])){

@@ -462,12 +462,12 @@
                   }
                   tipElement.removeClass(originalPlacement).addClass(placement);
               }
-
               var tipPosition = getCalculatedOffset(placement, elementPosition, tipWidth, tipHeight);
               if (('center' in tipPosition) && tipPosition['center']) {
                   tipElement.removeClass(placement);
-                  placement = 'top';
+                 placement = 'top';
                   tipElement.addClass(placement);
+
               }
               applyPlacement(tipPosition, placement);
           };
@@ -583,7 +583,7 @@
                 case 'center':
                     return {
                         left: Math.max(0, (ww - actualWidth) / 2),
-                        top: Math.max(0, (wh - actualHeight) / 2)
+                        top: Math.max(0, (wh - actualHeight) / 2) + ws
                     }
                     break;
                 case 'center-left':
