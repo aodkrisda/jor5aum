@@ -26,7 +26,7 @@ function clientIP(){
 	}
 	return $ip;	
 }
-function url($f){
+function url($f){ 
 	$v=filemtime(__DIR__.'/'. $f);
 	if($v){
 		$v='?v='.$v;

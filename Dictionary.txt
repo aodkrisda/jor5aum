@@ -48,6 +48,10 @@ ALTER TABLE `info_cases` ADD `form4_note_a` TEXT CHARACTER SET utf8 COLLATE utf8
 ALTER TABLE `info_cases` ADD `number_sent5_a` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '';
 ALTER TABLE `info_cases` ADD `number_received3_a` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '';
 
+
+ALTER TABLE `info_cases` ADD `accept_nsent` INT NULL DEFAULT 0;
+
+
 --field types:
 --NUMBER()
 --TEXT()
@@ -100,6 +104,8 @@ file1=สำเนาตรวจร่าง
 file2=สำเนาคำพิพากษา
 date_upload=วันที่uploadล่าสุด (system)
 
+
+accept_nsent จำเลยรับสารภาพ ไม่ต้องส่งสำนวน
 
 --1. ภาครับรายงานคดี
 command_id=PK(AT); คำสั่ง อธ.

@@ -3954,6 +3954,18 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "\r" +
     "\n" +
+    "                <div class=\"col-md-6  checkbox\">\r" +
+    "\n" +
+    "                    <label class=\"col-md-offset-4 col-md-8\">\r" +
+    "\n" +
+    "                        <strong><input type=\"checkbox\"  ng-true-value=\"'1'\"  ng-false-value=\"'0'\" ng-model=\"editingItem.accept_nsent\">\r" +
+    "\n" +
+    "                        จำเลยรับสารภาพ (ไม่ต้องส่งสำนวนตรวจ)</strong>\r" +
+    "\n" +
+    "                    </label>\r" +
+    "\n" +
+    "                </div>\r" +
+    "\n" +
     "                <div class=\"col-md-12\" style=\"margin-top:2em\">\r" +
     "\n" +
     "                    <label class=\"control-label col-md-2\" style=\"padding-right:3em\">หมายเหตุ</label>\r" +
@@ -6976,15 +6988,21 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "                                </div>\r" +
     "\n" +
-    "\r" +
+    "                            </fieldset> \r" +
+    "\n" +
+    "                            <fieldset> \r" +
     "\n" +
     "                                <div class=\"col-md-10 col-md-offset-2\">\r" +
     "\n" +
     "                                    <div class=\"help-block\">\r" +
     "\n" +
-    "\r" +
-    "\n" +
     "                                        <p class=\"text-info\">\r" +
+    "\n" +
+    "                                           <!--\r" +
+    "\n" +
+    "                                           <p><label><input  type=\"checkbox\" ng-model=\"editingItem.add_by_form1\" ng-true-value=\"'1'\" ng-false-value=\"'0'\"/> ข้อมูลนี้ภาคเป็นผู้ป้อน</label> </p>\r" +
+    "\n" +
+    "                                            -->\r" +
     "\n" +
     "                                            <span class=\"glyphicon glyphicon-question-sign pull-left\"></span>\r" +
     "\n" +
@@ -7009,8 +7027,6 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\r" +
     "\n" +
     "                        </form>\r" +
-    "\n" +
-    "\r" +
     "\n" +
     "                    </div>\r" +
     "\n" +
@@ -7628,15 +7644,21 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "                                </div>\r" +
     "\n" +
-    "\r" +
+    "                                 </fieldset> \r" +
+    "\n" +
+    "                            <fieldset> \r" +
     "\n" +
     "                                <div class=\"col-md-10 col-md-offset-2\">\r" +
     "\n" +
     "                                    <div class=\"help-block\">\r" +
     "\n" +
-    "\r" +
-    "\n" +
     "                                        <p class=\"text-info\">\r" +
+    "\n" +
+    "                                        <!--\r" +
+    "\n" +
+    "                                           <p><label><input  type=\"checkbox\" ng-model=\"editingItem.add_by_form2\" ng-true-value=\"'1'\" ng-false-value=\"'0'\"/> ข้อมูลนี้ภาคเป็นผู้ป้อน</label> </p>\r" +
+    "\n" +
+    "                                        -->\r" +
     "\n" +
     "                                            <span class=\"glyphicon glyphicon-question-sign pull-left\"></span>\r" +
     "\n" +
@@ -8848,7 +8870,7 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "    <div class=\"panel-heading\">\r" +
     "\n" +
-    "        <h2 class=\"text-center\" style=\"margin-top:6px\">UPLOAD ไฟล์คำพิพากษา {{editingItem.user_id | lookup_court}}</h2>\r" +
+    "        <h2 class=\"text-center\" style=\"margin-top:6px\">UPLOAD ไฟล์คำพิพากษา {{editingItem.user_id | lookup_court}} <small>(ปิดการใช้งานชั่วคราว)</small></h2>\r" +
     "\n" +
     "    </div>\r" +
     "\n" +
@@ -8886,7 +8908,7 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "                                <div ng-hide=\"upflow.getFlowState()==2\" style=\"padding-bottom:1em\" ng-if=\"$flow.files.length<1\">\r" +
     "\n" +
-    "                                    <span class=\"btn btn-success\" flow-btn flow-single-file=\"true\" flow-attrs=\"{accept:'application/pdf'}\" style=\"min-width:20em\"><span class=\"fa fa-file-pdf-o\"></span> อัพโหลดไฟล์สำเนาตรวจร่าง</span>\r" +
+    "                                    <span ng-disabled=\"true\" class=\"btn btn-success\" flow-btn flow-single-file=\"true\" flow-attrs=\"{accept:'application/pdf'}\" style=\"min-width:20em\"><span class=\"fa fa-file-pdf-o\"></span> อัพโหลดไฟล์สำเนาตรวจร่าง</span>\r" +
     "\n" +
     "                                </div>\r" +
     "\n" +
@@ -8982,7 +9004,7 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "                                <div ng-hide=\"upflow.getFlowState()==2\" style=\"padding-bottom:1em\" ng-if=\"$flow.files.length<1\">\r" +
     "\n" +
-    "                                    <span class=\"btn btn-success\" flow-btn flow-single-file=\"true\" flow-attrs=\"{accept:'application/pdf'}\" style=\"min-width:20em\"><span class=\"fa fa-file-pdf-o\"></span> อัพโหลดไฟล์สำเนาคำพิพากษา</span>\r" +
+    "                                    <span ng-disabled=\"true\" class=\"btn btn-success\" flow-btn flow-single-file=\"true\" flow-attrs=\"{accept:'application/pdf'}\" style=\"min-width:20em\"><span class=\"fa fa-file-pdf-o\"></span> อัพโหลดไฟล์สำเนาคำพิพากษา</span>\r" +
     "\n" +
     "                                </div>\r" +
     "\n" +
@@ -12770,7 +12792,7 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <button type=\"button\" ng-disabled=\"(caseCourtForm($it)<2)\" class=\"btn btn-success btn-block\" ng-click=\"go('court.cases.form2',$it);$hide()\"><div class=\"text-left\"><span class=\"badge\">1</span> ส่งสำเนาคำพิพากษา</div></button>\r" +
     "\n" +
-    "            <button type=\"button\" ng-disabled=\"(caseCourtForm($it)<2)\" class=\"btn btn-success btn-block\" ng-click=\"go('court.cases.form3',$it);$hide()\"><div class=\"text-left\"><span class=\"badge\">2</span> Upload คำพิพากษา</div></button>\r" +
+    "            <button type=\"button\" ng-disabled=\"true || (caseCourtForm($it)<2)\" class=\"btn btn-success btn-block\" ng-click=\"go('court.cases.form3',$it);$hide()\"><div class=\"text-left\"><span class=\"badge\">2</span> Upload คำพิพากษา</div></button>\r" +
     "\n" +
     "            <button type=\"button\" class=\"btn btn-success btn-block\" ng-click=\"go('court.cases.form4',$it);$hide()\"><div class=\"text-left\"><span class=\"badge\">3</span> ระบบติดตาม</div></button>\r" +
     "\n" +
@@ -12797,7 +12819,7 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "            <button type=\"button\" ng-disabled=\"(caseCourtForm($it)==1)\" class=\"btn btn-success btn-block\" ng-click=\"go('court.vcases.form2',$it);$hide()\"><div class=\"text-left\"><span class=\"badge\">2</span> ส่งสำเนาคำพิพากษา</div></button>\r" +
     "\n" +
-    "            <button type=\"button\" ng-disabled=\"(caseCourtForm($it)==1)\" class=\"btn btn-success btn-block\" ng-click=\"go('court.vcases.form3',$it);$hide()\"><div class=\"text-left\"><span class=\"badge\">3</span> Upload คำพิพากษา</div></button>\r" +
+    "            <button type=\"button\" ng-disabled=\"true || (caseCourtForm($it)==1)\" class=\"btn btn-success btn-block\" ng-click=\"go('court.vcases.form3',$it);$hide()\"><div class=\"text-left\"><span class=\"badge\">3</span> Upload คำพิพากษา</div></button>\r" +
     "\n" +
     "            <button type=\"button\" class=\"btn btn-success btn-block\" ng-click=\"go('court.vcases.form4',$it);$hide()\"><div class=\"text-left\"><span class=\"badge\">4</span> ระบบติดตาม</div></button>\r" +
     "\n" +

@@ -174,11 +174,14 @@
                                         <textarea type="text" rows="3" placeholder="ยังไม่มีข้อมูล" class="form-control input-md" ng-model="editingItem.note1"></textarea>
                                     </div>
                                 </div>
-
+                                 </fieldset> 
+                            <fieldset> 
                                 <div class="col-md-10 col-md-offset-2">
                                     <div class="help-block">
-
                                         <p class="text-info">
+                                        <!--
+                                           <p><label><input  type="checkbox" ng-model="editingItem.add_by_form2" ng-true-value="'1'" ng-false-value="'0'"/> ข้อมูลนี้ภาคเป็นผู้ป้อน</label> </p>
+                                        -->
                                             <span class="glyphicon glyphicon-question-sign pull-left"></span>
                                             <ul>
                                                 <li ng-hide="isValid(editingItem)" class="text-warning">* ข้อมูลที่บังคับให้ต้องป้อนก่อน จึงจะสามารถบันทึกข้อมูลได้</li>

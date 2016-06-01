@@ -7,10 +7,10 @@ function get_version(){
   global $norm;
   
   
-  $r=$norm->cases()->where('type.id>10')->where('cases.id>?',0)->select('cases.id,type.id,jude.id');
+  //$r=$norm->cases()->where('type.id>10')->where('cases.id>?',0)->select('cases.id,type.id,jude.id');
   //$r=$norm->casese();//join_table('cases','left join type on cases.type_id=type.id','left join jude on cases.jud_id=judge.id')->where('type.id>10')->where('cases.id>?',0)->select('cases.id,type.id,jude.id');
-  var_dump((string)$r); 
-  exit();
+  //var_dump((string)$r); 
+  //exit();
   
   return array('version'=>floatval(preg_replace('/^[a-zA-Z]{1,}/','',basename(dirname(__FILE__)))), 'build_date'=>date("Y-m-d H:i:s",filemtime(__FILE__)), 'server_date'=> date("Y-m-d H:i:s") );
 }
@@ -1097,7 +1097,7 @@ class NGTABLE_COURT_CASES  extends NGTABLE{
 	  $checked=$norm->at()->select('id')->where('checked',1);
 	  $atid=$norm->at()->select('id')->where('copyied',1);
 
-      $this->meta['notsent']=$norm->cases()->where('user_id', $usr['id'])->where('command_id',$checked)->where('(auto_received_num is null) or (auto_received_num=?)','')->where('(date_received3 is null) or (date_received3=?)','0000-00-00')->count();
+      $this->meta['notsent']=$norm->cases()->where('user_id', $usr['id'])->where('command_id',$checked)->where('(auto_received_num is null) or (auto_received_num=?)','')->where('(date_received3 is null) or (date_received3=?)','0000-00-00')->where('accept_nsent!=?',1)->count();
       $this->meta['notsent2']=$norm->cases()->where('user_id', $usr['id'])->where('(date_received4  is null) or (number_received4  is null) or (date_received4 =?) or (number_received4=?)','','')->where('command_id',$atid)->count();
      
       $tm=$norm->cases()->where('user_id', $usr['id'])->where('return_checked',1)->where('auto_received_num!=?','')->where('date_sent5 is not NULL')->where('number_sent5!=?','');
@@ -1109,7 +1109,7 @@ class NGTABLE_COURT_CASES  extends NGTABLE{
 
       if(isset($data['_view'])){ 
         if($data['_view']==='notify'){
-          $rs->where('user_id', $usr['id'])->where('command_id',$checked)->where('(auto_received_num is null) or (auto_received_num=?)','')->where('(date_received3 is null) or (date_received3=?)','0000-00-00');
+          $rs->where('user_id', $usr['id'])->where('command_id',$checked)->where('(auto_received_num is null) or (auto_received_num=?)','')->where('(date_received3 is null) or (date_received3=?)','0000-00-00')->where('accept_nsent!=?',1);
           $rs->order('date_sent desc, id desc');
           return;
         }

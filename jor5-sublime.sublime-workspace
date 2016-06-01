@@ -59,14 +59,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "/E/GOPATH/src/github.com/beego/beeweb/views/about.html",
-			"settings":
-			{
-				"buffer_size": 667,
-				"line_ending": "Windows"
-			}
-		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -141,10 +133,64 @@
 	},
 	"expanded_folders":
 	[
-		"/E/GOPATH/src/github.com/beego/beeweb/views"
+		"/E/WebProjects/custom1/app",
+		"/E/WebProjects/custom1/app/partials"
 	],
 	"file_history":
 	[
+		"/E/OT/grantlee-master/templates/CMakeLists.txt",
+		"/E/OT/grantlee-master/CMakeLists.txt",
+		"/E/OT/grantlee-master/textdocument/CMakeLists.txt",
+		"/E/OT/grantlee-master/COPYING.LIB",
+		"/E/OT/grantlee-master/cmake/modules/Doxyfile.in",
+		"/E/WebProjects/custom1/app/index.html",
+		"/E/WebProjects/custom2/package.json",
+		"/E/WebProjects/semantic-ui/semantic.json",
+		"/E/WWW/sudarut/jor5/views/court_cases.html",
+		"/E/WWW/sudarut/jor5/views/court_acases.html",
+		"/E/WWW/sudarut/jor5/index.php",
+		"/E/WWW/sudarut/jor5/views/main/custom.confirm.court.actions3.html",
+		"/E/WWW/sudarut/jor5/views/main/custom.confirm.court.actions2.html",
+		"/E/WWW/sudarut/jor5/views/main/custom.confirm.court.actions.html",
+		"/E/WWW/sudarut/jor5/views/court_cases_form3.html",
+		"/E/GOPATH/src/beerestangular/controllers/auth_user.go",
+		"/E/GOPATH/src/beerestangular/README.md",
+		"/E/GOPATH/src/beerestangular/main.go",
+		"/E/WWW/sudarut/jor5/views/main.menu.html",
+		"/E/GOPATH/src/BeegoAPIRestAngular-master/main.go",
+		"/E/WWW/sudarut/jor5/js/app.js",
+		"/E/WWW/sudarut/jor5/views/main/court.cases.reports.html",
+		"/E/WWW/sudarut/jor5/views/court_vcases.html",
+		"/E/WWW/sudarut/jor5/views/main/admin.cases.reports.html",
+		"/E/WWW/sudarut/jor5/views/main/admin.vcases.reports.html",
+		"/E/WWW/sudarut/jor5/views/court_print_report1.html",
+		"/E/WWW/sudarut/jor5/views/court_print_report2.html",
+		"/E/WWW/sudarut/jor5/views/court_print_report3.html",
+		"/E/WWW/sudarut/jor5/views/court_print_report4.html",
+		"/E/WWW/sudarut/jor5/js/__templates.js",
+		"/E/WWW/sudarut/jor5/views/court_cases_form1.html",
+		"/E/WWW/sudarut/jor5/views/admin_print_report1.html",
+		"/E/WWW/sudarut/jor5/views/admin_print_report10.html",
+		"/E/WWW/sudarut/jor5/views/admin_print_report11.html",
+		"/E/WWW/sudarut/jor5/views/admin_print_report12.html",
+		"/E/WWW/sudarut/jor5/views/admin_print_report13.html",
+		"/E/WWW/sudarut/jor5/views/admin_print_report5.html",
+		"/E/WWW/sudarut/jor5/views/admin_print_report14.html",
+		"/E/WWW/sudarut/jor5/views/admin_print_report15.html",
+		"/E/WWW/sudarut/jor5/views/admin_print_report2.html",
+		"/E/WWW/sudarut/jor5/views/admin_print_report4.html",
+		"/E/WWW/sudarut/jor5/views/admin_print_report6.html",
+		"/E/WWW/sudarut/jor5/views/admin_print_report7.html",
+		"/E/WWW/sudarut/jor5/views/admin_print_report8.html",
+		"/E/WWW/sudarut/jor5/views/admin_print_report9.html",
+		"/E/WWW/sudarut/jor5/views/print_reports.html",
+		"/E/WWW/sudarut/jor5/views/admin_menu.html",
+		"/E/WWW/sudarut/jor5/views/admin_cases_form3.html",
+		"/E/WWW/sudarut/jor5/views/admin_cases_form5.html",
+		"/E/WWW/sudarut/jor5/views/court_cases_form4.html",
+		"/E/WWW/sudarut/jor5/views/admin_cases_form4.html",
+		"/E/WWW/sudarut/jor5/js/templates - Copy.js",
+		"/E/WWW/sudarut/jor5/js/templates.js",
 		"/E/GOPATH/src/ot/views/index.tpl",
 		"/E/GOPATH/src/ot/tests/default_test.go",
 		"/E/GOPATH/src/ot/routers/router.go",
@@ -159,11 +205,7 @@
 		"/E/1.bat",
 		"/C/Go/src/crypto/md5/example_test.go",
 		"/E/WWW/sudarut/jor5/rest/v1/__main.php",
-		"/E/WWW/sudarut/jor5/views/main.menu.html",
 		"/E/WWW/sudarut/jor5/rest/v1/main.php",
-		"/E/WWW/sudarut/jor5/js/app.js",
-		"/E/WWW/sudarut/jor5/js/templates.js",
-		"/E/WWW/sudarut/jor5/js/__templates.js",
 		"/E/WWW/sudarut/jor5/views/court_users.html",
 		"/E/WWW/sudarut/jor5/reports/templates/report13.html",
 		"/E/WWW/sudarut/jor5/rest/v1/___main.php",
@@ -185,9 +227,7 @@
 		"/E/leptonica-master/leptonica/prog/fonts/chars-14.ps",
 		"/E/WWW/sudarut/jor5/reports/report14.php",
 		"/E/WWW/sudarut/jor5/reports/report15.php",
-		"/E/WWW/sudarut/jor5/views/admin_print_report15.html",
 		"/E/WWW/sudarut/jor5/js/angular-strap/angular-strap.min.js",
-		"/E/WWW/sudarut/jor5/views/admin_cases_form4.html",
 		"/E/TORRENTS/ARK.Survival.Evolved.v1.71.74.x64-Kortal.zip",
 		"/E/TORRENTS/ARK.Survival.Evolved.v1.71.74.x64-Kortal/1000art",
 		"/E/Hybridge App/nwjs013/app/collections/settings.json",
@@ -204,10 +244,8 @@
 		"/E/Hybridge App/nwjs013/nwjs-example-master/README.md",
 		"/E/Hybridge App/nwjs013/polymer-example-nwjs-master/elements/page-body.html",
 		"/E/Hybridge App/nwjs013/polymer-example-nwjs-master/index.html",
-		"/E/WWW/sudarut/jor5/views/main/custom.confirm.court.actions.html",
 		"/E/Hybridge App/nwjs013/camera/app.html",
 		"/E/Hybridge App/nwjs013/camera/app.js",
-		"/E/WWW/sudarut/jor5/views/main/custom.confirm.court.actions2.html",
 		"/E/WWW/sudarut/jor5/views/main/custom.confirm.admin.actions2.html",
 		"/C/nginx/conf/nginx.conf",
 		"/C/xampp/apache/conf/httpd.conf",
@@ -215,8 +253,6 @@
 		"/C/nginx/start_php_cgi.bat",
 		"/E/WWW/sudarut/jor5/rest/api.php",
 		"/E/php7/php.ini",
-		"/E/WWW/sudarut/jor5/views/admin_print_report13.html",
-		"/E/WWW/sudarut/jor5/views/admin_print_report14.html",
 		"/E/WWW/info.php",
 		"/E/WWW/sudarut/jor5/js/lazyload.js",
 		"/E/WWW/sudarut/jor5/views/admin_vcases.html",
@@ -224,55 +260,12 @@
 		"/E/WWW/sudarut/jor5/js/date/locales/bootstrap-datepicker.th.min.js",
 		"/E/WWW/sudarut/jor5/js/md5.min.js",
 		"/E/WWW/sudarut/jor5/reports/templates/report14.html",
-		"/E/WWW/sudarut/jor5/views/main/admin.vcases.reports.html",
 		"/E/WWW/sudarut/jor5/reports/templates/court_report4.html",
-		"/E/WWW/sudarut/jor5/views/court_acases.html",
 		"/E/WWW/sudarut/jor5/reports/court_report4.php",
 		"/E/WWW/sudarut/jor5/views/court_reports_menu.html",
 		"/E/WWW/sudarut/jor5/reports/court_report3.php",
 		"/E/WWW/sudarut/jor5/reports/templates/court_report3.html",
-		"/E/WWW/sudarut/jor5/views/court_print_report3.html",
-		"/E/WWW/sudarut/jor5/views/court_print_report4.html",
-		"/E/WWW/sudarut/jor5/reports/templates/court_report1.html",
-		"/E/WWW/sudarut/jor5/views/main/court.cases.reports.html",
-		"/E/WWW/sudarut/jor5/views/court_cases.html",
-		"/E/WWW/sudarut/jor5/reports/court_report2.php",
-		"/E/WWW/sudarut/jor5/reports/court_report1.php",
-		"/E/WWW/sudarut/jor5/views/court_print_report1.html",
-		"/E/WWW/sudarut/jor5/views/court_print_report2.html",
-		"/E/WWW/sudarut/jor5/views/admin_print_report1.html",
-		"/E/WWW/sudarut/jor5/js/app.css",
-		"/E/WWW/sudarut/jor5/views/login.html",
-		"/E/WWW/sudarut/jor5/reports/templates/court_report2.html",
-		"/E/WWW/sudarut/jor5/views/court_vcases.html",
-		"/E/WWW/sudarut/jor5/reports/templates/report5.html",
-		"/E/WWW/sudarut/jor5/views/admin_print_report9.html",
-		"/E/WWW/sudarut/jor5/views/court_menu.html",
-		"/E/WWW/sudarut/jor5/views/admin_menu.html",
-		"/E/WWW/ion.sound.example/index.html",
-		"/E/yo/play.js",
-		"/E/WWW/sudarut/jor5/reports/templates/report3.html",
-		"/E/WWW/sudarut/jor5/reports/templates/report3-draft.html",
-		"/E/WWW/sudarut/jor5/views/main/custom.confirm.admin.actions3.html",
-		"/E/WWW/sudarut/jor5/images/jor5_informations.sql",
-		"/E/WWW/sudarut/jor5/js/custom.table.js",
-		"/E/WWW/sudarut/jor5/Dictionary.txt",
-		"/E/WWW/sudarut/jor5/index.php",
-		"/E/WWW/sudarut/jor5/reports/report3b.php",
-		"/E/WWW/sudarut/jor5/reports/templates/report12.html",
-		"/E/WWW/sudarut/jor5/views/admin_reports_menu.html",
-		"/E/WWW/sudarut/jor5/reports/report9.php",
-		"/E/WWW/sudarut/jor5/reports/report12.php",
-		"/E/WWW/sudarut/jor5/views/admin_print_report12.html",
-		"/E/WWW/sudarut/jor5/views/admin_cases.html",
-		"/E/WWW/sudarut/jor5/views/main/admin.cases.reports.html",
-		"/E/WWW/sudarut/jor5/views/court_manages_menu.html",
-		"/E/WWW/sudarut/jor5/views/admin_manages_menu.html",
-		"/E/WWW/sudarut/jor5/views/admin_print_report8.html",
-		"/E/WWW/sudarut/jor5/views/admin_managements_menu.html",
-		"/E/DEV/Grunt/Gruntfile.js",
-		"/C/Users/krisda/Downloads/index.php",
-		"/E/DEV/slideout/index.html"
+		"/E/WWW/sudarut/jor5/reports/templates/court_report1.html"
 	],
 	"find":
 	{
@@ -290,6 +283,17 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"qt5",
+			"qt",
+			"print_reports",
+			"$popover(",
+			"custom",
+			"\" ",
+			"custom.select",
+			"rootscope",
+			"modal",
+			"search",
+			"หน.ศาลฯประจำภาค",
 			"main.menu",
 			"NGTABLE_CUSERS",
 			"moveuser",
@@ -357,38 +361,8 @@
 	"groups":
 	[
 		{
-			"selected": 0,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "/E/GOPATH/src/github.com/beego/beeweb/views/about.html",
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 667,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								11,
-								31
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				}
 			]
 		}
 	],

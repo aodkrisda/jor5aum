@@ -19,7 +19,7 @@
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h2 class="text-center" style="margin-top:6px">UPLOAD ไฟล์คำพิพากษา {{editingItem.user_id | lookup_court}}</h2>
+        <h2 class="text-center" style="margin-top:6px">UPLOAD ไฟล์คำพิพากษา {{editingItem.user_id | lookup_court}} <small>(ปิดการใช้งานชั่วคราว)</small></h2>
     </div>
 
     <div class="panel-body" style="padding-bottom:0px;">
@@ -38,7 +38,7 @@
                             <div ng-if="editingItem.id" style="padding-top:1em" flow-init="{target: API_URL + 'upload/' + editingItem.id + '/file1'}" flow-file-added="upflow.setFlow($flow,$file);" flow-files-added="upflow.setFlow($flow); upflow.setFlowState(1)" flow-upload-started="upflow.setFlowState(2)" flow-complete="upflow.checkFlow()" flow-file-success="$file.response = $message">
 
                                 <div ng-hide="upflow.getFlowState()==2" style="padding-bottom:1em" ng-if="$flow.files.length<1">
-                                    <span class="btn btn-success" flow-btn flow-single-file="true" flow-attrs="{accept:'application/pdf'}" style="min-width:20em"><span class="fa fa-file-pdf-o"></span> อัพโหลดไฟล์สำเนาตรวจร่าง</span>
+                                    <span ng-disabled="true" class="btn btn-success" flow-btn flow-single-file="true" flow-attrs="{accept:'application/pdf'}" style="min-width:20em"><span class="fa fa-file-pdf-o"></span> อัพโหลดไฟล์สำเนาตรวจร่าง</span>
                                 </div>
                                 <h4 ng-show="upflow.getFlowState()==2">กำลังอัพโหลดไฟล์<br><small>กรุณารอจนกว่าจะอัพโหลดเสร็จ...</small></h4>
 
@@ -86,7 +86,7 @@
                             <div ng-if="editingItem.id" style="padding-top:1em" flow-init="{target: API_URL + 'upload/' + editingItem.id + '/file2'}" flow-file-added="upflow.setFlow($flow,$file);" flow-files-added="upflow.setFlow($flow); upflow.setFlowState(1)" flow-upload-started="upflow.setFlowState(2)" flow-complete="upflow.checkFlow()" flow-file-success="$file.response = $message">
 
                                 <div ng-hide="upflow.getFlowState()==2" style="padding-bottom:1em" ng-if="$flow.files.length<1">
-                                    <span class="btn btn-success" flow-btn flow-single-file="true" flow-attrs="{accept:'application/pdf'}" style="min-width:20em"><span class="fa fa-file-pdf-o"></span> อัพโหลดไฟล์สำเนาคำพิพากษา</span>
+                                    <span ng-disabled="true" class="btn btn-success" flow-btn flow-single-file="true" flow-attrs="{accept:'application/pdf'}" style="min-width:20em"><span class="fa fa-file-pdf-o"></span> อัพโหลดไฟล์สำเนาคำพิพากษา</span>
                                 </div>
                                 <h4 ng-show="upflow.getFlowState()==2">กำลังอัพโหลดไฟล์<br><small>กรุณารอจนกว่าจะอัพโหลดเสร็จ...</small></h4>
 

@@ -5,7 +5,7 @@
         <p class="text-center">
             <button type="button" ng-show="($it.no_case_sent=='2' )" class="btn btn-warning btn-block" ng-click="editItem();$hide()"><div class="text-left"><span class="badge"><span class="glyphicon glyphicon-star-empty"></span></span> ส่งรายงานคดี</div></button>        
             <button type="button" ng-disabled="(caseCourtForm($it)<2)" class="btn btn-success btn-block" ng-click="go('court.cases.form2',$it);$hide()"><div class="text-left"><span class="badge">1</span> ส่งสำเนาคำพิพากษา</div></button>
-            <button type="button" ng-disabled="(caseCourtForm($it)<2)" class="btn btn-success btn-block" ng-click="go('court.cases.form3',$it);$hide()"><div class="text-left"><span class="badge">2</span> Upload คำพิพากษา</div></button>
+            <button type="button" ng-disabled="true || (caseCourtForm($it)<2)" class="btn btn-success btn-block" ng-click="go('court.cases.form3',$it);$hide()"><div class="text-left"><span class="badge">2</span> Upload คำพิพากษา</div></button>
             <button type="button" class="btn btn-success btn-block" ng-click="go('court.cases.form4',$it);$hide()"><div class="text-left"><span class="badge">3</span> ระบบติดตาม</div></button>
         </p>
     </div>
