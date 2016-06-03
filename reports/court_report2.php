@@ -44,7 +44,8 @@
 		$r->where('date_sent2<?',$dt2['end']);
 	}else{
 		$r->where('date_sent2<?',$dt1['end']);
-	}	
+	}
+	$r->where('user_id', $_SESSION['user']['id']);	
 	$type_id=0;
 	$atype=array();
 	if(isset($_POST['type_id'])){

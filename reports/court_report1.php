@@ -45,7 +45,9 @@
 		$r->where('date_sent<?',$dt2['end']);
 	}else{
 		$r->where('date_sent<?',$dt1['end']);
-	}	
+	}
+	$r->where('user_id', $_SESSION['user']['id']);
+
 	$type_id=0;
 	$atype=array();
 	if(isset($_POST['type_id'])){
@@ -61,6 +63,8 @@
 		//$r->where('type_id', $type_id);
 		$r->where("auto_received_num like '{$code}%'");
 	}
+
+
 	$cases=$r->toArray();
     $html= $twig->render('court_report1.html', array('report_name'=>'รายงาน','date1'=>$date1,   'date2'=>$date2, 'type_id'=>$type_id, 'type_item'=>$atype,  'cases'=>$cases, 'user'=> $_SESSION['user']));
 	printPdf($html);

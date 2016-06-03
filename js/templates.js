@@ -1720,6 +1720,8 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "                                    <span ng-switch-when=\"2\" class=\"label label-danger\">ไม่ต้องส่ง</span>\r" +
     "\n" +
+    "                                    <span ng-switch-when=\"3\" class=\"label label-success\">รับสารภาพ (ไม่ส่ง)</span>\r" +
+    "\n" +
     "                                    <span ng-switch-default class=\"label label-warning\">ยังไม่ได้ส่ง</span>\r" +
     "\n" +
     "                                </td>\r" +
@@ -7914,8 +7916,6 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "\n" +
     "                                        {{::it.result | lookup_result}}\r" +
     "\n" +
-    "\r" +
-    "\n" +
     "                                    </td>\r" +
     "\n" +
     "                                    <td data-title=\"'ส่งสำนวน'\" class=\"text-center\" ng-switch=\"caseReceived(it)\">\r" +
@@ -7923,6 +7923,8 @@ angular.module('App').run(['$templateCache', function($templateCache) {
     "                                        <span ng-switch-when=\"1\" class=\"label label-success\">ส่งแล้ว</span>\r" +
     "\n" +
     "                                        <span ng-switch-when=\"2\" class=\"label label-danger\">ไม่ต้องส่ง</span>\r" +
+    "\n" +
+    "                                        <span ng-switch-when=\"3\" class=\"label label-success\">รับสารภาพ (ไม่ส่ง)</span>\r" +
     "\n" +
     "                                        <span ng-switch-default class=\"label label-warning\">ยังไม่ได้ส่ง</span>\r" +
     "\n" +

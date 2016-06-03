@@ -203,6 +203,9 @@ angular.module('App', ['lazyLoadJs', 'wt.responsive', 'ui.router', 'angular-load
     }
     $rootScope.caseReceived = function (it) {
         var b = 0;
+        if(it['accept_nsent']==1){
+          return 3;
+        }
         var v = (it.command_id > 0);
         var v1 = $filter('lookup_at')(it.command_id, 'checked');
         var v2 = '1';

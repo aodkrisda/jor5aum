@@ -78,6 +78,7 @@
                                 <td data-title="'ส่งสำนวน'" class="text-center" ng-switch="caseReceived(it)">
                                     <span ng-switch-when="1" class="label label-success">ส่งแล้ว</span>
                                     <span ng-switch-when="2" class="label label-danger">ไม่ต้องส่ง</span>
+                                    <span ng-switch-when="3" class="label label-success">รับสารภาพ (ไม่ส่ง)</span>
                                     <span ng-switch-default class="label label-warning">ยังไม่ได้ส่ง</span>
                                 </td>
                                 <td data-title="'ส่งไฟล์คำพิพากษา'" class="text-center" ng-switch="caseCopyReceived(it)">
