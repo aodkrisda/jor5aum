@@ -18,22 +18,7 @@
 			"path": "."
 		},
 		{
-			"path": "E:\\WWW\\sudarut\\Examples\\frontend-workflows-with-grunt-and-angularjs-master"
-		},
-		{
-			"path": "E:\\WWW\\php-live\\livechat"
-		},
-		{
-			"path": "E:\\ttt"
-		},
-		{
-			"path": "E:\\DEV\\security\\rip"
-		},
-		{
-			"path": "E:\\GOPATH\\src\\github.com\\beego\\beeweb\\views"
-		},
-		{
-			"path": "E:\\WebProjects\\custom1\\app"
+			"path": "E:\\GOPATH\\src\\github.com\\Max-Liu\\sns-api-in-beego"
 		}
 	]
 }

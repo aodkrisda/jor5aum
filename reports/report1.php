@@ -165,4 +165,5 @@
 
     $html= $twig->render('report1.html', array('report_name'=>'รายงาน','date1'=>$date1,  'date2'=>$date2, 'type_id'=>$type_id, 'type_item'=>$atype, 'groups'=>$groups, 'courts'=>$courts));
 	printPdf($html);
+
 	
